@@ -9,41 +9,83 @@
 #include <algorithm>
 #include <graph.h>
 #include <memory>
+#include "fmt/format.h"
 
 class Slide_window {
 public:
 
     Slide_window() = default;
 
-    Slide_window(int x, int y, int xw, int yw, int level, uint64_t inputAddr, uint64_t edgeAddr, uint64_t outputAddr,
-                 int inputLen, int edgeLen, int outputLen);
+    Slide_window(int x, int y, int xw, int yw, int level, uint64_t inputAddr, uint64_t edgeAddr,
+                 uint64_t outputAddr, int inputLen, int edgeLen, int outputLen, int numNodesInWindow);
 
-    int getX() const;
+    [[nodiscard]] int getX() const;
 
-    int getY() const;
+    [[nodiscard]] int getY() const;
 
-    int getXw() const;
+    [[nodiscard]] int getXw() const;
 
-    int getYw() const;
+    [[nodiscard]] int getYw() const;
 
-    int getLevel() const;
+    [[nodiscard]] int getLevel() const;
 
-    uint64_t getInputAddr() const;
+    [[nodiscard]] uint64_t getInputAddr() const;
 
-    uint64_t getEdgeAddr() const;
+    [[nodiscard]] uint64_t getEdgeAddr() const;
 
-    uint64_t getOutputAddr() const;
+    [[nodiscard]] uint64_t getOutputAddr() const;
 
-    int getInputLen() const;
+    [[nodiscard]] int getInputLen() const;
 
-    int getEdgeLen() const;
+    [[nodiscard]] int getEdgeLen() const;
 
-    int getOutputLen() const;
+    [[nodiscard]] int getOutputLen() const;
 
 private:
     int x, y, xw, yw, level;
     uint64_t input_addr, edge_addr, output_addr;
     int input_len, edge_len, output_len;
+    int num_nodes_in_window;
+public:
+    [[nodiscard]] int getNumNodesInWindow() const;
+};
+
+
+template<>
+struct fmt::formatter<Slide_window> {
+    bool simple = false;
+
+    constexpr auto parse(format_parse_context &ctx) {
+
+
+        // Parse the presentation format and store it in the formatter:
+        auto it = ctx.begin();
+        while (it != ctx.end() and *it == 's') {
+            if (*it == 's') {
+                simple = true;
+            }
+            it++;
+        }
+        if (it != ctx.end() && *it != '}') {
+            throw format_error("invalid format");
+        }
+        return it;
+    }
+
+
+    template<typename FormatContext>
+    auto format(const Slide_window &p, FormatContext &ctx) {
+        // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
+        // ctx.out() is an output iterator to write to.
+        auto out = simple ? format_to(ctx.out(), "{} {} {} {} {}", p.getX(), p.getY(), p.getXw(), p.getYw(),
+                                      p.getLevel()) : format_to(ctx.out(), "{} {} {} {} {} {} {} {} {} {} {} {}",
+                                                                p.getX(),
+                                                                p.getY(), p.getXw(), p.getYw(), p.getLevel(),
+                                                                p.getInputAddr(), p.getEdgeAddr(), p.getOutputAddr(),
+                                                                p.getInputLen(), p.getEdgeLen(), p.getOutputLen(),
+                                                                p.getNumNodesInWindow());
+        return out;
+    }
 };
 
 class Slide_window_set {
@@ -51,16 +93,23 @@ public:
     Slide_window_set(std::shared_ptr<Graph> mGraph, std::vector<int> xwS, std::vector<int> ywS,
                      std::vector<int> nodeSizeS, int totalLevel);
 
+    const std::vector<Slide_window> &get_windows() {
+        return m_sliding_window_vec;
+    }
+
 private:
     std::shared_ptr<Graph> m_graph;
     std::vector<int> xw_s;
     std::vector<int> yw_s;
+
     std::vector<int> node_size_s;
 
     int total_level;
 
     std::vector<Slide_window>
-            m_siding_window_vec;
+            m_sliding_window_vec;
+
+    std::vector<uint64_t> node_addrs;//for each level;
 
 };
 

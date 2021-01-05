@@ -1,6 +1,9 @@
+cmake_minimum_required(VERSION 3.18)
+
 project(gcn_sim)
-cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
+
+
 add_subdirectory(deps/fmt)
 add_subdirectory(deps/ramulator)
 add_subdirectory(deps/spdlog)
@@ -11,7 +14,7 @@ list(FILTER lib_srcs EXCLUDE REGEX  ".*main.cc")
 
 add_library(gcn_sim_lib ${lib_srcs} src/Slide_window.cpp src/Slide_window.h)
 target_include_directories(gcn_sim_lib  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(gcn_sim_lib PUBLIC ramulator)
+target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog)
 
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
 

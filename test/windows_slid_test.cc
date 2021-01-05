@@ -1,29 +1,17 @@
-#include <aggregate.h>
+
 #include <catch.hpp>
 #include <fmt/format.h>
 #include <graph.h>
 #include <iostream>
 #include <string>
-TEST_CASE("slid_test") {
+#include <Slide_window.h>
 
-  std::string name = "default.cfg";
-  auto m_aggregator =
-      Aggregator<unsigned>(std::make_shared<Graph<unsigned>>("test"), name, 64,
-                           16, 16, 128, 4, {1, 1, 1, 1});
-  while (true) {
-    m_aggregator.cycle();
-    auto [x, y, z] = m_aggregator.get_next_window();
-    if (x == 0 and y == 0 and z == 0) {
-      break;
+TEST_CASE("slid_test") {
+    auto m_graph = std::make_shared<Graph>("test");
+    Slide_window_set m_set(m_graph, {4, 2, 3}, {4, 2, 5}, {1, 2, 3, 1}, 4);
+    const std::vector<Slide_window> &w = m_set.get_windows();
+    for (const Slide_window &i :w) {
+        std::cout << fmt::format("{}", i) << std::endl;
     }
-    std::cout << fmt::format("{} {} {}", x, y, z) << std::endl;
-  }
-  std::cout << "\n\n";
-  while (true) {
-    auto [x, y, z] = m_aggregator.get_next_window();
-    if (x == 0 and y == 0 and z == 0) {
-      break;
-    }
-    std::cout << fmt::format("{} {} {}", x, y, z) << std::endl;
-  }
+
 }
