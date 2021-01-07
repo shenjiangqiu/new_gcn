@@ -26,7 +26,7 @@ public:
         return (ull) &(edge_index.at(index));
     }
 
-    ull get_dege_addr(unsigned index) const {
+    ull get_edge_addr(unsigned index) const {
         return (ull) &(edges.at(index));
     }
 

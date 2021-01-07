@@ -11,28 +11,36 @@
 
 class Aggregator {
 public:
-    void add_task();
+    void add_task(std::shared_ptr<Slide_window> window);
 
-    bool emtpy();
+    [[nodiscard]] bool isEmpty() const {
+        return empty;
+    }
 
-    bool waiting_buffer();
+    [[nodiscard]] bool isWorking() const {
+        return working;
+    }
 
     void cycle();
+
+    Aggregator(const shared_ptr<ReadBuffer> &inputBuffer, const shared_ptr<ReadBuffer> &edgeBuffer,
+               const shared_ptr<Aggregator_buffer> &aggBuffer, int totalCores);
 
 
 private:
     //
-    std::shared_ptr<Buffer_base> input_buffer;
-    std::shared_ptr<Buffer_base> edge_buffer;
-    std::shared_ptr<Buffer_base> agg_buffer;
+    std::shared_ptr<ReadBuffer> input_buffer;
+    std::shared_ptr<ReadBuffer> edge_buffer;
+    std::shared_ptr<Aggregator_buffer> agg_buffer;
 
     int calculate_remaining_cycle();
 
     std::shared_ptr<Slide_window> current_sliding_window;
-
-    bool empty;
-    bool working;
-    int remaining_cycles;
+    int total_cores;
+    bool empty{true};
+    bool working{false};
+    bool finished{false};
+    int remaining_cycles{0};
 
 };
 

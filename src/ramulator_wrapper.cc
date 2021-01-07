@@ -32,11 +32,11 @@ static map<string, function<MemoryBase *(const Config &, int)>> name_to_func = {
 };
 
 ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
-                                     int cacheline) {
+                                     int cacheLine) {
   const string &std_name = configs["standard"];
   assert(name_to_func.find(std_name) != name_to_func.end() &&
          "unrecognized standard name");
-  mem = name_to_func[std_name](configs, cacheline);
+  mem = name_to_func[std_name](configs, cacheLine);
   tCK = mem->clk_ns();
 }
 ramulator_wrapper::~ramulator_wrapper() { delete mem; }

@@ -17,7 +17,8 @@ public:
     Slide_window() = default;
 
     Slide_window(int x, int y, int xw, int yw, int level, uint64_t inputAddr, uint64_t edgeAddr,
-                 uint64_t outputAddr, int inputLen, int edgeLen, int outputLen, int numNodesInWindow);
+                 uint64_t outputAddr, int inputLen, int edgeLen, int outputLen, int numNodesInWindow,
+                 int currentNodeSize);
 
     [[nodiscard]] int getX() const;
 
@@ -41,11 +42,14 @@ public:
 
     [[nodiscard]] int getOutputLen() const;
 
+    [[nodiscard]] int getCurrentNodeSize() const;
+
 private:
     int x, y, xw, yw, level;
     uint64_t input_addr, edge_addr, output_addr;
     int input_len, edge_len, output_len;
     int num_nodes_in_window;
+    int current_node_size;
 public:
     [[nodiscard]] int getNumNodesInWindow() const;
 };
@@ -78,7 +82,8 @@ struct fmt::formatter<Slide_window> {
         // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
         // ctx.out() is an output iterator to write to.
         auto out = simple ? format_to(ctx.out(), "{} {} {} {} {}", p.getX(), p.getY(), p.getXw(), p.getYw(),
-                                      p.getLevel()) : format_to(ctx.out(), "{} {} {} {} {} {} {} {} {} {} {} {}",
+                                      p.getLevel()) : format_to(ctx.out(),
+                                                                "x {} y {} {} {} l {} i_a {} e_a {} o_a {} i_l {} e_l {} o_l {} n_n {}",
                                                                 p.getX(),
                                                                 p.getY(), p.getXw(), p.getYw(), p.getLevel(),
                                                                 p.getInputAddr(), p.getEdgeAddr(), p.getOutputAddr(),

@@ -24,3 +24,5 @@ Mem_buffer::Mem_buffer(const string basicString) : Buffer_base(basicString) {
 }
 
 ReadBuffer::ReadBuffer(const string &basicString) : Mem_buffer(basicString) {}
+
+Aggregator_buffer::Aggregator_buffer(const string &name) : Buffer_base(name) {}
