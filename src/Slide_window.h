@@ -113,6 +113,7 @@ private:
 
     std::vector<Slide_window>
             m_sliding_window_vec;
+    std::vector<std::vector<std::vector<Slide_window>>> m_sliding_window_multi_level;
 
     std::vector<uint64_t> node_addrs;//for each level;
 

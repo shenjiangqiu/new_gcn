@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <types.h>
+#include "Slide_window.h"
 
 class Buffer_base {
 public:
@@ -27,7 +28,8 @@ public:
         return next_ready;
     }
 
-    explicit Buffer_base(std::string name) : name(std::move(name)) {}
+    explicit Buffer_base(std::string name)
+            : name(std::move(name)) {}
 
     [[nodiscard]] const string &getName() const {
         return name;
@@ -94,20 +96,65 @@ private:
     bool current_ready{false};
     bool next_empty{true};
     bool next_ready{false};
+    std::shared_ptr<Slide_window> m_window;
 };
 
-class Aggregator_buffer : public Buffer_base {
+class Aggregator_buffer {
 public:
-    Aggregator_buffer(const string &name);
+    explicit Aggregator_buffer(string name);
+
+
+    void cycle();
+
+    //means no data exists in the write buffer
+    [[nodiscard]] bool isWriteEmpty() const;
+
+    //means the data is complete and ready to be read
+    [[nodiscard]] bool isWriteReady() const;
+
+    //means the data is ready to be read
+    [[nodiscard]] bool isReadEmpty() const;
+
+    //means the data is finished read, can be erased
+    [[nodiscard]] bool isReadReady() const;
+
+    [[nodiscard]] const string &getName() const;
+
+    void add_new_task(std::shared_ptr<Slide_window> window);
+
+    void finish_write();
+
+    void finish_read();
 
 private:
+
+
+    //for write port;
+    bool write_empty{true};
+    bool write_ready{false};
+
+    bool read_empty{true};
+    bool read_ready{false};
+
+
+    std::string name;
+
+    std::shared_ptr<Slide_window> read_window;
+public:
+    [[nodiscard]] const shared_ptr<Slide_window> &getReadWindow() const;
+
+    [[nodiscard]] const shared_ptr<Slide_window> &getWriteWindow() const;
+
+private:
+    std::shared_ptr<Slide_window> write_window;
+
 
     //
 };
 
 class Mem_buffer : public Buffer_base {
 public:
-    explicit Mem_buffer(string basicString);
+    explicit Mem_buffer(const string &basicString);
 
     void cycle() override;
 
@@ -160,7 +207,7 @@ public:
         return next_sent;
     }
 
-    void accept_req(std::shared_ptr<Req> req) {
+    void accept_req(const std::shared_ptr<Req> &req) {
         if (getNextReq() and getNextReq()->id == req->id) {
             assert(!isNextReady() and !isNextEmpty());
             setNextReady(true);
@@ -184,16 +231,16 @@ private:
 class WriteBuffer : public Mem_buffer {
 public:
     shared_ptr<Req> pop_current_req() override {
-        setCurrentReady(true);
+        setCurrentEmpty(true);
         return Mem_buffer::pop_current_req();
     }
 
     shared_ptr<Req> pop_next_req() override {
-        setNextReady(true);
+        setNextEmpty(true);
         return Mem_buffer::pop_next_req();
     }
 
-    explicit WriteBuffer(const std::string &name = "Write Buffer") : Mem_buffer(name) {}
+    explicit WriteBuffer(const std::string &name);
 
 };
 

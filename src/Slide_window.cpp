@@ -89,9 +89,10 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph, std::vector<in
     }
 
     for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
+        m_sliding_window_multi_level.emplace_back();
         auto col_i = 0;
         while (col_i < m_graph->get_num_nodes()) {
-
+            m_sliding_window_multi_level[level_i].emplace_back();
             std::map<int, int> row_to_count;
             auto col_end = col_i + xw_s[level_i];
             if (col_end > m_graph->get_num_nodes()) {
