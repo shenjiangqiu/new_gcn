@@ -71,7 +71,7 @@ TEST_CASE("aggregator_test") {
             edge_buffer->add_next(next_edge_req);
             if (i != m_set.get_windows().begin())
                 agg_buffer->finish_write();
-            if (agg_buffer->isReadEmpty() and agg_buffer->isReadReady()) {
+            if (!agg_buffer->isReadEmpty() and agg_buffer->isReadReady()) {
                 agg_buffer->finish_read();
             }
 

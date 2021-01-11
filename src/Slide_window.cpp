@@ -47,6 +47,18 @@ int Slide_window::getOutputLen() const { return output_len; }
 int Slide_window::getNumNodesInWindow() const { return num_nodes_in_window; }
 
 int Slide_window::getCurrentNodeSize() const { return current_node_size; }
+bool Slide_window::operator==(const Slide_window &rhs) const {
+  return x == rhs.x && y == rhs.y && xw == rhs.xw && yw == rhs.yw &&
+         level == rhs.level && input_addr == rhs.input_addr &&
+         edge_addr == rhs.edge_addr && output_addr == rhs.output_addr &&
+         input_len == rhs.input_len && edge_len == rhs.edge_len &&
+         output_len == rhs.output_len &&
+         num_nodes_in_window == rhs.num_nodes_in_window &&
+         current_node_size == rhs.current_node_size;
+}
+bool Slide_window::operator!=(const Slide_window &rhs) const {
+  return !(rhs == *this);
+}
 
 Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
                                    std::vector<int> xwS, std::vector<int> ywS,
