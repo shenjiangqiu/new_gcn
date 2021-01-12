@@ -7,3 +7,6 @@
 [submodule "deps/spdlog"]
 	path = deps/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "deps/minisat_utils"]
+	path = deps/minisat_utils
+	url = https://github.com/shenjiangqiu/minisat_utils.git

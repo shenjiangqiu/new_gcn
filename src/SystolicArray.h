@@ -10,7 +10,6 @@
 class SystolicArray {
 public:
   SystolicArray(int totalRows, int totalCols,
-                const shared_ptr<Slide_window> &currentSlidingWindow,
                 const shared_ptr<Aggregator_buffer> &aggBuffer,
                 const shared_ptr<WriteBuffer> &outputBuffer);
   void cycle();

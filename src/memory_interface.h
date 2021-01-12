@@ -10,82 +10,41 @@
 
 class memory_interface {
 private:
-    unsigned waiting_size;
-    std::queue<std::shared_ptr<Req>> req_queue;
-    std::queue<std::pair<unsigned long long, bool>> out_send_queue;
-    std::queue<unsigned long long> response_queue;
-    std::queue<std::shared_ptr<Req>> task_return_queue;
+  unsigned waiting_size;
+  std::queue<std::shared_ptr<Req>> req_queue;
+  std::queue<std::pair<unsigned long long, bool>> out_send_queue;
+  std::queue<unsigned long long> response_queue;
+  std::queue<std::shared_ptr<Req>> task_return_queue;
 
-    std::map<unsigned, unsigned> id_to_numreqs_map;
-    std::map<unsigned long long, std::shared_ptr<Req>> addr_to_req_map;
-    std::shared_ptr<ramulator_wrapper> m_ramulator;
+  std::map<unsigned, unsigned> id_to_numreqs_map;
+  std::map<unsigned long long, std::shared_ptr<Req>> addr_to_req_map;
+  std::shared_ptr<ramulator_wrapper> m_ramulator;
 
 public:
-    bool empty() {
-        return req_queue.empty() and out_send_queue.empty() and response_queue.empty() and task_return_queue.empty() and
-               id_to_numreqs_map.empty() and addr_to_req_map.empty();
-    }
+  bool empty() {
+    return req_queue.empty() and out_send_queue.empty() and
+           response_queue.empty() and task_return_queue.empty() and
+           id_to_numreqs_map.empty() and addr_to_req_map.empty();
+  }
 
-    bool avaliable() { return req_queue.size() < waiting_size; }
+  bool avaliable() { return req_queue.size() < waiting_size; }
 
-    void send(std::shared_ptr<Req> req) {
-        assert(req_queue.size() < waiting_size);
-        req_queue.push(req);
-        auto num_reqs = (req->len + 63) / 64;
-        id_to_numreqs_map.insert({req->id, num_reqs});
-    }
+  void send(std::shared_ptr<Req> req);
 
-    bool ret_avaliable() { return task_return_queue.size() > 0; }
+  bool ret_avaliable() { return task_return_queue.size() > 0; }
 
-    std::shared_ptr<Req> get_req() {
-        auto ret = task_return_queue.front();
-        task_return_queue.pop();
-        return ret;
-    }
+  std::shared_ptr<Req> get_req() {
+    auto ret = task_return_queue.front();
+    task_return_queue.pop();
+    return ret;
+  }
 
-    memory_interface(const std::string &dram_config_name, unsigned int waitingSize)
-            : m_ramulator(new ramulator_wrapper(dram_config_name, 64)), waiting_size(waitingSize) {}
+  memory_interface(const std::string &dram_config_name,
+                   unsigned int waitingSize)
+      : m_ramulator(new ramulator_wrapper(dram_config_name, 64)),
+        waiting_size(waitingSize) {}
 
-    void cycle() {
-
-        m_ramulator->do_cycle();
-        // send policy changed here
-        if (!req_queue.empty()) {
-            auto next_req = req_queue.front();
-            if (next_req->len > 0) {
-                addr_to_req_map.insert({next_req->addr, next_req});
-                out_send_queue.push(
-                        {next_req->addr, next_req->req_type == mem_request::write});
-                if (int(next_req->len - 64) <= 0) {
-                    req_queue.pop();
-                } else {
-                    next_req->addr += 64;
-                    next_req->len -= 64;
-                }
-            }
-        }
-        if (!response_queue.empty()) {
-            auto &resp = response_queue.front();
-            auto req = addr_to_req_map.at(resp);
-            addr_to_req_map.erase(resp);
-            if (--id_to_numreqs_map.at(req->id) == 0) {
-                id_to_numreqs_map.erase(req->id);
-                task_return_queue.push(req);
-            }
-            response_queue.pop();
-        }
-
-        // to dram
-        if (!out_send_queue.empty()) {
-            auto req = out_send_queue.front();
-            out_send_queue.pop();
-            m_ramulator->send(req.first, !req.second);
-        }
-        if (m_ramulator->return_available()) {
-            auto req = m_ramulator->pop();
-            response_queue.push(req);
-        }
-    }
+  void cycle();
 };
 
 #endif /* MEMORY_INTERFACE_H */

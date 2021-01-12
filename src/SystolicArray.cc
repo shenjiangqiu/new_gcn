@@ -5,13 +5,11 @@
 #include "SystolicArray.h"
 #include "globals.h"
 #include "spdlog/spdlog.h"
-SystolicArray::SystolicArray(
-    int totalRows, int totalCols,
-    const shared_ptr<Slide_window> &currentSlidingWindow,
-    const shared_ptr<Aggregator_buffer> &aggBuffer,
-    const shared_ptr<WriteBuffer> &outputBuffer)
+SystolicArray::SystolicArray(int totalRows, int totalCols,
+                             const shared_ptr<Aggregator_buffer> &aggBuffer,
+                             const shared_ptr<WriteBuffer> &outputBuffer)
     : total_rows(totalRows), total_cols(totalCols),
-      current_sliding_window(currentSlidingWindow), agg_buffer(aggBuffer),
+      current_sliding_window(nullptr), agg_buffer(aggBuffer),
       output_buffer(outputBuffer) {}
 int SystolicArray::cal_remaining_cycle() {
 
@@ -35,7 +33,7 @@ int SystolicArray::cal_remaining_cycle() {
 }
 void SystolicArray::cycle() {
   if (empty and agg_buffer->isReadReady() and !agg_buffer->isReadBusy() and
-      !agg_buffer->isReadEmpty()) {
+      !agg_buffer->isReadEmpty() and output_buffer->isNextEmpty()) {
     assert(remaining_cycle == 0);
     empty = false;
     running = true;

@@ -98,7 +98,8 @@ public:
 
   void add_new_task(std::shared_ptr<Slide_window> window);
   void start_read() {
-    assert(read_ready and !read_busy) { read_busy = true; }
+    assert(read_ready and !read_busy);
+    read_busy = true;
   }
   void finish_write();
 
