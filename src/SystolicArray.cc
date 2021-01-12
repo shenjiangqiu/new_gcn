@@ -40,6 +40,8 @@ void SystolicArray::cycle() {
     current_sliding_window = agg_buffer->getReadWindow();
 
     remaining_cycle = cal_remaining_cycle();
+    
+    //TODO need to set agg buffer and output buffer here
     spdlog::debug("start a new systolic task: window:{}, total_cycle:{}, "
                   "current cycle:{}",
                   *current_sliding_window, remaining_cycle,
@@ -53,6 +55,7 @@ void SystolicArray::cycle() {
       current_sliding_window = nullptr;
 
       agg_buffer->finish_read();
+      //TODO need to update output buffer here
       empty = true;
       running = false;
       finished = true;
