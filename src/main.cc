@@ -19,14 +19,12 @@ static StringOption graph_name("system", "graph-name", "the name of graph");
 int main(int argc, char **argv) {
 
   Minisat::parseOptions(argc, argv, false);
-  std::vector<int> node_sizes;
+  //TODO: should be read gcn number
+  std::vector<int> node_sizes = {100, 200, 300};
   System m_system(inputSize, edgeSize, aggSize, outputSize, aggCores,
                   systolic_rows, systolic_cols, (std::string)graph_name,
-                  node_sizes,
-                  slide_window_set_iterator(__gnu_cxx::__normal_iterator(),
-                                            __gnu_cxx::__normal_iterator(),
-                                            __gnu_cxx::__normal_iterator(),
-                                            __gnu_cxx::__normal_iterator()));
+                  node_sizes);
+  m_system.run();
 
   return 0;
 }

@@ -147,25 +147,21 @@ void System::cycle() {
     // TODO: remember: need the increase the current_iter and prev_iter after
     // this function!!!!
     if (i == m_slide_window_set->begin() or
-        (std::prev(i)->getX() != i->getX() or
-         std::prev(i)->getLevel() != i->getLevel())) {
+        (((**prev_iter).getX() != (*i).getX()) or
+         (**prev_iter).getLevel() != (*i).getLevel())) {
       // which meas, currently we are going to execute a new col.
       // finished current col.
       // prefetch the next col
       edge_buffer->finish_current_move_next();
 
       auto next_edge_req = std::make_shared<Req>();
-      next_edge_req->addr = j->getEdgeAddr();
-      next_edge_req->len = j->getEdgeLen();
+      next_edge_req->addr = (*i.get_next_col()).getEdgeAddr();
+      next_edge_req->len = (*i.get_next_col()).getEdgeLen();
       next_edge_req->req_type = mem_request::read;
       next_edge_req->t = device_types::edge_buffer;
       edge_buffer->add_next(next_edge_req);
-      if (i != m_slide_window_set->get_windows().begin())
+      if (i != m_slide_window_set->begin())
         agg_buffer->finish_write();
-      if (!agg_buffer->isReadEmpty() and agg_buffer->isReadReady()) {
-        agg_buffer->finish_read();
-      }
     }
   }
-}
 }
