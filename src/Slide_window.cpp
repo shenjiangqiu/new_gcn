@@ -68,12 +68,12 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   assert(xw_s.size() == total_level - 1);
   assert(node_size_s.size() == total_level);
 
-  uint64_t start_addr = 0xff11ff11;
+  uint64_t start_addr = 0xff11ff00;
   for (auto l = 0; l < totalLevel; l++) {
     node_addrs.push_back(start_addr);
     start_addr += m_graph->get_num_nodes() * node_size_s[l] * single_node_size;
   }
-
+  //each layer
   for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
     m_sliding_window_multi_level.emplace_back();
     auto col_i = 0;
@@ -91,8 +91,8 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         row_to_count[m_graph->get_edges()[e_index]]++;
       }
       auto row_i = 0;
-
       while (row_i < m_graph->get_num_nodes()) {
+        //skipping
         while (row_i < m_graph->get_num_nodes() and
                !row_to_count.count(row_i)) {
           // empty line
@@ -105,6 +105,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         if (row_end > m_graph->get_num_nodes()) {
           row_end = m_graph->get_num_nodes();
         }
+        //shrinking
         while (!row_to_count.count(row_end - 1)) {
           row_end--;
         }

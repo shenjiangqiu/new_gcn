@@ -206,7 +206,7 @@ public:
 
   explicit WriteBuffer(const std::string &name);
 };
-
+//only read the edge , do not read edge index now
 class ReadBuffer : public Mem_buffer {
 public:
   explicit ReadBuffer(const string &basicString);

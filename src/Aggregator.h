@@ -20,7 +20,7 @@ public:
     [[nodiscard]] bool isWorking() const {
         return working;
     }
-
+    //TODO read buffer have latency
     void cycle();
 
     Aggregator(const shared_ptr<ReadBuffer> &inputBuffer, const shared_ptr<ReadBuffer> &edgeBuffer,

@@ -19,11 +19,14 @@ static StringOption graph_name("system", "graph-name", "the name of graph");
 int main(int argc, char **argv) {
 
   Minisat::parseOptions(argc, argv, false);
-  //TODO: should be read gcn number
+  // TODO: should be read gcn number
+  // the features dimension for each layer
   std::vector<int> node_sizes = {100, 200, 300};
+  std::cout << argv[1] << std::endl;
+  std::string the_name = "123";
   System m_system(inputSize, edgeSize, aggSize, outputSize, aggCores,
-                  systolic_rows, systolic_cols, (std::string)graph_name,
-                  node_sizes);
+                  systolic_rows, systolic_cols, (std::string)the_name,
+                  node_sizes, std::string());
   m_system.run();
 
   return 0;

@@ -13,7 +13,7 @@
 System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int outputBufferSize, int aggTotalCores, int systolic_rows,
                int systolic_cols, std::string graphName,
-               std::vector<int> node_size)
+               std::vector<int> node_size, std::string dram_config_name)
     : input_buffer_size(inputBufferSize), edge_buffer_size(edgeBufferSize),
       agg_buffer_size(aggBufferSize), output_buffer_size(outputBufferSize),
       agg_total_cores(aggTotalCores),
@@ -77,6 +77,7 @@ void System::cycle() {
 
   m_aggregator->cycle();
   m_systolic_array->cycle();
+  // TODO, the memory working frequency is not same as gcn_sim
   m_mem->cycle();
 
   // handle memory requests
@@ -149,7 +150,7 @@ void System::cycle() {
     if (i == m_slide_window_set->begin() or
         (((**prev_iter).getX() != (*i).getX()) or
          (**prev_iter).getLevel() != (*i).getLevel())) {
-      // which meas, currently we are going to execute a new col.
+      // which means, currently we are going to execute a new col.
       // finished current col.
       // prefetch the next col
       edge_buffer->finish_current_move_next();

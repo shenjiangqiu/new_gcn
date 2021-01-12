@@ -290,6 +290,8 @@ private:
 
     std::vector<Slide_window>
             m_sliding_window_vec;
+    //3 dimension vector: level-col-row-element
+    //m_sliding_window_multi_level[1][2][3],layer,1,col,2,row3
     std::vector<std::vector<std::vector<Slide_window>>> m_sliding_window_multi_level;
 
     std::vector<uint64_t> node_addrs;//for each level;

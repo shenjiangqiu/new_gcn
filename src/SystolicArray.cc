@@ -12,7 +12,7 @@ SystolicArray::SystolicArray(int totalRows, int totalCols,
       current_sliding_window(nullptr), agg_buffer(aggBuffer),
       output_buffer(outputBuffer) {}
 int SystolicArray::cal_remaining_cycle() {
-
+  // TODO: Add output latency, the weight is decided by output layer dimension.
   assert(current_sliding_window);
   int total_cycles = 0;
   auto num_nodes = current_sliding_window->getXw();
@@ -40,8 +40,8 @@ void SystolicArray::cycle() {
     current_sliding_window = agg_buffer->getReadWindow();
 
     remaining_cycle = cal_remaining_cycle();
-    
-    //TODO need to set agg buffer and output buffer here
+
+    // TODO need to set agg buffer and output buffer here
     spdlog::debug("start a new systolic task: window:{}, total_cycle:{}, "
                   "current cycle:{}",
                   *current_sliding_window, remaining_cycle,
@@ -55,7 +55,7 @@ void SystolicArray::cycle() {
       current_sliding_window = nullptr;
 
       agg_buffer->finish_read();
-      //TODO need to update output buffer here
+      // TODO need to update output buffer here
       empty = true;
       running = false;
       finished = true;
