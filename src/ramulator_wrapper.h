@@ -20,43 +20,42 @@
 
 class ramulator_wrapper {
 public:
-    void send(uint64_t addr, bool is_read);
+  void send(uint64_t addr, bool is_read);
+  bool available() { return in_queue.size() <= 64; }
+  void tick();
 
-    void tick();
+  void finish();
 
-    void finish();
+  ramulator_wrapper(ramulator::Config configs, int cacheLine);
 
-    ramulator_wrapper(ramulator::Config configs, int cacheLine);
+  ~ramulator_wrapper();
 
-    ~ramulator_wrapper();
+  void call_back(ramulator::Request &req);
 
-    void call_back(ramulator::Request &req);
+  [[nodiscard]] bool empty() const;
 
-    [[nodiscard]] bool empty() const;
+  [[nodiscard]] std::string get_internal_size() const;
 
-    [[nodiscard]] std::string get_internal_size() const;
+  [[nodiscard]] std::string get_line_trace() const;
 
-    [[nodiscard]] std::string get_line_trace() const;
+  [[nodiscard]] uint64_t get() const { return out_queue.front(); }
 
-    [[nodiscard]] uint64_t get() const { return out_queue.front(); }
+  uint64_t pop() {
+    auto ret = out_queue.front();
+    out_queue.pop();
+    return ret;
+  }
 
-    uint64_t pop() {
-        auto ret = out_queue.front();
-        out_queue.pop();
-        return ret;
-    }
+  [[nodiscard]] bool return_available() const { return !out_queue.empty(); }
 
-    [[nodiscard]] bool return_available() const { return !out_queue.empty(); }
-
-
-    bool do_cycle();
+  bool do_cycle();
 
 private:
-    double tCK;
-    unsigned long long outgoing_reqs = 0;
-    std::queue<std::pair<uint64_t, bool>> in_queue;
-    std::queue<uint64_t> out_queue;
-    ramulator::MemoryBase *mem;
+  double tCK;
+  unsigned long long outgoing_reqs = 0;
+  std::queue<std::pair<uint64_t, bool>> in_queue;
+  std::queue<uint64_t> out_queue;
+  ramulator::MemoryBase *mem;
 };
 
 #endif

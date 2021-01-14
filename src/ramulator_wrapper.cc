@@ -54,7 +54,7 @@ void ramulator_wrapper::call_back(ramulator::Request &req) {
     break;
 
   default:
-    assert(req.type == Request::Type::WRITE);
+
     break;
   }
 }

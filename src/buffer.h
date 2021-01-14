@@ -9,8 +9,16 @@
 #include <string>
 #include <types.h>
 #include <utility>
+void r(bool &origin);
+class Name_object {
+public:
+  explicit Name_object(std::string name) : name(std::move(name)) {}
+  const std::string &get_name() { return name; }
 
-class Buffer_base {
+private:
+  std::string name;
+};
+class Buffer_base : public Name_object {
 public:
   [[nodiscard]] bool isCurrentEmpty() const { return current_empty; }
 
@@ -20,9 +28,7 @@ public:
 
   [[nodiscard]] bool isNextReady() const { return next_ready; }
 
-  explicit Buffer_base(std::string name) : name(std::move(name)) {}
-
-  [[nodiscard]] const string &getName() const { return name; }
+  explicit Buffer_base(std::string name) : Name_object(std::move(name)) {}
 
   // by default, do nothing
   virtual void cycle(){};
@@ -68,7 +74,6 @@ private:
   std::shared_ptr<Req> current_req;
   std::shared_ptr<Req> next_req;
 
-  std::string name;
   bool current_empty{true};
   bool current_ready{false};
   bool next_empty{true};
@@ -76,7 +81,7 @@ private:
   std::shared_ptr<Slide_window> m_window;
 };
 
-class Aggregator_buffer {
+class Aggregator_buffer : public Name_object {
 public:
   explicit Aggregator_buffer(string name);
 
@@ -97,10 +102,7 @@ public:
   [[nodiscard]] const string &getName() const;
 
   void add_new_task(std::shared_ptr<Slide_window> window);
-  void start_read() {
-    assert(read_ready and !read_busy);
-    read_busy = true;
-  }
+  void start_read();
   void finish_write();
 
   void finish_read();
@@ -110,12 +112,12 @@ private:
   // for write port;
   bool write_empty{true};
   bool write_ready{false};
-
+  // nothing to be read
   bool read_empty{true};
+  // data valid for read
   bool read_ready{false};
+  // currently we are reading, do not erase me!
   bool read_busy{false};
-
-  std::string name;
 
   std::shared_ptr<Slide_window> read_window;
 
@@ -129,7 +131,7 @@ private:
 
   //
 };
-
+/*
 class Mem_buffer : public Buffer_base {
 public:
   explicit Mem_buffer(const string &basicString);
@@ -185,31 +187,128 @@ public:
   }
 
 private:
-  bool current_sent{};
-  bool current_send_ready{};
+  bool current_sent{false};
+  bool current_send_ready{false};
 
-  bool next_send_ready{};
-  bool next_sent{};
+  bool next_send_ready{false};
+  bool next_sent{false};
 };
-
-class WriteBuffer : public Mem_buffer {
+*/
+class WriteBuffer : public Name_object {
 public:
-  shared_ptr<Req> pop_current_req() override {
-    setCurrentEmpty(true);
-    return Mem_buffer::pop_current_req();
+  explicit WriteBuffer(std::string name) : Name_object(std::move(name)) {}
+  void start_write_to_buffer(std::shared_ptr<Req> req) {
+    assert(write_to_buffer_empty and !write_to_buffer_started and
+           !write_to_buffer_finished);
+    r(write_to_buffer_empty);
+    r(write_to_buffer_started);
+    write_to_buffer_req = std::move(req);
   }
 
-  shared_ptr<Req> pop_next_req() override {
-    setNextEmpty(true);
-    return Mem_buffer::pop_next_req();
+  // finished write to buffer, so it's ready to be moved into memory buffer
+  void finished_write_to_buffer();
+
+  // the memory controller start to write back the buffer into memory. so it'
+  // not ready to be replaced by write buffer.
+  void start_write_memory();
+
+  // the memory buffer is finished write back. So it's ready to be replaced.
+  void finished_write_memory();
+
+  // if the write buffer is ready and memory buffer is empty, move the buffer
+  void cycle();
+
+  [[nodiscard]] bool is_write_to_buffer_available() const {
+    return write_to_buffer_empty;
   }
 
-  explicit WriteBuffer(const std::string &name);
+  [[nodiscard]] bool is_write_to_memory_empty() const;
+  [[nodiscard]] bool isWriteToBufferEmpty() const;
+  [[nodiscard]] bool isWriteToBufferStarted() const;
+  [[nodiscard]] bool isWriteToBufferFinished() const;
+  [[nodiscard]] bool isWriteToMemoryEmpty() const;
+  [[nodiscard]] bool isWriteToMemoryStarted() const;
+
+  [[nodiscard]] const shared_ptr<Req> &getWriteToMemReq() const;
+  const shared_ptr<Req> &popWriteToMemReq() {
+    start_write_memory();
+    return getWriteToMemReq();
+  }
+
+private:
+  std::shared_ptr<Req> write_to_buffer_req;
+  std::shared_ptr<Req> write_to_mem_req;
+
+  bool write_to_buffer_empty{true};
+  bool write_to_buffer_started{false};
+  bool write_to_buffer_finished{false};
+
+  bool write_to_memory_empty{true};
+  bool write_to_memory_started{false};
 };
-//only read the edge , do not read edge index now
-class ReadBuffer : public Mem_buffer {
+// only read the edge , do not read edge index now
+class ReadBuffer : public Name_object {
 public:
-  explicit ReadBuffer(const string &basicString);
+  explicit ReadBuffer(const string &basicString,
+                      const std::shared_ptr<Slide_window_set> &m_set);
+  virtual void cycle() = 0;
+
+  [[nodiscard]] bool isCurrentReady() const;
+  [[nodiscard]] bool isNextEmpty() const;
+  [[nodiscard]] bool isNextReady() const;
+  [[nodiscard]] bool isCurrentEmpty() const;
+  [[nodiscard]] bool isCurrentSent() const;
+  [[nodiscard]] bool isNextSent() const;
+
+  [[nodiscard]] bool current_send_ready() const {
+    return !current_empty and !current_sent;
+  }
+  [[nodiscard]] bool next_send_ready() const {
+    return !next_empty and !next_sent;
+  }
+  virtual std::shared_ptr<Req> pop_current() = 0;
+  virtual std::shared_ptr<Req> pop_next() = 0;
+  virtual void receive(shared_ptr<Req> req);
+  void finished_current() {
+    assert(!current_empty and current_sent and current_ready);
+    current_empty = true;
+    current_sent = false;
+    current_ready = false;
+  }
+  const slide_window_set_iterator &getMCurrentIter() const;
+
+protected:
+  std::shared_ptr<Slide_window_set> m_set;
+  slide_window_set_iterator m_current_iter;
+  slide_window_set_iterator m_next_iter;
+  std::shared_ptr<Req> current_req;
+  std::shared_ptr<Req> next_req;
+  // if current empty but not send, the system should send it,
+  bool current_empty{true};
+  // if the requests returns, should set return to true;
+  bool current_ready{false};
+  bool current_sent{false};
+  bool next_empty{true};
+  bool next_ready{false};
+  bool next_sent{false};
+};
+class EdgeBuffer : public ReadBuffer {
+public:
+  explicit EdgeBuffer(const string &name,
+                      const std::shared_ptr<Slide_window_set> &m_set);
+  void cycle() override;
+  shared_ptr<Req> pop_current() override;
+  shared_ptr<Req> pop_next() override;
+
+protected:
+};
+class InputBuffer : public ReadBuffer {
+public:
+  InputBuffer(const std::string &name,
+              const std::shared_ptr<Slide_window_set> &m_set);
+  void cycle() override;
+  shared_ptr<Req> pop_current() override;
+  shared_ptr<Req> pop_next() override;
 };
 
 #endif /* BUFFER_H */

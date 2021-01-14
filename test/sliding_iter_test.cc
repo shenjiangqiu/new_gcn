@@ -13,16 +13,16 @@ TEST_CASE("sliding_iter") {
   auto j = m_set.begin();
   for (; i != w.end() and j != m_set.end(); i++, j++) {
     REQUIRE(*i == *j);
-    fmt::print("{}\n", *i);
+    fmt::print("{:s}\n", *i);
   }
   j = m_set.begin();
-  fmt::print("next: {}\n", *j);
+  fmt::print("next: {:s}\n", *j);
 
   auto next_col = j.get_next_col();
-  fmt::print("next: {}\n", *next_col);
+  fmt::print("next: {:s}\n", *next_col);
 
   while (next_col.have_next_col()) {
     next_col = next_col.get_next_col();
-    fmt::print("next: {}\n", *next_col);
+    fmt::print("next: {:s}\n", *next_col);
   }
 }

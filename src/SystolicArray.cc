@@ -3,8 +3,10 @@
 //
 
 #include "SystolicArray.h"
+
 #include "globals.h"
 #include "spdlog/spdlog.h"
+#include <memory>
 SystolicArray::SystolicArray(int totalRows, int totalCols,
                              const shared_ptr<Aggregator_buffer> &aggBuffer,
                              const shared_ptr<WriteBuffer> &outputBuffer)
@@ -33,15 +35,29 @@ int SystolicArray::cal_remaining_cycle() {
 }
 void SystolicArray::cycle() {
   if (empty and agg_buffer->isReadReady() and !agg_buffer->isReadBusy() and
-      !agg_buffer->isReadEmpty() and output_buffer->isNextEmpty()) {
+      !agg_buffer->isReadEmpty() and output_buffer->isWriteToBufferEmpty()) {
+    spdlog::debug("systolic array start a new task,cycle:{}",
+                  global_definitions.cycle);
+    // generate the output buffer request.
+    current_sliding_window = agg_buffer->getReadWindow();
+    auto req = std::make_shared<Req>();
+    req->the_final_request = current_sliding_window->isTheFinalCol();
+    req->addr = current_sliding_window->getOutputAddr();
+    req->len = current_sliding_window->getOutputLen();
+    req->t = device_types::output_buffer;
+    req->req_type = mem_request::write;
+    output_buffer->start_write_to_buffer(req);
+
+    // calculate the remaining cycle
     assert(remaining_cycle == 0);
     empty = false;
     running = true;
-    current_sliding_window = agg_buffer->getReadWindow();
 
     remaining_cycle = cal_remaining_cycle();
 
-    // TODO need to set agg buffer and output buffer here
+    // start agg buffer read
+    agg_buffer->start_read();
+
     spdlog::debug("start a new systolic task: window:{}, total_cycle:{}, "
                   "current cycle:{}",
                   *current_sliding_window, remaining_cycle,
@@ -55,7 +71,9 @@ void SystolicArray::cycle() {
       current_sliding_window = nullptr;
 
       agg_buffer->finish_read();
-      // TODO need to update output buffer here
+      output_buffer->finished_write_to_buffer();
+
+
       empty = true;
       running = false;
       finished = true;

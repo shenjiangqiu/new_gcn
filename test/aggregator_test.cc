@@ -11,8 +11,8 @@
 #include "globals.h"
 
 TEST_CASE("aggregator_test") {
-    spdlog::set_level(spdlog::level::debug);
-    auto input_buffer = std::make_shared<ReadBuffer>("input buffer");
+    /*spdlog::set_level(spdlog::level::debug);
+    auto input_buffer = std::make_shared<InputBuffer>("input buffer");
     auto edge_buffer = std::make_shared<ReadBuffer>("edge buffer");
     auto agg_buffer = std::make_shared<Aggregator_buffer>("agg buffer");
     auto mem_interface = std::make_shared<memory_interface>("DDR4-config.cfg", 64);
@@ -129,6 +129,6 @@ TEST_CASE("aggregator_test") {
 
         }
 
-    }
+    }*/
 
 }

@@ -6,13 +6,16 @@ void memory_interface::cycle() {
   if (!req_queue.empty()) {
     auto next_req = req_queue.front();
     if (next_req->len > 0) {
-      // write request will not be back again, so no need to record.
+      // write request will come back immediately when sent, so no need record
       if (next_req->req_type == mem_request::read)
         addr_to_req_map.insert({next_req->addr, next_req});
       out_send_queue.push(
           {next_req->addr, next_req->req_type == mem_request::write});
       if (int(next_req->len - 64) <= 0) {
         req_queue.pop();
+        if (next_req->req_type == mem_request::write) {
+          task_return_queue.push(next_req);
+        }
       } else {
         next_req->addr += 64;
         next_req->len -= 64;
@@ -31,7 +34,7 @@ void memory_interface::cycle() {
   }
 
   // to dram
-  if (!out_send_queue.empty()) {
+  if (!out_send_queue.empty() and m_ramulator->available()) {
     auto req = out_send_queue.front();
     out_send_queue.pop();
     m_ramulator->send(req.first, !req.second);

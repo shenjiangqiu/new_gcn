@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(gcn_sim)
+project(gcn_sim VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 17)
 
 
@@ -12,7 +12,7 @@ add_subdirectory(deps/minisat_utils)
 file(GLOB lib_srcs src/*.cc)
 list(FILTER lib_srcs EXCLUDE REGEX ".*main.cc")
 
-add_library(gcn_sim_lib ${lib_srcs} src/Slide_window.cpp src/Slide_window.h)
+add_library(gcn_sim_lib ${lib_srcs})
 target_include_directories(gcn_sim_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles)
 
