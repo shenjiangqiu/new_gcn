@@ -83,11 +83,16 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   }
   // each layer
   for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
+    if (level_i != 0) {
+      m_sliding_window_vec.back().setTheFinalRow(true);
+      m_sliding_window_multi_level[level_i - 1].back().back().setTheFinalRow(
+          true);
+    }
     m_sliding_window_multi_level.emplace_back();
     auto col_i = 0;
     while (col_i < m_graph->get_num_nodes()) {
       if (!m_sliding_window_multi_level[level_i].empty()) {
-        //TODO: bug here, can not set it correctly!!
+       
         m_sliding_window_multi_level[level_i].back().back().setTheFinalRow(
             true);
         m_sliding_window_vec.back().setTheFinalRow(true);
@@ -166,6 +171,8 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
       col_i = col_end;
     }
   }
+  m_sliding_window_multi_level.back().back().back().setTheFinalRow(true);
+  m_sliding_window_vec.back().setTheFinalRow(true);
 }
 slide_window_set_iterator Slide_window_set::begin() {
   for (auto i = m_sliding_window_multi_level.begin();
