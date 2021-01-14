@@ -97,7 +97,7 @@ template <> struct fmt::formatter<Slide_window> {
                         p.isTheFinalCol(), p.isTheFinalRow(), p.isTheFirstRow())
             : format_to(ctx.out(),
                         "x {} y {} {} {} l {} i_a {} e_a {} o_a {} i_l {} "
-                        "e_l {} o_l {} n_n fnc:{} fnr:{} fsr:{}",
+                        "e_l {} o_l {} n_n:{} fnc:{} fnr:{} fsr:{}",
                         p.getX(), p.getY(), p.getXw(), p.getYw(), p.getLevel(),
                         p.getInputAddr(), p.getEdgeAddr(), p.getOutputAddr(),
                         p.getInputLen(), p.getEdgeLen(), p.getOutputLen(),

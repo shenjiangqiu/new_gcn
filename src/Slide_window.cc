@@ -92,7 +92,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
     auto col_i = 0;
     while (col_i < m_graph->get_num_nodes()) {
       if (!m_sliding_window_multi_level[level_i].empty()) {
-       
+
         m_sliding_window_multi_level[level_i].back().back().setTheFinalRow(
             true);
         m_sliding_window_vec.back().setTheFinalRow(true);

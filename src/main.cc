@@ -6,6 +6,7 @@
 #include <graph.h>
 #include <iostream>
 using namespace Minisat;
+// those are global definitions, do not use them in constructors!!!
 static IntOption inputSize("system", "input", "the input buffer size(Byte)");
 static IntOption outputSize("system", "output", "the output buffer size(Byte)");
 static IntOption edgeSize("system", "edge", "the edge buffer size(Byte)");
@@ -21,6 +22,8 @@ static StringOption graph_name("system", "graph-name", "the name of graph",
 static StringOption dram_name("sym", "dram-name", "the name of dram",
                               "DDR4-config.cfg");
 static BoolOption debug("system", "debug", "if enable debug", false);
+
+
 int main(int argc, char **argv) {
 
   Minisat::parseOptions(argc, argv, false);
@@ -28,6 +31,8 @@ int main(int argc, char **argv) {
   // the features dimension for each layer
   if (debug) {
     spdlog::set_level(spdlog::level::debug);
+  } else {
+    spdlog::set_level(spdlog::level::err);
   }
   std::vector<int> node_sizes = {10, 20, 10};
 
