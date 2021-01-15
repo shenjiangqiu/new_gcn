@@ -42,8 +42,8 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
 ramulator_wrapper::~ramulator_wrapper() { delete mem; }
 void ramulator_wrapper::finish() { mem->finish(); }
 void ramulator_wrapper::tick() { mem->tick(); }
-void ramulator_wrapper::send(uint64_t addr, bool is_read) {
-  this->in_queue.push({addr, is_read});
+void ramulator_wrapper::send(uint64_t addr, bool is_write) {
+  this->in_queue.push({addr, is_write});
 }
 void ramulator_wrapper::call_back(ramulator::Request &req) {
   outgoing_reqs--;
@@ -58,13 +58,13 @@ void ramulator_wrapper::call_back(ramulator::Request &req) {
     break;
   }
 }
-bool ramulator_wrapper::do_cycle() {
-  bool busy = false;
+void ramulator_wrapper::cycle() {
+
   if (!in_queue.empty()) {
-    busy = true;
     auto &req = in_queue.front();
+    //first addr, second: is_write
     auto r_req = Request(
-        req.first, req.second ? Request::Type::READ : Request::Type::WRITE,
+        req.first, req.second ? Request::Type::WRITE : Request::Type::READ,
         [this](Request &req) { this->call_back(req); });
     if (mem->send(r_req)) {
       outgoing_reqs++;
@@ -72,7 +72,6 @@ bool ramulator_wrapper::do_cycle() {
     }
   }
   this->tick();
-  return busy;
 }
 bool ramulator_wrapper::empty() const {
   return in_queue.empty() and out_queue.empty() and outgoing_reqs == 0;

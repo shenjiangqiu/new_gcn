@@ -1,7 +1,7 @@
 #include <memory_interface.h>
 void memory_interface::cycle() {
 
-  m_ramulator->do_cycle();
+  m_ramulator->cycle();
   // send policy changed here
   if (!req_queue.empty()) {
     auto next_req = req_queue.front();
@@ -9,6 +9,7 @@ void memory_interface::cycle() {
       // write request will come back immediately when sent, so no need record
       if (next_req->req_type == mem_request::read)
         addr_to_req_map.insert({next_req->addr, next_req});
+      //addr, is_write
       out_send_queue.push(
           {next_req->addr, next_req->req_type == mem_request::write});
       if (int(next_req->len - 64) <= 0) {
@@ -37,7 +38,8 @@ void memory_interface::cycle() {
   if (!out_send_queue.empty() and m_ramulator->available()) {
     auto req = out_send_queue.front();
     out_send_queue.pop();
-    m_ramulator->send(req.first, !req.second);
+    //addr, is_write
+    m_ramulator->send(req.first, req.second);
   }
   if (m_ramulator->return_available()) {
     auto req = m_ramulator->pop();

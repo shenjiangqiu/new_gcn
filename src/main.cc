@@ -23,11 +23,16 @@ static StringOption dram_name("sym", "dram-name", "the name of dram",
                               "DDR4-config.cfg");
 static BoolOption debug("system", "debug", "if enable debug", false);
 
-
+static StringOption model("system", "model", "the model definition file",
+                          "graphseige.model");
+static BoolOption double_input(
+    "system", "double-input",
+    "will the result of aggregation need to concat the origin vector", false);
 int main(int argc, char **argv) {
 
   Minisat::parseOptions(argc, argv, false);
   // TODO: should be read gcn number
+  // TODO: the agg_buffer might contain double information
   // the features dimension for each layer
   if (debug) {
     spdlog::set_level(spdlog::level::debug);

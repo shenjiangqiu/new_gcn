@@ -14,5 +14,4 @@ TEST_CASE("system_test", "[big]") {
                   "DDR4-config.cfg");
 
   m_system.run();
-  return;
 }

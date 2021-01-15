@@ -17,12 +17,12 @@
 #include <queue>
 #include <set>
 #include <tuple>
-
-class ramulator_wrapper {
+#include "dram_wrapper.h"
+class ramulator_wrapper: public dram_wrapper {
 public:
-  void send(uint64_t addr, bool is_read);
-  bool available() { return in_queue.size() <= 64; }
-  void tick();
+  void send(uint64_t addr, bool is_write) override;
+  bool available() const override { return in_queue.size() <= 64; }
+  void tick() ;
 
   void finish();
 
@@ -38,21 +38,22 @@ public:
 
   [[nodiscard]] std::string get_line_trace() const;
 
-  [[nodiscard]] uint64_t get() const { return out_queue.front(); }
+  [[nodiscard]] uint64_t get() const override { return out_queue.front(); }
 
-  uint64_t pop() {
+  uint64_t pop() override {
     auto ret = out_queue.front();
     out_queue.pop();
     return ret;
   }
 
-  [[nodiscard]] bool return_available() const { return !out_queue.empty(); }
+  [[nodiscard]] bool return_available() const override { return !out_queue.empty(); }
 
-  bool do_cycle();
+  void cycle() override;
 
 private:
   double tCK;
   unsigned long long outgoing_reqs = 0;
+  //addr,iswrite
   std::queue<std::pair<uint64_t, bool>> in_queue;
   std::queue<uint64_t> out_queue;
   ramulator::MemoryBase *mem;

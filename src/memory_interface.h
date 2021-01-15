@@ -7,18 +7,19 @@
 #include <queue>
 #include <ramulator_wrapper.h>
 #include <types.h>
-
+#include "dram_wrapper.h"
 class memory_interface {
 private:
   unsigned waiting_size;
   std::queue<std::shared_ptr<Req>> req_queue;
+  //addr, is_write
   std::queue<std::pair<unsigned long long, bool>> out_send_queue;
   std::queue<unsigned long long> response_queue;
   std::queue<std::shared_ptr<Req>> task_return_queue;
 
   std::map<unsigned, unsigned> id_to_numreqs_map;
   std::map<unsigned long long, std::shared_ptr<Req>> addr_to_req_map;
-  std::shared_ptr<ramulator_wrapper> m_ramulator;
+  std::shared_ptr<dram_wrapper> m_ramulator;
 
 public:
   bool empty() {
