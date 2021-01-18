@@ -11,19 +11,19 @@
 #include "SystolicArray.h"
 #include "buffer.h"
 #include "memory_interface.h"
-
+#include "Model.h"
 class System {
 public:
   System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
          int outputBufferSize, int aggTotalCores, int systolic_rows,
-         int systolic_cols, std::string graphName, std::vector<int> node_size,
-         const std::string &dram_config_name);
+         int systolic_cols, std::shared_ptr<Graph> graph,
+         std::vector<int> node_size, const std::string &dram_config_name,
+         std::shared_ptr<Model> mModel);
 
   void cycle();
   void run();
 
 private:
-  std::string graph_name;
 
   std::shared_ptr<Graph> m_graph;
 
@@ -45,6 +45,8 @@ private:
   bool finished{false};
   std::shared_ptr<slide_window_set_iterator> current_iter;
   std::shared_ptr<slide_window_set_iterator> prev_iter;
+  std::shared_ptr<Model> m_model;
+
 };
 
 #endif // GCN_SIM_SYSTEM_H

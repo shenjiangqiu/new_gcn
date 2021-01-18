@@ -12,7 +12,7 @@ add_subdirectory(deps/minisat_utils)
 file(GLOB lib_srcs src/*.cc)
 list(FILTER lib_srcs EXCLUDE REGEX ".*main.cc")
 
-add_library(gcn_sim_lib ${lib_srcs})
+add_library(gcn_sim_lib ${lib_srcs} src/Model.cc src/Model.h)
 target_include_directories(gcn_sim_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles)
 

@@ -13,8 +13,9 @@
 
 System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int outputBufferSize, int aggTotalCores, int systolic_rows,
-               int systolic_cols, std::string graphName,
-               std::vector<int> node_size, const std::string &dram_config_name)
+               int systolic_cols, std::shared_ptr<Graph> graph,
+               std::vector<int> node_size, const std::string &dram_config_name,
+               std::shared_ptr<Model> mModel)
     : input_buffer_size(inputBufferSize), edge_buffer_size(edgeBufferSize),
       agg_buffer_size(aggBufferSize), output_buffer_size(outputBufferSize),
       agg_total_cores(aggTotalCores),
@@ -24,21 +25,27 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
 
       m_systolic_array(std::make_shared<SystolicArray>(
           systolic_rows, systolic_cols, agg_buffer, output_buffer)),
-      graph_name(std::move(graphName)),
-      m_graph(std::make_shared<Graph>(graph_name)),
-      m_mem(std::make_shared<memory_interface>(dram_config_name, 64)) {
+      m_graph(std::move(graph)),
+      m_mem(std::make_shared<memory_interface>(dram_config_name, 64)),
+      m_model(mModel) {
   // first need to get the max x_w;
   int total_level = node_size.size();
 
   std::vector<int> xw_s;
   std::vector<int> yw_s;
   for (auto i = 0; i < total_level - 1; i++) {
-    xw_s.push_back((agg_buffer_size / 2) / (node_size[i] * 4));
-    spdlog::debug("xws push back:{}", xw_s.back());
+    if (m_model->isConcatenate()) {
+      //the aggregator's result will concatenate the origin node.
+      auto size = ((agg_buffer_size / 4) / (node_size[i] * 4));
+      xw_s.push_back(size);
+    } else {
+      xw_s.push_back((agg_buffer_size / 2) / (node_size[i] * 4));
+    }
+    spdlog::info("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
     yw_s.push_back((input_buffer_size / 2) / (node_size[i] * 4));
     assert(yw_s.back() > 0 && "the window should be positive");
-    spdlog::debug("yws push back:{}", yw_s.back());
+    spdlog::info("yws push back:{}", yw_s.back());
   }
   m_slide_window_set = std::make_shared<Slide_window_set>(
       m_graph, xw_s, yw_s, node_size, total_level);

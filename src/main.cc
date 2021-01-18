@@ -1,49 +1,57 @@
+#include "Model.h"
 #include "System.h"
+#include "globals.h"
+#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 #include "utils/Options.h"
 #include <fmt/format.h>
 #include <fstream>
 #include <graph.h>
 #include <iostream>
+
 using namespace Minisat;
-// those are global definitions, do not use them in constructors!!!
-static IntOption inputSize("system", "input", "the input buffer size(Byte)");
-static IntOption outputSize("system", "output", "the output buffer size(Byte)");
-static IntOption edgeSize("system", "edge", "the edge buffer size(Byte)");
-static IntOption aggSize("system", "agg", "the agg buffer size(Byte)");
 
-static IntOption aggCores("system", "aggCores", "the agg buffer size(Byte)");
-static IntOption systolic_rows("system", "systolic-rows",
-                               "the agg buffer size(Byte)");
-static IntOption systolic_cols("system", "systolic-cols",
-                               "the agg buffer size(Byte)");
-static StringOption graph_name("system", "graph-name", "the name of graph",
-                               "test");
-static StringOption dram_name("sym", "dram-name", "the name of dram",
-                              "DDR4-config.cfg");
-static BoolOption debug("system", "debug", "if enable debug", false);
-
-static StringOption model("system", "model", "the model definition file",
-                          "graphseige.model");
-static BoolOption double_input(
-    "system", "double-input",
-    "will the result of aggregation need to concat the origin vector", false);
 int main(int argc, char **argv) {
-
+  std::map<std::string, int> node_feat_sizes = {{"cora", 1433},
+                                                {"citeseer", 3703}};
   Minisat::parseOptions(argc, argv, false);
   // TODO: should be read gcn number
   // TODO: the agg_buffer might contain double information
   // the features dimension for each layer
-  if (debug) {
+  std::shared_ptr<Model> m_model;
+  int node_feature_size = 0;
+
+  if (std::string(config::model) == std::string("gcn")) {
+    m_model = std::shared_ptr<Model>(new Model("gcn", {128}, true));
+  } else {
+    throw std::runtime_error("no such model!");
+  }
+  if (m_model->isConcatenate()) {
+    global_definitions.cycle = true;
+  }
+
+  if (node_feat_sizes.count(std::string(config::graph_name))) {
+    node_feature_size = node_feat_sizes.at(std::string(config::graph_name));
+  }
+
+  if (config::debug) {
     spdlog::set_level(spdlog::level::debug);
   } else {
     spdlog::set_level(spdlog::level::err);
   }
-  std::vector<int> node_sizes = {10, 20, 10};
 
-  System m_system(inputSize, edgeSize, aggSize, outputSize, aggCores,
-                  systolic_rows, systolic_cols, (std::string)graph_name,
-                  node_sizes, (std::string)dram_name);
+  std::shared_ptr<Graph> m_graph =
+      std::make_shared<Graph>(std::string(config::graph_name));
+
+  std::vector<int> node_sizes = {node_feature_size};
+  node_sizes.insert(node_sizes.end(), m_model->getMLevels().begin(),
+                    m_model->getMLevels().end());
+  spdlog::info("print out model levels {}", fmt::join(node_sizes, ","));
+
+  System m_system(config::inputSize, config::edgeSize, config::aggSize,
+                  config::outputSize, config::aggCores, config::systolic_rows,
+                  config::systolic_cols, m_graph, node_sizes,
+                  (std::string)config::dram_name, m_model);
   m_system.run();
 
   return 0;

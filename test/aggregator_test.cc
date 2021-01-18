@@ -11,6 +11,8 @@
 #include "globals.h"
 
 TEST_CASE("aggregator_test") {
+  //TODO finish this test
+  REQUIRE(1==0);
     /*spdlog::set_level(spdlog::level::debug);
     auto input_buffer = std::make_shared<InputBuffer>("input buffer");
     auto edge_buffer = std::make_shared<ReadBuffer>("edge buffer");

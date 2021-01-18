@@ -19,25 +19,25 @@ private:
 public:
   // for simulation, we should get the dege index addr when to access the dege
   // index
-  unsigned get_num_nodes() const { return edge_index.size() - 1; }
+  [[nodiscard]] unsigned get_num_nodes() const { return edge_index.size() - 1; }
 
-  ull get_edge_index_addr(unsigned index) const {
+  [[nodiscard]] ull get_edge_index_addr(unsigned index) const {
     return (ull) & (edge_index.at(index));
   }
 
-  ull get_edge_addr(unsigned index) const { return (ull) & (edges.at(index)); }
+  [[nodiscard]] ull get_edge_addr(unsigned index) const { return (ull) & (edges.at(index)); }
 
-  unsigned get_edge_size(unsigned index) const {
+  [[nodiscard]] unsigned get_edge_size(unsigned index) const {
     return edge_index.at(index + 1) - edge_index.at(index);
   }
 
-  const std::vector<unsigned> &get_edge_index() const { return edge_index; }
+  [[nodiscard]] const std::vector<unsigned> &get_edge_index() const { return edge_index; }
 
-  const std::vector<unsigned> &get_edges() const { return edges; }
+  [[nodiscard]] const std::vector<unsigned> &get_edges() const { return edges; }
 
-  const std::vector<std::vector<double>> &get_nodes() const { return nodes; }
+  [[nodiscard]] const std::vector<std::vector<double>> &get_nodes() const { return nodes; }
 
-  Graph(const std::string name) { this->parse(name); }
+  explicit Graph(const std::string& name) { this->parse(name); }
 
   void parse(const std::string& graph_name);
 

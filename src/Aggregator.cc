@@ -87,5 +87,11 @@ int Aggregator::calculate_remaining_cycle() {
       current_sliding_window->getX(), current_sliding_window->getY(),
       (total_elements + total_cores - 1) / total_cores,
       global_definitions.cycle);
-  return (total_elements + total_cores - 1) / total_cores;
+
+  auto cycle = (total_elements + total_cores - 1) / total_cores;
+  // read dram latency;
+  auto per_cycle_memory_fetch_time = (total_cores * 4 + 63) / 64;
+  auto total_read_memory_time = cycle * per_cycle_memory_fetch_time;
+  cycle += total_read_memory_time;
+  return cycle;
 }
