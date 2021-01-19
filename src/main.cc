@@ -12,37 +12,39 @@
 using namespace Minisat;
 
 int main(int argc, char **argv) {
-  std::map<std::string, int> node_feat_sizes = {{"cora", 1433},
-                                                {"citeseer", 3703}};
+
   Minisat::parseOptions(argc, argv, false);
   // TODO: should be read gcn number
   // TODO: the agg_buffer might contain double information
   // the features dimension for each layer
   std::shared_ptr<Model> m_model;
   int node_feature_size = 0;
+  std::string model_name = std::string(config::model);
+  if (model_name == std::string("gcn")) {
+    m_model = std::shared_ptr<Model>(new Model("gcn", {128}, true, false, 0));
+  } else if (model_name == std::string("gsc")) {
+    m_model = std::shared_ptr<Model>(new Model("gsc", {128}, true, true, 25));
+  } else if (model_name == "gin") {
+    m_model =
+        std::shared_ptr<Model>(new Model("gin", {128, 128}, true, false, 0));
 
-  if (std::string(config::model) == std::string("gcn")) {
-    m_model = std::shared_ptr<Model>(new Model("gcn", {128}, true));
   } else {
-    throw std::runtime_error("no such model!");
+    throw std::runtime_error("no such model!,supported model is gcn,gsc,gin");
   }
   if (m_model->isConcatenate()) {
     global_definitions.cycle = true;
   }
 
-  if (node_feat_sizes.count(std::string(config::graph_name))) {
-    node_feature_size = node_feat_sizes.at(std::string(config::graph_name));
-  }
-
   if (config::debug) {
     spdlog::set_level(spdlog::level::debug);
   } else {
-    spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::info);
   }
 
   std::shared_ptr<Graph> m_graph =
       std::make_shared<Graph>(std::string(config::graph_name));
 
+  node_feature_size = m_graph->getNodeFeatures();
   std::vector<int> node_sizes = {node_feature_size};
   node_sizes.insert(node_sizes.end(), m_model->getMLevels().begin(),
                     m_model->getMLevels().end());

@@ -8,15 +8,15 @@ add_subdirectory(deps/fmt)
 add_subdirectory(deps/ramulator)
 add_subdirectory(deps/spdlog)
 add_subdirectory(deps/minisat_utils)
-
+add_subdirectory(data)
 file(GLOB lib_srcs src/*.cc)
 list(FILTER lib_srcs EXCLUDE REGEX ".*main.cc")
 
-add_library(gcn_sim_lib ${lib_srcs} src/Model.cc src/Model.h)
+add_library(gcn_sim_lib ${lib_srcs})
 target_include_directories(gcn_sim_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles)
 
-add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
+add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc )
 
 target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt)
 

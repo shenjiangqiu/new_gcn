@@ -11,10 +11,6 @@
 class Graph {
   using ull = unsigned long long;
   // the csc format graph
-private:
-  std::vector<unsigned> edge_index;
-  std::vector<unsigned> edges;
-  std::vector<std::vector<double>> nodes;
 
 public:
   // for simulation, we should get the dege index addr when to access the dege
@@ -41,16 +37,16 @@ public:
 
   void parse(const std::string& graph_name);
 
-  void print() const {
-    for (auto index : edge_index) {
-      std::cout << index << " ";
-    }
-    std::cout << std::endl;
-    for (auto e : edges) {
-      std::cout << e << " ";
-    }
-    std::cout << std::endl;
-  }
+  void print() const;
+
+private:
+  std::vector<unsigned> edge_index;
+  std::vector<unsigned> edges;
+  std::vector<std::vector<double>> nodes;
+  int node_features{0};
+
+public:
+  [[nodiscard]] int getNodeFeatures() const;
 };
 
 #endif
