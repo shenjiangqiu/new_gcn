@@ -7,6 +7,7 @@
 #include "sstream"
 #include "vector"
 #include <utility>
+#include "cassert"
 using std::string;
 using std::vector;
 
