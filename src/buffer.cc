@@ -116,6 +116,9 @@ void WriteBuffer::finished_write_memory() {
   if (write_to_mem_req->the_final_request) {
     global_definitions.finished = true;
   }
+  if (write_to_mem_req->the_final_request_of_the_layer) {
+    global_definitions.finished_time_stamp.push_back(global_definitions.cycle);
+  }
   write_to_mem_req = nullptr;
 }
 

@@ -49,6 +49,9 @@ void SystolicArray::cycle() {
     current_sliding_window = agg_buffer->getReadWindow();
     auto req = std::make_shared<Req>();
     req->the_final_request = current_sliding_window->isTheFinalCol();
+    req->the_final_request_of_the_layer =
+        current_sliding_window->isTheFinalColOfTheLayer();
+
     req->addr = current_sliding_window->getOutputAddr();
     req->len = current_sliding_window->getOutputLen();
     req->t = device_types::output_buffer;
@@ -61,7 +64,7 @@ void SystolicArray::cycle() {
     running = true;
 
     remaining_cycle = cal_remaining_cycle();
-    global_definitions.do_systolic+=remaining_cycle;
+    global_definitions.do_systolic += remaining_cycle;
     // start agg buffer read
     agg_buffer->start_read();
 
@@ -70,17 +73,14 @@ void SystolicArray::cycle() {
                   *current_sliding_window, remaining_cycle,
                   global_definitions.cycle);
 
-  }else{
-    if(!agg_buffer->isReadReady()){
+  } else {
+    if (!agg_buffer->isReadReady()) {
       global_definitions.total_waiting_agg_read++;
     }
-    if(!output_buffer->isWriteToBufferEmpty()){
+    if (!output_buffer->isWriteToBufferEmpty()) {
       global_definitions.total_waiting_out++;
     }
-
   }
-
-
 
   if (remaining_cycle != 0) {
     remaining_cycle--;

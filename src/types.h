@@ -22,6 +22,7 @@ struct Req {
   device_types t;
   mem_request req_type;
   bool the_final_request = false;
+  bool the_final_request_of_the_layer=false;
 };
 
 template <> struct fmt::formatter<Req> {

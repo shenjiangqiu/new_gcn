@@ -5,7 +5,7 @@
 #ifndef GCN_SIM_GLOBALS_H
 #define GCN_SIM_GLOBALS_H
 #include "utils/Options.h"
-
+#include "vector"
 class globals {
 public:
   unsigned long long cycle = 0;
@@ -26,6 +26,8 @@ public:
   unsigned long long total_read_input_times = 0;
   unsigned long long total_read_edge_latency = 0;
   unsigned long long total_read_edge_times = 0;
+
+  std::vector<unsigned long long> finished_time_stamp;
 };
 extern globals global_definitions;
 

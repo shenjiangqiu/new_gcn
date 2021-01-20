@@ -16,13 +16,15 @@ Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
                            uint64_t outputAddr, int inputLen, int edgeLen,
                            int outputLen, int numNodesInWindow,
                            int currentNodeSize, bool the_final_col,
-                           bool theFinalRow, bool theFirstRow)
+                           bool theFinalRow, bool theFirstRow,
+                           bool theFinalColOfTheLayer)
     : x(x), y(y), xw(xw), yw(yw), level(level), input_addr(inputAddr),
       edge_addr(edgeAddr), output_addr(outputAddr), input_len(inputLen),
       edge_len(edgeLen), output_len(outputLen),
       num_nodes_in_window(numNodesInWindow), current_node_size(currentNodeSize),
       the_final_col(the_final_col), the_final_row(theFinalRow),
-      the_first_row(theFirstRow) {}
+      the_first_row(theFirstRow),
+      the_final_col_of_the_layer(theFinalColOfTheLayer) {}
 
 int Slide_window::getX() const { return x; }
 
@@ -66,6 +68,9 @@ bool Slide_window::isTheFinalRow() const { return the_final_row; }
 bool Slide_window::isTheFirstRow() const { return the_first_row; }
 void Slide_window::setTheFinalRow(bool theFinalRow) {
   the_final_row = theFinalRow;
+}
+bool Slide_window::isTheFinalColOfTheLayer() const {
+  return the_final_col_of_the_layer;
 }
 
 Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
@@ -156,15 +161,17 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
             (col_end - col_i) * node_size_s.at(level_i + 1) * single_node_size;
         bool the_last_col = ((level_i == total_level - 2) and
                              col_end >= m_graph->get_num_nodes());
-
+        bool the_last_col_of_the_layer = col_end >= m_graph->get_num_nodes();
         m_sliding_window_vec.emplace_back(
             col_i, row_i, xw_s[level_i], row_end - row_i, level_i, input_addr,
             edge_addr, output_addr, input_len, edge_len, output_len, total_node,
-            node_size_s[level_i], the_last_col, false, the_first_row);
+            node_size_s[level_i], the_last_col, false, the_first_row,
+            the_last_col_of_the_layer);
         m_sliding_window_multi_level.back().back().emplace_back(
             col_i, row_i, xw_s[level_i], row_end - row_i, level_i, input_addr,
             edge_addr, output_addr, input_len, edge_len, output_len, total_node,
-            node_size_s[level_i], the_last_col, false, the_first_row);
+            node_size_s[level_i], the_last_col, false, the_first_row,
+            the_last_col_of_the_layer);
         row_i = row_end;
         the_first_row = false;
       }

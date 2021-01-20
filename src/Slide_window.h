@@ -23,7 +23,7 @@ public:
                uint64_t edgeAddr, uint64_t outputAddr, int inputLen,
                int edgeLen, int outputLen, int numNodesInWindow,
                int currentNodeSize, bool the_final_col, bool theFinalRow,
-               bool theFirstRow);
+               bool theFirstRow, bool theFinalColOfTheLayer);
 
   [[nodiscard]] int getX() const;
 
@@ -60,6 +60,11 @@ private:
   int num_nodes_in_window;
   int current_node_size;
   bool the_final_col;
+  bool the_final_col_of_the_layer;
+
+public:
+  bool isTheFinalColOfTheLayer() const;
+private:
   bool the_final_row;
   bool the_first_row;
 

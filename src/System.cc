@@ -92,6 +92,9 @@ void System::run() {
                global_definitions.total_read_input_times,
                global_definitions.total_read_edge_latency,
                global_definitions.total_read_edge_times);
+  spdlog::info("the_time_stamp\n{}\n",
+               fmt::join(global_definitions.finished_time_stamp.begin(),
+                         global_definitions.finished_time_stamp.end(), ","));
 }
 void System::cycle() {
   input_buffer->cycle();
