@@ -35,7 +35,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   std::vector<int> yw_s;
   for (auto i = 0; i < total_level - 1; i++) {
     if (m_model->isConcatenate()) {
-      //the aggregator's result will concatenate the origin node.
+      // the aggregator's result will concatenate the origin node.
       auto size = ((agg_buffer_size / 4) / (node_size[i] * 4));
       xw_s.push_back(size);
     } else {
@@ -70,6 +70,28 @@ void System::run() {
   }
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
             << std::endl;
+  spdlog::info("the result\n"
+               "total_waiting_input {}\n"
+               "total_waiting_edge {}\n"
+               "total_waiting_agg_write {}\n"
+               "do_aggregate {}\n"
+               "do_systolic {}\n"
+               "total_waiting_agg_read {}\n"
+               "total_waiting_out {}\n"
+               "total_read_input_latency {}\n"
+               "total_read_input_times {}\n"
+               "total_read_edge_latency {}\n"
+               "total_read_edge_times {}\n",
+               global_definitions.total_waiting_input,
+               global_definitions.total_waiting_edge,
+               global_definitions.total_waiting_agg_write,
+               global_definitions.do_aggregate, global_definitions.do_systolic,
+               global_definitions.total_waiting_agg_read,
+               global_definitions.total_waiting_out,
+               global_definitions.total_read_input_latency,
+               global_definitions.total_read_input_times,
+               global_definitions.total_read_edge_latency,
+               global_definitions.total_read_edge_times);
 }
 void System::cycle() {
   input_buffer->cycle();

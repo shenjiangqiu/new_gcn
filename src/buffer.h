@@ -291,6 +291,8 @@ protected:
   bool next_empty{true};
   bool next_ready{false};
   bool next_sent{false};
+
+  std::map<unsigned long long,unsigned long long> start_cycle_map;
 };
 class EdgeBuffer : public ReadBuffer {
 public:

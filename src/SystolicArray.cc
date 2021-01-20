@@ -61,7 +61,7 @@ void SystolicArray::cycle() {
     running = true;
 
     remaining_cycle = cal_remaining_cycle();
-
+    global_definitions.do_systolic+=remaining_cycle;
     // start agg buffer read
     agg_buffer->start_read();
 
@@ -69,7 +69,19 @@ void SystolicArray::cycle() {
                   "current cycle:{}",
                   *current_sliding_window, remaining_cycle,
                   global_definitions.cycle);
+
+  }else{
+    if(!agg_buffer->isReadReady()){
+      global_definitions.total_waiting_agg_read++;
+    }
+    if(!output_buffer->isWriteToBufferEmpty()){
+      global_definitions.total_waiting_out++;
+    }
+
   }
+
+
+
   if (remaining_cycle != 0) {
     remaining_cycle--;
     if (remaining_cycle == 0) {

@@ -167,6 +167,7 @@ shared_ptr<Req> EdgeBuffer::pop_current() {
   req->req_type = mem_request::read;
   req->t = device_types::edge_buffer;
   current_req = req;
+  start_cycle_map[req->id] = global_definitions.cycle;
   return req;
 }
 shared_ptr<Req> EdgeBuffer::pop_next() {
@@ -178,6 +179,8 @@ shared_ptr<Req> EdgeBuffer::pop_next() {
   req->req_type = mem_request::read;
   req->t = device_types::edge_buffer;
   next_req = req;
+  start_cycle_map[req->id] = global_definitions.cycle;
+
   return req;
 }
 
@@ -221,6 +224,8 @@ shared_ptr<Req> InputBuffer::pop_current() {
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   current_req = req;
+  start_cycle_map[req->id] = global_definitions.cycle;
+
   return req;
 }
 shared_ptr<Req> InputBuffer::pop_next() {
@@ -232,11 +237,29 @@ shared_ptr<Req> InputBuffer::pop_next() {
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   next_req = req;
+  start_cycle_map[req->id] = global_definitions.cycle;
+
   return req;
 }
 void ReadBuffer::receive(shared_ptr<Req> req) {
+
+  auto latency = global_definitions.cycle - start_cycle_map.at(req->id);
+  start_cycle_map.erase(req->id);
+  switch (req->t) {
+  case device_types::edge_buffer:
+    global_definitions.total_read_edge_latency += latency;
+    global_definitions.total_read_edge_times++;
+    break;
+  case device_types::input_buffer:
+    global_definitions.total_read_input_latency += latency;
+    global_definitions.total_read_input_times++;
+    break;
+  default:
+    throw std::runtime_error("can't be here");
+  }
   if (!current_empty and current_sent and !current_ready and
       req->id == current_req->id) {
+
     current_ready = true;
   } else {
     assert(!next_empty and next_sent and !next_ready and

@@ -41,15 +41,18 @@ void Aggregator::cycle() {
     // if this is the new  col, the agg_buffer should be emtpy
     // have task and finshed, need waite the agg buffer move it to rad buffer
     if (!agg_buffer->isWriteEmpty() and agg_buffer->isWriteReady()) {
+      global_definitions.total_waiting_agg_write++;
       return;
     }
     if (input_buffer->isCurrentReady() and edge_buffer->isCurrentReady() and
         (agg_buffer->isWriteEmpty() or
          (current_sliding_window and agg_buffer->getWriteWindow()->getX() ==
                                          current_sliding_window->getX()))) {
+
       current_sliding_window =
           std::make_shared<Slide_window>(*(input_buffer->getMCurrentIter()));
       remaining_cycles = calculate_remaining_cycle();
+      global_definitions.do_aggregate += remaining_cycles;
       working = true;
 
       if (current_sliding_window->isTheFirstRow()) {
@@ -58,6 +61,13 @@ void Aggregator::cycle() {
       spdlog::debug("aggregator start to run task x: {} y: {} ,cycle: {}",
                     current_sliding_window->getX(),
                     current_sliding_window->getY(), global_definitions.cycle);
+    } else {
+      if (!input_buffer->isCurrentReady()) {
+        global_definitions.total_waiting_input++;
+      }
+      if (!edge_buffer->isCurrentReady()) {
+        global_definitions.total_waiting_edge++;
+      }
     }
   }
 }

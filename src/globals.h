@@ -13,7 +13,19 @@ public:
   // this will be set by the output buffer when the last col's output is write
   // down to the memory
   bool finished = false;
-  bool concate=false;
+  bool concate = false;
+
+  unsigned long long total_waiting_input = 0;
+  unsigned long long total_waiting_edge = 0;
+  unsigned long long total_waiting_agg_write = 0;
+  unsigned long long do_aggregate = 0;
+  unsigned long long do_systolic = 0;
+  unsigned long long total_waiting_agg_read = 0;
+  unsigned long long total_waiting_out = 0;
+  unsigned long long total_read_input_latency = 0;
+  unsigned long long total_read_input_times = 0;
+  unsigned long long total_read_edge_latency = 0;
+  unsigned long long total_read_edge_times = 0;
 };
 extern globals global_definitions;
 
