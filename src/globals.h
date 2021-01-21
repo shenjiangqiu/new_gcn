@@ -4,8 +4,10 @@
 
 #ifndef GCN_SIM_GLOBALS_H
 #define GCN_SIM_GLOBALS_H
+#include "Model.h"
 #include "utils/Options.h"
 #include "vector"
+#include "map"
 class globals {
 public:
   unsigned long long cycle = 0;
@@ -28,6 +30,10 @@ public:
   unsigned long long total_read_edge_times = 0;
 
   std::vector<unsigned long long> finished_time_stamp;
+  std::map<std::string, Model> m_models{
+      {"gcn", Model("gcn", {128}, true, false, 0)},
+      {"gsc", Model("gsc", {128}, true, true, 25)},
+      {"gin", Model("gin", {128, 128}, true, false, 0)}};
 };
 extern globals global_definitions;
 
@@ -44,5 +50,7 @@ extern Minisat::StringOption graph_name;
 extern Minisat::StringOption dram_name;
 extern Minisat::BoolOption debug;
 extern Minisat::StringOption model;
+extern Minisat::IntOption ignore_neighbor;
+extern Minisat::IntOption ignore_self;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

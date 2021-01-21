@@ -28,18 +28,38 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
       m_graph(std::move(graph)),
       m_mem(std::make_shared<memory_interface>(dram_config_name, 64)),
       m_model(mModel) {
-  // first need to get the max x_w;
+  // step1, first need to get the max x_w;
   int total_level = node_size.size();
 
   std::vector<int> xw_s;
   std::vector<int> yw_s;
-  for (auto i = 0; i < total_level - 1; i++) {
+  // for the first layer
+  if (m_model->isConcatenate()) {
+    // the aggregator's result will concatenate the origin node.
+    auto size =
+        ((agg_buffer_size / 2) /
+         ((2 * node_size[0] - config::ignore_neighbor - config::ignore_self) *
+          4));
+    xw_s.push_back(size);
+  } else {
+    xw_s.push_back((agg_buffer_size / 2) /
+                   ((node_size[0] - config::ignore_neighbor) * 4));
+  }
+
+  spdlog::info("xws push back:{}", xw_s.back());
+  assert(xw_s.back() > 0 && "the window should be positive");
+  yw_s.push_back((input_buffer_size / 2) /
+                 ((node_size[0] - config::ignore_neighbor) * 4));
+  assert(yw_s.back() > 0 && "the window should be positive");
+  spdlog::info("yws push back:{}", yw_s.back());
+
+  for (auto i = 1; i < total_level - 1; i++) {
     if (m_model->isConcatenate()) {
       // the aggregator's result will concatenate the origin node.
-      auto size = ((agg_buffer_size / 4) / (node_size[i] * 4));
+      auto size = ((agg_buffer_size / 2) / ((2 * node_size[i]) * 4));
       xw_s.push_back(size);
     } else {
-      xw_s.push_back((agg_buffer_size / 2) / (node_size[i] * 4));
+      xw_s.push_back((agg_buffer_size / 2) / ((node_size[i]) * 4));
     }
     spdlog::info("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
@@ -47,6 +67,8 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     assert(yw_s.back() > 0 && "the window should be positive");
     spdlog::info("yws push back:{}", yw_s.back());
   }
+
+  // step 2, build the windows set. and input buffer,edge buffer
   m_slide_window_set = std::make_shared<Slide_window_set>(
       m_graph, xw_s, yw_s, node_size, total_level);
   current_iter =
@@ -71,13 +93,13 @@ void System::run() {
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
             << std::endl;
   spdlog::info("the result\n"
-               "total_waiting_input {}\n"
-               "total_waiting_edge {}\n"
-               "total_waiting_agg_write {}\n"
+               "total_idle_waiting_input {}\n"
+               "total_idle_waiting_edge {}\n"
+               "total_idle_waiting_agg_write {}\n"
                "do_aggregate {}\n"
                "do_systolic {}\n"
-               "total_waiting_agg_read {}\n"
-               "total_waiting_out {}\n"
+               "total_idle_waiting_agg_read {}\n"
+               "total_idle_waiting_out {}\n"
                "total_read_input_latency {}\n"
                "total_read_input_times {}\n"
                "total_read_edge_latency {}\n"

@@ -39,7 +39,7 @@ void Aggregator::cycle() {
     // have task but not running
     assert(remaining_cycles == 0);
     // if this is the new  col, the agg_buffer should be emtpy
-    // have task and finshed, need waite the agg buffer move it to rad buffer
+    // have task and finished, need waite the agg buffer move it to rad buffer
     if (!agg_buffer->isWriteEmpty() and agg_buffer->isWriteReady()) {
       global_definitions.total_waiting_agg_write++;
       return;
@@ -86,12 +86,23 @@ void Aggregator::add_task(std::shared_ptr<Slide_window> window) {
 */
 
 int Aggregator::calculate_remaining_cycle() {
+
+  // Update here, now the ignored features are not count for calculation
   assert(current_sliding_window);
   auto total_nodes = current_sliding_window->getNumNodesInWindow();
+
   auto node_size = current_sliding_window
                        ->getCurrentNodeSize(); // num features in one node//not
                                                // the bytes in one nodes
+
+  if (current_sliding_window->getLevel() == 0)
+    node_size -= config::ignore_neighbor;
+  assert(node_size > 0);
+
   auto total_elements = total_nodes * node_size;
+  spdlog::debug("total elements: {} ,total size: {}", total_elements,
+                total_elements * 4);
+
   spdlog::debug(
       "aggregator culculate window cycles. x: {} y: {}, result: {} ,cycle: {}",
       current_sliding_window->getX(), current_sliding_window->getY(),
@@ -100,7 +111,7 @@ int Aggregator::calculate_remaining_cycle() {
 
   auto cycle = (total_elements + total_cores - 1) / total_cores;
   // read dram latency;
-  auto per_cycle_memory_fetch_time = (total_cores * 4 + 63) / 64;
+  auto per_cycle_memory_fetch_time = (total_cores * 4 + 31) / 32;
   auto total_read_memory_time = cycle * per_cycle_memory_fetch_time;
   cycle += total_read_memory_time;
   return cycle;

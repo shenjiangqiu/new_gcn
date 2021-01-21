@@ -10,7 +10,10 @@
 class Model {
 public:
   Model(std::string name, std::vector<int> mLevels, bool isConcatenate,
-        bool isSample=false, int sampleNum=0);
+        bool isSample = false, int sampleNum = 0);
+  Model(const Model &other) = default;
+  Model(Model &&other) = default;
+  Model() = default;
   [[nodiscard]] const std::string &getName() const;
   [[nodiscard]] const std::vector<int> &getMLevels() const;
   [[nodiscard]] bool isConcatenate() const;

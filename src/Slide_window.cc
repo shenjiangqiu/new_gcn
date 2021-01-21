@@ -4,13 +4,13 @@
 
 #include "Slide_window.h"
 
+#include "globals.h"
 #include "size.h"
 #include <algorithm>
 #include <cassert>
 #include <map>
 #include <numeric>
 #include <utility>
-
 Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
                            uint64_t inputAddr, uint64_t edgeAddr,
                            uint64_t outputAddr, int inputLen, int edgeLen,
@@ -82,10 +82,16 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   assert(node_size_s.size() == total_level);
   bool the_first_row;
   uint64_t start_addr = 0xff11ff00;
-  for (auto l = 0; l < totalLevel; l++) {
+  // for the first layer, we should ignore the empty entries
+  node_addrs.push_back(start_addr);
+  start_addr += m_graph->get_num_nodes() *
+                (node_size_s[0] - config::ignore_neighbor) * single_node_size;
+  // for the remaining layer, keep all the entries.
+  for (auto l = 1; l < totalLevel; l++) {
     node_addrs.push_back(start_addr);
     start_addr += m_graph->get_num_nodes() * node_size_s[l] * single_node_size;
   }
+
   // each layer
   for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
     if (level_i != 0) {
@@ -143,17 +149,29 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
             [](int value, auto &&pair) { return value + pair.second; });
         auto &&edge_index = m_graph->get_edge_index();
 
-        uint64_t input_addr =
-            node_addrs.at(level_i) +
-            row_i * node_size_s.at(level_i) * single_node_size;
+        uint64_t input_addr = 0;
+        if (level_i == 0) {
+          input_addr = node_addrs.at(level_i) +
+                       row_i * (node_size_s.at(0) - config::ignore_neighbor) *
+                           single_node_size;
+        } else {
+          input_addr = node_addrs.at(level_i) +
+                       row_i * node_size_s.at(level_i) * single_node_size;
+        }
 
         uint64_t edge_addr = m_graph->get_edge_addr(edge_index.at(col_i));
 
         uint64_t output_addr =
             node_addrs.at(level_i + 1) +
             col_i * node_size_s.at(level_i + 1) * single_node_size;
+
+        // the first layer should ignore the empty entries
         int input_len =
-            (row_end - row_i) * node_size_s.at(level_i) * single_node_size;
+            level_i == 0 ? (row_end - row_i) *
+                               (node_size_s.at(0) - config::ignore_neighbor) *
+                               single_node_size
+                         : (row_end - row_i) * node_size_s.at(level_i) *
+                               single_node_size;
 
         auto edge_len = (edge_index.at(col_end) - edge_index.at(col_i)) * 4;
 

@@ -20,17 +20,11 @@ int main(int argc, char **argv) {
   std::shared_ptr<Model> m_model;
   int node_feature_size = 0;
   std::string model_name = std::string(config::model);
-  if (model_name == std::string("gcn")) {
-    m_model = std::shared_ptr<Model>(new Model("gcn", {128}, true, false, 0));
-  } else if (model_name == std::string("gsc")) {
-    m_model = std::shared_ptr<Model>(new Model("gsc", {128}, true, true, 25));
-  } else if (model_name == "gin") {
-    m_model =
-        std::shared_ptr<Model>(new Model("gin", {128, 128}, true, false, 0));
-
-  } else {
-    throw std::runtime_error("no such model!,supported model is gcn,gsc,gin");
+  if (!global_definitions.m_models.count(model_name)) {
+    throw std::runtime_error("no such model");
   }
+  m_model = std::make_shared<Model>(global_definitions.m_models[model_name]);
+
   if (m_model->isConcatenate()) {
     global_definitions.cycle = true;
   }
