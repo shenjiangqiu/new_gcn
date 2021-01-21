@@ -5,9 +5,9 @@
 #ifndef GCN_SIM_GLOBALS_H
 #define GCN_SIM_GLOBALS_H
 #include "Model.h"
+#include "map"
 #include "utils/Options.h"
 #include "vector"
-#include "map"
 class globals {
 public:
   unsigned long long cycle = 0;
@@ -28,6 +28,7 @@ public:
   unsigned long long total_read_input_times = 0;
   unsigned long long total_read_edge_latency = 0;
   unsigned long long total_read_edge_times = 0;
+  unsigned long long total_mac_in_systolic_array = 0;
 
   std::vector<unsigned long long> finished_time_stamp;
   std::map<std::string, Model> m_models{

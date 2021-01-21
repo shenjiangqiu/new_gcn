@@ -103,7 +103,8 @@ void System::run() {
                "total_read_input_latency {}\n"
                "total_read_input_times {}\n"
                "total_read_edge_latency {}\n"
-               "total_read_edge_times {}\n",
+               "total_read_edge_times {}\n"
+               "total_mac_in_systolic_array {}\n",
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,
                global_definitions.total_waiting_agg_write,
@@ -113,7 +114,8 @@ void System::run() {
                global_definitions.total_read_input_latency,
                global_definitions.total_read_input_times,
                global_definitions.total_read_edge_latency,
-               global_definitions.total_read_edge_times);
+               global_definitions.total_read_edge_times,
+               global_definitions.total_mac_in_systolic_array);
   spdlog::info("the_time_stamp\n{}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), ","));

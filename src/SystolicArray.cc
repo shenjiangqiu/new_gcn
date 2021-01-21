@@ -43,17 +43,32 @@ int SystolicArray::cal_remaining_cycle() {
     }
     assert(node_size > 0);
   }
-  auto steps = (total_rows + num_nodes - 1) / num_nodes;
+
+  // to this now, the node size, next_node_size and num_nodes are finishied.
+  global_definitions.total_mac_in_systolic_array +=
+      num_nodes * node_size * next_node_size;
+
+  // fix bug here
+
+  auto steps = (total_rows + num_nodes - 1) / total_rows;
+
   auto elements_steps = (next_node_size + total_cols - 1) / total_cols;
   for (auto i = 0; i < steps - 1; i++) {
     for (auto j = 0; j < elements_steps - 1; j++) {
       // fix bug here, the windows should contain the node size
       total_cycles += (total_rows + total_cols + node_size);
     }
+    assert(total_rows + next_node_size - (elements_steps * total_cols) +
+               node_size >
+           0);
+    assert(total_rows + next_node_size - (elements_steps * total_cols) +
+               node_size <
+           (total_rows + total_cols + node_size));
 
     total_cycles +=
         total_rows + next_node_size - (elements_steps * total_cols) + node_size;
   }
+
   total_cycles += num_nodes - (steps * total_rows) + next_node_size -
                   (elements_steps * total_cols) + node_size;
   return total_cycles;
