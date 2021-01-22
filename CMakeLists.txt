@@ -9,6 +9,8 @@ add_subdirectory(deps/ramulator)
 add_subdirectory(deps/spdlog)
 add_subdirectory(deps/minisat_utils)
 add_subdirectory(data)
+
+add_compile_options("-Wall")
 file(GLOB lib_srcs src/*.cc)
 list(FILTER lib_srcs EXCLUDE REGEX ".*main.cc")
 

@@ -37,11 +37,20 @@ int SystolicArray::cal_remaining_cycle() {
   if (current_sliding_window->getLevel() == 0) {
     // the first layer, we should remove the ignored feature
     node_size -= config::ignore_neighbor;
-    node_size -= config::ignore_self;
-    if (!global_definitions.concate) {
-      assert(config::ignore_self == 0);
+
+    if (global_definitions.concate) {
+      node_size -= config::ignore_self;
     }
     assert(node_size > 0);
+  }
+  if (node_size <= 0) {
+    spdlog::error("node size < 0 happend,concate:{}, origin node "
+                  "size:{},ignore_nei:{},ignore_self:{},level:{}",
+                  global_definitions.concate,
+                  current_sliding_window->getCurrentNodeSize(),
+                  config::ignore_neighbor, config::ignore_self);
+    spdlog::flush_on(spdlog::level::err);
+    throw std::runtime_error("can't check the size");
   }
 
   // to this now, the node size, next_node_size and num_nodes are finishied.
@@ -58,19 +67,51 @@ int SystolicArray::cal_remaining_cycle() {
       // fix bug here, the windows should contain the node size
       total_cycles += (total_rows + total_cols + node_size);
     }
-    assert(total_rows + next_node_size - (elements_steps * total_cols) +
-               node_size >
-           0);
-    assert(total_rows + next_node_size - (elements_steps * total_cols) +
-               node_size <
-           (total_rows + total_cols + node_size));
 
-    total_cycles +=
-        total_rows + next_node_size - (elements_steps * total_cols) + node_size;
+    if (total_rows + next_node_size - ((elements_steps - 1) * total_cols) +
+            node_size <=
+        0) {
+      spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
+                    "total_rows:{},next_node_size:{},elements_steps*total_cols:"
+                    "{},node_size:{}",
+                    steps, elements_steps, total_rows, next_node_size,
+                    elements_steps * total_cols, node_size);
+      spdlog::flush_on(spdlog::level::err);
+      throw std::runtime_error("wrong cycle happened!");
+    }
+    auto remaining_rows = total_rows;
+    auto remaining_cols = next_node_size - ((elements_steps - 1) * total_cols);
+    total_cycles += remaining_rows + remaining_cols + node_size;
   }
+  for (auto j = 0; j < elements_steps - 1; j++) {
+    // calculate the last row
+    auto remaining_rows = num_nodes - ((steps - 1) * total_rows);
+    auto remaining_cols = total_cols;
+    total_cycles += remaining_rows + remaining_cols + node_size;
+    if (remaining_rows <= 0 or remaining_rows > total_rows) {
+      spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
+                    "total_rows:{},next_node_size:{},elements_steps*total_cols:"
+                    "{},node_size:{}",
+                    steps, elements_steps, total_rows, next_node_size,
+                    elements_steps * total_cols, node_size);
+    }
+  }
+  // calculate the last row the last col
+  auto remaining_rows = num_nodes - ((steps - 1) * total_rows);
+  auto remaining_cols = next_node_size - ((elements_steps - 1) * total_cols);
 
-  total_cycles += num_nodes - (steps * total_rows) + next_node_size -
-                  (elements_steps * total_cols) + node_size;
+  total_cycles += remaining_rows + remaining_cols + node_size;
+
+  if (remaining_rows <= 0 or remaining_cols <= 0 or
+      remaining_rows > total_rows or remaining_cols > total_cols) {
+    spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
+                  "total_rows:{},next_node_size:{},elements_steps*total_cols:"
+                  "{},node_size:{}",
+                  steps, elements_steps, total_rows, next_node_size,
+                  elements_steps * total_cols, node_size);
+    spdlog::flush_on(spdlog::level::err);
+    throw std::runtime_error("wrong cycle happened!");
+  }
   return total_cycles;
 }
 void SystolicArray::cycle() {

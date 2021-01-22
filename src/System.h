@@ -28,9 +28,9 @@ private:
   std::shared_ptr<Graph> m_graph;
 
   int input_buffer_size;
-  int edge_buffer_size;
+  [[maybe_unused]] int edge_buffer_size;
   int agg_buffer_size;
-  int output_buffer_size;
+  [[maybe_unused]] int output_buffer_size;
 
   int agg_total_cores;
   std::shared_ptr<Slide_window_set> m_slide_window_set;

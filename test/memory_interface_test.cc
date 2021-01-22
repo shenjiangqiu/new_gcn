@@ -16,7 +16,7 @@ TEST_CASE("mem_interface") {
         req->len = 1024;
         req->addr = i * 2048;
         req->t = device_types::input_buffer;
-        while (!m_interface.avaliable()) {
+        while (!m_interface.available()) {
             m_interface.cycle();
             cycle++;
 
@@ -24,7 +24,7 @@ TEST_CASE("mem_interface") {
         m_interface.send(req);
     }
     for (auto i = 0; i < 100; i++) {
-        while (!m_interface.ret_avaliable()) {
+        while (!m_interface.ret_available()) {
             m_interface.cycle();
             cycle++;
             //std::cout << cycle << std::endl;

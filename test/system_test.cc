@@ -4,15 +4,31 @@
 
 #include "System.h"
 #include "catch.hpp"
+#include "globals.h"
 #include "spdlog/spdlog.h"
 #include "vector"
 TEST_CASE("system_test", "[big]") {
-  spdlog::set_level(spdlog::level::debug);
-  std::vector<int> node_sizes = {10, 20, 10};
-  //TODO finish this test
-  REQUIRE(1==0);
-  //System m_system(1000, 1000, 1000, 1000, 16, 10, 10, "cora", node_sizes,
-  //                "DDR4-config.cfg", std::shared_ptr<Model>());
 
-  //m_system.run();
+  std::shared_ptr<Model> m_model;
+  int node_feature_size = 0;
+
+  m_model = std::make_shared<Model>(global_definitions.m_models["gcn"]);
+
+  if (m_model->isConcatenate()) {
+    global_definitions.concate = true;
+  }
+
+  spdlog::set_level(spdlog::level::debug);
+
+  std::shared_ptr<Graph> m_graph = std::make_shared<Graph>(std::string("test"));
+
+  node_feature_size = m_graph->getNodeFeatures();
+  std::vector<int> node_sizes = {node_feature_size};
+  node_sizes.insert(node_sizes.end(), m_model->getMLevels().begin(),
+                    m_model->getMLevels().end());
+  spdlog::info("print out model levels {}", fmt::join(node_sizes, ","));
+
+  System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
+                  (std::string)config::dram_name, m_model);
+  m_system.run();
 }

@@ -1,3 +1,4 @@
+#include "globals.h"
 #include <memory_interface.h>
 void memory_interface::cycle() {
 
@@ -9,9 +10,14 @@ void memory_interface::cycle() {
       // write request will come back immediately when sent, so no need record
       if (next_req->req_type == mem_request::read)
         addr_to_req_map.insert({next_req->addr, next_req});
-      //addr, is_write
+      // addr, is_write
       out_send_queue.push(
           {next_req->addr, next_req->req_type == mem_request::write});
+      // calculate the input buffer traffic
+      if (next_req->t == device_types::input_buffer) {
+        global_definitions.total_read_input_traffic +=
+            next_req->len > 64 ? 64 : next_req->len;
+      }
       if (int(next_req->len - 64) <= 0) {
         req_queue.pop();
         if (next_req->req_type == mem_request::write) {
@@ -38,7 +44,7 @@ void memory_interface::cycle() {
   if (!out_send_queue.empty() and m_ramulator->available()) {
     auto req = out_send_queue.front();
     out_send_queue.pop();
-    //addr, is_write
+    // addr, is_write
     m_ramulator->send(req.first, req.second);
   }
   if (m_ramulator->return_available()) {

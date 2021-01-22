@@ -16,18 +16,21 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int systolic_cols, std::shared_ptr<Graph> graph,
                std::vector<int> node_size, const std::string &dram_config_name,
                std::shared_ptr<Model> mModel)
-    : input_buffer_size(inputBufferSize), edge_buffer_size(edgeBufferSize),
-      agg_buffer_size(aggBufferSize), output_buffer_size(outputBufferSize),
+    : m_graph(std::move(graph)), input_buffer_size(inputBufferSize),
+      edge_buffer_size(edgeBufferSize), agg_buffer_size(aggBufferSize),
+      output_buffer_size(outputBufferSize),
+
       agg_total_cores(aggTotalCores),
-      agg_buffer(std::make_shared<Aggregator_buffer>("agg_buffer")),
 
       output_buffer(std::make_shared<WriteBuffer>("output_buffer")),
 
+      agg_buffer(std::make_shared<Aggregator_buffer>("agg_buffer")),
+
+      m_mem(std::make_shared<memory_interface>(dram_config_name, 64)),
       m_systolic_array(std::make_shared<SystolicArray>(
           systolic_rows, systolic_cols, agg_buffer, output_buffer)),
-      m_graph(std::move(graph)),
-      m_mem(std::make_shared<memory_interface>(dram_config_name, 64)),
-      m_model(mModel) {
+
+      m_model(std::move(mModel)) {
   // step1, first need to get the max x_w;
   int total_level = node_size.size();
 
@@ -80,6 +83,22 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   edge_buffer = std::make_shared<EdgeBuffer>("edge buffer", m_slide_window_set);
   m_aggregator = std::make_shared<Aggregator>(input_buffer, edge_buffer,
                                               agg_buffer, agg_total_cores);
+
+  // output the number of the memory read requests need to be read
+  uint64_t total_size = 0;
+  auto first_layer_size = (node_size[0] - config::ignore_neighbor) * 4;
+  total_size += first_layer_size * m_graph->get_num_nodes() *
+                (m_graph->get_num_nodes()+xw_s[0]-1 / xw_s[0]);
+  fmt::print("{} {} {}\n",first_layer_size,m_graph->get_num_nodes(),xw_s[0]);
+  for (auto i = 1; i < node_size.size() - 1; i++) {
+    total_size += node_size[i] * 4 * m_graph->get_num_nodes() *
+                  m_graph->get_num_nodes() / xw_s[i];
+  }
+  spdlog::info("total_nodes:{}, total_feature_length:{},total input traffic "
+               "need to be read:{}",
+               m_graph->get_num_nodes(),
+               fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
+               total_size);
 }
 void System::run() {
 
@@ -104,7 +123,8 @@ void System::run() {
                "total_read_input_times {}\n"
                "total_read_edge_latency {}\n"
                "total_read_edge_times {}\n"
-               "total_mac_in_systolic_array {}\n",
+               "total_mac_in_systolic_array {}\n"
+               "total_read_input_traffic {}\n",
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,
                global_definitions.total_waiting_agg_write,
@@ -115,7 +135,8 @@ void System::run() {
                global_definitions.total_read_input_times,
                global_definitions.total_read_edge_latency,
                global_definitions.total_read_edge_times,
-               global_definitions.total_mac_in_systolic_array);
+               global_definitions.total_mac_in_systolic_array,
+               global_definitions.total_read_input_traffic);
   spdlog::info("the_time_stamp\n{}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), ","));
@@ -133,7 +154,7 @@ void System::cycle() {
 
   // handle memory requests
   // connection between buffer and
-  if (m_mem->avaliable()) {
+  if (m_mem->available()) {
     if (!input_buffer->isCurrentEmpty() and !input_buffer->isCurrentSent()) {
       auto req = input_buffer->pop_current();
       spdlog::debug("{}:{},input buffer send req:{},{}", __FILE__, __LINE__,
@@ -164,7 +185,7 @@ void System::cycle() {
     }
   }
 
-  if (m_mem->ret_avaliable()) {
+  if (m_mem->ret_available()) {
     auto ret = m_mem->get_req();
     if (ret->t == device_types::input_buffer) {
       spdlog::debug(" input  req received,req:{},cycle:{} ", *ret,

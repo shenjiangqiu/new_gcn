@@ -64,6 +64,7 @@ private:
 
 public:
   bool isTheFinalColOfTheLayer() const;
+
 private:
   bool the_final_row;
   bool the_first_row;
@@ -192,6 +193,7 @@ private:
       m_sliding_window_multi_level;
 
   std::vector<uint64_t> node_addrs; // for each level;
+  uint number_of_nodes_to_be_read = 0;
 };
 
 #endif // GCN_SIM_SLIDE_WINDOW_H

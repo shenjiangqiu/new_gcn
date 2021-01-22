@@ -20,6 +20,7 @@ private:
 };
 class Buffer_base : public Name_object {
 public:
+  virtual ~Buffer_base() = default;
   [[nodiscard]] bool isCurrentEmpty() const { return current_empty; }
 
   [[nodiscard]] bool isCurrentReady() const { return current_ready; }
@@ -251,6 +252,7 @@ class ReadBuffer : public Name_object {
 public:
   explicit ReadBuffer(const string &basicString,
                       const std::shared_ptr<Slide_window_set> &m_set);
+  virtual ~ReadBuffer() = default;
   virtual void cycle() = 0;
 
   [[nodiscard]] bool isCurrentReady() const;
@@ -292,7 +294,7 @@ protected:
   bool next_ready{false};
   bool next_sent{false};
 
-  std::map<unsigned long long,unsigned long long> start_cycle_map;
+  std::map<unsigned long long, unsigned long long> start_cycle_map;
 };
 class EdgeBuffer : public ReadBuffer {
 public:

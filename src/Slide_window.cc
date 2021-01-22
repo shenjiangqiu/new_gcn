@@ -22,9 +22,11 @@ Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
       edge_addr(edgeAddr), output_addr(outputAddr), input_len(inputLen),
       edge_len(edgeLen), output_len(outputLen),
       num_nodes_in_window(numNodesInWindow), current_node_size(currentNodeSize),
-      the_final_col(the_final_col), the_final_row(theFinalRow),
-      the_first_row(theFirstRow),
-      the_final_col_of_the_layer(theFinalColOfTheLayer) {}
+      the_final_col(the_final_col),
+      the_final_col_of_the_layer(theFinalColOfTheLayer),
+      the_final_row(theFinalRow),
+
+      the_first_row(theFirstRow) {}
 
 int Slide_window::getX() const { return x; }
 
@@ -93,6 +95,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   }
 
   // each layer
+  uint64_t total_len = 0;
   for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
     if (level_i != 0) {
       m_sliding_window_vec.back().setTheFinalRow(true);
@@ -101,6 +104,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
     }
     m_sliding_window_multi_level.emplace_back();
     auto col_i = 0;
+    uint current_layer_input_len = 0;
     while (col_i < m_graph->get_num_nodes()) {
       if (!m_sliding_window_multi_level[level_i].empty()) {
 
@@ -122,6 +126,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
       }
       auto row_i = 0;
       the_first_row = true;
+      uint current_col_input_len = 0;
       while (row_i < m_graph->get_num_nodes()) {
         // skipping
         while (row_i < m_graph->get_num_nodes() and
@@ -172,7 +177,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
                                single_node_size
                          : (row_end - row_i) * node_size_s.at(level_i) *
                                single_node_size;
-
+        current_col_input_len += input_len;
         auto edge_len = (edge_index.at(col_end) - edge_index.at(col_i)) * 4;
 
         int output_len =
@@ -193,9 +198,15 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         row_i = row_end;
         the_first_row = false;
       }
+      std::cout << "col input len: " << current_col_input_len << std::endl;
+      current_layer_input_len += current_col_input_len;
       col_i = col_end;
     }
+    std::cout << "\n\nlayer input len: " << current_layer_input_len
+              << std::endl;
+    total_len += current_layer_input_len;
   }
+  std::cout << "\n\ntotal_len: " << total_len << std::endl;
   m_sliding_window_multi_level.back().back().back().setTheFinalRow(true);
   m_sliding_window_vec.back().setTheFinalRow(true);
 }

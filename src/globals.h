@@ -29,12 +29,12 @@ public:
   unsigned long long total_read_edge_latency = 0;
   unsigned long long total_read_edge_times = 0;
   unsigned long long total_mac_in_systolic_array = 0;
-
+  unsigned long long total_read_input_traffic = 0;
   std::vector<unsigned long long> finished_time_stamp;
   std::map<std::string, Model> m_models{
-      {"gcn", Model("gcn", {128}, true, false, 0)},
-      {"gsc", Model("gsc", {128}, true, true, 25)},
-      {"gin", Model("gin", {128, 128}, true, false, 0)}};
+      {"gcn", Model("gcn", {16, 16}, false, false, 0)},
+      {"gsc", Model("gsc", {512, 512}, false, true, 25)},
+      {"gin", Model("gin", {64, 64, 64, 64, 64}, false, false, 0)}};
 };
 extern globals global_definitions;
 

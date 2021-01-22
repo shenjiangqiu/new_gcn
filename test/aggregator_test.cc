@@ -107,14 +107,14 @@ TEST_CASE("aggregator_test") {
 
                 mem_interface->send(edge_buffer->pop_current_req());
             }
-            if (edge_buffer->isNextSendReady() and mem_interface->avaliable()) {
+            if (edge_buffer->isNextSendReady() and mem_interface->available()) {
                 spdlog::debug("send edge next req to mem,addr:{},cycle:{} ", edge_buffer->getNextReq()->addr,
                               global_definitions.cycle);
 
                 mem_interface->send(edge_buffer->pop_next_req());
             }
 
-            if (mem_interface->ret_avaliable()) {
+            if (mem_interface->ret_available()) {
                 auto ret = mem_interface->get_req();
                 if (ret->t == device_types::input_buffer) {
                     spdlog::debug(" input  req received,cycle:{} ", global_definitions.cycle);
