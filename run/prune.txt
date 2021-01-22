@@ -1,0 +1,1525 @@
+parse graph:pubmed
+[2021-01-20 21:10:46.595] [info] print out model levels 500,128
+[2021-01-20 21:10:46.597] [info] xws push back:5242
+[2021-01-20 21:10:46.597] [info] yws push back:327
+[2021-01-20 21:10:46.607] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:137,input buffer send req:0 4279369472 65400 Input ,1
+[2021-01-20 21:10:46.607] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:143,edge buffer send req:1 5637636096 117272 edge ,2
+[2021-01-20 21:10:46.607] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:2 4279434872 65400 Input ,3
+[2021-01-20 21:10:46.607] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:153,edge_next buffer send req:3 5637753368 115356 edge ,4
+[2021-01-20 21:10:46.608] [debug]  input  req received,req:0 4279434816 56 Input ,cycle:1041 
+[2021-01-20 21:10:46.610] [debug]  edge  req received,req:1 5637753344 24 edge ,cycle:3011 
+[2021-01-20 21:10:46.610] [debug] total elements: 35900 ,total size: 143600
+[2021-01-20 21:10:46.610] [debug] aggregator culculate window cycles. x: 0 y: 0, result: 71 ,cycle: 3012
+[2021-01-20 21:10:46.610] [debug] aggregator add new task:x 0 y 0 5242 327 l 0 i_a 4279369472 e_a 5637636096 o_a 4283312872 i_l 65400 e_l 117272 o_l 2683904 n_n:718 fnc:false fnr:false fsr:true
+[2021-01-20 21:10:46.610] [debug] aggregator start to run task x: 0 y: 0 ,cycle: 3012
+[2021-01-20 21:10:46.611] [debug]  input  req received,req:2 4279500216 56 Input ,cycle:4033 
+[2021-01-20 21:10:46.613] [debug]  edge  req received,req:3 5637868696 28 edge ,cycle:5836 
+[2021-01-20 21:10:46.613] [debug] aggregator finished run task. x: 0 y: 0,cycle: 7627
+[2021-01-20 21:10:46.613] [debug] total elements: 37800 ,total size: 151200
+[2021-01-20 21:10:46.613] [debug] aggregator culculate window cycles. x: 0 y: 327, result: 74 ,cycle: 7628
+[2021-01-20 21:10:46.613] [debug] aggregator start to run task x: 0 y: 327 ,cycle: 7628
+[2021-01-20 21:10:46.613] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:4 4279500272 65400 Input ,7628
+[2021-01-20 21:10:46.615] [debug]  input  req received,req:4 4279565616 56 Input ,cycle:8805 
+[2021-01-20 21:10:46.615] [debug] aggregator finished run task. x: 0 y: 327,cycle: 12438
+[2021-01-20 21:10:46.615] [debug] total elements: 37600 ,total size: 150400
+[2021-01-20 21:10:46.615] [debug] aggregator culculate window cycles. x: 0 y: 654, result: 74 ,cycle: 12439
+[2021-01-20 21:10:46.615] [debug] aggregator start to run task x: 0 y: 654 ,cycle: 12439
+[2021-01-20 21:10:46.615] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:5 4279565672 65400 Input ,12439
+[2021-01-20 21:10:46.616] [debug]  input  req received,req:5 4279631016 56 Input ,cycle:13479 
+[2021-01-20 21:10:46.616] [debug] aggregator finished run task. x: 0 y: 654,cycle: 17249
+[2021-01-20 21:10:46.616] [debug] total elements: 35100 ,total size: 140400
+[2021-01-20 21:10:46.616] [debug] aggregator culculate window cycles. x: 0 y: 981, result: 69 ,cycle: 17250
+[2021-01-20 21:10:46.616] [debug] aggregator start to run task x: 0 y: 981 ,cycle: 17250
+[2021-01-20 21:10:46.616] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:6 4279631072 65400 Input ,17250
+[2021-01-20 21:10:46.618] [debug]  input  req received,req:6 4279696416 56 Input ,cycle:18427 
+[2021-01-20 21:10:46.618] [debug] aggregator finished run task. x: 0 y: 981,cycle: 21735
+[2021-01-20 21:10:46.618] [debug] total elements: 38450 ,total size: 153800
+[2021-01-20 21:10:46.618] [debug] aggregator culculate window cycles. x: 0 y: 1308, result: 76 ,cycle: 21736
+[2021-01-20 21:10:46.618] [debug] aggregator start to run task x: 0 y: 1308 ,cycle: 21736
+[2021-01-20 21:10:46.618] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:7 4279696472 65400 Input ,21736
+[2021-01-20 21:10:46.619] [debug]  input  req received,req:7 4279761816 56 Input ,cycle:22776 
+[2021-01-20 21:10:46.619] [debug] aggregator finished run task. x: 0 y: 1308,cycle: 26676
+[2021-01-20 21:10:46.619] [debug] total elements: 37900 ,total size: 151600
+[2021-01-20 21:10:46.619] [debug] aggregator culculate window cycles. x: 0 y: 1635, result: 75 ,cycle: 26677
+[2021-01-20 21:10:46.619] [debug] aggregator start to run task x: 0 y: 1635 ,cycle: 26677
+[2021-01-20 21:10:46.619] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:8 4279761872 65400 Input ,26677
+[2021-01-20 21:10:46.621] [debug]  input  req received,req:8 4279827216 56 Input ,cycle:27854 
+[2021-01-20 21:10:46.621] [debug] aggregator finished run task. x: 0 y: 1635,cycle: 31552
+[2021-01-20 21:10:46.621] [debug] total elements: 39050 ,total size: 156200
+[2021-01-20 21:10:46.621] [debug] aggregator culculate window cycles. x: 0 y: 1962, result: 77 ,cycle: 31553
+[2021-01-20 21:10:46.621] [debug] aggregator start to run task x: 0 y: 1962 ,cycle: 31553
+[2021-01-20 21:10:46.621] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:9 4279827272 65400 Input ,31553
+[2021-01-20 21:10:46.622] [debug]  input  req received,req:9 4279892616 56 Input ,cycle:32593 
+[2021-01-20 21:10:46.622] [debug] aggregator finished run task. x: 0 y: 1962,cycle: 36558
+[2021-01-20 21:10:46.622] [debug] total elements: 38700 ,total size: 154800
+[2021-01-20 21:10:46.622] [debug] aggregator culculate window cycles. x: 0 y: 2289, result: 76 ,cycle: 36559
+[2021-01-20 21:10:46.622] [debug] aggregator start to run task x: 0 y: 2289 ,cycle: 36559
+[2021-01-20 21:10:46.622] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:10 4279892672 65400 Input ,36559
+[2021-01-20 21:10:46.624] [debug]  input  req received,req:10 4279958016 56 Input ,cycle:37736 
+[2021-01-20 21:10:46.624] [debug] aggregator finished run task. x: 0 y: 2289,cycle: 41499
+[2021-01-20 21:10:46.624] [debug] total elements: 33700 ,total size: 134800
+[2021-01-20 21:10:46.624] [debug] aggregator culculate window cycles. x: 0 y: 2616, result: 66 ,cycle: 41500
+[2021-01-20 21:10:46.624] [debug] aggregator start to run task x: 0 y: 2616 ,cycle: 41500
+[2021-01-20 21:10:46.624] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:11 4279958072 65400 Input ,41500
+[2021-01-20 21:10:46.625] [debug]  input  req received,req:11 4280023416 56 Input ,cycle:42540 
+[2021-01-20 21:10:46.625] [debug] aggregator finished run task. x: 0 y: 2616,cycle: 45790
+[2021-01-20 21:10:46.625] [debug] total elements: 37150 ,total size: 148600
+[2021-01-20 21:10:46.625] [debug] aggregator culculate window cycles. x: 0 y: 2943, result: 73 ,cycle: 45791
+[2021-01-20 21:10:46.625] [debug] aggregator start to run task x: 0 y: 2943 ,cycle: 45791
+[2021-01-20 21:10:46.625] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:12 4280023472 65400 Input ,45791
+[2021-01-20 21:10:46.626] [debug]  input  req received,req:12 4280088816 56 Input ,cycle:46968 
+[2021-01-20 21:10:46.626] [debug] aggregator finished run task. x: 0 y: 2943,cycle: 50536
+[2021-01-20 21:10:46.626] [debug] total elements: 35550 ,total size: 142200
+[2021-01-20 21:10:46.626] [debug] aggregator culculate window cycles. x: 0 y: 3270, result: 70 ,cycle: 50537
+[2021-01-20 21:10:46.626] [debug] aggregator start to run task x: 0 y: 3270 ,cycle: 50537
+[2021-01-20 21:10:46.626] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:13 4280088872 65400 Input ,50537
+[2021-01-20 21:10:46.628] [debug]  input  req received,req:13 4280154216 56 Input ,cycle:51714 
+[2021-01-20 21:10:46.628] [debug] aggregator finished run task. x: 0 y: 3270,cycle: 55087
+[2021-01-20 21:10:46.628] [debug] total elements: 37550 ,total size: 150200
+[2021-01-20 21:10:46.628] [debug] aggregator culculate window cycles. x: 0 y: 3597, result: 74 ,cycle: 55088
+[2021-01-20 21:10:46.628] [debug] aggregator start to run task x: 0 y: 3597 ,cycle: 55088
+[2021-01-20 21:10:46.628] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:14 4280154272 65400 Input ,55088
+[2021-01-20 21:10:46.629] [debug]  input  req received,req:14 4280219616 56 Input ,cycle:56128 
+[2021-01-20 21:10:46.629] [debug] aggregator finished run task. x: 0 y: 3597,cycle: 59898
+[2021-01-20 21:10:46.629] [debug] total elements: 37800 ,total size: 151200
+[2021-01-20 21:10:46.629] [debug] aggregator culculate window cycles. x: 0 y: 3924, result: 74 ,cycle: 59899
+[2021-01-20 21:10:46.629] [debug] aggregator start to run task x: 0 y: 3924 ,cycle: 59899
+[2021-01-20 21:10:46.629] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:15 4280219672 65400 Input ,59899
+[2021-01-20 21:10:46.631] [debug]  input  req received,req:15 4280285016 56 Input ,cycle:61076 
+[2021-01-20 21:10:46.631] [debug] aggregator finished run task. x: 0 y: 3924,cycle: 64709
+[2021-01-20 21:10:46.631] [debug] total elements: 36700 ,total size: 146800
+[2021-01-20 21:10:46.631] [debug] aggregator culculate window cycles. x: 0 y: 4251, result: 72 ,cycle: 64710
+[2021-01-20 21:10:46.631] [debug] aggregator start to run task x: 0 y: 4251 ,cycle: 64710
+[2021-01-20 21:10:46.631] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:16 4280285072 65400 Input ,64710
+[2021-01-20 21:10:46.632] [debug]  input  req received,req:16 4280350416 56 Input ,cycle:65750 
+[2021-01-20 21:10:46.632] [debug] aggregator finished run task. x: 0 y: 4251,cycle: 69390
+[2021-01-20 21:10:46.632] [debug] total elements: 34400 ,total size: 137600
+[2021-01-20 21:10:46.632] [debug] aggregator culculate window cycles. x: 0 y: 4578, result: 68 ,cycle: 69391
+[2021-01-20 21:10:46.632] [debug] aggregator start to run task x: 0 y: 4578 ,cycle: 69391
+[2021-01-20 21:10:46.632] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:17 4280350472 65400 Input ,69391
+[2021-01-20 21:10:46.634] [debug]  input  req received,req:17 4280415816 56 Input ,cycle:70568 
+[2021-01-20 21:10:46.634] [debug] aggregator finished run task. x: 0 y: 4578,cycle: 73811
+[2021-01-20 21:10:46.634] [debug] total elements: 35700 ,total size: 142800
+[2021-01-20 21:10:46.634] [debug] aggregator culculate window cycles. x: 0 y: 4905, result: 70 ,cycle: 73812
+[2021-01-20 21:10:46.634] [debug] aggregator start to run task x: 0 y: 4905 ,cycle: 73812
+[2021-01-20 21:10:46.634] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:18 4280415872 65200 Input ,73812
+[2021-01-20 21:10:46.636] [debug]  input  req received,req:18 4280481024 48 Input ,cycle:74986 
+[2021-01-20 21:10:46.636] [debug] aggregator finished run task. x: 0 y: 4905,cycle: 78362
+[2021-01-20 21:10:46.636] [debug] total elements: 21600 ,total size: 86400
+[2021-01-20 21:10:46.636] [debug] aggregator culculate window cycles. x: 0 y: 5232, result: 43 ,cycle: 78363
+[2021-01-20 21:10:46.636] [debug] aggregator start to run task x: 0 y: 5232 ,cycle: 78363
+[2021-01-20 21:10:46.636] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:19 4280482272 65200 Input ,78363
+[2021-01-20 21:10:46.637] [debug]  input  req received,req:19 4280547424 48 Input ,cycle:79400 
+[2021-01-20 21:10:46.637] [debug] aggregator finished run task. x: 0 y: 5232,cycle: 81158
+[2021-01-20 21:10:46.637] [debug] total elements: 18900 ,total size: 75600
+[2021-01-20 21:10:46.637] [debug] aggregator culculate window cycles. x: 0 y: 5564, result: 37 ,cycle: 81159
+[2021-01-20 21:10:46.637] [debug] aggregator start to run task x: 0 y: 5564 ,cycle: 81159
+[2021-01-20 21:10:46.637] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:20 4280547672 65400 Input ,81159
+[2021-01-20 21:10:46.638] [debug]  input  req received,req:20 4280613016 56 Input ,cycle:82336 
+[2021-01-20 21:10:46.639] [debug] aggregator finished run task. x: 0 y: 5564,cycle: 83564
+[2021-01-20 21:10:46.639] [debug] total elements: 20200 ,total size: 80800
+[2021-01-20 21:10:46.639] [debug] aggregator culculate window cycles. x: 0 y: 5891, result: 40 ,cycle: 83565
+[2021-01-20 21:10:46.639] [debug] aggregator start to run task x: 0 y: 5891 ,cycle: 83565
+[2021-01-20 21:10:46.639] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:21 4280613072 65400 Input ,83565
+[2021-01-20 21:10:46.640] [debug]  input  req received,req:21 4280678416 56 Input ,cycle:84742 
+[2021-01-20 21:10:46.640] [debug] aggregator finished run task. x: 0 y: 5891,cycle: 86165
+[2021-01-20 21:10:46.640] [debug] total elements: 18900 ,total size: 75600
+[2021-01-20 21:10:46.640] [debug] aggregator culculate window cycles. x: 0 y: 6218, result: 37 ,cycle: 86166
+[2021-01-20 21:10:46.640] [debug] aggregator start to run task x: 0 y: 6218 ,cycle: 86166
+[2021-01-20 21:10:46.640] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:22 4280679072 65000 Input ,86166
+[2021-01-20 21:10:46.641] [debug]  input  req received,req:22 4280744032 40 Input ,cycle:87200 
+[2021-01-20 21:10:46.641] [debug] aggregator finished run task. x: 0 y: 6218,cycle: 88571
+[2021-01-20 21:10:46.641] [debug] total elements: 21250 ,total size: 85000
+[2021-01-20 21:10:46.641] [debug] aggregator culculate window cycles. x: 0 y: 6548, result: 42 ,cycle: 88572
+[2021-01-20 21:10:46.641] [debug] aggregator start to run task x: 0 y: 6548 ,cycle: 88572
+[2021-01-20 21:10:46.641] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:23 4280744672 64800 Input ,88572
+[2021-01-20 21:10:46.642] [debug]  input  req received,req:23 4280809440 32 Input ,cycle:89603 
+[2021-01-20 21:10:46.642] [debug] aggregator finished run task. x: 0 y: 6548,cycle: 91302
+[2021-01-20 21:10:46.642] [debug] total elements: 20750 ,total size: 83000
+[2021-01-20 21:10:46.642] [debug] aggregator culculate window cycles. x: 0 y: 6876, result: 41 ,cycle: 91303
+[2021-01-20 21:10:46.642] [debug] aggregator start to run task x: 0 y: 6876 ,cycle: 91303
+[2021-01-20 21:10:46.642] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:24 4280810872 65400 Input ,91303
+[2021-01-20 21:10:46.644] [debug]  input  req received,req:24 4280876216 56 Input ,cycle:92480 
+[2021-01-20 21:10:46.644] [debug] aggregator finished run task. x: 0 y: 6876,cycle: 93968
+[2021-01-20 21:10:46.644] [debug] total elements: 19950 ,total size: 79800
+[2021-01-20 21:10:46.644] [debug] aggregator culculate window cycles. x: 0 y: 7207, result: 39 ,cycle: 93969
+[2021-01-20 21:10:46.644] [debug] aggregator start to run task x: 0 y: 7207 ,cycle: 93969
+[2021-01-20 21:10:46.644] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:25 4280876272 65200 Input ,93969
+[2021-01-20 21:10:46.645] [debug]  input  req received,req:25 4280941424 48 Input ,cycle:95006 
+[2021-01-20 21:10:46.645] [debug] aggregator finished run task. x: 0 y: 7207,cycle: 96504
+[2021-01-20 21:10:46.645] [debug] total elements: 20400 ,total size: 81600
+[2021-01-20 21:10:46.645] [debug] aggregator culculate window cycles. x: 0 y: 7534, result: 40 ,cycle: 96505
+[2021-01-20 21:10:46.645] [debug] aggregator start to run task x: 0 y: 7534 ,cycle: 96505
+[2021-01-20 21:10:46.645] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:26 4280941672 65400 Input ,96505
+[2021-01-20 21:10:46.646] [debug]  input  req received,req:26 4281007016 56 Input ,cycle:97682 
+[2021-01-20 21:10:46.646] [debug] aggregator finished run task. x: 0 y: 7534,cycle: 99105
+[2021-01-20 21:10:46.646] [debug] total elements: 20850 ,total size: 83400
+[2021-01-20 21:10:46.646] [debug] aggregator culculate window cycles. x: 0 y: 7861, result: 41 ,cycle: 99106
+[2021-01-20 21:10:46.646] [debug] aggregator start to run task x: 0 y: 7861 ,cycle: 99106
+[2021-01-20 21:10:46.646] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:27 4281007072 64600 Input ,99106
+[2021-01-20 21:10:46.647] [debug]  input  req received,req:27 4281071648 24 Input ,cycle:100271 
+[2021-01-20 21:10:46.648] [debug] aggregator finished run task. x: 0 y: 7861,cycle: 101771
+[2021-01-20 21:10:46.648] [debug] total elements: 20250 ,total size: 81000
+[2021-01-20 21:10:46.648] [debug] aggregator culculate window cycles. x: 0 y: 8188, result: 40 ,cycle: 101772
+[2021-01-20 21:10:46.648] [debug] aggregator start to run task x: 0 y: 8188 ,cycle: 101772
+[2021-01-20 21:10:46.648] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:28 4281073072 65400 Input ,101772
+[2021-01-20 21:10:46.648] [debug]  input  req received,req:28 4281138416 56 Input ,cycle:102812 
+[2021-01-20 21:10:46.649] [debug] aggregator finished run task. x: 0 y: 8188,cycle: 104372
+[2021-01-20 21:10:46.649] [debug] total elements: 19450 ,total size: 77800
+[2021-01-20 21:10:46.649] [debug] aggregator culculate window cycles. x: 0 y: 8518, result: 38 ,cycle: 104373
+[2021-01-20 21:10:46.649] [debug] aggregator start to run task x: 0 y: 8518 ,cycle: 104373
+[2021-01-20 21:10:46.649] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:29 4281139072 65200 Input ,104373
+[2021-01-20 21:10:46.650] [debug]  input  req received,req:29 4281204224 48 Input ,cycle:105547 
+[2021-01-20 21:10:46.650] [debug] aggregator finished run task. x: 0 y: 8518,cycle: 106843
+[2021-01-20 21:10:46.650] [debug] total elements: 19550 ,total size: 78200
+[2021-01-20 21:10:46.650] [debug] aggregator culculate window cycles. x: 0 y: 8848, result: 39 ,cycle: 106844
+[2021-01-20 21:10:46.650] [debug] aggregator start to run task x: 0 y: 8848 ,cycle: 106844
+[2021-01-20 21:10:46.650] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:30 4281204872 65000 Input ,106844
+[2021-01-20 21:10:46.651] [debug]  input  req received,req:30 4281269832 40 Input ,cycle:108015 
+[2021-01-20 21:10:46.651] [debug] aggregator finished run task. x: 0 y: 8848,cycle: 109379
+[2021-01-20 21:10:46.651] [debug] total elements: 20000 ,total size: 80000
+[2021-01-20 21:10:46.651] [debug] aggregator culculate window cycles. x: 0 y: 9177, result: 40 ,cycle: 109380
+[2021-01-20 21:10:46.651] [debug] aggregator start to run task x: 0 y: 9177 ,cycle: 109380
+[2021-01-20 21:10:46.651] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:31 4281270472 65400 Input ,109380
+[2021-01-20 21:10:46.652] [debug]  input  req received,req:31 4281335816 56 Input ,cycle:110420 
+[2021-01-20 21:10:46.652] [debug] aggregator finished run task. x: 0 y: 9177,cycle: 111980
+[2021-01-20 21:10:46.652] [debug] total elements: 17850 ,total size: 71400
+[2021-01-20 21:10:46.652] [debug] aggregator culculate window cycles. x: 0 y: 9505, result: 35 ,cycle: 111981
+[2021-01-20 21:10:46.652] [debug] aggregator start to run task x: 0 y: 9505 ,cycle: 111981
+[2021-01-20 21:10:46.652] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:32 4281336072 65200 Input ,111981
+[2021-01-20 21:10:46.653] [debug]  input  req received,req:32 4281401224 48 Input ,cycle:113018 
+[2021-01-20 21:10:46.653] [debug] aggregator finished run task. x: 0 y: 9505,cycle: 114256
+[2021-01-20 21:10:46.653] [debug] total elements: 19150 ,total size: 76600
+[2021-01-20 21:10:46.653] [debug] aggregator culculate window cycles. x: 0 y: 9833, result: 38 ,cycle: 114257
+[2021-01-20 21:10:46.653] [debug] aggregator start to run task x: 0 y: 9833 ,cycle: 114257
+[2021-01-20 21:10:46.653] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:33 4281401472 65000 Input ,114257
+[2021-01-20 21:10:46.655] [debug]  input  req received,req:33 4281466432 40 Input ,cycle:115428 
+[2021-01-20 21:10:46.655] [debug] aggregator finished run task. x: 0 y: 9833,cycle: 116727
+[2021-01-20 21:10:46.655] [debug] total elements: 23400 ,total size: 93600
+[2021-01-20 21:10:46.655] [debug] aggregator culculate window cycles. x: 0 y: 10160, result: 46 ,cycle: 116728
+[2021-01-20 21:10:46.655] [debug] aggregator start to run task x: 0 y: 10160 ,cycle: 116728
+[2021-01-20 21:10:46.655] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:34 4281467072 65000 Input ,116728
+[2021-01-20 21:10:46.657] [debug]  input  req received,req:34 4281532032 40 Input ,cycle:117901 
+[2021-01-20 21:10:46.657] [debug] aggregator finished run task. x: 0 y: 10160,cycle: 119718
+[2021-01-20 21:10:46.657] [debug] total elements: 19850 ,total size: 79400
+[2021-01-20 21:10:46.657] [debug] aggregator culculate window cycles. x: 0 y: 10488, result: 39 ,cycle: 119719
+[2021-01-20 21:10:46.657] [debug] aggregator start to run task x: 0 y: 10488 ,cycle: 119719
+[2021-01-20 21:10:46.657] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:35 4281532472 65400 Input ,119719
+[2021-01-20 21:10:46.658] [debug]  input  req received,req:35 4281597816 56 Input ,cycle:120759 
+[2021-01-20 21:10:46.658] [debug] aggregator finished run task. x: 0 y: 10488,cycle: 122254
+[2021-01-20 21:10:46.658] [debug] total elements: 20150 ,total size: 80600
+[2021-01-20 21:10:46.658] [debug] aggregator culculate window cycles. x: 0 y: 10815, result: 40 ,cycle: 122255
+[2021-01-20 21:10:46.658] [debug] aggregator start to run task x: 0 y: 10815 ,cycle: 122255
+[2021-01-20 21:10:46.658] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:36 4281597872 65400 Input ,122255
+[2021-01-20 21:10:46.659] [debug]  input  req received,req:36 4281663216 56 Input ,cycle:123432 
+[2021-01-20 21:10:46.659] [debug] aggregator finished run task. x: 0 y: 10815,cycle: 124855
+[2021-01-20 21:10:46.659] [debug] total elements: 24250 ,total size: 97000
+[2021-01-20 21:10:46.659] [debug] aggregator culculate window cycles. x: 0 y: 11142, result: 48 ,cycle: 124856
+[2021-01-20 21:10:46.659] [debug] aggregator start to run task x: 0 y: 11142 ,cycle: 124856
+[2021-01-20 21:10:46.659] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:37 4281663272 65400 Input ,124856
+[2021-01-20 21:10:46.660] [debug]  input  req received,req:37 4281728616 56 Input ,cycle:125975 
+[2021-01-20 21:10:46.661] [debug] aggregator finished run task. x: 0 y: 11142,cycle: 127976
+[2021-01-20 21:10:46.661] [debug] total elements: 18050 ,total size: 72200
+[2021-01-20 21:10:46.661] [debug] aggregator culculate window cycles. x: 0 y: 11469, result: 36 ,cycle: 127977
+[2021-01-20 21:10:46.661] [debug] aggregator start to run task x: 0 y: 11469 ,cycle: 127977
+[2021-01-20 21:10:46.661] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:38 4281729272 65400 Input ,127977
+[2021-01-20 21:10:46.662] [debug]  input  req received,req:38 4281794616 56 Input ,cycle:129154 
+[2021-01-20 21:10:46.662] [debug] aggregator finished run task. x: 0 y: 11469,cycle: 130317
+[2021-01-20 21:10:46.662] [debug] total elements: 25850 ,total size: 103400
+[2021-01-20 21:10:46.662] [debug] aggregator culculate window cycles. x: 0 y: 11799, result: 51 ,cycle: 130318
+[2021-01-20 21:10:46.662] [debug] aggregator start to run task x: 0 y: 11799 ,cycle: 130318
+[2021-01-20 21:10:46.662] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:39 4281794672 65400 Input ,130318
+[2021-01-20 21:10:46.664] [debug]  input  req received,req:39 4281860016 56 Input ,cycle:131495 
+[2021-01-20 21:10:46.664] [debug] aggregator finished run task. x: 0 y: 11799,cycle: 133633
+[2021-01-20 21:10:46.664] [debug] total elements: 19600 ,total size: 78400
+[2021-01-20 21:10:46.664] [debug] aggregator culculate window cycles. x: 0 y: 12126, result: 39 ,cycle: 133634
+[2021-01-20 21:10:46.664] [debug] aggregator start to run task x: 0 y: 12126 ,cycle: 133634
+[2021-01-20 21:10:46.664] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:40 4281860072 64200 Input ,133634
+[2021-01-20 21:10:46.665] [debug]  input  req received,req:40 4281924264 8 Input ,cycle:134793 
+[2021-01-20 21:10:46.665] [debug] aggregator finished run task. x: 0 y: 12126,cycle: 136169
+[2021-01-20 21:10:46.665] [debug] total elements: 19950 ,total size: 79800
+[2021-01-20 21:10:46.665] [debug] aggregator culculate window cycles. x: 0 y: 12453, result: 39 ,cycle: 136170
+[2021-01-20 21:10:46.665] [debug] aggregator start to run task x: 0 y: 12453 ,cycle: 136170
+[2021-01-20 21:10:46.665] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:41 4281925472 65000 Input ,136170
+[2021-01-20 21:10:46.667] [debug]  input  req received,req:41 4281990432 40 Input ,cycle:137341 
+[2021-01-20 21:10:46.667] [debug] aggregator finished run task. x: 0 y: 12453,cycle: 138705
+[2021-01-20 21:10:46.667] [debug] total elements: 14850 ,total size: 59400
+[2021-01-20 21:10:46.667] [debug] aggregator culculate window cycles. x: 0 y: 12780, result: 30 ,cycle: 138706
+[2021-01-20 21:10:46.667] [debug] aggregator start to run task x: 0 y: 12780 ,cycle: 138706
+[2021-01-20 21:10:46.667] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:42 4281991272 65400 Input ,138706
+[2021-01-20 21:10:46.668] [debug]  input  req received,req:42 4282056616 56 Input ,cycle:139746 
+[2021-01-20 21:10:46.668] [debug] aggregator finished run task. x: 0 y: 12780,cycle: 140656
+[2021-01-20 21:10:46.668] [debug] total elements: 18650 ,total size: 74600
+[2021-01-20 21:10:46.668] [debug] aggregator culculate window cycles. x: 0 y: 13109, result: 37 ,cycle: 140657
+[2021-01-20 21:10:46.668] [debug] aggregator start to run task x: 0 y: 13109 ,cycle: 140657
+[2021-01-20 21:10:46.668] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:43 4282056672 65200 Input ,140657
+[2021-01-20 21:10:46.669] [debug]  input  req received,req:43 4282121824 48 Input ,cycle:141694 
+[2021-01-20 21:10:46.669] [debug] aggregator finished run task. x: 0 y: 13109,cycle: 143062
+[2021-01-20 21:10:46.669] [debug] total elements: 20900 ,total size: 83600
+[2021-01-20 21:10:46.669] [debug] aggregator culculate window cycles. x: 0 y: 13436, result: 41 ,cycle: 143063
+[2021-01-20 21:10:46.669] [debug] aggregator start to run task x: 0 y: 13436 ,cycle: 143063
+[2021-01-20 21:10:46.669] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:44 4282122072 65200 Input ,143063
+[2021-01-20 21:10:46.670] [debug]  input  req received,req:44 4282187224 48 Input ,cycle:144100 
+[2021-01-20 21:10:46.670] [debug] aggregator finished run task. x: 0 y: 13436,cycle: 145728
+[2021-01-20 21:10:46.670] [debug] total elements: 21000 ,total size: 84000
+[2021-01-20 21:10:46.670] [debug] aggregator culculate window cycles. x: 0 y: 13763, result: 42 ,cycle: 145729
+[2021-01-20 21:10:46.670] [debug] aggregator start to run task x: 0 y: 13763 ,cycle: 145729
+[2021-01-20 21:10:46.670] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:45 4282187472 65200 Input ,145729
+[2021-01-20 21:10:46.671] [debug]  input  req received,req:45 4282252624 48 Input ,cycle:146903 
+[2021-01-20 21:10:46.672] [debug] aggregator finished run task. x: 0 y: 13763,cycle: 148459
+[2021-01-20 21:10:46.672] [debug] total elements: 19350 ,total size: 77400
+[2021-01-20 21:10:46.672] [debug] aggregator culculate window cycles. x: 0 y: 14090, result: 38 ,cycle: 148460
+[2021-01-20 21:10:46.672] [debug] aggregator start to run task x: 0 y: 14090 ,cycle: 148460
+[2021-01-20 21:10:46.672] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:46 4282252872 65200 Input ,148460
+[2021-01-20 21:10:46.672] [debug]  input  req received,req:46 4282318024 48 Input ,cycle:149497 
+[2021-01-20 21:10:46.672] [debug] aggregator finished run task. x: 0 y: 14090,cycle: 150930
+[2021-01-20 21:10:46.672] [debug] total elements: 18900 ,total size: 75600
+[2021-01-20 21:10:46.672] [debug] aggregator culculate window cycles. x: 0 y: 14417, result: 37 ,cycle: 150931
+[2021-01-20 21:10:46.672] [debug] aggregator start to run task x: 0 y: 14417 ,cycle: 150931
+[2021-01-20 21:10:46.672] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:47 4282318272 65400 Input ,150931
+[2021-01-20 21:10:46.673] [debug]  input  req received,req:47 4282383616 56 Input ,cycle:151971 
+[2021-01-20 21:10:46.673] [debug] aggregator finished run task. x: 0 y: 14417,cycle: 153336
+[2021-01-20 21:10:46.673] [debug] total elements: 19150 ,total size: 76600
+[2021-01-20 21:10:46.673] [debug] aggregator culculate window cycles. x: 0 y: 14744, result: 38 ,cycle: 153337
+[2021-01-20 21:10:46.673] [debug] aggregator start to run task x: 0 y: 14744 ,cycle: 153337
+[2021-01-20 21:10:46.673] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:48 4282383872 64800 Input ,153337
+[2021-01-20 21:10:46.675] [debug]  input  req received,req:48 4282448640 32 Input ,cycle:154505 
+[2021-01-20 21:10:46.675] [debug] aggregator finished run task. x: 0 y: 14744,cycle: 155807
+[2021-01-20 21:10:46.675] [debug] total elements: 17850 ,total size: 71400
+[2021-01-20 21:10:46.675] [debug] aggregator culculate window cycles. x: 0 y: 15072, result: 35 ,cycle: 155808
+[2021-01-20 21:10:46.675] [debug] aggregator start to run task x: 0 y: 15072 ,cycle: 155808
+[2021-01-20 21:10:46.675] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:49 4282449272 64800 Input ,155808
+[2021-01-20 21:10:46.676] [debug]  input  req received,req:49 4282514040 32 Input ,cycle:156976 
+[2021-01-20 21:10:46.676] [debug] aggregator finished run task. x: 0 y: 15072,cycle: 158083
+[2021-01-20 21:10:46.676] [debug] total elements: 19950 ,total size: 79800
+[2021-01-20 21:10:46.676] [debug] aggregator culculate window cycles. x: 0 y: 15399, result: 39 ,cycle: 158084
+[2021-01-20 21:10:46.676] [debug] aggregator start to run task x: 0 y: 15399 ,cycle: 158084
+[2021-01-20 21:10:46.676] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:50 4282514672 65200 Input ,158084
+[2021-01-20 21:10:46.677] [debug]  input  req received,req:50 4282579824 48 Input ,cycle:159122 
+[2021-01-20 21:10:46.677] [debug] aggregator finished run task. x: 0 y: 15399,cycle: 160619
+[2021-01-20 21:10:46.677] [debug] total elements: 24150 ,total size: 96600
+[2021-01-20 21:10:46.677] [debug] aggregator culculate window cycles. x: 0 y: 15726, result: 48 ,cycle: 160620
+[2021-01-20 21:10:46.677] [debug] aggregator start to run task x: 0 y: 15726 ,cycle: 160620
+[2021-01-20 21:10:46.677] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:51 4282580272 65400 Input ,160620
+[2021-01-20 21:10:46.678] [debug]  input  req received,req:51 4282645616 56 Input ,cycle:161660 
+[2021-01-20 21:10:46.678] [debug] aggregator finished run task. x: 0 y: 15726,cycle: 163740
+[2021-01-20 21:10:46.678] [debug] total elements: 19000 ,total size: 76000
+[2021-01-20 21:10:46.678] [debug] aggregator culculate window cycles. x: 0 y: 16054, result: 38 ,cycle: 163741
+[2021-01-20 21:10:46.678] [debug] aggregator start to run task x: 0 y: 16054 ,cycle: 163741
+[2021-01-20 21:10:46.678] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:52 4282646072 64200 Input ,163741
+[2021-01-20 21:10:46.680] [debug]  input  req received,req:52 4282710264 8 Input ,cycle:164900 
+[2021-01-20 21:10:46.680] [debug] aggregator finished run task. x: 0 y: 16054,cycle: 166211
+[2021-01-20 21:10:46.680] [debug] total elements: 19300 ,total size: 77200
+[2021-01-20 21:10:46.680] [debug] aggregator culculate window cycles. x: 0 y: 16383, result: 38 ,cycle: 166212
+[2021-01-20 21:10:46.680] [debug] aggregator start to run task x: 0 y: 16383 ,cycle: 166212
+[2021-01-20 21:10:46.680] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:53 4282711872 65400 Input ,166212
+[2021-01-20 21:10:46.681] [debug]  input  req received,req:53 4282777216 56 Input ,cycle:167252 
+[2021-01-20 21:10:46.681] [debug] aggregator finished run task. x: 0 y: 16383,cycle: 168682
+[2021-01-20 21:10:46.681] [debug] total elements: 21300 ,total size: 85200
+[2021-01-20 21:10:46.681] [debug] aggregator culculate window cycles. x: 0 y: 16712, result: 42 ,cycle: 168683
+[2021-01-20 21:10:46.681] [debug] aggregator start to run task x: 0 y: 16712 ,cycle: 168683
+[2021-01-20 21:10:46.681] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:54 4282778072 65200 Input ,168683
+[2021-01-20 21:10:46.682] [debug]  input  req received,req:54 4282843224 48 Input ,cycle:169857 
+[2021-01-20 21:10:46.682] [debug] aggregator finished run task. x: 0 y: 16712,cycle: 171413
+[2021-01-20 21:10:46.682] [debug] total elements: 19600 ,total size: 78400
+[2021-01-20 21:10:46.682] [debug] aggregator culculate window cycles. x: 0 y: 17043, result: 39 ,cycle: 171414
+[2021-01-20 21:10:46.682] [debug] aggregator start to run task x: 0 y: 17043 ,cycle: 171414
+[2021-01-20 21:10:46.682] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:55 4282844272 64000 Input ,171414
+[2021-01-20 21:10:46.684] [debug]  input  req received,req:55 4282908208 64 Input ,cycle:172569 
+[2021-01-20 21:10:46.684] [debug] aggregator finished run task. x: 0 y: 17043,cycle: 173949
+[2021-01-20 21:10:46.684] [debug] total elements: 18750 ,total size: 75000
+[2021-01-20 21:10:46.684] [debug] aggregator culculate window cycles. x: 0 y: 17374, result: 37 ,cycle: 173950
+[2021-01-20 21:10:46.684] [debug] aggregator start to run task x: 0 y: 17374 ,cycle: 173950
+[2021-01-20 21:10:46.684] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:56 4282909672 65200 Input ,173950
+[2021-01-20 21:10:46.685] [debug]  input  req received,req:56 4282974824 48 Input ,cycle:174987 
+[2021-01-20 21:10:46.685] [debug] aggregator finished run task. x: 0 y: 17374,cycle: 176355
+[2021-01-20 21:10:46.685] [debug] total elements: 17950 ,total size: 71800
+[2021-01-20 21:10:46.685] [debug] aggregator culculate window cycles. x: 0 y: 17701, result: 36 ,cycle: 176356
+[2021-01-20 21:10:46.685] [debug] aggregator start to run task x: 0 y: 17701 ,cycle: 176356
+[2021-01-20 21:10:46.685] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:57 4282975072 65200 Input ,176356
+[2021-01-20 21:10:46.686] [debug]  input  req received,req:57 4283040224 48 Input ,cycle:177393 
+[2021-01-20 21:10:46.686] [debug] aggregator finished run task. x: 0 y: 17701,cycle: 178696
+[2021-01-20 21:10:46.686] [debug] total elements: 16350 ,total size: 65400
+[2021-01-20 21:10:46.686] [debug] aggregator culculate window cycles. x: 0 y: 18028, result: 32 ,cycle: 178697
+[2021-01-20 21:10:46.686] [debug] aggregator start to run task x: 0 y: 18028 ,cycle: 178697
+[2021-01-20 21:10:46.686] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:58 4283040872 65400 Input ,178697
+[2021-01-20 21:10:46.687] [debug]  input  req received,req:58 4283106216 56 Input ,cycle:179874 
+[2021-01-20 21:10:46.687] [debug] aggregator finished run task. x: 0 y: 18028,cycle: 180777
+[2021-01-20 21:10:46.687] [debug] total elements: 17600 ,total size: 70400
+[2021-01-20 21:10:46.687] [debug] aggregator culculate window cycles. x: 0 y: 18357, result: 35 ,cycle: 180778
+[2021-01-20 21:10:46.687] [debug] aggregator start to run task x: 0 y: 18357 ,cycle: 180778
+[2021-01-20 21:10:46.687] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:59 4283106472 65200 Input ,180778
+[2021-01-20 21:10:46.689] [debug]  input  req received,req:59 4283171624 48 Input ,cycle:181952 
+[2021-01-20 21:10:46.689] [debug] aggregator finished run task. x: 0 y: 18357,cycle: 183053
+[2021-01-20 21:10:46.689] [debug] total elements: 43000 ,total size: 172000
+[2021-01-20 21:10:46.689] [debug] aggregator culculate window cycles. x: 0 y: 18685, result: 84 ,cycle: 183054
+[2021-01-20 21:10:46.689] [debug] aggregator start to run task x: 0 y: 18685 ,cycle: 183054
+[2021-01-20 21:10:46.689] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:60 4283172472 65200 Input ,183054
+[2021-01-20 21:10:46.690] [debug]  input  req received,req:60 4283237624 48 Input ,cycle:184234 
+[2021-01-20 21:10:46.691] [debug] aggregator finished run task. x: 0 y: 18685,cycle: 188514
+[2021-01-20 21:10:46.691] [debug] total elements: 13350 ,total size: 53400
+[2021-01-20 21:10:46.691] [debug] aggregator culculate window cycles. x: 0 y: 19015, result: 27 ,cycle: 188515
+[2021-01-20 21:10:46.691] [debug] aggregator start to run task x: 0 y: 19015 ,cycle: 188515
+[2021-01-20 21:10:46.691] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:61 4283237872 65200 Input ,188515
+[2021-01-20 21:10:46.692] [debug]  input  req received,req:61 4283303024 48 Input ,cycle:189689 
+[2021-01-20 21:10:46.692] [debug] aggregator finished run task. x: 0 y: 19015,cycle: 190270
+[2021-01-20 21:10:46.692] [debug] total elements: 5300 ,total size: 21200
+[2021-01-20 21:10:46.692] [debug] aggregator culculate window cycles. x: 0 y: 19342, result: 11 ,cycle: 190271
+[2021-01-20 21:10:46.692] [debug] aggregator start to run task x: 0 y: 19342 ,cycle: 190271
+[2021-01-20 21:10:46.692] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:62 4283303272 9400 Input ,190271
+[2021-01-20 21:10:46.692] [debug]  input  req received,req:62 4283312616 56 Input ,cycle:190429 
+[2021-01-20 21:10:46.692] [debug] aggregator finished run task. x: 0 y: 19342,cycle: 190986
+[2021-01-20 21:10:46.692] [debug] total elements: 450 ,total size: 1800
+[2021-01-20 21:10:46.692] [debug] aggregator culculate window cycles. x: 0 y: 19669, result: 1 ,cycle: 190987
+[2021-01-20 21:10:46.692] [debug] aggregator start to run task x: 0 y: 19669 ,cycle: 190987
+[2021-01-20 21:10:46.692] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:63 4279369472 65000 Input ,190987
+[2021-01-20 21:10:46.692] [debug] aggregator finished run task. x: 0 y: 19669,cycle: 191052
+[2021-01-20 21:10:46.692] [debug] aggbuffer move the write buffer to read buffer
+[2021-01-20 21:10:46.692] [debug] systolic array start a new task,cycle:191053
+[2021-01-20 21:10:46.693] [debug] start a new systolic task: window:x 0 y 0 5242 327 l 0 i_a 4279369472 e_a 5637636096 o_a 4283312872 i_l 65400 e_l 117272 o_l 2683904 n_n:718 fnc:false fnr:false fsr:true, total_cycle:4810, current cycle:191053
+[2021-01-20 21:10:46.693] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:65 4279435272 65000 Input ,191053
+[2021-01-20 21:10:46.693] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:153,edge_next buffer send req:66 5637868724 114284 edge ,191054
+[2021-01-20 21:10:46.694] [debug]  input  req received,req:63 4279434432 40 Input ,cycle:192158 
+[2021-01-20 21:10:46.694] [debug] total elements: 20000 ,total size: 80000
+[2021-01-20 21:10:46.694] [debug] aggregator culculate window cycles. x: 5242 y: 0, result: 40 ,cycle: 192159
+[2021-01-20 21:10:46.694] [debug] aggregator add new task:x 5242 y 0 5242 325 l 0 i_a 4279369472 e_a 5637753368 o_a 4285996776 i_l 65000 e_l 115356 o_l 2683904 n_n:400 fnc:false fnr:false fsr:true
+[2021-01-20 21:10:46.694] [debug] aggregator start to run task x: 5242 y: 0 ,cycle: 192159
+[2021-01-20 21:10:46.695] [debug]  input  req received,req:65 4279500232 40 Input ,cycle:193174 
+[2021-01-20 21:10:46.697] [debug] aggregator finished run task. x: 5242 y: 0,cycle: 194759
+[2021-01-20 21:10:46.697] [debug] total elements: 19950 ,total size: 79800
+[2021-01-20 21:10:46.697] [debug] aggregator culculate window cycles. x: 5242 y: 329, result: 39 ,cycle: 194760
+[2021-01-20 21:10:46.697] [debug] aggregator start to run task x: 5242 y: 329 ,cycle: 194760
+[2021-01-20 21:10:46.697] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:67 4279500672 65200 Input ,194760
+[2021-01-20 21:10:46.697] [debug]  edge  req received,req:66 5637982964 44 edge ,cycle:194962 
+[2021-01-20 21:10:46.698] [debug] end a systolic array, window:x 0 y 0 5242 327 l 0 i_a 4279369472 e_a 5637636096 o_a 4283312872 i_l 65400 e_l 117272 o_l 2683904 n_n:718 fnc:false fnr:false fsr:true, current_cycle:195862
+[2021-01-20 21:10:46.698] [debug] aggbuffer finished read
+[2021-01-20 21:10:46.698] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:159,output buffer send req:64 4283312872 2683904 else ,195863
+[2021-01-20 21:10:46.698] [debug]  input  req received,req:67 4279565824 48 Input ,cycle:195981 
+[2021-01-20 21:10:46.699] [debug] aggregator finished run task. x: 5242 y: 329,cycle: 197295
+[2021-01-20 21:10:46.699] [debug] total elements: 20400 ,total size: 81600
+[2021-01-20 21:10:46.699] [debug] aggregator culculate window cycles. x: 5242 y: 656, result: 40 ,cycle: 197296
+[2021-01-20 21:10:46.699] [debug] aggregator start to run task x: 5242 y: 656 ,cycle: 197296
+[2021-01-20 21:10:46.699] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:68 4279566672 65400 Input ,197296
+[2021-01-20 21:10:46.701] [debug] aggregator finished run task. x: 5242 y: 656,cycle: 199896
+[2021-01-20 21:10:46.701] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:69 4279632072 65400 Input ,199897
+[2021-01-20 21:10:46.733] [debug] output buffer finished write to memory: cycle:237799
+[2021-01-20 21:10:46.735] [debug]  input  req received,req:68 4279632016 56 Input ,cycle:238976 
+[2021-01-20 21:10:46.735] [debug] total elements: 19200 ,total size: 76800
+[2021-01-20 21:10:46.735] [debug] aggregator culculate window cycles. x: 5242 y: 986, result: 38 ,cycle: 238977
+[2021-01-20 21:10:46.735] [debug] aggregator start to run task x: 5242 y: 986 ,cycle: 238977
+[2021-01-20 21:10:46.735] [debug]  input  req received,req:69 4279697416 56 Input ,cycle:239998 
+[2021-01-20 21:10:46.736] [debug] aggregator finished run task. x: 5242 y: 986,cycle: 241447
+[2021-01-20 21:10:46.736] [debug] total elements: 19850 ,total size: 79400
+[2021-01-20 21:10:46.736] [debug] aggregator culculate window cycles. x: 5242 y: 1313, result: 39 ,cycle: 241448
+[2021-01-20 21:10:46.736] [debug] aggregator start to run task x: 5242 y: 1313 ,cycle: 241448
+[2021-01-20 21:10:46.736] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:70 4279697472 65200 Input ,241448
+[2021-01-20 21:10:46.737] [debug]  input  req received,req:70 4279762624 48 Input ,cycle:242622 
+[2021-01-20 21:10:46.737] [debug] aggregator finished run task. x: 5242 y: 1313,cycle: 243983
+[2021-01-20 21:10:46.737] [debug] total elements: 19900 ,total size: 79600
+[2021-01-20 21:10:46.737] [debug] aggregator culculate window cycles. x: 5242 y: 1640, result: 39 ,cycle: 243984
+[2021-01-20 21:10:46.737] [debug] aggregator start to run task x: 5242 y: 1640 ,cycle: 243984
+[2021-01-20 21:10:46.737] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:71 4279763072 65000 Input ,243984
+[2021-01-20 21:10:46.738] [debug]  input  req received,req:71 4279828032 40 Input ,cycle:245018 
+[2021-01-20 21:10:46.738] [debug] aggregator finished run task. x: 5242 y: 1640,cycle: 246519
+[2021-01-20 21:10:46.738] [debug] total elements: 21700 ,total size: 86800
+[2021-01-20 21:10:46.738] [debug] aggregator culculate window cycles. x: 5242 y: 1968, result: 43 ,cycle: 246520
+[2021-01-20 21:10:46.738] [debug] aggregator start to run task x: 5242 y: 1968 ,cycle: 246520
+[2021-01-20 21:10:46.738] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:72 4279828472 65400 Input ,246520
+[2021-01-20 21:10:46.739] [debug]  input  req received,req:72 4279893816 56 Input ,cycle:247560 
+[2021-01-20 21:10:46.739] [debug] aggregator finished run task. x: 5242 y: 1968,cycle: 249315
+[2021-01-20 21:10:46.739] [debug] total elements: 21350 ,total size: 85400
+[2021-01-20 21:10:46.739] [debug] aggregator culculate window cycles. x: 5242 y: 2295, result: 42 ,cycle: 249316
+[2021-01-20 21:10:46.739] [debug] aggregator start to run task x: 5242 y: 2295 ,cycle: 249316
+[2021-01-20 21:10:46.739] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:73 4279893872 65200 Input ,249316
+[2021-01-20 21:10:46.741] [debug]  input  req received,req:73 4279959024 48 Input ,cycle:250490 
+[2021-01-20 21:10:46.741] [debug] aggregator finished run task. x: 5242 y: 2295,cycle: 252046
+[2021-01-20 21:10:46.741] [debug] total elements: 18600 ,total size: 74400
+[2021-01-20 21:10:46.741] [debug] aggregator culculate window cycles. x: 5242 y: 2622, result: 37 ,cycle: 252047
+[2021-01-20 21:10:46.741] [debug] aggregator start to run task x: 5242 y: 2622 ,cycle: 252047
+[2021-01-20 21:10:46.741] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:74 4279959672 65000 Input ,252047
+[2021-01-20 21:10:46.742] [debug]  input  req received,req:74 4280024632 40 Input ,cycle:253081 
+[2021-01-20 21:10:46.742] [debug] aggregator finished run task. x: 5242 y: 2622,cycle: 254452
+[2021-01-20 21:10:46.742] [debug] total elements: 22600 ,total size: 90400
+[2021-01-20 21:10:46.742] [debug] aggregator culculate window cycles. x: 5242 y: 2951, result: 45 ,cycle: 254453
+[2021-01-20 21:10:46.742] [debug] aggregator start to run task x: 5242 y: 2951 ,cycle: 254453
+[2021-01-20 21:10:46.742] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:75 4280025272 65200 Input ,254453
+[2021-01-20 21:10:46.743] [debug]  input  req received,req:75 4280090424 48 Input ,cycle:255627 
+[2021-01-20 21:10:46.743] [debug] aggregator finished run task. x: 5242 y: 2951,cycle: 257378
+[2021-01-20 21:10:46.743] [debug] total elements: 18350 ,total size: 73400
+[2021-01-20 21:10:46.743] [debug] aggregator culculate window cycles. x: 5242 y: 3279, result: 36 ,cycle: 257379
+[2021-01-20 21:10:46.743] [debug] aggregator start to run task x: 5242 y: 3279 ,cycle: 257379
+[2021-01-20 21:10:46.743] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:76 4280090872 65000 Input ,257379
+[2021-01-20 21:10:46.744] [debug]  input  req received,req:76 4280155832 40 Input ,cycle:258551 
+[2021-01-20 21:10:46.745] [debug] aggregator finished run task. x: 5242 y: 3279,cycle: 259719
+[2021-01-20 21:10:46.745] [debug] total elements: 20750 ,total size: 83000
+[2021-01-20 21:10:46.745] [debug] aggregator culculate window cycles. x: 5242 y: 3607, result: 41 ,cycle: 259720
+[2021-01-20 21:10:46.745] [debug] aggregator start to run task x: 5242 y: 3607 ,cycle: 259720
+[2021-01-20 21:10:46.745] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:77 4280156272 65400 Input ,259720
+[2021-01-20 21:10:46.745] [debug]  input  req received,req:77 4280221616 56 Input ,cycle:260760 
+[2021-01-20 21:10:46.746] [debug] aggregator finished run task. x: 5242 y: 3607,cycle: 262385
+[2021-01-20 21:10:46.746] [debug] total elements: 19300 ,total size: 77200
+[2021-01-20 21:10:46.746] [debug] aggregator culculate window cycles. x: 5242 y: 3934, result: 38 ,cycle: 262386
+[2021-01-20 21:10:46.746] [debug] aggregator start to run task x: 5242 y: 3934 ,cycle: 262386
+[2021-01-20 21:10:46.746] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:78 4280221672 65400 Input ,262386
+[2021-01-20 21:10:46.747] [debug]  input  req received,req:78 4280287016 56 Input ,cycle:263563 
+[2021-01-20 21:10:46.747] [debug] aggregator finished run task. x: 5242 y: 3934,cycle: 264856
+[2021-01-20 21:10:46.747] [debug] total elements: 21550 ,total size: 86200
+[2021-01-20 21:10:46.747] [debug] aggregator culculate window cycles. x: 5242 y: 4261, result: 43 ,cycle: 264857
+[2021-01-20 21:10:46.747] [debug] aggregator start to run task x: 5242 y: 4261 ,cycle: 264857
+[2021-01-20 21:10:46.747] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:79 4280287672 65400 Input ,264857
+[2021-01-20 21:10:46.749] [debug]  input  req received,req:79 4280353016 56 Input ,cycle:266034 
+[2021-01-20 21:10:46.749] [debug] aggregator finished run task. x: 5242 y: 4261,cycle: 267652
+[2021-01-20 21:10:46.749] [debug] total elements: 18450 ,total size: 73800
+[2021-01-20 21:10:46.749] [debug] aggregator culculate window cycles. x: 5242 y: 4591, result: 37 ,cycle: 267653
+[2021-01-20 21:10:46.749] [debug] aggregator start to run task x: 5242 y: 4591 ,cycle: 267653
+[2021-01-20 21:10:46.749] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:80 4280353872 65400 Input ,267653
+[2021-01-20 21:10:46.750] [debug]  input  req received,req:80 4280419216 56 Input ,cycle:268693 
+[2021-01-20 21:10:46.750] [debug] aggregator finished run task. x: 5242 y: 4591,cycle: 270058
+[2021-01-20 21:10:46.750] [debug] total elements: 19850 ,total size: 79400
+[2021-01-20 21:10:46.750] [debug] aggregator culculate window cycles. x: 5242 y: 4922, result: 39 ,cycle: 270059
+[2021-01-20 21:10:46.750] [debug] aggregator start to run task x: 5242 y: 4922 ,cycle: 270059
+[2021-01-20 21:10:46.750] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:81 4280419272 65400 Input ,270059
+[2021-01-20 21:10:46.751] [debug]  input  req received,req:81 4280484616 56 Input ,cycle:271236 
+[2021-01-20 21:10:46.751] [debug] aggregator finished run task. x: 5242 y: 4922,cycle: 272594
+[2021-01-20 21:10:46.751] [debug] total elements: 37850 ,total size: 151400
+[2021-01-20 21:10:46.751] [debug] aggregator culculate window cycles. x: 5242 y: 5249, result: 74 ,cycle: 272595
+[2021-01-20 21:10:46.751] [debug] aggregator start to run task x: 5242 y: 5249 ,cycle: 272595
+[2021-01-20 21:10:46.751] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:82 4280484672 65400 Input ,272595
+[2021-01-20 21:10:46.752] [debug]  input  req received,req:82 4280550016 56 Input ,cycle:273772 
+[2021-01-20 21:10:46.753] [debug] aggregator finished run task. x: 5242 y: 5249,cycle: 277405
+[2021-01-20 21:10:46.753] [debug] total elements: 32500 ,total size: 130000
+[2021-01-20 21:10:46.753] [debug] aggregator culculate window cycles. x: 5242 y: 5576, result: 64 ,cycle: 277406
+[2021-01-20 21:10:46.753] [debug] aggregator start to run task x: 5242 y: 5576 ,cycle: 277406
+[2021-01-20 21:10:46.753] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:83 4280550072 65400 Input ,277406
+[2021-01-20 21:10:46.753] [debug]  input  req received,req:83 4280615416 56 Input ,cycle:278446 
+[2021-01-20 21:10:46.754] [debug] aggregator finished run task. x: 5242 y: 5576,cycle: 281566
+[2021-01-20 21:10:46.754] [debug] total elements: 34050 ,total size: 136200
+[2021-01-20 21:10:46.754] [debug] aggregator culculate window cycles. x: 5242 y: 5903, result: 67 ,cycle: 281567
+[2021-01-20 21:10:46.754] [debug] aggregator start to run task x: 5242 y: 5903 ,cycle: 281567
+[2021-01-20 21:10:46.754] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:84 4280615472 65400 Input ,281567
+[2021-01-20 21:10:46.755] [debug]  input  req received,req:84 4280680816 56 Input ,cycle:282607 
+[2021-01-20 21:10:46.755] [debug] aggregator finished run task. x: 5242 y: 5903,cycle: 285922
+[2021-01-20 21:10:46.755] [debug] total elements: 35350 ,total size: 141400
+[2021-01-20 21:10:46.755] [debug] aggregator culculate window cycles. x: 5242 y: 6230, result: 70 ,cycle: 285923
+[2021-01-20 21:10:46.755] [debug] aggregator start to run task x: 5242 y: 6230 ,cycle: 285923
+[2021-01-20 21:10:46.755] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:85 4280680872 65400 Input ,285923
+[2021-01-20 21:10:46.756] [debug]  input  req received,req:85 4280746216 56 Input ,cycle:287100 
+[2021-01-20 21:10:46.757] [debug] aggregator finished run task. x: 5242 y: 6230,cycle: 290473
+[2021-01-20 21:10:46.757] [debug] total elements: 35350 ,total size: 141400
+[2021-01-20 21:10:46.757] [debug] aggregator culculate window cycles. x: 5242 y: 6557, result: 70 ,cycle: 290474
+[2021-01-20 21:10:46.757] [debug] aggregator start to run task x: 5242 y: 6557 ,cycle: 290474
+[2021-01-20 21:10:46.757] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:86 4280746272 65400 Input ,290474
+[2021-01-20 21:10:46.758] [debug]  input  req received,req:86 4280811616 56 Input ,cycle:291651 
+[2021-01-20 21:10:46.759] [debug] aggregator finished run task. x: 5242 y: 6557,cycle: 295024
+[2021-01-20 21:10:46.759] [debug] total elements: 36500 ,total size: 146000
+[2021-01-20 21:10:46.759] [debug] aggregator culculate window cycles. x: 5242 y: 6884, result: 72 ,cycle: 295025
+[2021-01-20 21:10:46.759] [debug] aggregator start to run task x: 5242 y: 6884 ,cycle: 295025
+[2021-01-20 21:10:46.759] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:87 4280811672 65400 Input ,295025
+[2021-01-20 21:10:46.759] [debug]  input  req received,req:87 4280877016 56 Input ,cycle:296065 
+[2021-01-20 21:10:46.760] [debug] aggregator finished run task. x: 5242 y: 6884,cycle: 299705
+[2021-01-20 21:10:46.760] [debug] total elements: 37350 ,total size: 149400
+[2021-01-20 21:10:46.760] [debug] aggregator culculate window cycles. x: 5242 y: 7211, result: 73 ,cycle: 299706
+[2021-01-20 21:10:46.760] [debug] aggregator start to run task x: 5242 y: 7211 ,cycle: 299706
+[2021-01-20 21:10:46.760] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:88 4280877072 65400 Input ,299706
+[2021-01-20 21:10:46.761] [debug]  input  req received,req:88 4280942416 56 Input ,cycle:300883 
+[2021-01-20 21:10:46.762] [debug] aggregator finished run task. x: 5242 y: 7211,cycle: 304451
+[2021-01-20 21:10:46.762] [debug] total elements: 35950 ,total size: 143800
+[2021-01-20 21:10:46.762] [debug] aggregator culculate window cycles. x: 5242 y: 7538, result: 71 ,cycle: 304452
+[2021-01-20 21:10:46.762] [debug] aggregator start to run task x: 5242 y: 7538 ,cycle: 304452
+[2021-01-20 21:10:46.762] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:89 4280942472 65400 Input ,304452
+[2021-01-20 21:10:46.762] [debug]  input  req received,req:89 4281007816 56 Input ,cycle:305492 
+[2021-01-20 21:10:46.763] [debug] aggregator finished run task. x: 5242 y: 7538,cycle: 309067
+[2021-01-20 21:10:46.763] [debug] total elements: 35500 ,total size: 142000
+[2021-01-20 21:10:46.763] [debug] aggregator culculate window cycles. x: 5242 y: 7865, result: 70 ,cycle: 309068
+[2021-01-20 21:10:46.763] [debug] aggregator start to run task x: 5242 y: 7865 ,cycle: 309068
+[2021-01-20 21:10:46.763] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:90 4281007872 65400 Input ,309068
+[2021-01-20 21:10:46.764] [debug]  input  req received,req:90 4281073216 56 Input ,cycle:310245 
+[2021-01-20 21:10:46.764] [debug] aggregator finished run task. x: 5242 y: 7865,cycle: 313618
+[2021-01-20 21:10:46.764] [debug] total elements: 36950 ,total size: 147800
+[2021-01-20 21:10:46.764] [debug] aggregator culculate window cycles. x: 5242 y: 8192, result: 73 ,cycle: 313619
+[2021-01-20 21:10:46.764] [debug] aggregator start to run task x: 5242 y: 8192 ,cycle: 313619
+[2021-01-20 21:10:46.764] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:91 4281073272 65400 Input ,313619
+[2021-01-20 21:10:46.765] [debug]  input  req received,req:91 4281138616 56 Input ,cycle:314796 
+[2021-01-20 21:10:46.766] [debug] aggregator finished run task. x: 5242 y: 8192,cycle: 318364
+[2021-01-20 21:10:46.766] [debug] total elements: 36200 ,total size: 144800
+[2021-01-20 21:10:46.766] [debug] aggregator culculate window cycles. x: 5242 y: 8519, result: 71 ,cycle: 318365
+[2021-01-20 21:10:46.766] [debug] aggregator start to run task x: 5242 y: 8519 ,cycle: 318365
+[2021-01-20 21:10:46.766] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:92 4281138672 65400 Input ,318365
+[2021-01-20 21:10:46.767] [debug]  input  req received,req:92 4281204016 56 Input ,cycle:319405 
+[2021-01-20 21:10:46.767] [debug] aggregator finished run task. x: 5242 y: 8519,cycle: 322980
+[2021-01-20 21:10:46.767] [debug] total elements: 36400 ,total size: 145600
+[2021-01-20 21:10:46.767] [debug] aggregator culculate window cycles. x: 5242 y: 8846, result: 72 ,cycle: 322981
+[2021-01-20 21:10:46.767] [debug] aggregator start to run task x: 5242 y: 8846 ,cycle: 322981
+[2021-01-20 21:10:46.767] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:93 4281204072 65400 Input ,322981
+[2021-01-20 21:10:46.768] [debug]  input  req received,req:93 4281269416 56 Input ,cycle:324158 
+[2021-01-20 21:10:46.769] [debug] aggregator finished run task. x: 5242 y: 8846,cycle: 327661
+[2021-01-20 21:10:46.769] [debug] total elements: 37450 ,total size: 149800
+[2021-01-20 21:10:46.769] [debug] aggregator culculate window cycles. x: 5242 y: 9173, result: 74 ,cycle: 327662
+[2021-01-20 21:10:46.769] [debug] aggregator start to run task x: 5242 y: 9173 ,cycle: 327662
+[2021-01-20 21:10:46.769] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:94 4281269472 65400 Input ,327662
+[2021-01-20 21:10:46.770] [debug]  input  req received,req:94 4281334816 56 Input ,cycle:328768 
+[2021-01-20 21:10:46.770] [debug] aggregator finished run task. x: 5242 y: 9173,cycle: 332472
+[2021-01-20 21:10:46.770] [debug] total elements: 35050 ,total size: 140200
+[2021-01-20 21:10:46.770] [debug] aggregator culculate window cycles. x: 5242 y: 9500, result: 69 ,cycle: 332473
+[2021-01-20 21:10:46.770] [debug] aggregator start to run task x: 5242 y: 9500 ,cycle: 332473
+[2021-01-20 21:10:46.770] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:95 4281334872 65400 Input ,332473
+[2021-01-20 21:10:46.771] [debug]  input  req received,req:95 4281400216 56 Input ,cycle:333650 
+[2021-01-20 21:10:46.772] [debug] aggregator finished run task. x: 5242 y: 9500,cycle: 336958
+[2021-01-20 21:10:46.772] [debug] total elements: 34750 ,total size: 139000
+[2021-01-20 21:10:46.772] [debug] aggregator culculate window cycles. x: 5242 y: 9827, result: 68 ,cycle: 336959
+[2021-01-20 21:10:46.772] [debug] aggregator start to run task x: 5242 y: 9827 ,cycle: 336959
+[2021-01-20 21:10:46.772] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:96 4281400272 65400 Input ,336959
+[2021-01-20 21:10:46.773] [debug]  input  req received,req:96 4281465616 56 Input ,cycle:338136 
+[2021-01-20 21:10:46.773] [debug] aggregator finished run task. x: 5242 y: 9827,cycle: 341379
+[2021-01-20 21:10:46.773] [debug] total elements: 40450 ,total size: 161800
+[2021-01-20 21:10:46.773] [debug] aggregator culculate window cycles. x: 5242 y: 10154, result: 80 ,cycle: 341380
+[2021-01-20 21:10:46.773] [debug] aggregator start to run task x: 5242 y: 10154 ,cycle: 341380
+[2021-01-20 21:10:46.773] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:97 4281465672 65400 Input ,341380
+[2021-01-20 21:10:46.774] [debug]  input  req received,req:97 4281531016 56 Input ,cycle:342420 
+[2021-01-20 21:10:46.774] [debug] aggregator finished run task. x: 5242 y: 10154,cycle: 346580
+[2021-01-20 21:10:46.774] [debug] total elements: 19450 ,total size: 77800
+[2021-01-20 21:10:46.774] [debug] aggregator culculate window cycles. x: 5242 y: 10481, result: 38 ,cycle: 346581
+[2021-01-20 21:10:46.774] [debug] aggregator start to run task x: 5242 y: 10481 ,cycle: 346581
+[2021-01-20 21:10:46.774] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:98 4281531072 64800 Input ,346581
+[2021-01-20 21:10:46.776] [debug]  input  req received,req:98 4281595840 32 Input ,cycle:347749 
+[2021-01-20 21:10:46.776] [debug] aggregator finished run task. x: 5242 y: 10481,cycle: 349051
+[2021-01-20 21:10:46.776] [debug] total elements: 18050 ,total size: 72200
+[2021-01-20 21:10:46.776] [debug] aggregator culculate window cycles. x: 5242 y: 10808, result: 36 ,cycle: 349052
+[2021-01-20 21:10:46.776] [debug] aggregator start to run task x: 5242 y: 10808 ,cycle: 349052
+[2021-01-20 21:10:46.776] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:99 4281596472 65400 Input ,349052
+[2021-01-20 21:10:46.777] [debug]  input  req received,req:99 4281661816 56 Input ,cycle:350225 
+[2021-01-20 21:10:46.778] [debug] aggregator finished run task. x: 5242 y: 10808,cycle: 351392
+[2021-01-20 21:10:46.778] [debug] total elements: 23250 ,total size: 93000
+[2021-01-20 21:10:46.778] [debug] aggregator culculate window cycles. x: 5242 y: 11135, result: 46 ,cycle: 351393
+[2021-01-20 21:10:46.778] [debug] aggregator start to run task x: 5242 y: 11135 ,cycle: 351393
+[2021-01-20 21:10:46.778] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:100 4281661872 65200 Input ,351393
+[2021-01-20 21:10:46.778] [debug]  input  req received,req:100 4281727024 48 Input ,cycle:352430 
+[2021-01-20 21:10:46.779] [debug] aggregator finished run task. x: 5242 y: 11135,cycle: 354383
+[2021-01-20 21:10:46.779] [debug] total elements: 18000 ,total size: 72000
+[2021-01-20 21:10:46.779] [debug] aggregator culculate window cycles. x: 5242 y: 11462, result: 36 ,cycle: 354384
+[2021-01-20 21:10:46.779] [debug] aggregator start to run task x: 5242 y: 11462 ,cycle: 354384
+[2021-01-20 21:10:46.779] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:101 4281727472 65400 Input ,354384
+[2021-01-20 21:10:46.780] [debug]  input  req received,req:101 4281792816 56 Input ,cycle:355561 
+[2021-01-20 21:10:46.780] [debug] aggregator finished run task. x: 5242 y: 11462,cycle: 356724
+[2021-01-20 21:10:46.780] [debug] total elements: 24750 ,total size: 99000
+[2021-01-20 21:10:46.780] [debug] aggregator culculate window cycles. x: 5242 y: 11790, result: 49 ,cycle: 356725
+[2021-01-20 21:10:46.780] [debug] aggregator start to run task x: 5242 y: 11790 ,cycle: 356725
+[2021-01-20 21:10:46.780] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:102 4281792872 65400 Input ,356725
+[2021-01-20 21:10:46.782] [debug]  input  req received,req:102 4281858216 56 Input ,cycle:357902 
+[2021-01-20 21:10:46.782] [debug] aggregator finished run task. x: 5242 y: 11790,cycle: 359910
+[2021-01-20 21:10:46.782] [debug] total elements: 19650 ,total size: 78600
+[2021-01-20 21:10:46.782] [debug] aggregator culculate window cycles. x: 5242 y: 12117, result: 39 ,cycle: 359911
+[2021-01-20 21:10:46.782] [debug] aggregator start to run task x: 5242 y: 12117 ,cycle: 359911
+[2021-01-20 21:10:46.782] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:103 4281858472 64800 Input ,359911
+[2021-01-20 21:10:46.783] [debug]  input  req received,req:103 4281923240 32 Input ,cycle:361079 
+[2021-01-20 21:10:46.783] [debug] aggregator finished run task. x: 5242 y: 12117,cycle: 362446
+[2021-01-20 21:10:46.783] [debug] total elements: 19000 ,total size: 76000
+[2021-01-20 21:10:46.783] [debug] aggregator culculate window cycles. x: 5242 y: 12445, result: 38 ,cycle: 362447
+[2021-01-20 21:10:46.783] [debug] aggregator start to run task x: 5242 y: 12445 ,cycle: 362447
+[2021-01-20 21:10:46.783] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:104 4281924272 65400 Input ,362447
+[2021-01-20 21:10:46.785] [debug]  input  req received,req:104 4281989616 56 Input ,cycle:363624 
+[2021-01-20 21:10:46.785] [debug] aggregator finished run task. x: 5242 y: 12445,cycle: 364917
+[2021-01-20 21:10:46.785] [debug] total elements: 15850 ,total size: 63400
+[2021-01-20 21:10:46.785] [debug] aggregator culculate window cycles. x: 5242 y: 12774, result: 31 ,cycle: 364918
+[2021-01-20 21:10:46.785] [debug] aggregator start to run task x: 5242 y: 12774 ,cycle: 364918
+[2021-01-20 21:10:46.785] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:105 4281989672 64600 Input ,364918
+[2021-01-20 21:10:46.786] [debug]  input  req received,req:105 4282054248 24 Input ,cycle:365946 
+[2021-01-20 21:10:46.786] [debug] aggregator finished run task. x: 5242 y: 12774,cycle: 366933
+[2021-01-20 21:10:46.786] [debug] total elements: 18200 ,total size: 72800
+[2021-01-20 21:10:46.786] [debug] aggregator culculate window cycles. x: 5242 y: 13101, result: 36 ,cycle: 366934
+[2021-01-20 21:10:46.786] [debug] aggregator start to run task x: 5242 y: 13101 ,cycle: 366934
+[2021-01-20 21:10:46.786] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:106 4282056472 65400 Input ,366934
+[2021-01-20 21:10:46.787] [debug]  input  req received,req:106 4282121816 56 Input ,cycle:367974 
+[2021-01-20 21:10:46.787] [debug] aggregator finished run task. x: 5242 y: 13101,cycle: 369274
+[2021-01-20 21:10:46.787] [debug] total elements: 20600 ,total size: 82400
+[2021-01-20 21:10:46.787] [debug] aggregator culculate window cycles. x: 5242 y: 13435, result: 41 ,cycle: 369275
+[2021-01-20 21:10:46.787] [debug] aggregator start to run task x: 5242 y: 13435 ,cycle: 369275
+[2021-01-20 21:10:46.787] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:107 4282122072 64800 Input ,369275
+[2021-01-20 21:10:46.787] [debug]  input  req received,req:107 4282186840 32 Input ,cycle:370306 
+[2021-01-20 21:10:46.788] [debug] aggregator finished run task. x: 5242 y: 13435,cycle: 371940
+[2021-01-20 21:10:46.788] [debug] total elements: 18750 ,total size: 75000
+[2021-01-20 21:10:46.788] [debug] aggregator culculate window cycles. x: 5242 y: 13763, result: 37 ,cycle: 371941
+[2021-01-20 21:10:46.788] [debug] aggregator start to run task x: 5242 y: 13763 ,cycle: 371941
+[2021-01-20 21:10:46.788] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:108 4282187872 65400 Input ,371941
+[2021-01-20 21:10:46.789] [debug]  input  req received,req:108 4282253216 56 Input ,cycle:373118 
+[2021-01-20 21:10:46.789] [debug] aggregator finished run task. x: 5242 y: 13763,cycle: 374346
+[2021-01-20 21:10:46.789] [debug] total elements: 20550 ,total size: 82200
+[2021-01-20 21:10:46.789] [debug] aggregator culculate window cycles. x: 5242 y: 14092, result: 41 ,cycle: 374347
+[2021-01-20 21:10:46.789] [debug] aggregator start to run task x: 5242 y: 14092 ,cycle: 374347
+[2021-01-20 21:10:46.789] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:109 4282253272 65400 Input ,374347
+[2021-01-20 21:10:46.791] [debug]  input  req received,req:109 4282318616 56 Input ,cycle:375524 
+[2021-01-20 21:10:46.791] [debug] aggregator finished run task. x: 5242 y: 14092,cycle: 377012
+[2021-01-20 21:10:46.791] [debug] total elements: 19550 ,total size: 78200
+[2021-01-20 21:10:46.791] [debug] aggregator culculate window cycles. x: 5242 y: 14419, result: 39 ,cycle: 377013
+[2021-01-20 21:10:46.791] [debug] aggregator start to run task x: 5242 y: 14419 ,cycle: 377013
+[2021-01-20 21:10:46.791] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:110 4282318672 65200 Input ,377013
+[2021-01-20 21:10:46.792] [debug]  input  req received,req:110 4282383824 48 Input ,cycle:378050 
+[2021-01-20 21:10:46.792] [debug] aggregator finished run task. x: 5242 y: 14419,cycle: 379548
+[2021-01-20 21:10:46.792] [debug] total elements: 18850 ,total size: 75400
+[2021-01-20 21:10:46.792] [debug] aggregator culculate window cycles. x: 5242 y: 14746, result: 37 ,cycle: 379549
+[2021-01-20 21:10:46.792] [debug] aggregator start to run task x: 5242 y: 14746 ,cycle: 379549
+[2021-01-20 21:10:46.792] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:111 4282384272 65400 Input ,379549
+[2021-01-20 21:10:46.793] [debug]  input  req received,req:111 4282449616 56 Input ,cycle:380726 
+[2021-01-20 21:10:46.793] [debug] aggregator finished run task. x: 5242 y: 14746,cycle: 381954
+[2021-01-20 21:10:46.793] [debug] total elements: 16100 ,total size: 64400
+[2021-01-20 21:10:46.793] [debug] aggregator culculate window cycles. x: 5242 y: 15074, result: 32 ,cycle: 381955
+[2021-01-20 21:10:46.793] [debug] aggregator start to run task x: 5242 y: 15074 ,cycle: 381955
+[2021-01-20 21:10:46.793] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:112 4282449672 65400 Input ,381955
+[2021-01-20 21:10:46.795] [debug]  input  req received,req:112 4282515016 56 Input ,cycle:383132 
+[2021-01-20 21:10:46.795] [debug] aggregator finished run task. x: 5242 y: 15074,cycle: 384035
+[2021-01-20 21:10:46.795] [debug] total elements: 18550 ,total size: 74200
+[2021-01-20 21:10:46.795] [debug] aggregator culculate window cycles. x: 5242 y: 15401, result: 37 ,cycle: 384036
+[2021-01-20 21:10:46.795] [debug] aggregator start to run task x: 5242 y: 15401 ,cycle: 384036
+[2021-01-20 21:10:46.795] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:113 4282515272 65400 Input ,384036
+[2021-01-20 21:10:46.796] [debug]  input  req received,req:113 4282580616 56 Input ,cycle:385213 
+[2021-01-20 21:10:46.796] [debug] aggregator finished run task. x: 5242 y: 15401,cycle: 386441
+[2021-01-20 21:10:46.796] [debug] total elements: 21700 ,total size: 86800
+[2021-01-20 21:10:46.796] [debug] aggregator culculate window cycles. x: 5242 y: 15729, result: 43 ,cycle: 386442
+[2021-01-20 21:10:46.796] [debug] aggregator start to run task x: 5242 y: 15729 ,cycle: 386442
+[2021-01-20 21:10:46.796] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:114 4282580872 65400 Input ,386442
+[2021-01-20 21:10:46.797] [debug]  input  req received,req:114 4282646216 56 Input ,cycle:387482 
+[2021-01-20 21:10:46.797] [debug] aggregator finished run task. x: 5242 y: 15729,cycle: 389237
+[2021-01-20 21:10:46.797] [debug] total elements: 18700 ,total size: 74800
+[2021-01-20 21:10:46.797] [debug] aggregator culculate window cycles. x: 5242 y: 16057, result: 37 ,cycle: 389238
+[2021-01-20 21:10:46.797] [debug] aggregator start to run task x: 5242 y: 16057 ,cycle: 389238
+[2021-01-20 21:10:46.797] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:115 4282646272 65200 Input ,389238
+[2021-01-20 21:10:46.799] [debug]  input  req received,req:115 4282711424 48 Input ,cycle:390412 
+[2021-01-20 21:10:46.799] [debug] aggregator finished run task. x: 5242 y: 16057,cycle: 391643
+[2021-01-20 21:10:46.799] [debug] total elements: 17900 ,total size: 71600
+[2021-01-20 21:10:46.799] [debug] aggregator culculate window cycles. x: 5242 y: 16384, result: 35 ,cycle: 391644
+[2021-01-20 21:10:46.799] [debug] aggregator start to run task x: 5242 y: 16384 ,cycle: 391644
+[2021-01-20 21:10:46.799] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:116 4282711672 65400 Input ,391644
+[2021-01-20 21:10:46.800] [debug]  input  req received,req:116 4282777016 56 Input ,cycle:392821 
+[2021-01-20 21:10:46.801] [debug] aggregator finished run task. x: 5242 y: 16384,cycle: 393919
+[2021-01-20 21:10:46.801] [debug] total elements: 20050 ,total size: 80200
+[2021-01-20 21:10:46.801] [debug] aggregator culculate window cycles. x: 5242 y: 16711, result: 40 ,cycle: 393920
+[2021-01-20 21:10:46.801] [debug] aggregator start to run task x: 5242 y: 16711 ,cycle: 393920
+[2021-01-20 21:10:46.801] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:117 4282777872 65000 Input ,393920
+[2021-01-20 21:10:46.802] [debug]  input  req received,req:117 4282842832 40 Input ,cycle:395069 
+[2021-01-20 21:10:46.802] [debug] aggregator finished run task. x: 5242 y: 16711,cycle: 396520
+[2021-01-20 21:10:46.802] [debug] total elements: 17650 ,total size: 70600
+[2021-01-20 21:10:46.802] [debug] aggregator culculate window cycles. x: 5242 y: 17042, result: 35 ,cycle: 396521
+[2021-01-20 21:10:46.802] [debug] aggregator start to run task x: 5242 y: 17042 ,cycle: 396521
+[2021-01-20 21:10:46.802] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:118 4282843472 64000 Input ,396521
+[2021-01-20 21:10:46.803] [debug]  input  req received,req:118 4282907408 64 Input ,cycle:397539 
+[2021-01-20 21:10:46.803] [debug] aggregator finished run task. x: 5242 y: 17042,cycle: 398796
+[2021-01-20 21:10:46.803] [debug] total elements: 18650 ,total size: 74600
+[2021-01-20 21:10:46.803] [debug] aggregator culculate window cycles. x: 5242 y: 17370, result: 37 ,cycle: 398797
+[2021-01-20 21:10:46.803] [debug] aggregator start to run task x: 5242 y: 17370 ,cycle: 398797
+[2021-01-20 21:10:46.803] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:119 4282909072 65000 Input ,398797
+[2021-01-20 21:10:46.804] [debug]  input  req received,req:119 4282974032 40 Input ,cycle:399968 
+[2021-01-20 21:10:46.804] [debug] aggregator finished run task. x: 5242 y: 17370,cycle: 401202
+[2021-01-20 21:10:46.804] [debug] total elements: 19000 ,total size: 76000
+[2021-01-20 21:10:46.804] [debug] aggregator culculate window cycles. x: 5242 y: 17698, result: 38 ,cycle: 401203
+[2021-01-20 21:10:46.804] [debug] aggregator start to run task x: 5242 y: 17698 ,cycle: 401203
+[2021-01-20 21:10:46.804] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:120 4282974672 65400 Input ,401203
+[2021-01-20 21:10:46.805] [debug]  input  req received,req:120 4283040016 56 Input ,cycle:402380 
+[2021-01-20 21:10:46.806] [debug] aggregator finished run task. x: 5242 y: 17698,cycle: 403673
+[2021-01-20 21:10:46.806] [debug] total elements: 17450 ,total size: 69800
+[2021-01-20 21:10:46.806] [debug] aggregator culculate window cycles. x: 5242 y: 18026, result: 35 ,cycle: 403674
+[2021-01-20 21:10:46.806] [debug] aggregator start to run task x: 5242 y: 18026 ,cycle: 403674
+[2021-01-20 21:10:46.806] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:121 4283040872 65400 Input ,403674
+[2021-01-20 21:10:46.807] [debug]  input  req received,req:121 4283106216 56 Input ,cycle:404825 
+[2021-01-20 21:10:46.807] [debug] aggregator finished run task. x: 5242 y: 18026,cycle: 405949
+[2021-01-20 21:10:46.807] [debug] total elements: 18250 ,total size: 73000
+[2021-01-20 21:10:46.807] [debug] aggregator culculate window cycles. x: 5242 y: 18357, result: 36 ,cycle: 405950
+[2021-01-20 21:10:46.807] [debug] aggregator start to run task x: 5242 y: 18357 ,cycle: 405950
+[2021-01-20 21:10:46.807] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:122 4283106272 65400 Input ,405950
+[2021-01-20 21:10:46.808] [debug]  input  req received,req:122 4283171616 56 Input ,cycle:406990 
+[2021-01-20 21:10:46.808] [debug] aggregator finished run task. x: 5242 y: 18357,cycle: 408290
+[2021-01-20 21:10:46.808] [debug] total elements: 44250 ,total size: 177000
+[2021-01-20 21:10:46.808] [debug] aggregator culculate window cycles. x: 5242 y: 18684, result: 87 ,cycle: 408291
+[2021-01-20 21:10:46.808] [debug] aggregator start to run task x: 5242 y: 18684 ,cycle: 408291
+[2021-01-20 21:10:46.808] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:123 4283171872 65200 Input ,408291
+[2021-01-20 21:10:46.809] [debug]  input  req received,req:123 4283237024 48 Input ,cycle:409328 
+[2021-01-20 21:10:46.809] [debug] aggregator finished run task. x: 5242 y: 18684,cycle: 413946
+[2021-01-20 21:10:46.809] [debug] total elements: 12800 ,total size: 51200
+[2021-01-20 21:10:46.809] [debug] aggregator culculate window cycles. x: 5242 y: 19012, result: 25 ,cycle: 413947
+[2021-01-20 21:10:46.809] [debug] aggregator start to run task x: 5242 y: 19012 ,cycle: 413947
+[2021-01-20 21:10:46.809] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:124 4283237272 65400 Input ,413947
+[2021-01-20 21:10:46.810] [debug]  input  req received,req:124 4283302616 56 Input ,cycle:414987 
+[2021-01-20 21:10:46.810] [debug] aggregator finished run task. x: 5242 y: 19012,cycle: 415572
+[2021-01-20 21:10:46.810] [debug] total elements: 5950 ,total size: 23800
+[2021-01-20 21:10:46.810] [debug] aggregator culculate window cycles. x: 5242 y: 19339, result: 12 ,cycle: 415573
+[2021-01-20 21:10:46.810] [debug] aggregator start to run task x: 5242 y: 19339 ,cycle: 415573
+[2021-01-20 21:10:46.810] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:125 4283304872 6600 Input ,415573
+[2021-01-20 21:10:46.810] [debug]  input  req received,req:125 4283311464 8 Input ,cycle:415695 
+[2021-01-20 21:10:46.810] [debug] aggregator finished run task. x: 5242 y: 19339,cycle: 416353
+[2021-01-20 21:10:46.810] [debug] total elements: 1000 ,total size: 4000
+[2021-01-20 21:10:46.810] [debug] aggregator culculate window cycles. x: 5242 y: 19677, result: 2 ,cycle: 416354
+[2021-01-20 21:10:46.810] [debug] aggregator start to run task x: 5242 y: 19677 ,cycle: 416354
+[2021-01-20 21:10:46.810] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:126 4279369472 65400 Input ,416354
+[2021-01-20 21:10:46.810] [debug] aggregator finished run task. x: 5242 y: 19677,cycle: 416484
+[2021-01-20 21:10:46.810] [debug] aggbuffer move the write buffer to read buffer
+[2021-01-20 21:10:46.810] [debug] systolic array start a new task,cycle:416485
+[2021-01-20 21:10:46.810] [debug] start a new systolic task: window:x 5242 y 0 5242 325 l 0 i_a 4279369472 e_a 5637753368 o_a 4285996776 i_l 65000 e_l 115356 o_l 2683904 n_n:400 fnc:false fnr:false fsr:true, total_cycle:4810, current cycle:416485
+[2021-01-20 21:10:46.810] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:128 4279435872 65200 Input ,416485
+[2021-01-20 21:10:46.810] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:153,edge_next buffer send req:129 5637983008 86660 edge ,416486
+[2021-01-20 21:10:46.812] [debug]  input  req received,req:126 4279434816 56 Input ,cycle:417597 
+[2021-01-20 21:10:46.812] [debug] total elements: 18850 ,total size: 75400
+[2021-01-20 21:10:46.812] [debug] aggregator culculate window cycles. x: 10484 y: 0, result: 37 ,cycle: 417598
+[2021-01-20 21:10:46.812] [debug] aggregator add new task:x 10484 y 0 5242 327 l 0 i_a 4279369472 e_a 5637868724 o_a 4288680680 i_l 65400 e_l 114284 o_l 2683904 n_n:377 fnc:false fnr:false fsr:true
+[2021-01-20 21:10:46.812] [debug] aggregator start to run task x: 10484 y: 0 ,cycle: 417598
+[2021-01-20 21:10:46.812] [debug]  input  req received,req:128 4279501024 48 Input ,cycle:418550 
+[2021-01-20 21:10:46.814] [debug]  edge  req received,req:129 5638069664 4 edge ,cycle:419905 
+[2021-01-20 21:10:46.814] [debug] aggregator finished run task. x: 10484 y: 0,cycle: 420003
+[2021-01-20 21:10:46.814] [debug] total elements: 20800 ,total size: 83200
+[2021-01-20 21:10:46.814] [debug] aggregator culculate window cycles. x: 10484 y: 332, result: 41 ,cycle: 420004
+[2021-01-20 21:10:46.814] [debug] aggregator start to run task x: 10484 y: 332 ,cycle: 420004
+[2021-01-20 21:10:46.814] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:130 4279501272 65400 Input ,420004
+[2021-01-20 21:10:46.815] [debug]  input  req received,req:130 4279566616 56 Input ,cycle:421044 
+[2021-01-20 21:10:46.815] [debug] end a systolic array, window:x 5242 y 0 5242 325 l 0 i_a 4279369472 e_a 5637753368 o_a 4285996776 i_l 65000 e_l 115356 o_l 2683904 n_n:400 fnc:false fnr:false fsr:true, current_cycle:421294
+[2021-01-20 21:10:46.815] [debug] aggbuffer finished read
+[2021-01-20 21:10:46.815] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:159,output buffer send req:127 4285996776 2683904 else ,421295
+[2021-01-20 21:10:46.815] [debug] aggregator finished run task. x: 10484 y: 332,cycle: 422669
+[2021-01-20 21:10:46.815] [debug] total elements: 18850 ,total size: 75400
+[2021-01-20 21:10:46.815] [debug] aggregator culculate window cycles. x: 10484 y: 659, result: 37 ,cycle: 422670
+[2021-01-20 21:10:46.815] [debug] aggregator start to run task x: 10484 y: 659 ,cycle: 422670
+[2021-01-20 21:10:46.815] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:131 4279566672 65400 Input ,422670
+[2021-01-20 21:10:46.817] [debug] aggregator finished run task. x: 10484 y: 659,cycle: 425075
+[2021-01-20 21:10:46.817] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:132 4279632072 65400 Input ,425076
+[2021-01-20 21:10:46.850] [debug] output buffer finished write to memory: cycle:463231
+[2021-01-20 21:10:46.852] [debug]  input  req received,req:131 4279632016 56 Input ,cycle:464466 
+[2021-01-20 21:10:46.852] [debug] total elements: 20100 ,total size: 80400
+[2021-01-20 21:10:46.852] [debug] aggregator culculate window cycles. x: 10484 y: 986, result: 40 ,cycle: 464467
+[2021-01-20 21:10:46.852] [debug] aggregator start to run task x: 10484 y: 986 ,cycle: 464467
+[2021-01-20 21:10:46.853] [debug]  input  req received,req:132 4279697416 56 Input ,cycle:465430 
+[2021-01-20 21:10:46.853] [debug] aggregator finished run task. x: 10484 y: 986,cycle: 467067
+[2021-01-20 21:10:46.853] [debug] total elements: 21850 ,total size: 87400
+[2021-01-20 21:10:46.853] [debug] aggregator culculate window cycles. x: 10484 y: 1313, result: 43 ,cycle: 467068
+[2021-01-20 21:10:46.853] [debug] aggregator start to run task x: 10484 y: 1313 ,cycle: 467068
+[2021-01-20 21:10:46.853] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:133 4279697472 65400 Input ,467068
+[2021-01-20 21:10:46.854] [debug]  input  req received,req:133 4279762816 56 Input ,cycle:468245 
+[2021-01-20 21:10:46.854] [debug] aggregator finished run task. x: 10484 y: 1313,cycle: 469863
+[2021-01-20 21:10:46.854] [debug] total elements: 20050 ,total size: 80200
+[2021-01-20 21:10:46.854] [debug] aggregator culculate window cycles. x: 10484 y: 1640, result: 40 ,cycle: 469864
+[2021-01-20 21:10:46.854] [debug] aggregator start to run task x: 10484 y: 1640 ,cycle: 469864
+[2021-01-20 21:10:46.854] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:134 4279762872 65400 Input ,469864
+[2021-01-20 21:10:46.856] [debug]  input  req received,req:134 4279828216 56 Input ,cycle:471041 
+[2021-01-20 21:10:46.856] [debug] aggregator finished run task. x: 10484 y: 1640,cycle: 472464
+[2021-01-20 21:10:46.856] [debug] total elements: 23950 ,total size: 95800
+[2021-01-20 21:10:46.856] [debug] aggregator culculate window cycles. x: 10484 y: 1967, result: 47 ,cycle: 472465
+[2021-01-20 21:10:46.856] [debug] aggregator start to run task x: 10484 y: 1967 ,cycle: 472465
+[2021-01-20 21:10:46.856] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:135 4279828472 65200 Input ,472465
+[2021-01-20 21:10:46.857] [debug]  input  req received,req:135 4279893624 48 Input ,cycle:473502 
+[2021-01-20 21:10:46.857] [debug] aggregator finished run task. x: 10484 y: 1967,cycle: 475520
+[2021-01-20 21:10:46.857] [debug] total elements: 21100 ,total size: 84400
+[2021-01-20 21:10:46.857] [debug] aggregator culculate window cycles. x: 10484 y: 2295, result: 42 ,cycle: 475521
+[2021-01-20 21:10:46.857] [debug] aggregator start to run task x: 10484 y: 2295 ,cycle: 475521
+[2021-01-20 21:10:46.857] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:136 4279894072 65200 Input ,475521
+[2021-01-20 21:10:46.858] [debug]  input  req received,req:136 4279959224 48 Input ,cycle:476696 
+[2021-01-20 21:10:46.859] [debug] aggregator finished run task. x: 10484 y: 2295,cycle: 478251
+[2021-01-20 21:10:46.859] [debug] total elements: 18100 ,total size: 72400
+[2021-01-20 21:10:46.859] [debug] aggregator culculate window cycles. x: 10484 y: 2623, result: 36 ,cycle: 478252
+[2021-01-20 21:10:46.859] [debug] aggregator start to run task x: 10484 y: 2623 ,cycle: 478252
+[2021-01-20 21:10:46.859] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:137 4279959472 65400 Input ,478252
+[2021-01-20 21:10:46.859] [debug]  input  req received,req:137 4280024816 56 Input ,cycle:479292 
+[2021-01-20 21:10:46.860] [debug] aggregator finished run task. x: 10484 y: 2623,cycle: 480592
+[2021-01-20 21:10:46.860] [debug] total elements: 20350 ,total size: 81400
+[2021-01-20 21:10:46.860] [debug] aggregator culculate window cycles. x: 10484 y: 2950, result: 40 ,cycle: 480593
+[2021-01-20 21:10:46.860] [debug] aggregator start to run task x: 10484 y: 2950 ,cycle: 480593
+[2021-01-20 21:10:46.860] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:138 4280024872 64800 Input ,480593
+[2021-01-20 21:10:46.860] [debug]  input  req received,req:138 4280089640 32 Input ,cycle:481624 
+[2021-01-20 21:10:46.861] [debug] aggregator finished run task. x: 10484 y: 2950,cycle: 483193
+[2021-01-20 21:10:46.861] [debug] total elements: 17400 ,total size: 69600
+[2021-01-20 21:10:46.861] [debug] aggregator culculate window cycles. x: 10484 y: 3277, result: 34 ,cycle: 483194
+[2021-01-20 21:10:46.861] [debug] aggregator start to run task x: 10484 y: 3277 ,cycle: 483194
+[2021-01-20 21:10:46.861] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:139 4280090272 65400 Input ,483194
+[2021-01-20 21:10:46.862] [debug]  input  req received,req:139 4280155616 56 Input ,cycle:484371 
+[2021-01-20 21:10:46.862] [debug] aggregator finished run task. x: 10484 y: 3277,cycle: 485404
+[2021-01-20 21:10:46.862] [debug] total elements: 18800 ,total size: 75200
+[2021-01-20 21:10:46.862] [debug] aggregator culculate window cycles. x: 10484 y: 3604, result: 37 ,cycle: 485405
+[2021-01-20 21:10:46.862] [debug] aggregator start to run task x: 10484 y: 3604 ,cycle: 485405
+[2021-01-20 21:10:46.862] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:140 4280155672 65400 Input ,485405
+[2021-01-20 21:10:46.863] [debug]  input  req received,req:140 4280221016 56 Input ,cycle:486582 
+[2021-01-20 21:10:46.864] [debug] aggregator finished run task. x: 10484 y: 3604,cycle: 487810
+[2021-01-20 21:10:46.864] [debug] total elements: 20850 ,total size: 83400
+[2021-01-20 21:10:46.864] [debug] aggregator culculate window cycles. x: 10484 y: 3931, result: 41 ,cycle: 487811
+[2021-01-20 21:10:46.864] [debug] aggregator start to run task x: 10484 y: 3931 ,cycle: 487811
+[2021-01-20 21:10:46.864] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:141 4280221672 65000 Input ,487811
+[2021-01-20 21:10:46.864] [debug]  input  req received,req:141 4280286632 40 Input ,cycle:488845 
+[2021-01-20 21:10:46.865] [debug] aggregator finished run task. x: 10484 y: 3931,cycle: 490476
+[2021-01-20 21:10:46.865] [debug] total elements: 21250 ,total size: 85000
+[2021-01-20 21:10:46.865] [debug] aggregator culculate window cycles. x: 10484 y: 4261, result: 42 ,cycle: 490477
+[2021-01-20 21:10:46.865] [debug] aggregator start to run task x: 10484 y: 4261 ,cycle: 490477
+[2021-01-20 21:10:46.865] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:142 4280287272 65200 Input ,490477
+[2021-01-20 21:10:46.866] [debug]  input  req received,req:142 4280352424 48 Input ,cycle:491651 
+[2021-01-20 21:10:46.866] [debug] aggregator finished run task. x: 10484 y: 4261,cycle: 493207
+[2021-01-20 21:10:46.866] [debug] total elements: 18400 ,total size: 73600
+[2021-01-20 21:10:46.866] [debug] aggregator culculate window cycles. x: 10484 y: 4589, result: 36 ,cycle: 493208
+[2021-01-20 21:10:46.866] [debug] aggregator start to run task x: 10484 y: 4589 ,cycle: 493208
+[2021-01-20 21:10:46.866] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:143 4280352672 65200 Input ,493208
+[2021-01-20 21:10:46.867] [debug]  input  req received,req:143 4280417824 48 Input ,cycle:494382 
+[2021-01-20 21:10:46.867] [debug] aggregator finished run task. x: 10484 y: 4589,cycle: 495548
+[2021-01-20 21:10:46.867] [debug] total elements: 18000 ,total size: 72000
+[2021-01-20 21:10:46.867] [debug] aggregator culculate window cycles. x: 10484 y: 4916, result: 36 ,cycle: 495549
+[2021-01-20 21:10:46.867] [debug] aggregator start to run task x: 10484 y: 4916 ,cycle: 495549
+[2021-01-20 21:10:46.867] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:144 4280418472 65200 Input ,495549
+[2021-01-20 21:10:46.868] [debug]  input  req received,req:144 4280483624 48 Input ,cycle:496586 
+[2021-01-20 21:10:46.868] [debug] aggregator finished run task. x: 10484 y: 4916,cycle: 497889
+[2021-01-20 21:10:46.868] [debug] total elements: 21250 ,total size: 85000
+[2021-01-20 21:10:46.868] [debug] aggregator culculate window cycles. x: 10484 y: 5245, result: 42 ,cycle: 497890
+[2021-01-20 21:10:46.868] [debug] aggregator start to run task x: 10484 y: 5245 ,cycle: 497890
+[2021-01-20 21:10:46.868] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:145 4280483872 65400 Input ,497890
+[2021-01-20 21:10:46.869] [debug]  input  req received,req:145 4280549216 56 Input ,cycle:498930 
+[2021-01-20 21:10:46.869] [debug] aggregator finished run task. x: 10484 y: 5245,cycle: 500620
+[2021-01-20 21:10:46.869] [debug] total elements: 15750 ,total size: 63000
+[2021-01-20 21:10:46.869] [debug] aggregator culculate window cycles. x: 10484 y: 5572, result: 31 ,cycle: 500621
+[2021-01-20 21:10:46.869] [debug] aggregator start to run task x: 10484 y: 5572 ,cycle: 500621
+[2021-01-20 21:10:46.869] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:146 4280549272 65400 Input ,500621
+[2021-01-20 21:10:46.871] [debug]  input  req received,req:146 4280614616 56 Input ,cycle:501804 
+[2021-01-20 21:10:46.871] [debug] aggregator finished run task. x: 10484 y: 5572,cycle: 502636
+[2021-01-20 21:10:46.871] [debug] total elements: 18350 ,total size: 73400
+[2021-01-20 21:10:46.871] [debug] aggregator culculate window cycles. x: 10484 y: 5899, result: 36 ,cycle: 502637
+[2021-01-20 21:10:46.871] [debug] aggregator start to run task x: 10484 y: 5899 ,cycle: 502637
+[2021-01-20 21:10:46.871] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:147 4280615272 65400 Input ,502637
+[2021-01-20 21:10:46.872] [debug]  input  req received,req:147 4280680616 56 Input ,cycle:503814 
+[2021-01-20 21:10:46.873] [debug] aggregator finished run task. x: 10484 y: 5899,cycle: 504977
+[2021-01-20 21:10:46.873] [debug] total elements: 19800 ,total size: 79200
+[2021-01-20 21:10:46.873] [debug] aggregator culculate window cycles. x: 10484 y: 6229, result: 39 ,cycle: 504978
+[2021-01-20 21:10:46.873] [debug] aggregator start to run task x: 10484 y: 6229 ,cycle: 504978
+[2021-01-20 21:10:46.873] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:148 4280681472 64800 Input ,504978
+[2021-01-20 21:10:46.874] [debug]  input  req received,req:148 4280746240 32 Input ,cycle:506146 
+[2021-01-20 21:10:46.874] [debug] aggregator finished run task. x: 10484 y: 6229,cycle: 507513
+[2021-01-20 21:10:46.874] [debug] total elements: 18900 ,total size: 75600
+[2021-01-20 21:10:46.874] [debug] aggregator culculate window cycles. x: 10484 y: 6560, result: 37 ,cycle: 507514
+[2021-01-20 21:10:46.874] [debug] aggregator start to run task x: 10484 y: 6560 ,cycle: 507514
+[2021-01-20 21:10:46.874] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:149 4280746872 64800 Input ,507514
+[2021-01-20 21:10:46.875] [debug]  input  req received,req:149 4280811640 32 Input ,cycle:508545 
+[2021-01-20 21:10:46.875] [debug] aggregator finished run task. x: 10484 y: 6560,cycle: 509919
+[2021-01-20 21:10:46.875] [debug] total elements: 18150 ,total size: 72600
+[2021-01-20 21:10:46.875] [debug] aggregator culculate window cycles. x: 10484 y: 6887, result: 36 ,cycle: 509920
+[2021-01-20 21:10:46.875] [debug] aggregator start to run task x: 10484 y: 6887 ,cycle: 509920
+[2021-01-20 21:10:46.875] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:150 4280812272 65400 Input ,509920
+[2021-01-20 21:10:46.876] [debug]  input  req received,req:150 4280877616 56 Input ,cycle:511097 
+[2021-01-20 21:10:46.876] [debug] aggregator finished run task. x: 10484 y: 6887,cycle: 512260
+[2021-01-20 21:10:46.876] [debug] total elements: 20600 ,total size: 82400
+[2021-01-20 21:10:46.876] [debug] aggregator culculate window cycles. x: 10484 y: 7214, result: 41 ,cycle: 512261
+[2021-01-20 21:10:46.876] [debug] aggregator start to run task x: 10484 y: 7214 ,cycle: 512261
+[2021-01-20 21:10:46.876] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:151 4280877672 65000 Input ,512261
+[2021-01-20 21:10:46.878] [debug]  input  req received,req:151 4280942632 40 Input ,cycle:513432 
+[2021-01-20 21:10:46.878] [debug] aggregator finished run task. x: 10484 y: 7214,cycle: 514926
+[2021-01-20 21:10:46.878] [debug] total elements: 18150 ,total size: 72600
+[2021-01-20 21:10:46.878] [debug] aggregator culculate window cycles. x: 10484 y: 7541, result: 36 ,cycle: 514927
+[2021-01-20 21:10:46.878] [debug] aggregator start to run task x: 10484 y: 7541 ,cycle: 514927
+[2021-01-20 21:10:46.878] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:152 4280943272 65400 Input ,514927
+[2021-01-20 21:10:46.879] [debug]  input  req received,req:152 4281008616 56 Input ,cycle:515975 
+[2021-01-20 21:10:46.879] [debug] aggregator finished run task. x: 10484 y: 7541,cycle: 517267
+[2021-01-20 21:10:46.879] [debug] total elements: 18000 ,total size: 72000
+[2021-01-20 21:10:46.879] [debug] aggregator culculate window cycles. x: 10484 y: 7869, result: 36 ,cycle: 517268
+[2021-01-20 21:10:46.879] [debug] aggregator start to run task x: 10484 y: 7869 ,cycle: 517268
+[2021-01-20 21:10:46.879] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:153 4281008672 65400 Input ,517268
+[2021-01-20 21:10:46.879] [debug]  input  req received,req:153 4281074016 56 Input ,cycle:518308 
+[2021-01-20 21:10:46.880] [debug] aggregator finished run task. x: 10484 y: 7869,cycle: 519608
+[2021-01-20 21:10:46.880] [debug] total elements: 19950 ,total size: 79800
+[2021-01-20 21:10:46.880] [debug] aggregator culculate window cycles. x: 10484 y: 8196, result: 39 ,cycle: 519609
+[2021-01-20 21:10:46.880] [debug] aggregator start to run task x: 10484 y: 8196 ,cycle: 519609
+[2021-01-20 21:10:46.880] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:154 4281074472 65400 Input ,519609
+[2021-01-20 21:10:46.880] [debug]  input  req received,req:154 4281139816 56 Input ,cycle:520649 
+[2021-01-20 21:10:46.880] [debug] aggregator finished run task. x: 10484 y: 8196,cycle: 522144
+[2021-01-20 21:10:46.881] [debug] total elements: 19050 ,total size: 76200
+[2021-01-20 21:10:46.881] [debug] aggregator culculate window cycles. x: 10484 y: 8525, result: 38 ,cycle: 522145
+[2021-01-20 21:10:46.881] [debug] aggregator start to run task x: 10484 y: 8525 ,cycle: 522145
+[2021-01-20 21:10:46.881] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:155 4281139872 65200 Input ,522145
+[2021-01-20 21:10:46.882] [debug]  input  req received,req:155 4281205024 48 Input ,cycle:523319 
+[2021-01-20 21:10:46.882] [debug] aggregator finished run task. x: 10484 y: 8525,cycle: 524615
+[2021-01-20 21:10:46.882] [debug] total elements: 19700 ,total size: 78800
+[2021-01-20 21:10:46.882] [debug] aggregator culculate window cycles. x: 10484 y: 8852, result: 39 ,cycle: 524616
+[2021-01-20 21:10:46.882] [debug] aggregator start to run task x: 10484 y: 8852 ,cycle: 524616
+[2021-01-20 21:10:46.882] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:156 4281205272 65400 Input ,524616
+[2021-01-20 21:10:46.883] [debug]  input  req received,req:156 4281270616 56 Input ,cycle:525725 
+[2021-01-20 21:10:46.883] [debug] aggregator finished run task. x: 10484 y: 8852,cycle: 527151
+[2021-01-20 21:10:46.883] [debug] total elements: 21200 ,total size: 84800
+[2021-01-20 21:10:46.883] [debug] aggregator culculate window cycles. x: 10484 y: 9179, result: 42 ,cycle: 527152
+[2021-01-20 21:10:46.883] [debug] aggregator start to run task x: 10484 y: 9179 ,cycle: 527152
+[2021-01-20 21:10:46.883] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:157 4281271072 65200 Input ,527152
+[2021-01-20 21:10:46.884] [debug]  input  req received,req:157 4281336224 48 Input ,cycle:528189 
+[2021-01-20 21:10:46.884] [debug] aggregator finished run task. x: 10484 y: 9179,cycle: 529882
+[2021-01-20 21:10:46.884] [debug] total elements: 19550 ,total size: 78200
+[2021-01-20 21:10:46.884] [debug] aggregator culculate window cycles. x: 10484 y: 9508, result: 39 ,cycle: 529883
+[2021-01-20 21:10:46.884] [debug] aggregator start to run task x: 10484 y: 9508 ,cycle: 529883
+[2021-01-20 21:10:46.884] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:158 4281336872 65400 Input ,529883
+[2021-01-20 21:10:46.886] [debug]  input  req received,req:158 4281402216 56 Input ,cycle:531061 
+[2021-01-20 21:10:46.886] [debug] aggregator finished run task. x: 10484 y: 9508,cycle: 532418
+[2021-01-20 21:10:46.886] [debug] total elements: 18800 ,total size: 75200
+[2021-01-20 21:10:46.886] [debug] aggregator culculate window cycles. x: 10484 y: 9837, result: 37 ,cycle: 532419
+[2021-01-20 21:10:46.886] [debug] aggregator start to run task x: 10484 y: 9837 ,cycle: 532419
+[2021-01-20 21:10:46.886] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:159 4281402472 65400 Input ,532419
+[2021-01-20 21:10:46.887] [debug]  input  req received,req:159 4281467816 56 Input ,cycle:533525 
+[2021-01-20 21:10:46.887] [debug] aggregator finished run task. x: 10484 y: 9837,cycle: 534824
+[2021-01-20 21:10:46.887] [debug] total elements: 22350 ,total size: 89400
+[2021-01-20 21:10:46.887] [debug] aggregator culculate window cycles. x: 10484 y: 10165, result: 44 ,cycle: 534825
+[2021-01-20 21:10:46.887] [debug] aggregator start to run task x: 10484 y: 10165 ,cycle: 534825
+[2021-01-20 21:10:46.887] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:160 4281467872 65400 Input ,534825
+[2021-01-20 21:10:46.888] [debug]  input  req received,req:160 4281533216 56 Input ,cycle:535865 
+[2021-01-20 21:10:46.888] [debug] aggregator finished run task. x: 10484 y: 10165,cycle: 537685
+[2021-01-20 21:10:46.888] [debug] total elements: 36550 ,total size: 146200
+[2021-01-20 21:10:46.888] [debug] aggregator culculate window cycles. x: 10484 y: 10492, result: 72 ,cycle: 537686
+[2021-01-20 21:10:46.888] [debug] aggregator start to run task x: 10484 y: 10492 ,cycle: 537686
+[2021-01-20 21:10:46.888] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:161 4281533272 65400 Input ,537686
+[2021-01-20 21:10:46.890] [debug]  input  req received,req:161 4281598616 56 Input ,cycle:538869 
+[2021-01-20 21:10:46.890] [debug] aggregator finished run task. x: 10484 y: 10492,cycle: 542366
+[2021-01-20 21:10:46.890] [debug] total elements: 36400 ,total size: 145600
+[2021-01-20 21:10:46.890] [debug] aggregator culculate window cycles. x: 10484 y: 10819, result: 72 ,cycle: 542367
+[2021-01-20 21:10:46.890] [debug] aggregator start to run task x: 10484 y: 10819 ,cycle: 542367
+[2021-01-20 21:10:46.890] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:162 4281598672 65400 Input ,542367
+[2021-01-20 21:10:46.891] [debug]  input  req received,req:162 4281664016 56 Input ,cycle:543407 
+[2021-01-20 21:10:46.891] [debug] aggregator finished run task. x: 10484 y: 10819,cycle: 547047
+[2021-01-20 21:10:46.891] [debug] total elements: 40100 ,total size: 160400
+[2021-01-20 21:10:46.891] [debug] aggregator culculate window cycles. x: 10484 y: 11146, result: 79 ,cycle: 547048
+[2021-01-20 21:10:46.891] [debug] aggregator start to run task x: 10484 y: 11146 ,cycle: 547048
+[2021-01-20 21:10:46.891] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:163 4281664072 65400 Input ,547048
+[2021-01-20 21:10:46.893] [debug]  input  req received,req:163 4281729416 56 Input ,cycle:548225 
+[2021-01-20 21:10:46.893] [debug] aggregator finished run task. x: 10484 y: 11146,cycle: 552183
+[2021-01-20 21:10:46.893] [debug] total elements: 32600 ,total size: 130400
+[2021-01-20 21:10:46.893] [debug] aggregator culculate window cycles. x: 10484 y: 11473, result: 64 ,cycle: 552184
+[2021-01-20 21:10:46.893] [debug] aggregator start to run task x: 10484 y: 11473 ,cycle: 552184
+[2021-01-20 21:10:46.893] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:164 4281729472 65400 Input ,552184
+[2021-01-20 21:10:46.894] [debug]  input  req received,req:164 4281794816 56 Input ,cycle:553224 
+[2021-01-20 21:10:46.894] [debug] aggregator finished run task. x: 10484 y: 11473,cycle: 556344
+[2021-01-20 21:10:46.894] [debug] total elements: 40200 ,total size: 160800
+[2021-01-20 21:10:46.894] [debug] aggregator culculate window cycles. x: 10484 y: 11800, result: 79 ,cycle: 556345
+[2021-01-20 21:10:46.894] [debug] aggregator start to run task x: 10484 y: 11800 ,cycle: 556345
+[2021-01-20 21:10:46.894] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:165 4281794872 65400 Input ,556345
+[2021-01-20 21:10:46.895] [debug]  input  req received,req:165 4281860216 56 Input ,cycle:557385 
+[2021-01-20 21:10:46.896] [debug] aggregator finished run task. x: 10484 y: 11800,cycle: 561480
+[2021-01-20 21:10:46.896] [debug] total elements: 34250 ,total size: 137000
+[2021-01-20 21:10:46.896] [debug] aggregator culculate window cycles. x: 10484 y: 12127, result: 67 ,cycle: 561481
+[2021-01-20 21:10:46.896] [debug] aggregator start to run task x: 10484 y: 12127 ,cycle: 561481
+[2021-01-20 21:10:46.896] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:166 4281860272 65400 Input ,561481
+[2021-01-20 21:10:46.897] [debug]  input  req received,req:166 4281925616 56 Input ,cycle:562658 
+[2021-01-20 21:10:46.897] [debug] aggregator finished run task. x: 10484 y: 12127,cycle: 565836
+[2021-01-20 21:10:46.897] [debug] total elements: 34750 ,total size: 139000
+[2021-01-20 21:10:46.897] [debug] aggregator culculate window cycles. x: 10484 y: 12454, result: 68 ,cycle: 565837
+[2021-01-20 21:10:46.897] [debug] aggregator start to run task x: 10484 y: 12454 ,cycle: 565837
+[2021-01-20 21:10:46.897] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:167 4281925672 65400 Input ,565837
+[2021-01-20 21:10:46.898] [debug]  input  req received,req:167 4281991016 56 Input ,cycle:566877 
+[2021-01-20 21:10:46.898] [debug] aggregator finished run task. x: 10484 y: 12454,cycle: 570257
+[2021-01-20 21:10:46.898] [debug] total elements: 32650 ,total size: 130600
+[2021-01-20 21:10:46.898] [debug] aggregator culculate window cycles. x: 10484 y: 12781, result: 64 ,cycle: 570258
+[2021-01-20 21:10:46.898] [debug] aggregator start to run task x: 10484 y: 12781 ,cycle: 570258
+[2021-01-20 21:10:46.898] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:168 4281991072 65400 Input ,570258
+[2021-01-20 21:10:46.899] [debug]  input  req received,req:168 4282056416 56 Input ,cycle:571298 
+[2021-01-20 21:10:46.900] [debug] aggregator finished run task. x: 10484 y: 12781,cycle: 574418
+[2021-01-20 21:10:46.900] [debug] total elements: 33750 ,total size: 135000
+[2021-01-20 21:10:46.900] [debug] aggregator culculate window cycles. x: 10484 y: 13108, result: 66 ,cycle: 574419
+[2021-01-20 21:10:46.900] [debug] aggregator start to run task x: 10484 y: 13108 ,cycle: 574419
+[2021-01-20 21:10:46.900] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:169 4282056472 65400 Input ,574419
+[2021-01-20 21:10:46.901] [debug]  input  req received,req:169 4282121816 56 Input ,cycle:575596 
+[2021-01-20 21:10:46.901] [debug] aggregator finished run task. x: 10484 y: 13108,cycle: 578709
+[2021-01-20 21:10:46.901] [debug] total elements: 36700 ,total size: 146800
+[2021-01-20 21:10:46.901] [debug] aggregator culculate window cycles. x: 10484 y: 13435, result: 72 ,cycle: 578710
+[2021-01-20 21:10:46.901] [debug] aggregator start to run task x: 10484 y: 13435 ,cycle: 578710
+[2021-01-20 21:10:46.901] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:170 4282121872 65400 Input ,578710
+[2021-01-20 21:10:46.903] [debug]  input  req received,req:170 4282187216 56 Input ,cycle:579887 
+[2021-01-20 21:10:46.903] [debug] aggregator finished run task. x: 10484 y: 13435,cycle: 583390
+[2021-01-20 21:10:46.903] [debug] total elements: 35200 ,total size: 140800
+[2021-01-20 21:10:46.903] [debug] aggregator culculate window cycles. x: 10484 y: 13762, result: 69 ,cycle: 583391
+[2021-01-20 21:10:46.903] [debug] aggregator start to run task x: 10484 y: 13762 ,cycle: 583391
+[2021-01-20 21:10:46.903] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:171 4282187272 65400 Input ,583391
+[2021-01-20 21:10:46.904] [debug]  input  req received,req:171 4282252616 56 Input ,cycle:584431 
+[2021-01-20 21:10:46.904] [debug] aggregator finished run task. x: 10484 y: 13762,cycle: 587876
+[2021-01-20 21:10:46.904] [debug] total elements: 35100 ,total size: 140400
+[2021-01-20 21:10:46.904] [debug] aggregator culculate window cycles. x: 10484 y: 14089, result: 69 ,cycle: 587877
+[2021-01-20 21:10:46.904] [debug] aggregator start to run task x: 10484 y: 14089 ,cycle: 587877
+[2021-01-20 21:10:46.904] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:172 4282252672 65400 Input ,587877
+[2021-01-20 21:10:46.905] [debug]  input  req received,req:172 4282318016 56 Input ,cycle:589054 
+[2021-01-20 21:10:46.905] [debug] aggregator finished run task. x: 10484 y: 14089,cycle: 592362
+[2021-01-20 21:10:46.905] [debug] total elements: 35100 ,total size: 140400
+[2021-01-20 21:10:46.905] [debug] aggregator culculate window cycles. x: 10484 y: 14416, result: 69 ,cycle: 592363
+[2021-01-20 21:10:46.905] [debug] aggregator start to run task x: 10484 y: 14416 ,cycle: 592363
+[2021-01-20 21:10:46.905] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:173 4282318072 65400 Input ,592363
+[2021-01-20 21:10:46.907] [debug]  input  req received,req:173 4282383416 56 Input ,cycle:593540 
+[2021-01-20 21:10:46.907] [debug] aggregator finished run task. x: 10484 y: 14416,cycle: 596848
+[2021-01-20 21:10:46.907] [debug] total elements: 34000 ,total size: 136000
+[2021-01-20 21:10:46.907] [debug] aggregator culculate window cycles. x: 10484 y: 14743, result: 67 ,cycle: 596849
+[2021-01-20 21:10:46.907] [debug] aggregator start to run task x: 10484 y: 14743 ,cycle: 596849
+[2021-01-20 21:10:46.907] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:174 4282383472 65400 Input ,596849
+[2021-01-20 21:10:46.908] [debug]  input  req received,req:174 4282448816 56 Input ,cycle:597889 
+[2021-01-20 21:10:46.908] [debug] aggregator finished run task. x: 10484 y: 14743,cycle: 601204
+[2021-01-20 21:10:46.908] [debug] total elements: 33900 ,total size: 135600
+[2021-01-20 21:10:46.908] [debug] aggregator culculate window cycles. x: 10484 y: 15070, result: 67 ,cycle: 601205
+[2021-01-20 21:10:46.908] [debug] aggregator start to run task x: 10484 y: 15070 ,cycle: 601205
+[2021-01-20 21:10:46.908] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:175 4282448872 65400 Input ,601205
+[2021-01-20 21:10:46.909] [debug]  input  req received,req:175 4282514216 56 Input ,cycle:602245 
+[2021-01-20 21:10:46.910] [debug] aggregator finished run task. x: 10484 y: 15070,cycle: 605560
+[2021-01-20 21:10:46.910] [debug] total elements: 35750 ,total size: 143000
+[2021-01-20 21:10:46.910] [debug] aggregator culculate window cycles. x: 10484 y: 15397, result: 70 ,cycle: 605561
+[2021-01-20 21:10:46.910] [debug] aggregator start to run task x: 10484 y: 15397 ,cycle: 605561
+[2021-01-20 21:10:46.910] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:176 4282514272 65200 Input ,605561
+[2021-01-20 21:10:46.911] [debug]  input  req received,req:176 4282579424 48 Input ,cycle:606735 
+[2021-01-20 21:10:46.911] [debug] aggregator finished run task. x: 10484 y: 15397,cycle: 610111
+[2021-01-20 21:10:46.911] [debug] total elements: 22450 ,total size: 89800
+[2021-01-20 21:10:46.911] [debug] aggregator culculate window cycles. x: 10484 y: 15724, result: 44 ,cycle: 610112
+[2021-01-20 21:10:46.911] [debug] aggregator start to run task x: 10484 y: 15724 ,cycle: 610112
+[2021-01-20 21:10:46.911] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:177 4282579672 65400 Input ,610112
+[2021-01-20 21:10:46.913] [debug]  input  req received,req:177 4282645016 56 Input ,cycle:611289 
+[2021-01-20 21:10:46.913] [debug] aggregator finished run task. x: 10484 y: 15724,cycle: 612972
+[2021-01-20 21:10:46.913] [debug] total elements: 17150 ,total size: 68600
+[2021-01-20 21:10:46.913] [debug] aggregator culculate window cycles. x: 10484 y: 16051, result: 34 ,cycle: 612973
+[2021-01-20 21:10:46.913] [debug] aggregator start to run task x: 10484 y: 16051 ,cycle: 612973
+[2021-01-20 21:10:46.913] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:178 4282645072 65200 Input ,612973
+[2021-01-20 21:10:46.914] [debug]  input  req received,req:178 4282710224 48 Input ,cycle:614010 
+[2021-01-20 21:10:46.914] [debug] aggregator finished run task. x: 10484 y: 16051,cycle: 615183
+[2021-01-20 21:10:46.914] [debug] total elements: 20700 ,total size: 82800
+[2021-01-20 21:10:46.914] [debug] aggregator culculate window cycles. x: 10484 y: 16378, result: 41 ,cycle: 615184
+[2021-01-20 21:10:46.914] [debug] aggregator start to run task x: 10484 y: 16378 ,cycle: 615184
+[2021-01-20 21:10:46.914] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:179 4282710672 64800 Input ,615184
+[2021-01-20 21:10:46.915] [debug]  input  req received,req:179 4282775440 32 Input ,cycle:616215 
+[2021-01-20 21:10:46.915] [debug] aggregator finished run task. x: 10484 y: 16378,cycle: 617849
+[2021-01-20 21:10:46.915] [debug] total elements: 20350 ,total size: 81400
+[2021-01-20 21:10:46.915] [debug] aggregator culculate window cycles. x: 10484 y: 16706, result: 40 ,cycle: 617850
+[2021-01-20 21:10:46.915] [debug] aggregator start to run task x: 10484 y: 16706 ,cycle: 617850
+[2021-01-20 21:10:46.915] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:180 4282776272 65000 Input ,617850
+[2021-01-20 21:10:46.916] [debug]  input  req received,req:180 4282841232 40 Input ,cycle:619022 
+[2021-01-20 21:10:46.916] [debug] aggregator finished run task. x: 10484 y: 16706,cycle: 620450
+[2021-01-20 21:10:46.916] [debug] total elements: 17550 ,total size: 70200
+[2021-01-20 21:10:46.916] [debug] aggregator culculate window cycles. x: 10484 y: 17034, result: 35 ,cycle: 620451
+[2021-01-20 21:10:46.916] [debug] aggregator start to run task x: 10484 y: 17034 ,cycle: 620451
+[2021-01-20 21:10:46.916] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:181 4282841672 65400 Input ,620451
+[2021-01-20 21:10:46.917] [debug]  input  req received,req:181 4282907016 56 Input ,cycle:621491 
+[2021-01-20 21:10:46.917] [debug] aggregator finished run task. x: 10484 y: 17034,cycle: 622726
+[2021-01-20 21:10:46.917] [debug] total elements: 19050 ,total size: 76200
+[2021-01-20 21:10:46.917] [debug] aggregator culculate window cycles. x: 10484 y: 17361, result: 38 ,cycle: 622727
+[2021-01-20 21:10:46.917] [debug] aggregator start to run task x: 10484 y: 17361 ,cycle: 622727
+[2021-01-20 21:10:46.917] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:182 4282907272 64600 Input ,622727
+[2021-01-20 21:10:46.918] [debug]  input  req received,req:182 4282971848 24 Input ,cycle:623755 
+[2021-01-20 21:10:46.918] [debug] aggregator finished run task. x: 10484 y: 17361,cycle: 625197
+[2021-01-20 21:10:46.918] [debug] total elements: 16650 ,total size: 66600
+[2021-01-20 21:10:46.918] [debug] aggregator culculate window cycles. x: 10484 y: 17689, result: 33 ,cycle: 625198
+[2021-01-20 21:10:46.918] [debug] aggregator start to run task x: 10484 y: 17689 ,cycle: 625198
+[2021-01-20 21:10:46.918] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:183 4282973272 65200 Input ,625198
+[2021-01-20 21:10:46.920] [debug]  input  req received,req:183 4283038424 48 Input ,cycle:626372 
+[2021-01-20 21:10:46.920] [debug] aggregator finished run task. x: 10484 y: 17689,cycle: 627343
+[2021-01-20 21:10:46.920] [debug] total elements: 15650 ,total size: 62600
+[2021-01-20 21:10:46.920] [debug] aggregator culculate window cycles. x: 10484 y: 18019, result: 31 ,cycle: 627344
+[2021-01-20 21:10:46.920] [debug] aggregator start to run task x: 10484 y: 18019 ,cycle: 627344
+[2021-01-20 21:10:46.920] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:184 4283038672 65400 Input ,627344
+[2021-01-20 21:10:46.921] [debug]  input  req received,req:184 4283104016 56 Input ,cycle:628521 
+[2021-01-20 21:10:46.921] [debug] aggregator finished run task. x: 10484 y: 18019,cycle: 629359
+[2021-01-20 21:10:46.921] [debug] total elements: 17850 ,total size: 71400
+[2021-01-20 21:10:46.921] [debug] aggregator culculate window cycles. x: 10484 y: 18346, result: 35 ,cycle: 629360
+[2021-01-20 21:10:46.921] [debug] aggregator start to run task x: 10484 y: 18346 ,cycle: 629360
+[2021-01-20 21:10:46.921] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:185 4283104072 64800 Input ,629360
+[2021-01-20 21:10:46.923] [debug]  input  req received,req:185 4283168840 32 Input ,cycle:630528 
+[2021-01-20 21:10:46.923] [debug] aggregator finished run task. x: 10484 y: 18346,cycle: 631635
+[2021-01-20 21:10:46.923] [debug] total elements: 44850 ,total size: 179400
+[2021-01-20 21:10:46.923] [debug] aggregator culculate window cycles. x: 10484 y: 18673, result: 88 ,cycle: 631636
+[2021-01-20 21:10:46.923] [debug] aggregator start to run task x: 10484 y: 18673 ,cycle: 631636
+[2021-01-20 21:10:46.923] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:186 4283169672 65200 Input ,631636
+[2021-01-20 21:10:46.924] [debug]  input  req received,req:186 4283234824 48 Input ,cycle:632810 
+[2021-01-20 21:10:46.925] [debug] aggregator finished run task. x: 10484 y: 18673,cycle: 637356
+[2021-01-20 21:10:46.925] [debug] total elements: 13800 ,total size: 55200
+[2021-01-20 21:10:46.925] [debug] aggregator culculate window cycles. x: 10484 y: 19001, result: 27 ,cycle: 637357
+[2021-01-20 21:10:46.925] [debug] aggregator start to run task x: 10484 y: 19001 ,cycle: 637357
+[2021-01-20 21:10:46.925] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:187 4283237072 65000 Input ,637357
+[2021-01-20 21:10:46.926] [debug]  input  req received,req:187 4283302032 40 Input ,cycle:638528 
+[2021-01-20 21:10:46.926] [debug] aggregator finished run task. x: 10484 y: 19001,cycle: 639112
+[2021-01-20 21:10:46.926] [debug] total elements: 6650 ,total size: 26600
+[2021-01-20 21:10:46.926] [debug] aggregator culculate window cycles. x: 10484 y: 19338, result: 13 ,cycle: 639113
+[2021-01-20 21:10:46.926] [debug] aggregator start to run task x: 10484 y: 19338 ,cycle: 639113
+[2021-01-20 21:10:46.926] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:188 4283302672 9800 Input ,639113
+[2021-01-20 21:10:46.927] [debug]  input  req received,req:188 4283312464 8 Input ,cycle:639282 
+[2021-01-20 21:10:46.927] [debug] aggregator finished run task. x: 10484 y: 19338,cycle: 639958
+[2021-01-20 21:10:46.927] [debug] total elements: 600 ,total size: 2400
+[2021-01-20 21:10:46.927] [debug] aggregator culculate window cycles. x: 10484 y: 19666, result: 2 ,cycle: 639959
+[2021-01-20 21:10:46.927] [debug] aggregator start to run task x: 10484 y: 19666 ,cycle: 639959
+[2021-01-20 21:10:46.927] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:189 4279370672 65400 Input ,639959
+[2021-01-20 21:10:46.927] [debug] aggregator finished run task. x: 10484 y: 19666,cycle: 640089
+[2021-01-20 21:10:46.927] [debug] aggbuffer move the write buffer to read buffer
+[2021-01-20 21:10:46.927] [debug] systolic array start a new task,cycle:640090
+[2021-01-20 21:10:46.927] [debug] start a new systolic task: window:x 10484 y 0 5242 327 l 0 i_a 4279369472 e_a 5637868724 o_a 4288680680 i_l 65400 e_l 114284 o_l 2683904 n_n:377 fnc:false fnr:false fsr:true, total_cycle:4810, current cycle:640090
+[2021-01-20 21:10:46.927] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:191 4279436072 65000 Input ,640090
+[2021-01-20 21:10:46.927] [debug]  input  req received,req:189 4279436016 56 Input ,cycle:641000 
+[2021-01-20 21:10:46.927] [debug] total elements: 13800 ,total size: 55200
+[2021-01-20 21:10:46.927] [debug] aggregator culculate window cycles. x: 15726 y: 6, result: 27 ,cycle: 641001
+[2021-01-20 21:10:46.927] [debug] aggregator add new task:x 15726 y 6 5242 327 l 0 i_a 4279370672 e_a 5637983008 o_a 4291364584 i_l 65400 e_l 86660 o_l 2043392 n_n:276 fnc:true fnr:false fsr:true
+[2021-01-20 21:10:46.927] [debug] aggregator start to run task x: 15726 y: 6 ,cycle: 641001
+[2021-01-20 21:10:46.929] [debug]  input  req received,req:191 4279501032 40 Input ,cycle:642152 
+[2021-01-20 21:10:46.929] [debug] aggregator finished run task. x: 15726 y: 6,cycle: 642756
+[2021-01-20 21:10:46.929] [debug] total elements: 14550 ,total size: 58200
+[2021-01-20 21:10:46.929] [debug] aggregator culculate window cycles. x: 15726 y: 333, result: 29 ,cycle: 642757
+[2021-01-20 21:10:46.929] [debug] aggregator start to run task x: 15726 y: 333 ,cycle: 642757
+[2021-01-20 21:10:46.929] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:192 4279503072 65400 Input ,642757
+[2021-01-20 21:10:46.930] [debug]  input  req received,req:192 4279568416 56 Input ,cycle:643943 
+[2021-01-20 21:10:46.931] [debug] aggregator finished run task. x: 15726 y: 333,cycle: 644642
+[2021-01-20 21:10:46.931] [debug] total elements: 17400 ,total size: 69600
+[2021-01-20 21:10:46.931] [debug] aggregator culculate window cycles. x: 15726 y: 668, result: 34 ,cycle: 644643
+[2021-01-20 21:10:46.931] [debug] aggregator start to run task x: 15726 y: 668 ,cycle: 644643
+[2021-01-20 21:10:46.931] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:193 4279568672 65400 Input ,644643
+[2021-01-20 21:10:46.931] [debug] end a systolic array, window:x 10484 y 0 5242 327 l 0 i_a 4279369472 e_a 5637868724 o_a 4288680680 i_l 65400 e_l 114284 o_l 2683904 n_n:377 fnc:false fnr:false fsr:true, current_cycle:644899
+[2021-01-20 21:10:46.931] [debug] aggbuffer finished read
+[2021-01-20 21:10:46.931] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:159,output buffer send req:190 4288680680 2683904 else ,644900
+[2021-01-20 21:10:46.932] [debug]  input  req received,req:193 4279634016 56 Input ,cycle:645820 
+[2021-01-20 21:10:46.933] [debug] aggregator finished run task. x: 15726 y: 668,cycle: 646853
+[2021-01-20 21:10:46.933] [debug] total elements: 14950 ,total size: 59800
+[2021-01-20 21:10:46.933] [debug] aggregator culculate window cycles. x: 15726 y: 996, result: 30 ,cycle: 646854
+[2021-01-20 21:10:46.933] [debug] aggregator start to run task x: 15726 y: 996 ,cycle: 646854
+[2021-01-20 21:10:46.933] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:194 4279634072 65000 Input ,646854
+[2021-01-20 21:10:46.934] [debug] aggregator finished run task. x: 15726 y: 996,cycle: 648804
+[2021-01-20 21:10:46.934] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:195 4279699672 65400 Input ,648805
+[2021-01-20 21:10:46.967] [debug] output buffer finished write to memory: cycle:687601
+[2021-01-20 21:10:46.969] [debug]  input  req received,req:194 4279699032 40 Input ,cycle:688778 
+[2021-01-20 21:10:46.969] [debug] total elements: 17950 ,total size: 71800
+[2021-01-20 21:10:46.969] [debug] aggregator culculate window cycles. x: 15726 y: 1323, result: 36 ,cycle: 688779
+[2021-01-20 21:10:46.969] [debug] aggregator start to run task x: 15726 y: 1323 ,cycle: 688779
+[2021-01-20 21:10:46.970] [debug]  input  req received,req:195 4279765016 56 Input ,cycle:689800 
+[2021-01-20 21:10:46.970] [debug] aggregator finished run task. x: 15726 y: 1323,cycle: 691119
+[2021-01-20 21:10:46.970] [debug] total elements: 15300 ,total size: 61200
+[2021-01-20 21:10:46.970] [debug] aggregator culculate window cycles. x: 15726 y: 1651, result: 30 ,cycle: 691120
+[2021-01-20 21:10:46.970] [debug] aggregator start to run task x: 15726 y: 1651 ,cycle: 691120
+[2021-01-20 21:10:46.970] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:196 4279765472 65200 Input ,691120
+[2021-01-20 21:10:46.971] [debug]  input  req received,req:196 4279830624 48 Input ,cycle:692157 
+[2021-01-20 21:10:46.971] [debug] aggregator finished run task. x: 15726 y: 1651,cycle: 693070
+[2021-01-20 21:10:46.971] [debug] total elements: 13700 ,total size: 54800
+[2021-01-20 21:10:46.971] [debug] aggregator culculate window cycles. x: 15726 y: 1980, result: 27 ,cycle: 693071
+[2021-01-20 21:10:46.971] [debug] aggregator start to run task x: 15726 y: 1980 ,cycle: 693071
+[2021-01-20 21:10:46.971] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:197 4279831072 65400 Input ,693071
+[2021-01-20 21:10:46.971] [debug]  input  req received,req:197 4279896416 56 Input ,cycle:694111 
+[2021-01-20 21:10:46.972] [debug] aggregator finished run task. x: 15726 y: 1980,cycle: 694826
+[2021-01-20 21:10:46.972] [debug] total elements: 14450 ,total size: 57800
+[2021-01-20 21:10:46.972] [debug] aggregator culculate window cycles. x: 15726 y: 2308, result: 29 ,cycle: 694827
+[2021-01-20 21:10:46.972] [debug] aggregator start to run task x: 15726 y: 2308 ,cycle: 694827
+[2021-01-20 21:10:46.972] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:198 4279897072 65200 Input ,694827
+[2021-01-20 21:10:46.972] [debug]  input  req received,req:198 4279962224 48 Input ,cycle:695864 
+[2021-01-20 21:10:46.972] [debug] aggregator finished run task. x: 15726 y: 2308,cycle: 696712
+[2021-01-20 21:10:46.972] [debug] total elements: 14300 ,total size: 57200
+[2021-01-20 21:10:46.972] [debug] aggregator culculate window cycles. x: 15726 y: 2638, result: 28 ,cycle: 696713
+[2021-01-20 21:10:46.972] [debug] aggregator start to run task x: 15726 y: 2638 ,cycle: 696713
+[2021-01-20 21:10:46.972] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:199 4279962672 65400 Input ,696713
+[2021-01-20 21:10:46.973] [debug]  input  req received,req:199 4280028016 56 Input ,cycle:697753 
+[2021-01-20 21:10:46.973] [debug] aggregator finished run task. x: 15726 y: 2638,cycle: 698533
+[2021-01-20 21:10:46.973] [debug] total elements: 16150 ,total size: 64600
+[2021-01-20 21:10:46.973] [debug] aggregator culculate window cycles. x: 15726 y: 2966, result: 32 ,cycle: 698534
+[2021-01-20 21:10:46.973] [debug] aggregator start to run task x: 15726 y: 2966 ,cycle: 698534
+[2021-01-20 21:10:46.973] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:200 4280028072 65400 Input ,698534
+[2021-01-20 21:10:46.974] [debug]  input  req received,req:200 4280093416 56 Input ,cycle:699574 
+[2021-01-20 21:10:46.974] [debug] aggregator finished run task. x: 15726 y: 2966,cycle: 700614
+[2021-01-20 21:10:46.974] [debug] total elements: 12750 ,total size: 51000
+[2021-01-20 21:10:46.974] [debug] aggregator culculate window cycles. x: 15726 y: 3293, result: 25 ,cycle: 700615
+[2021-01-20 21:10:46.974] [debug] aggregator start to run task x: 15726 y: 3293 ,cycle: 700615
+[2021-01-20 21:10:46.974] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:201 4280093472 65400 Input ,700615
+[2021-01-20 21:10:46.975] [debug]  input  req received,req:201 4280158816 56 Input ,cycle:701655 
+[2021-01-20 21:10:46.975] [debug] aggregator finished run task. x: 15726 y: 3293,cycle: 702240
+[2021-01-20 21:10:46.975] [debug] total elements: 13600 ,total size: 54400
+[2021-01-20 21:10:46.975] [debug] aggregator culculate window cycles. x: 15726 y: 3620, result: 27 ,cycle: 702241
+[2021-01-20 21:10:46.975] [debug] aggregator start to run task x: 15726 y: 3620 ,cycle: 702241
+[2021-01-20 21:10:46.975] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:202 4280159072 65200 Input ,702241
+[2021-01-20 21:10:46.976] [debug]  input  req received,req:202 4280224224 48 Input ,cycle:703278 
+[2021-01-20 21:10:46.976] [debug] aggregator finished run task. x: 15726 y: 3620,cycle: 703996
+[2021-01-20 21:10:46.976] [debug] total elements: 15100 ,total size: 60400
+[2021-01-20 21:10:46.976] [debug] aggregator culculate window cycles. x: 15726 y: 3948, result: 30 ,cycle: 703997
+[2021-01-20 21:10:46.976] [debug] aggregator start to run task x: 15726 y: 3948 ,cycle: 703997
+[2021-01-20 21:10:46.976] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:203 4280224472 65400 Input ,703997
+[2021-01-20 21:10:46.977] [debug]  input  req received,req:203 4280289816 56 Input ,cycle:705125 
+[2021-01-20 21:10:46.977] [debug] aggregator finished run task. x: 15726 y: 3948,cycle: 705947
+[2021-01-20 21:10:46.977] [debug] total elements: 14400 ,total size: 57600
+[2021-01-20 21:10:46.977] [debug] aggregator culculate window cycles. x: 15726 y: 4275, result: 29 ,cycle: 705948
+[2021-01-20 21:10:46.977] [debug] aggregator start to run task x: 15726 y: 4275 ,cycle: 705948
+[2021-01-20 21:10:46.977] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:204 4280290272 65400 Input ,705948
+[2021-01-20 21:10:46.978] [debug]  input  req received,req:204 4280355616 56 Input ,cycle:707075 
+[2021-01-20 21:10:46.978] [debug] aggregator finished run task. x: 15726 y: 4275,cycle: 707833
+[2021-01-20 21:10:46.978] [debug] total elements: 14300 ,total size: 57200
+[2021-01-20 21:10:46.978] [debug] aggregator culculate window cycles. x: 15726 y: 4604, result: 28 ,cycle: 707834
+[2021-01-20 21:10:46.978] [debug] aggregator start to run task x: 15726 y: 4604 ,cycle: 707834
+[2021-01-20 21:10:46.978] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:205 4280355872 65200 Input ,707834
+[2021-01-20 21:10:46.980] [debug]  input  req received,req:205 4280421024 48 Input ,cycle:709008 
+[2021-01-20 21:10:46.980] [debug] aggregator finished run task. x: 15726 y: 4604,cycle: 709654
+[2021-01-20 21:10:46.980] [debug] total elements: 14100 ,total size: 56400
+[2021-01-20 21:10:46.980] [debug] aggregator culculate window cycles. x: 15726 y: 4932, result: 28 ,cycle: 709655
+[2021-01-20 21:10:46.980] [debug] aggregator start to run task x: 15726 y: 4932 ,cycle: 709655
+[2021-01-20 21:10:46.980] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:206 4280421672 65400 Input ,709655
+[2021-01-20 21:10:46.981] [debug]  input  req received,req:206 4280487016 56 Input ,cycle:710832 
+[2021-01-20 21:10:46.981] [debug] aggregator finished run task. x: 15726 y: 4932,cycle: 711475
+[2021-01-20 21:10:46.981] [debug] total elements: 16600 ,total size: 66400
+[2021-01-20 21:10:46.981] [debug] aggregator culculate window cycles. x: 15726 y: 5261, result: 33 ,cycle: 711476
+[2021-01-20 21:10:46.981] [debug] aggregator start to run task x: 15726 y: 5261 ,cycle: 711476
+[2021-01-20 21:10:46.981] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:207 4280487272 65000 Input ,711476
+[2021-01-20 21:10:46.983] [debug]  input  req received,req:207 4280552232 40 Input ,cycle:712647 
+[2021-01-20 21:10:46.983] [debug] aggregator finished run task. x: 15726 y: 5261,cycle: 713621
+[2021-01-20 21:10:46.983] [debug] total elements: 15300 ,total size: 61200
+[2021-01-20 21:10:46.983] [debug] aggregator culculate window cycles. x: 15726 y: 5589, result: 30 ,cycle: 713622
+[2021-01-20 21:10:46.983] [debug] aggregator start to run task x: 15726 y: 5589 ,cycle: 713622
+[2021-01-20 21:10:46.983] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:208 4280552872 65400 Input ,713622
+[2021-01-20 21:10:46.984] [debug]  input  req received,req:208 4280618216 56 Input ,cycle:714799 
+[2021-01-20 21:10:46.984] [debug] aggregator finished run task. x: 15726 y: 5589,cycle: 715572
+[2021-01-20 21:10:46.984] [debug] total elements: 14600 ,total size: 58400
+[2021-01-20 21:10:46.984] [debug] aggregator culculate window cycles. x: 15726 y: 5917, result: 29 ,cycle: 715573
+[2021-01-20 21:10:46.984] [debug] aggregator start to run task x: 15726 y: 5917 ,cycle: 715573
+[2021-01-20 21:10:46.984] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:209 4280618272 65200 Input ,715573
+[2021-01-20 21:10:46.986] [debug]  input  req received,req:209 4280683424 48 Input ,cycle:716747 
+[2021-01-20 21:10:46.986] [debug] aggregator finished run task. x: 15726 y: 5917,cycle: 717458
+[2021-01-20 21:10:46.986] [debug] total elements: 13600 ,total size: 54400
+[2021-01-20 21:10:46.986] [debug] aggregator culculate window cycles. x: 15726 y: 6244, result: 27 ,cycle: 717459
+[2021-01-20 21:10:46.986] [debug] aggregator start to run task x: 15726 y: 6244 ,cycle: 717459
+[2021-01-20 21:10:46.986] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:210 4280683872 65200 Input ,717459
+[2021-01-20 21:10:46.987] [debug]  input  req received,req:210 4280749024 48 Input ,cycle:718633 
+[2021-01-20 21:10:46.987] [debug] aggregator finished run task. x: 15726 y: 6244,cycle: 719214
+[2021-01-20 21:10:46.987] [debug] total elements: 14700 ,total size: 58800
+[2021-01-20 21:10:46.987] [debug] aggregator culculate window cycles. x: 15726 y: 6572, result: 29 ,cycle: 719215
+[2021-01-20 21:10:46.987] [debug] aggregator start to run task x: 15726 y: 6572 ,cycle: 719215
+[2021-01-20 21:10:46.987] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:211 4280749272 65400 Input ,719215
+[2021-01-20 21:10:46.989] [debug]  input  req received,req:211 4280814616 56 Input ,cycle:720392 
+[2021-01-20 21:10:46.989] [debug] aggregator finished run task. x: 15726 y: 6572,cycle: 721100
+[2021-01-20 21:10:46.989] [debug] total elements: 14400 ,total size: 57600
+[2021-01-20 21:10:46.989] [debug] aggregator culculate window cycles. x: 15726 y: 6899, result: 29 ,cycle: 721101
+[2021-01-20 21:10:46.989] [debug] aggregator start to run task x: 15726 y: 6899 ,cycle: 721101
+[2021-01-20 21:10:46.989] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:212 4280814672 64800 Input ,721101
+[2021-01-20 21:10:46.990] [debug]  input  req received,req:212 4280879440 32 Input ,cycle:722269 
+[2021-01-20 21:10:46.990] [debug] aggregator finished run task. x: 15726 y: 6899,cycle: 722986
+[2021-01-20 21:10:46.990] [debug] total elements: 15000 ,total size: 60000
+[2021-01-20 21:10:46.990] [debug] aggregator culculate window cycles. x: 15726 y: 7226, result: 30 ,cycle: 722987
+[2021-01-20 21:10:46.990] [debug] aggregator start to run task x: 15726 y: 7226 ,cycle: 722987
+[2021-01-20 21:10:46.990] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:213 4280881472 64800 Input ,722987
+[2021-01-20 21:10:46.992] [debug]  input  req received,req:213 4280946240 32 Input ,cycle:724156 
+[2021-01-20 21:10:46.992] [debug] aggregator finished run task. x: 15726 y: 7226,cycle: 724937
+[2021-01-20 21:10:46.992] [debug] total elements: 15700 ,total size: 62800
+[2021-01-20 21:10:46.992] [debug] aggregator culculate window cycles. x: 15726 y: 7560, result: 31 ,cycle: 724938
+[2021-01-20 21:10:46.992] [debug] aggregator start to run task x: 15726 y: 7560 ,cycle: 724938
+[2021-01-20 21:10:46.992] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:214 4280947072 64800 Input ,724938
+[2021-01-20 21:10:46.993] [debug]  input  req received,req:214 4281011840 32 Input ,cycle:726107 
+[2021-01-20 21:10:46.994] [debug] aggregator finished run task. x: 15726 y: 7560,cycle: 726953
+[2021-01-20 21:10:46.994] [debug] total elements: 13600 ,total size: 54400
+[2021-01-20 21:10:46.994] [debug] aggregator culculate window cycles. x: 15726 y: 7888, result: 27 ,cycle: 726954
+[2021-01-20 21:10:46.994] [debug] aggregator start to run task x: 15726 y: 7888 ,cycle: 726954
+[2021-01-20 21:10:46.994] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:215 4281012872 65200 Input ,726954
+[2021-01-20 21:10:46.995] [debug]  input  req received,req:215 4281078024 48 Input ,cycle:728128 
+[2021-01-20 21:10:46.995] [debug] aggregator finished run task. x: 15726 y: 7888,cycle: 728709
+[2021-01-20 21:10:46.995] [debug] total elements: 14650 ,total size: 58600
+[2021-01-20 21:10:46.995] [debug] aggregator culculate window cycles. x: 15726 y: 8217, result: 29 ,cycle: 728710
+[2021-01-20 21:10:46.995] [debug] aggregator start to run task x: 15726 y: 8217 ,cycle: 728710
+[2021-01-20 21:10:46.995] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:216 4281078272 65000 Input ,728710
+[2021-01-20 21:10:46.996] [debug]  input  req received,req:216 4281143232 40 Input ,cycle:729881 
+[2021-01-20 21:10:46.997] [debug] aggregator finished run task. x: 15726 y: 8217,cycle: 730595
+[2021-01-20 21:10:46.997] [debug] total elements: 14800 ,total size: 59200
+[2021-01-20 21:10:46.997] [debug] aggregator culculate window cycles. x: 15726 y: 8544, result: 29 ,cycle: 730596
+[2021-01-20 21:10:46.997] [debug] aggregator start to run task x: 15726 y: 8544 ,cycle: 730596
+[2021-01-20 21:10:46.997] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:217 4281143672 65400 Input ,730596
+[2021-01-20 21:10:46.998] [debug]  input  req received,req:217 4281209016 56 Input ,cycle:731773 
+[2021-01-20 21:10:46.998] [debug] aggregator finished run task. x: 15726 y: 8544,cycle: 732481
+[2021-01-20 21:10:46.998] [debug] total elements: 12200 ,total size: 48800
+[2021-01-20 21:10:46.998] [debug] aggregator culculate window cycles. x: 15726 y: 8871, result: 24 ,cycle: 732482
+[2021-01-20 21:10:46.998] [debug] aggregator start to run task x: 15726 y: 8871 ,cycle: 732482
+[2021-01-20 21:10:46.998] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:218 4281209672 64400 Input ,732482
+[2021-01-20 21:10:47.000] [debug]  input  req received,req:218 4281274056 16 Input ,cycle:733644 
+[2021-01-20 21:10:47.000] [debug] aggregator finished run task. x: 15726 y: 8871,cycle: 734042
+[2021-01-20 21:10:47.000] [debug] total elements: 13950 ,total size: 55800
+[2021-01-20 21:10:47.000] [debug] aggregator culculate window cycles. x: 15726 y: 9201, result: 28 ,cycle: 734043
+[2021-01-20 21:10:47.000] [debug] aggregator start to run task x: 15726 y: 9201 ,cycle: 734043
+[2021-01-20 21:10:47.000] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:219 4281275272 65200 Input ,734043
+[2021-01-20 21:10:47.000] [debug]  input  req received,req:219 4281340424 48 Input ,cycle:735080 
+[2021-01-20 21:10:47.001] [debug] aggregator finished run task. x: 15726 y: 9201,cycle: 735863
+[2021-01-20 21:10:47.001] [debug] total elements: 15100 ,total size: 60400
+[2021-01-20 21:10:47.001] [debug] aggregator culculate window cycles. x: 15726 y: 9529, result: 30 ,cycle: 735864
+[2021-01-20 21:10:47.001] [debug] aggregator start to run task x: 15726 y: 9529 ,cycle: 735864
+[2021-01-20 21:10:47.001] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:220 4281341472 65400 Input ,735864
+[2021-01-20 21:10:47.001] [debug]  input  req received,req:220 4281406816 56 Input ,cycle:736904 
+[2021-01-20 21:10:47.001] [debug] aggregator finished run task. x: 15726 y: 9529,cycle: 737814
+[2021-01-20 21:10:47.001] [debug] total elements: 13750 ,total size: 55000
+[2021-01-20 21:10:47.001] [debug] aggregator culculate window cycles. x: 15726 y: 9860, result: 27 ,cycle: 737815
+[2021-01-20 21:10:47.001] [debug] aggregator start to run task x: 15726 y: 9860 ,cycle: 737815
+[2021-01-20 21:10:47.001] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:221 4281406872 65400 Input ,737815
+[2021-01-20 21:10:47.002] [debug]  input  req received,req:221 4281472216 56 Input ,cycle:738855 
+[2021-01-20 21:10:47.002] [debug] aggregator finished run task. x: 15726 y: 9860,cycle: 739570
+[2021-01-20 21:10:47.002] [debug] total elements: 16450 ,total size: 65800
+[2021-01-20 21:10:47.002] [debug] aggregator culculate window cycles. x: 15726 y: 10187, result: 33 ,cycle: 739571
+[2021-01-20 21:10:47.002] [debug] aggregator start to run task x: 15726 y: 10187 ,cycle: 739571
+[2021-01-20 21:10:47.002] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:222 4281472672 65400 Input ,739571
+[2021-01-20 21:10:47.003] [debug]  input  req received,req:222 4281538016 56 Input ,cycle:740611 
+[2021-01-20 21:10:47.003] [debug] aggregator finished run task. x: 15726 y: 10187,cycle: 741716
+[2021-01-20 21:10:47.003] [debug] total elements: 15100 ,total size: 60400
+[2021-01-20 21:10:47.003] [debug] aggregator culculate window cycles. x: 15726 y: 10516, result: 30 ,cycle: 741717
+[2021-01-20 21:10:47.003] [debug] aggregator start to run task x: 15726 y: 10516 ,cycle: 741717
+[2021-01-20 21:10:47.003] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:223 4281538072 65400 Input ,741717
+[2021-01-20 21:10:47.004] [debug]  input  req received,req:223 4281603416 56 Input ,cycle:742757 
+[2021-01-20 21:10:47.004] [debug] aggregator finished run task. x: 15726 y: 10516,cycle: 743667
+[2021-01-20 21:10:47.004] [debug] total elements: 15350 ,total size: 61400
+[2021-01-20 21:10:47.004] [debug] aggregator culculate window cycles. x: 15726 y: 10843, result: 30 ,cycle: 743668
+[2021-01-20 21:10:47.004] [debug] aggregator start to run task x: 15726 y: 10843 ,cycle: 743668
+[2021-01-20 21:10:47.004] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:224 4281603472 65400 Input ,743668
+[2021-01-20 21:10:47.005] [debug]  input  req received,req:224 4281668816 56 Input ,cycle:744708 
+[2021-01-20 21:10:47.005] [debug] aggregator finished run task. x: 15726 y: 10843,cycle: 745618
+[2021-01-20 21:10:47.005] [debug] total elements: 17400 ,total size: 69600
+[2021-01-20 21:10:47.005] [debug] aggregator culculate window cycles. x: 15726 y: 11170, result: 34 ,cycle: 745619
+[2021-01-20 21:10:47.005] [debug] aggregator start to run task x: 15726 y: 11170 ,cycle: 745619
+[2021-01-20 21:10:47.005] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:225 4281669272 65400 Input ,745619
+[2021-01-20 21:10:47.006] [debug]  input  req received,req:225 4281734616 56 Input ,cycle:746659 
+[2021-01-20 21:10:47.006] [debug] aggregator finished run task. x: 15726 y: 11170,cycle: 747829
+[2021-01-20 21:10:47.006] [debug] total elements: 14500 ,total size: 58000
+[2021-01-20 21:10:47.006] [debug] aggregator culculate window cycles. x: 15726 y: 11499, result: 29 ,cycle: 747830
+[2021-01-20 21:10:47.006] [debug] aggregator start to run task x: 15726 y: 11499 ,cycle: 747830
+[2021-01-20 21:10:47.006] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:226 4281734872 65200 Input ,747830
+[2021-01-20 21:10:47.007] [debug]  input  req received,req:226 4281800024 48 Input ,cycle:749004 
+[2021-01-20 21:10:47.007] [debug] aggregator finished run task. x: 15726 y: 11499,cycle: 749715
+[2021-01-20 21:10:47.007] [debug] total elements: 15900 ,total size: 63600
+[2021-01-20 21:10:47.007] [debug] aggregator culculate window cycles. x: 15726 y: 11827, result: 32 ,cycle: 749716
+[2021-01-20 21:10:47.007] [debug] aggregator start to run task x: 15726 y: 11827 ,cycle: 749716
+[2021-01-20 21:10:47.007] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:227 4281800472 65200 Input ,749716
+[2021-01-20 21:10:47.008] [debug]  input  req received,req:227 4281865624 48 Input ,cycle:750753 
+[2021-01-20 21:10:47.008] [debug] aggregator finished run task. x: 15726 y: 11827,cycle: 751796
+[2021-01-20 21:10:47.008] [debug] total elements: 13700 ,total size: 54800
+[2021-01-20 21:10:47.008] [debug] aggregator culculate window cycles. x: 15726 y: 12155, result: 27 ,cycle: 751797
+[2021-01-20 21:10:47.008] [debug] aggregator start to run task x: 15726 y: 12155 ,cycle: 751797
+[2021-01-20 21:10:47.008] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:228 4281866072 65400 Input ,751797
+[2021-01-20 21:10:47.009] [debug]  input  req received,req:228 4281931416 56 Input ,cycle:752974 
+[2021-01-20 21:10:47.009] [debug] aggregator finished run task. x: 15726 y: 12155,cycle: 753552
+[2021-01-20 21:10:47.009] [debug] total elements: 13900 ,total size: 55600
+[2021-01-20 21:10:47.009] [debug] aggregator culculate window cycles. x: 15726 y: 12483, result: 28 ,cycle: 753553
+[2021-01-20 21:10:47.009] [debug] aggregator start to run task x: 15726 y: 12483 ,cycle: 753553
+[2021-01-20 21:10:47.009] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:229 4281931672 65200 Input ,753553
+[2021-01-20 21:10:47.010] [debug]  input  req received,req:229 4281996824 48 Input ,cycle:754590 
+[2021-01-20 21:10:47.010] [debug] aggregator finished run task. x: 15726 y: 12483,cycle: 755373
+[2021-01-20 21:10:47.010] [debug] total elements: 14300 ,total size: 57200
+[2021-01-20 21:10:47.010] [debug] aggregator culculate window cycles. x: 15726 y: 12811, result: 28 ,cycle: 755374
+[2021-01-20 21:10:47.010] [debug] aggregator start to run task x: 15726 y: 12811 ,cycle: 755374
+[2021-01-20 21:10:47.010] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:230 4281997072 65400 Input ,755374
+[2021-01-20 21:10:47.011] [debug]  input  req received,req:230 4282062416 56 Input ,cycle:756414 
+[2021-01-20 21:10:47.011] [debug] aggregator finished run task. x: 15726 y: 12811,cycle: 757194
+[2021-01-20 21:10:47.011] [debug] total elements: 13050 ,total size: 52200
+[2021-01-20 21:10:47.011] [debug] aggregator culculate window cycles. x: 15726 y: 13138, result: 26 ,cycle: 757195
+[2021-01-20 21:10:47.011] [debug] aggregator start to run task x: 15726 y: 13138 ,cycle: 757195
+[2021-01-20 21:10:47.011] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:231 4282062672 64600 Input ,757195
+[2021-01-20 21:10:47.012] [debug]  input  req received,req:231 4282127248 24 Input ,cycle:758223 
+[2021-01-20 21:10:47.012] [debug] aggregator finished run task. x: 15726 y: 13138,cycle: 758885
+[2021-01-20 21:10:47.012] [debug] total elements: 13350 ,total size: 53400
+[2021-01-20 21:10:47.012] [debug] aggregator culculate window cycles. x: 15726 y: 13466, result: 27 ,cycle: 758886
+[2021-01-20 21:10:47.012] [debug] aggregator start to run task x: 15726 y: 13466 ,cycle: 758886
+[2021-01-20 21:10:47.012] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:232 4282128072 65400 Input ,758886
+[2021-01-20 21:10:47.013] [debug]  input  req received,req:232 4282193416 56 Input ,cycle:759926 
+[2021-01-20 21:10:47.013] [debug] aggregator finished run task. x: 15726 y: 13466,cycle: 760641
+[2021-01-20 21:10:47.013] [debug] total elements: 16800 ,total size: 67200
+[2021-01-20 21:10:47.013] [debug] aggregator culculate window cycles. x: 15726 y: 13793, result: 33 ,cycle: 760642
+[2021-01-20 21:10:47.013] [debug] aggregator start to run task x: 15726 y: 13793 ,cycle: 760642
+[2021-01-20 21:10:47.013] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:233 4282193672 65200 Input ,760642
+[2021-01-20 21:10:47.014] [debug]  input  req received,req:233 4282258824 48 Input ,cycle:761679 
+[2021-01-20 21:10:47.014] [debug] aggregator finished run task. x: 15726 y: 13793,cycle: 762787
+[2021-01-20 21:10:47.014] [debug] total elements: 14000 ,total size: 56000
+[2021-01-20 21:10:47.014] [debug] aggregator culculate window cycles. x: 15726 y: 14121, result: 28 ,cycle: 762788
+[2021-01-20 21:10:47.014] [debug] aggregator start to run task x: 15726 y: 14121 ,cycle: 762788
+[2021-01-20 21:10:47.014] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:234 4282259072 65200 Input ,762788
+[2021-01-20 21:10:47.015] [debug]  input  req received,req:234 4282324224 48 Input ,cycle:763825 
+[2021-01-20 21:10:47.015] [debug] aggregator finished run task. x: 15726 y: 14121,cycle: 764608
+[2021-01-20 21:10:47.015] [debug] total elements: 15050 ,total size: 60200
+[2021-01-20 21:10:47.015] [debug] aggregator culculate window cycles. x: 15726 y: 14448, result: 30 ,cycle: 764609
+[2021-01-20 21:10:47.015] [debug] aggregator start to run task x: 15726 y: 14448 ,cycle: 764609
+[2021-01-20 21:10:47.015] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:235 4282324872 65400 Input ,764609
+[2021-01-20 21:10:47.015] [debug]  input  req received,req:235 4282390216 56 Input ,cycle:765649 
+[2021-01-20 21:10:47.016] [debug] aggregator finished run task. x: 15726 y: 14448,cycle: 766559
+[2021-01-20 21:10:47.016] [debug] total elements: 13150 ,total size: 52600
+[2021-01-20 21:10:47.016] [debug] aggregator culculate window cycles. x: 15726 y: 14777, result: 26 ,cycle: 766560
+[2021-01-20 21:10:47.016] [debug] aggregator start to run task x: 15726 y: 14777 ,cycle: 766560
+[2021-01-20 21:10:47.016] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:236 4282391472 65400 Input ,766560
+[2021-01-20 21:10:47.016] [debug]  input  req received,req:236 4282456816 56 Input ,cycle:767600 
+[2021-01-20 21:10:47.016] [debug] aggregator finished run task. x: 15726 y: 14777,cycle: 768250
+[2021-01-20 21:10:47.016] [debug] total elements: 13300 ,total size: 53200
+[2021-01-20 21:10:47.016] [debug] aggregator culculate window cycles. x: 15726 y: 15110, result: 26 ,cycle: 768251
+[2021-01-20 21:10:47.016] [debug] aggregator start to run task x: 15726 y: 15110 ,cycle: 768251
+[2021-01-20 21:10:47.016] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:237 4282457072 65400 Input ,768251
+[2021-01-20 21:10:47.018] [debug]  input  req received,req:237 4282522416 56 Input ,cycle:769428 
+[2021-01-20 21:10:47.018] [debug] aggregator finished run task. x: 15726 y: 15110,cycle: 769941
+[2021-01-20 21:10:47.018] [debug] total elements: 17350 ,total size: 69400
+[2021-01-20 21:10:47.018] [debug] aggregator culculate window cycles. x: 15726 y: 15438, result: 34 ,cycle: 769942
+[2021-01-20 21:10:47.018] [debug] aggregator start to run task x: 15726 y: 15438 ,cycle: 769942
+[2021-01-20 21:10:47.018] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:238 4282522472 65400 Input ,769942
+[2021-01-20 21:10:47.019] [debug]  input  req received,req:238 4282587816 56 Input ,cycle:771119 
+[2021-01-20 21:10:47.019] [debug] aggregator finished run task. x: 15726 y: 15438,cycle: 772152
+[2021-01-20 21:10:47.019] [debug] total elements: 34650 ,total size: 138600
+[2021-01-20 21:10:47.019] [debug] aggregator culculate window cycles. x: 15726 y: 15765, result: 68 ,cycle: 772153
+[2021-01-20 21:10:47.019] [debug] aggregator start to run task x: 15726 y: 15765 ,cycle: 772153
+[2021-01-20 21:10:47.019] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:239 4282587872 65400 Input ,772153
+[2021-01-20 21:10:47.021] [debug]  input  req received,req:239 4282653216 56 Input ,cycle:773330 
+[2021-01-20 21:10:47.021] [debug] aggregator finished run task. x: 15726 y: 15765,cycle: 776573
+[2021-01-20 21:10:47.021] [debug] total elements: 29800 ,total size: 119200
+[2021-01-20 21:10:47.021] [debug] aggregator culculate window cycles. x: 15726 y: 16092, result: 59 ,cycle: 776574
+[2021-01-20 21:10:47.021] [debug] aggregator start to run task x: 15726 y: 16092 ,cycle: 776574
+[2021-01-20 21:10:47.021] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:240 4282653272 65400 Input ,776574
+[2021-01-20 21:10:47.022] [debug]  input  req received,req:240 4282718616 56 Input ,cycle:777614 
+[2021-01-20 21:10:47.022] [debug] aggregator finished run task. x: 15726 y: 16092,cycle: 780409
+[2021-01-20 21:10:47.022] [debug] total elements: 32400 ,total size: 129600
+[2021-01-20 21:10:47.022] [debug] aggregator culculate window cycles. x: 15726 y: 16419, result: 64 ,cycle: 780410
+[2021-01-20 21:10:47.022] [debug] aggregator start to run task x: 15726 y: 16419 ,cycle: 780410
+[2021-01-20 21:10:47.022] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:241 4282718672 65400 Input ,780410
+[2021-01-20 21:10:47.023] [debug]  input  req received,req:241 4282784016 56 Input ,cycle:781450 
+[2021-01-20 21:10:47.023] [debug] aggregator finished run task. x: 15726 y: 16419,cycle: 784570
+[2021-01-20 21:10:47.023] [debug] total elements: 31150 ,total size: 124600
+[2021-01-20 21:10:47.023] [debug] aggregator culculate window cycles. x: 15726 y: 16746, result: 61 ,cycle: 784571
+[2021-01-20 21:10:47.023] [debug] aggregator start to run task x: 15726 y: 16746 ,cycle: 784571
+[2021-01-20 21:10:47.023] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:242 4282784072 65400 Input ,784571
+[2021-01-20 21:10:47.024] [debug]  input  req received,req:242 4282849416 56 Input ,cycle:785611 
+[2021-01-20 21:10:47.024] [debug] aggregator finished run task. x: 15726 y: 16746,cycle: 788536
+[2021-01-20 21:10:47.024] [debug] total elements: 29400 ,total size: 117600
+[2021-01-20 21:10:47.024] [debug] aggregator culculate window cycles. x: 15726 y: 17073, result: 58 ,cycle: 788537
+[2021-01-20 21:10:47.024] [debug] aggregator start to run task x: 15726 y: 17073 ,cycle: 788537
+[2021-01-20 21:10:47.024] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:243 4282849472 65400 Input ,788537
+[2021-01-20 21:10:47.025] [debug]  input  req received,req:243 4282914816 56 Input ,cycle:789577 
+[2021-01-20 21:10:47.026] [debug] aggregator finished run task. x: 15726 y: 17073,cycle: 792307
+[2021-01-20 21:10:47.026] [debug] total elements: 30450 ,total size: 121800
+[2021-01-20 21:10:47.026] [debug] aggregator culculate window cycles. x: 15726 y: 17400, result: 60 ,cycle: 792308
+[2021-01-20 21:10:47.026] [debug] aggregator start to run task x: 15726 y: 17400 ,cycle: 792308
+[2021-01-20 21:10:47.026] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:244 4282914872 65400 Input ,792308
+[2021-01-20 21:10:47.026] [debug]  input  req received,req:244 4282980216 56 Input ,cycle:793348 
+[2021-01-20 21:10:47.027] [debug] aggregator finished run task. x: 15726 y: 17400,cycle: 796208
+[2021-01-20 21:10:47.027] [debug] total elements: 32200 ,total size: 128800
+[2021-01-20 21:10:47.027] [debug] aggregator culculate window cycles. x: 15726 y: 17727, result: 63 ,cycle: 796209
+[2021-01-20 21:10:47.027] [debug] aggregator start to run task x: 15726 y: 17727 ,cycle: 796209
+[2021-01-20 21:10:47.027] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:245 4282980272 65400 Input ,796209
+[2021-01-20 21:10:47.027] [debug]  input  req received,req:245 4283045616 56 Input ,cycle:797249 
+[2021-01-20 21:10:47.028] [debug] aggregator finished run task. x: 15726 y: 17727,cycle: 800304
+[2021-01-20 21:10:47.028] [debug] total elements: 29500 ,total size: 118000
+[2021-01-20 21:10:47.028] [debug] aggregator culculate window cycles. x: 15726 y: 18054, result: 58 ,cycle: 800305
+[2021-01-20 21:10:47.028] [debug] aggregator start to run task x: 15726 y: 18054 ,cycle: 800305
+[2021-01-20 21:10:47.028] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:246 4283045672 65400 Input ,800305
+[2021-01-20 21:10:47.029] [debug]  input  req received,req:246 4283111016 56 Input ,cycle:801345 
+[2021-01-20 21:10:47.029] [debug] aggregator finished run task. x: 15726 y: 18054,cycle: 804075
+[2021-01-20 21:10:47.029] [debug] total elements: 30100 ,total size: 120400
+[2021-01-20 21:10:47.029] [debug] aggregator culculate window cycles. x: 15726 y: 18381, result: 59 ,cycle: 804076
+[2021-01-20 21:10:47.029] [debug] aggregator start to run task x: 15726 y: 18381 ,cycle: 804076
+[2021-01-20 21:10:47.029] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:247 4283111072 65400 Input ,804076
+[2021-01-20 21:10:47.030] [debug]  input  req received,req:247 4283176416 56 Input ,cycle:805116 
+[2021-01-20 21:10:47.030] [debug] aggregator finished run task. x: 15726 y: 18381,cycle: 807911
+[2021-01-20 21:10:47.030] [debug] total elements: 47950 ,total size: 191800
+[2021-01-20 21:10:47.030] [debug] aggregator culculate window cycles. x: 15726 y: 18708, result: 94 ,cycle: 807912
+[2021-01-20 21:10:47.030] [debug] aggregator start to run task x: 15726 y: 18708 ,cycle: 807912
+[2021-01-20 21:10:47.030] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:248 4283176472 65400 Input ,807912
+[2021-01-20 21:10:47.031] [debug]  input  req received,req:248 4283241816 56 Input ,cycle:808952 
+[2021-01-20 21:10:47.031] [debug] aggregator finished run task. x: 15726 y: 18708,cycle: 814022
+[2021-01-20 21:10:47.031] [debug] total elements: 25000 ,total size: 100000
+[2021-01-20 21:10:47.031] [debug] aggregator culculate window cycles. x: 15726 y: 19035, result: 49 ,cycle: 814023
+[2021-01-20 21:10:47.031] [debug] aggregator start to run task x: 15726 y: 19035 ,cycle: 814023
+[2021-01-20 21:10:47.031] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:249 4283241872 65400 Input ,814023
+[2021-01-20 21:10:47.032] [debug]  input  req received,req:249 4283307216 56 Input ,cycle:815063 
+[2021-01-20 21:10:47.032] [debug] aggregator finished run task. x: 15726 y: 19035,cycle: 817208
+[2021-01-20 21:10:47.032] [debug] total elements: 21600 ,total size: 86400
+[2021-01-20 21:10:47.032] [debug] aggregator culculate window cycles. x: 15726 y: 19362, result: 43 ,cycle: 817209
+[2021-01-20 21:10:47.032] [debug] aggregator start to run task x: 15726 y: 19362 ,cycle: 817209
+[2021-01-20 21:10:47.032] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:149,input_next buffer send req:250 4283307272 5600 Input ,817209
+[2021-01-20 21:10:47.032] [debug]  input  req received,req:250 4283312840 32 Input ,cycle:817315 
+[2021-01-20 21:10:47.033] [debug] aggregator finished run task. x: 15726 y: 19362,cycle: 820004
+[2021-01-20 21:10:47.033] [debug] total elements: 1650 ,total size: 6600
+[2021-01-20 21:10:47.033] [debug] aggregator culculate window cycles. x: 15726 y: 19689, result: 4 ,cycle: 820005
+[2021-01-20 21:10:47.033] [debug] aggregator start to run task x: 15726 y: 19689 ,cycle: 820005
+[2021-01-20 21:10:47.033] [debug] aggregator finished run task. x: 15726 y: 19689,cycle: 820265
+[2021-01-20 21:10:47.033] [debug] aggbuffer move the write buffer to read buffer
+[2021-01-20 21:10:47.033] [debug] systolic array start a new task,cycle:820266
+[2021-01-20 21:10:47.033] [debug] start a new systolic task: window:x 15726 y 6 5242 327 l 0 i_a 4279370672 e_a 5637983008 o_a 4291364584 i_l 65400 e_l 86660 o_l 2043392 n_n:276 fnc:true fnr:false fsr:true, total_cycle:4810, current cycle:820266
+[2021-01-20 21:10:47.033] [debug] end a systolic array, window:x 15726 y 6 5242 327 l 0 i_a 4279370672 e_a 5637983008 o_a 4291364584 i_l 65400 e_l 86660 o_l 2043392 n_n:276 fnc:true fnr:false fsr:true, current_cycle:825075
+[2021-01-20 21:10:47.033] [debug] aggbuffer finished read
+[2021-01-20 21:10:47.033] [debug] /Users/jiangqiushen/git/new_gcn/src/System.cc:159,output buffer send req:251 4291364584 2043392 else ,825076
+[2021-01-20 21:10:47.061] [debug] output buffer finished write to memory: cycle:857004
+finished run the simulator, cycle:857005
+[2021-01-20 21:10:47.061] [info] the result
+total_idle_waiting_input 159595
+total_idle_waiting_edge 39750
+total_idle_waiting_agg_write 4
+do_aggregate 695435
+do_systolic 19240
+total_idle_waiting_agg_read 837764
+total_idle_waiting_out 19236
+total_read_input_latency 513232
+total_read_input_times 244
+total_read_edge_latency 16168
+total_read_edge_times 4
+
+[2021-01-20 21:10:47.061] [info] the_time_stamp
+857004
+
