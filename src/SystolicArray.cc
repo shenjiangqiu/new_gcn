@@ -66,6 +66,7 @@ int SystolicArray::cal_remaining_cycle() {
     for (auto j = 0; j < elements_steps - 1; j++) {
       // fix bug here, the windows should contain the node size
       total_cycles += (total_rows + total_cols + node_size);
+      total_cycles += (total_rows * total_cols / 4) / 32;
     }
 
     if (total_rows + next_node_size - ((elements_steps - 1) * total_cols) +
@@ -82,12 +83,14 @@ int SystolicArray::cal_remaining_cycle() {
     auto remaining_rows = total_rows;
     auto remaining_cols = next_node_size - ((elements_steps - 1) * total_cols);
     total_cycles += remaining_rows + remaining_cols + node_size;
+    total_cycles += (total_rows * total_cols / 4) / 32;
   }
   for (auto j = 0; j < elements_steps - 1; j++) {
     // calculate the last row
     auto remaining_rows = num_nodes - ((steps - 1) * total_rows);
     auto remaining_cols = total_cols;
     total_cycles += remaining_rows + remaining_cols + node_size;
+    total_cycles += (total_rows * total_cols / 4) / 32;
     if (remaining_rows <= 0 or remaining_rows > total_rows) {
       spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
                     "total_rows:{},next_node_size:{},elements_steps*total_cols:"
@@ -101,6 +104,7 @@ int SystolicArray::cal_remaining_cycle() {
   auto remaining_cols = next_node_size - ((elements_steps - 1) * total_cols);
 
   total_cycles += remaining_rows + remaining_cols + node_size;
+  total_cycles += (total_rows * total_cols / 4) / 32;
 
   if (remaining_rows <= 0 or remaining_cols <= 0 or
       remaining_rows > total_rows or remaining_cols > total_cols) {
