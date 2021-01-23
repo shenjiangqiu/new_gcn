@@ -17,6 +17,9 @@ void memory_interface::cycle() {
       if (next_req->t == device_types::input_buffer) {
         global_definitions.total_read_input_traffic +=
             next_req->len > 64 ? 64 : next_req->len;
+      } else if (next_req->t == device_types::edge_buffer) {
+        global_definitions.total_read_edge_traffic +=
+            next_req->len > 64 ? 64 : next_req->len;
       }
       if (int(next_req->len - 64) <= 0) {
         req_queue.pop();

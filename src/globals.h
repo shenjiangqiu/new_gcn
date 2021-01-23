@@ -30,6 +30,7 @@ public:
   unsigned long long total_read_edge_times = 0;
   unsigned long long total_mac_in_systolic_array = 0;
   unsigned long long total_read_input_traffic = 0;
+  unsigned long long total_read_edge_traffic = 0;
   std::vector<unsigned long long> finished_time_stamp;
   std::map<std::string, Model> m_models{
       {"gcn", Model("gcn", {16, 16}, false, false, 0)},
@@ -53,5 +54,7 @@ extern Minisat::BoolOption debug;
 extern Minisat::StringOption model;
 extern Minisat::IntOption ignore_neighbor;
 extern Minisat::IntOption ignore_self;
+extern Minisat::DoubleOption core_freq;
+extern Minisat::DoubleOption dram_freq;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

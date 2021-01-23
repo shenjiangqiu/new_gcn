@@ -26,8 +26,17 @@ Minisat::BoolOption debug("system", "debug", "if enable debug", false);
 
 Minisat::StringOption model("system", "model", "the model definition file",
                             "gcn");
-Minisat::IntOption ignore_neighbor("system","ignore-neighbor","how many feature are ignored by neighbor",0,Minisat::IntRange(0,INT32_MAX));
-Minisat::IntOption ignore_self("system","ignore-self","how many feature are ignored by neighbor",0,Minisat::IntRange(0,INT32_MAX));
-
+Minisat::IntOption ignore_neighbor("system", "ignore-neighbor",
+                                   "how many feature are ignored by neighbor",
+                                   0, Minisat::IntRange(0, INT32_MAX));
+Minisat::IntOption ignore_self("system", "ignore-self",
+                               "how many feature are ignored by neighbor", 0,
+                               Minisat::IntRange(0, INT32_MAX));
+Minisat::DoubleOption core_freq("system", "core-freq",
+                                "the core frequency in GHZ", 1);
+Minisat::DoubleOption dram_freq("system", "dram-freq",
+                                "the dram frequency in GHZ,Note that, It's "
+                                "working frequency not data frequency!!",
+                                1);
 
 } // namespace config

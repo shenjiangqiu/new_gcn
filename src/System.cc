@@ -30,7 +30,11 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
       m_systolic_array(std::make_shared<SystolicArray>(
           systolic_rows, systolic_cols, agg_buffer, output_buffer)),
 
-      m_model(std::move(mModel)) {
+      m_model(std::move(mModel)),
+      cpu_gap((double)1.0 / (config::core_freq * 1000000000)),
+      dram_gap((double)1.0 / (config::dram_freq * 1000000000)) {
+  spdlog::info("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
+               dram_gap, cpu_gap, config::dram_freq, config::core_freq);
   // step1, first need to get the max x_w;
   int total_level = node_size.size();
 
@@ -88,8 +92,8 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   uint64_t total_size = 0;
   auto first_layer_size = (node_size[0] - config::ignore_neighbor) * 4;
   total_size += first_layer_size * m_graph->get_num_nodes() *
-                (m_graph->get_num_nodes()+xw_s[0]-1 / xw_s[0]);
-  fmt::print("{} {} {}\n",first_layer_size,m_graph->get_num_nodes(),xw_s[0]);
+                (m_graph->get_num_nodes() + xw_s[0] - 1 / xw_s[0]);
+  fmt::print("{} {} {}\n", first_layer_size, m_graph->get_num_nodes(), xw_s[0]);
   for (auto i = 1; i < node_size.size() - 1; i++) {
     total_size += node_size[i] * 4 * m_graph->get_num_nodes() *
                   m_graph->get_num_nodes() / xw_s[i];
@@ -125,6 +129,7 @@ void System::run() {
                "total_read_edge_times {}\n"
                "total_mac_in_systolic_array {}\n"
                "total_read_input_traffic {}\n",
+               "total_read_edge_traffic {}\n",
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,
                global_definitions.total_waiting_agg_write,
@@ -136,7 +141,8 @@ void System::run() {
                global_definitions.total_read_edge_latency,
                global_definitions.total_read_edge_times,
                global_definitions.total_mac_in_systolic_array,
-               global_definitions.total_read_input_traffic);
+               global_definitions.total_read_input_traffic,
+               global_definitions.total_read_edge_traffic);
   spdlog::info("the_time_stamp\n{}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), ","));
@@ -149,8 +155,13 @@ void System::cycle() {
 
   m_aggregator->cycle();
   m_systolic_array->cycle();
-  // TODO, the memory working frequency is not same as gcn_sim
-  m_mem->cycle();
+
+  // adjust the frequency
+  current_system_time += cpu_gap;
+  while (current_dram_time < current_system_time) {
+    m_mem->cycle();
+    current_dram_time += dram_gap;
+  }
 
   // handle memory requests
   // connection between buffer and

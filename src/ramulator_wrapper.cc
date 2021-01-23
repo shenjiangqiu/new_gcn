@@ -37,10 +37,18 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
   assert(name_to_func.find(std_name) != name_to_func.end() &&
          "unrecognized standard name");
   mem = name_to_func[std_name](configs, cacheLine);
+  Stats::statlist.output("mem_stats.txt");
   tCK = mem->clk_ns();
 }
-ramulator_wrapper::~ramulator_wrapper() { delete mem; }
-void ramulator_wrapper::finish() { mem->finish(); }
+ramulator_wrapper::~ramulator_wrapper() {
+  finish();
+
+  delete mem;
+}
+void ramulator_wrapper::finish() {
+  Stats::statlist.printall();
+  mem->finish();
+}
 void ramulator_wrapper::tick() { mem->tick(); }
 void ramulator_wrapper::send(uint64_t addr, bool is_write) {
   this->in_queue.push({addr, is_write});
@@ -62,7 +70,7 @@ void ramulator_wrapper::cycle() {
 
   if (!in_queue.empty()) {
     auto &req = in_queue.front();
-    //first addr, second: is_write
+    // first addr, second: is_write
     auto r_req = Request(
         req.first, req.second ? Request::Type::WRITE : Request::Type::READ,
         [this](Request &req) { this->call_back(req); });

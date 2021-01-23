@@ -8,10 +8,10 @@
 #include <memory>
 
 #include "Aggregator.h"
+#include "Model.h"
 #include "SystolicArray.h"
 #include "buffer.h"
 #include "memory_interface.h"
-#include "Model.h"
 class System {
 public:
   System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
@@ -24,7 +24,6 @@ public:
   void run();
 
 private:
-
   std::shared_ptr<Graph> m_graph;
 
   int input_buffer_size;
@@ -46,7 +45,10 @@ private:
   std::shared_ptr<slide_window_set_iterator> current_iter;
   std::shared_ptr<slide_window_set_iterator> prev_iter;
   std::shared_ptr<Model> m_model;
-
+  double current_system_time = 0;
+  double current_dram_time = 0;
+  double cpu_gap = 0;
+  double dram_gap = 0;
 };
 
 #endif // GCN_SIM_SYSTEM_H
