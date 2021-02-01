@@ -3,7 +3,7 @@
 //
 
 #include "globals.h"
-
+#include "utils/Options.h"
 globals global_definitions;
 
 namespace config {
@@ -38,5 +38,9 @@ Minisat::DoubleOption dram_freq("system", "dram-freq",
                                 "the dram frequency in GHZ,Note that, It's "
                                 "working frequency not data frequency!!",
                                 1);
+Minisat::DoubleOption use_dramsim("system", "dram-freq",
+                                  "the dram frequency in GHZ,Note that, It's "
+                                  "working frequency not data frequency!!",
+                                  1);
 
 } // namespace config

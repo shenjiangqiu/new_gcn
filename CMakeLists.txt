@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(gcn_sim VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 17)
 
-
+add_subdirectory(deps/DRAMsim3)
 add_subdirectory(deps/fmt)
 add_subdirectory(deps/ramulator)
 add_subdirectory(deps/spdlog)
@@ -14,9 +14,9 @@ add_compile_options("-Wall")
 file(GLOB lib_srcs src/*.cc)
 list(FILTER lib_srcs EXCLUDE REGEX ".*main.cc")
 
-add_library(gcn_sim_lib ${lib_srcs})
+add_library(gcn_sim_lib ${lib_srcs} src/dramsim_wrapper.cc src/dramsim_wrapper.h)
 target_include_directories(gcn_sim_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles)
+target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles dramsim3)
 
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc )
 
