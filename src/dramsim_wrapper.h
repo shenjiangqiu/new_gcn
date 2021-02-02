@@ -7,7 +7,7 @@
 #include "dram_wrapper.h"
 #include "dramsim3.h"
 #include "queue"
-#include <stdint-gcc.h>
+
 class dramsim_wrapper : public dram_wrapper {
 public:
   dramsim_wrapper(const std::string &config_file,
