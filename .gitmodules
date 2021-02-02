@@ -13,3 +13,6 @@
 [submodule "deps/DRAMsim3"]
 	path = deps/DRAMsim3
 	url = https://github.com/shenjiangqiu/DRAMsim3.git
+[submodule "deps/DRAMsim3_thermal"]
+	path = deps/DRAMsim3_thermal
+	url = https://github.com/IronySuzumiya/DRAMsim3.git
