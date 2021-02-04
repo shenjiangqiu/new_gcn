@@ -2,12 +2,14 @@
 #define MEMORY_INTERFACE_H
 
 #include "dram_wrapper.h"
+#include "dramsim_wrapper.h"
 #include <assert.h>
 #include <map>
 #include <memory>
 #include <queue>
 #include <ramulator_wrapper.h>
 #include <types.h>
+#include "globals.h"
 class memory_interface {
 private:
   unsigned waiting_size;
@@ -19,7 +21,7 @@ private:
 
   std::map<unsigned, unsigned> id_to_numreqs_map;
   std::map<unsigned long long, std::shared_ptr<Req>> addr_to_req_map;
-  std::shared_ptr<dram_wrapper> m_ramulator;
+  std::shared_ptr<dram_wrapper> m_mem;
 
 public:
   bool empty() {
@@ -43,7 +45,10 @@ public:
   memory_interface(const std::string &dram_config_name,
                    unsigned int waitingSize)
       : waiting_size(waitingSize),
-        m_ramulator(new ramulator_wrapper(dram_config_name, 64)) {}
+        m_mem(config::use_dramsim
+                  ? (dram_wrapper *)new dramsim_wrapper(dram_config_name)
+                  : (dram_wrapper *)new ramulator_wrapper(dram_config_name,
+                                                          64)) {}
   virtual ~memory_interface() = default;
   void cycle();
 };

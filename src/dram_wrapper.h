@@ -7,14 +7,14 @@
 #include "types.h"
 class dram_wrapper {
 public:
-  virtual void send(unsigned long long addr, bool is_write) = 0;
+  virtual void send(uint64_t addr, bool is_write) = 0;
   [[nodiscard]] virtual bool available() const = 0;
   virtual void cycle() = 0;
 
   [[nodiscard]] virtual bool return_available() const = 0;
 
-  virtual unsigned long long pop() = 0;
-  [[nodiscard]] virtual unsigned long long get() const = 0;
+  virtual uint64_t pop() = 0;
+  [[nodiscard]] virtual uint64_t get() const = 0;
   virtual ~dram_wrapper() = default;
 };
 

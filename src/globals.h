@@ -56,5 +56,6 @@ extern Minisat::IntOption ignore_neighbor;
 extern Minisat::IntOption ignore_self;
 extern Minisat::DoubleOption core_freq;
 extern Minisat::DoubleOption dram_freq;
+extern Minisat::BoolOption use_dramsim;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H
