@@ -128,7 +128,7 @@ void System::run() {
                "total_read_edge_latency {}\n"
                "total_read_edge_times {}\n"
                "total_mac_in_systolic_array {}\n"
-               "total_read_input_traffic {}\n",
+               "total_read_input_traffic {}\n"
                "total_read_edge_traffic {}\n",
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,

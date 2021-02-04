@@ -2,7 +2,7 @@
 #include <memory_interface.h>
 void memory_interface::cycle() {
 
-  m_ramulator->cycle();
+  m_mem->cycle();
   // send policy changed here
   if (!req_queue.empty()) {
     auto next_req = req_queue.front();
@@ -44,14 +44,14 @@ void memory_interface::cycle() {
   }
 
   // to dram
-  if (!out_send_queue.empty() and m_ramulator->available()) {
+  if (!out_send_queue.empty() and m_mem->available()) {
     auto req = out_send_queue.front();
     out_send_queue.pop();
     // addr, is_write
-    m_ramulator->send(req.first, req.second);
+    m_mem->send(req.first, req.second);
   }
-  if (m_ramulator->return_available()) {
-    auto req = m_ramulator->pop();
+  if (m_mem->return_available()) {
+    auto req = m_mem->pop();
     response_queue.push(req);
   }
 }

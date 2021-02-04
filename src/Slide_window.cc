@@ -198,15 +198,15 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         row_i = row_end;
         the_first_row = false;
       }
-      std::cout << "col input len: " << current_col_input_len << std::endl;
+      //std::cout << "col input len: " << current_col_input_len << std::endl;
       current_layer_input_len += current_col_input_len;
       col_i = col_end;
     }
-    std::cout << "\n\nlayer input len: " << current_layer_input_len
-              << std::endl;
+    //std::cout << "\n\nlayer input len: " << current_layer_input_len
+    //          << std::endl;
     total_len += current_layer_input_len;
   }
-  std::cout << "\n\ntotal_len: " << total_len << std::endl;
+  //std::cout << "\n\ntotal_len: " << total_len << std::endl;
   m_sliding_window_multi_level.back().back().back().setTheFinalRow(true);
   m_sliding_window_vec.back().setTheFinalRow(true);
 }

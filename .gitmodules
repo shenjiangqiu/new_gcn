@@ -10,3 +10,6 @@
 [submodule "deps/minisat_utils"]
 	path = deps/minisat_utils
 	url = https://github.com/shenjiangqiu/minisat_utils.git
+[submodule "deps/DRAMsim3"]
+	path = deps/DRAMsim3
+	url = https://github.com/shenjiangqiu/DRAMsim3.git
