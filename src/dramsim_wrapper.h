@@ -20,6 +20,7 @@ public:
   uint64_t get() const override;
   ~dramsim_wrapper() override;
 
+
 private:
   dramsim3::MemorySystem *m_memory_system;
   void receive_read(uint64_t addr);

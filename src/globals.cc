@@ -38,8 +38,8 @@ Minisat::DoubleOption dram_freq("system", "dram-freq",
                                 "the dram frequency in GHZ,Note that, It's "
                                 "working frequency not data frequency!!",
                                 1);
-Minisat::BoolOption use_dramsim("system", "use-dramsim",
-                                  "if use dramsim or not",
-                                  false);
+Minisat::StringOption mem_sim("system", "mem-sim",
+                                  "memory simulator",
+                                  "ramulator");
 
 } // namespace config

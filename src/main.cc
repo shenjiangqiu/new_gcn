@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
                     m_model->getMLevels().end());
   spdlog::info("print out model levels {}", fmt::join(node_sizes, ","));
 
+  spdlog::info("memory simulator: {}", config::mem_sim);
 
   System m_system(config::inputSize, config::edgeSize, config::aggSize,
                   config::outputSize, config::aggCores, config::systolic_rows,
