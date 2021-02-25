@@ -1,0 +1,8 @@
+Todo
+
+Task 1 Feb. 22 2021   Generate correct Reddit graph.
+
+Task 2 Feb. 25 2021   Fix HBM reported bandwidth issue.
+         Guess this is caused by DRAMSim2 frequence or
+         tCK setting.
+         
