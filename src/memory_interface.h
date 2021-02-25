@@ -3,6 +3,7 @@
 
 #include "dram_wrapper.h"
 #include "dramsim_wrapper.h"
+#include "dramsim2_wrapper.h"
 #include <assert.h>
 #include <map>
 #include <memory>
@@ -22,6 +23,11 @@ private:
   std::map<unsigned, unsigned> id_to_numreqs_map;
   std::map<unsigned long long, std::shared_ptr<Req>> addr_to_req_map;
   std::shared_ptr<dram_wrapper> m_mem;
+  double mem_tCK,cpu_tCK; 
+  unsigned long  cycles;
+  uint64_t dramPsPerClk, cpuPsPerClk;
+  uint64_t dramPs, cpuPs;
+
 
 public:
   bool empty() {
@@ -42,15 +48,12 @@ public:
     return ret;
   }
 
-  memory_interface(const std::string &dram_config_name,
-                   unsigned int waitingSize)
-      : waiting_size(waitingSize),
-        m_mem(config::use_dramsim
-                  ? (dram_wrapper *)new dramsim_wrapper(dram_config_name)
-                  : (dram_wrapper *)new ramulator_wrapper(dram_config_name,
-                                                          64)) {}
+  memory_interface(const std::string &dram_config_name, 
+                  const std::string &dev_config_name, unsigned int waitingSize);
+
   virtual ~memory_interface() = default;
   void cycle();
+  void set_CLKs( double mem_CLK, double cpu_CLK);
 };
 
 #endif /* MEMORY_INTERFACE_H */

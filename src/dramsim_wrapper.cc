@@ -46,7 +46,10 @@ dramsim_wrapper::dramsim_wrapper(const std::string &config_file,
       [this](uint64_t addr) { this->receive_write(addr); });
   spdlog::info("init dramsim");
 }
-dramsim_wrapper::~dramsim_wrapper() { delete m_memory_system; }
+dramsim_wrapper::~dramsim_wrapper() { 
+   m_memory_system->PrintStats();//Yue
+   delete m_memory_system; }
+
 void dramsim_wrapper::receive_read(uint64_t addr) { read_ret.push(addr); }
 void dramsim_wrapper::receive_write(uint64_t addr) {
   // do nothing

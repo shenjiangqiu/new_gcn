@@ -49,7 +49,7 @@ public:
   [[nodiscard]] bool return_available() const override { return !out_queue.empty(); }
 
   void cycle() override;
-
+  
 private:
   double tCK;
   unsigned long long outgoing_reqs = 0;

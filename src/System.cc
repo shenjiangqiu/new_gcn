@@ -16,23 +16,27 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int systolic_cols, std::shared_ptr<Graph> graph,
                std::vector<int> node_size, const std::string &dram_config_name,
                std::shared_ptr<Model> mModel)
-    : m_graph(std::move(graph)), input_buffer_size(inputBufferSize),
-      edge_buffer_size(edgeBufferSize), agg_buffer_size(aggBufferSize),
-      output_buffer_size(outputBufferSize),
+    {
 
-      agg_total_cores(aggTotalCores),
+      m_graph = std::move(graph);
+      input_buffer_size = inputBufferSize;
+      edge_buffer_size = edgeBufferSize;
+      agg_buffer_size = aggBufferSize;
+      output_buffer_size = outputBufferSize;
+      agg_total_cores = aggTotalCores;
+      output_buffer = std::make_shared<WriteBuffer>("output_buffer");
+      agg_buffer = std::make_shared<Aggregator_buffer>("agg_buffer");
 
-      output_buffer(std::make_shared<WriteBuffer>("output_buffer")),
+      m_mem = std::make_shared<memory_interface>(dram_config_name,"HBMDevice4GbLegacy.ini",64);
+      m_systolic_array = std::make_shared<SystolicArray>(
+          systolic_rows, systolic_cols, agg_buffer, output_buffer);
 
-      agg_buffer(std::make_shared<Aggregator_buffer>("agg_buffer")),
+      m_model = std::move(mModel);
+      cpu_gap = (double)1.0 / (config::core_freq * 1000000000);
+      dram_gap = (double)1.0 / (config::dram_freq * 1000000000);
+  
+  
 
-      m_mem(std::make_shared<memory_interface>(dram_config_name, 64)),
-      m_systolic_array(std::make_shared<SystolicArray>(
-          systolic_rows, systolic_cols, agg_buffer, output_buffer)),
-
-      m_model(std::move(mModel)),
-      cpu_gap((double)1.0 / (config::core_freq * 1000000000)),
-      dram_gap((double)1.0 / (config::dram_freq * 1000000000)) {
   spdlog::info("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
                dram_gap, cpu_gap, config::dram_freq, config::core_freq);
   // step1, first need to get the max x_w;

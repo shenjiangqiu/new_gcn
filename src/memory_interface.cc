@@ -1,8 +1,11 @@
 #include "globals.h"
 #include <memory_interface.h>
 void memory_interface::cycle() {
-
+  
+  
   m_mem->cycle();
+   
+
   // send policy changed here
   if (!req_queue.empty()) {
     auto next_req = req_queue.front();
@@ -63,3 +66,22 @@ void memory_interface::send(std::shared_ptr<Req> req) {
   if (req->req_type == mem_request::read)
     id_to_numreqs_map.insert({req->id, num_reqs});
 }
+
+memory_interface::memory_interface(const std::string &dram_config_name, 
+                  const std::string &dev_config_name, unsigned int waitingSize)
+    {
+    
+    waiting_size = waitingSize;
+    std::string mem_simulator = std::string(config::mem_sim);
+
+    std::cout<<"mem_simulator "<<mem_simulator<<"\n";
+    
+    if( mem_simulator.compare("ramulator") == 0)
+       m_mem.reset(new ramulator_wrapper(dram_config_name,64));
+    else if( mem_simulator.compare("dramsim3") == 0)
+       m_mem.reset(new dramsim_wrapper(dram_config_name));
+    else if( mem_simulator.compare("dramsim2") == 0 )
+       m_mem = std::make_shared<dramsim2_wrapper>(dram_config_name,dev_config_name); 
+    else
+        m_mem.reset(new  ramulator_wrapper(dram_config_name,64));      
+ }
