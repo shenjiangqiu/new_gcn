@@ -93,7 +93,9 @@ public:
   void updateBankStates();
   void update();
   void printStats(bool finalStats = false);
+  void printStatsToFile(bool finalStats, std::ofstream &  ofs);
   void resetStats();
+  void setStatsFile( std::string filename){statsOutputFileName = filename;};
 
   // retrieve the target stats entry 'metric' in 'stat'
   bool getStats( double *stat, DSIM_STAT metric );
@@ -148,6 +150,7 @@ private:
   unsigned byteOffsetWidth;
 
   unsigned refreshRank;
+  std::string statsOutputFileName;//Yue
 };
 }
 

@@ -51,6 +51,7 @@ class MemorySystem : public SimulatorObject
     void update();
     bool addTransaction(bool isWrite, uint64_t addr);
     void printStats(bool finalStats);
+    void printStatsToFile(bool finalStats, std::ofstream & of);
     bool WillAcceptTransaction();
     void RegisterCallbacks(Callback_t *readDone, Callback_t *writeDone);
 

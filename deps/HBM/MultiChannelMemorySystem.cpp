@@ -159,6 +159,19 @@ void MultiChannelMemorySystem::printStats(bool finalStats)
   }
 }
 
+void MultiChannelMemorySystem::printStatsToFile(bool finalStats, std::string fileName) 
+{
+  
+  std::ofstream ofs (fileName, std::ofstream::out);
+
+  for (unsigned i = 0; i < NUM_CHANS; ++i) {
+    //PRINT("==== Channel [" << i << "] ====");
+    channels[i]->printStatsToFile(finalStats, ofs); 
+    //PRINT("//// Channel [" << i << "] ////");
+  }
+  ofs.close();
+}
+
 void MultiChannelMemorySystem::RegisterCallbacks(TransactionCompleteCB *readDone, 
     TransactionCompleteCB *writeDone,
     void (*reportPower)(double bgpower,

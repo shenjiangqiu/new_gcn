@@ -130,6 +130,11 @@ void MemorySystem::printStats(bool finalStats)
   memoryController->printStats(finalStats);
 }
 
+void MemorySystem::printStatsToFile(bool finalStats, std::ofstream & of)
+{
+  memoryController->printStatsToFile(finalStats,of);//Yue
+}
+
 //update the memory systems state
 void MemorySystem::update()
 {

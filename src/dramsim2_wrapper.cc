@@ -1,7 +1,7 @@
 //
 // Created by Jianhui on 2/24/2021.
 //
-
+#include "globals.h"
 #include "dramsim2_wrapper.h"
 #include "spdlog/spdlog.h"
 
@@ -57,13 +57,18 @@ dramsim2_wrapper::dramsim2_wrapper(const std::string& config_file,
     DRAMSim::TransactionCompleteCB *write_cb = new DRAMSim::Callback<dramsim2_wrapper, void, unsigned, uint64_t, uint64_t>(this, &dramsim2_wrapper::receive_write);
     //m_memory_system->RegisterCallbacks(receive_read, receive_write, NULL);
     m_memory_system->RegisterCallbacks(read_cb, write_cb, NULL);
-
-
+    
      spdlog::info("init dramsim");
 }
 
 dramsim2_wrapper::~dramsim2_wrapper() { 
-   m_memory_system->printStats(true);//Yue
+   //m_memory_system->printStats(true);//Yue
+   std::string graph = std::string(config::graph_name);
+   std::string model = std::string(config::model);
+   std::string fileName = graph+"-"+model+"-"+"drm2.txt";
+
+   m_memory_system->printStatsToFile(true, fileName);
+
    delete m_memory_system; 
 }
 

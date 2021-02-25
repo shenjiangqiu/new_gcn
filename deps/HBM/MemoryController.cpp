@@ -45,7 +45,8 @@ MemoryController::MemoryController(unsigned sid, unsigned cid, MemorySystem *par
   commandQueue(bankStates),
   poppedBusPacket(NULL),
   totalTransactions(0),
-  refreshRank(0)
+  refreshRank(0),
+  statsOutputFileName("dramsim2.txt")
 {
   parentMemorySystem = parent;
   
@@ -737,11 +738,69 @@ bool MemoryController::getStats( uint64_t *stat, DSIM_STAT metric ){
   }
 }
 
+
+
 //prints statistics at the end of an epoch or  simulation
 void MemoryController::printStats(bool finalStats)
 {
   if (!finalStats)
     return;
+  
+  uint64_t cyclesElapsed = (currentClockCycle % EPOCH_LENGTH == 0) ? EPOCH_LENGTH : currentClockCycle % EPOCH_LENGTH;
+  unsigned bytesPerTransaction = JEDEC_DATA_BUS_BITS*BL/8;
+  if (operationMode == PseudoChannelMode)
+    bytesPerTransaction /= 2;
+
+  uint64_t totalBytesTransferred = totalTransactions * bytesPerTransaction;
+  double secondsThisEpoch = (double)cyclesElapsed * tCK * 1E-9;
+
+  // per bank variables
+  //vector<double> averageLatency = vector<double>(NUM_RANKS*NUM_BANKS,0.0);
+  vector<double> bandwidth = vector<double>(NUM_RANKS*NUM_BANKS,0.0);
+
+  double totalBandwidth=0.0;
+  for (unsigned i = 0; i < NUM_RANKS; ++i) {
+    for (unsigned j = 0; j < NUM_BANKS; ++j) {
+      bandwidth[SEQUENTIAL(i,j)] = (((double)(totalReadsPerBank[SEQUENTIAL(i,j)] + totalWritesPerBank[SEQUENTIAL(i,j)]) * (double)bytesPerTransaction)/(1024.0*1024.0*1024.0)) / secondsThisEpoch;
+      //averageLatency[SEQUENTIAL(i,j)] = ((float)totalEpochLatency[SEQUENTIAL(i,j)] / (float)(totalReadsPerBank[SEQUENTIAL(i,j)])) * tCK;
+      totalBandwidth += bandwidth[SEQUENTIAL(i,j)];
+      totalReadsPerRank[i] += totalReadsPerBank[SEQUENTIAL(i,j)];
+      totalWritesPerRank[i] += totalWritesPerBank[SEQUENTIAL(i,j)];
+    }
+  }
+
+  cout.precision(3);
+  cout.setf(ios::fixed, ios::floatfield);
+
+  PRINT("Channel " << parentMemorySystem->channelID << " statistics");
+  PRINTN(" Total Return Transactions: " << totalTransactions);
+  PRINT( " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s");
+  
+
+  //double totalAggregateBandwidth = 0.0;  
+  for (unsigned r = 0; r < NUM_RANKS; ++r) {
+    PRINTN(" Rank " << r << " - ");
+    PRINTN(" Reads: " << totalReadsPerRank[r]);
+    PRINTN(" (" << totalReadsPerRank[r] * bytesPerTransaction << " bytes)");
+    PRINTN(" Writes: " << totalWritesPerRank[r]);
+    PRINT(" (" << totalWritesPerRank[r] * bytesPerTransaction << " bytes)");
+
+    
+    //for (unsigned j = 0; j < NUM_BANKS; ++j) {
+      //PRINT( "        -Bandwidth / Latency  (Bank " <<j <<"): " <<bandwidth[SEQUENTIAL(r,j)] << " GB/s\t\t" <<averageLatency[SEQUENTIAL(r,j)] << " ns");
+    //}
+  }
+
+  resetStats();
+}
+
+//prints statistics at the end of an epoch or  simulation
+void MemoryController::printStatsToFile(bool finalStats, std::ofstream &  ofs){
+
+  if (!finalStats)
+    return;
+  
+  
 
   uint64_t cyclesElapsed = (currentClockCycle % EPOCH_LENGTH == 0) ? EPOCH_LENGTH : currentClockCycle % EPOCH_LENGTH;
   unsigned bytesPerTransaction = JEDEC_DATA_BUS_BITS*BL/8;
@@ -772,6 +831,12 @@ void MemoryController::printStats(bool finalStats)
   PRINT("Channel " << parentMemorySystem->channelID << " statistics");
   PRINTN(" Total Return Transactions: " << totalTransactions);
   PRINT( " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s");
+  
+  //Yue
+  ofs<<"Channel " << parentMemorySystem->channelID << " statistics";
+  ofs<<" Total Return Transactions: " << totalTransactions;
+  ofs << " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s\n";
+  
 
   //double totalAggregateBandwidth = 0.0;  
   for (unsigned r = 0; r < NUM_RANKS; ++r) {
@@ -780,12 +845,21 @@ void MemoryController::printStats(bool finalStats)
     PRINTN(" (" << totalReadsPerRank[r] * bytesPerTransaction << " bytes)");
     PRINTN(" Writes: " << totalWritesPerRank[r]);
     PRINT(" (" << totalWritesPerRank[r] * bytesPerTransaction << " bytes)");
+
+    ofs<<" Rank " << r << " - ";
+    ofs<<" Reads: " << totalReadsPerRank[r];
+    ofs<<" (" << totalReadsPerRank[r] * bytesPerTransaction << " bytes)";
+    ofs<<" Writes: " << totalWritesPerRank[r];
+    ofs<<" (" << totalWritesPerRank[r] * bytesPerTransaction << " bytes)\n";
+
     //for (unsigned j = 0; j < NUM_BANKS; ++j) {
       //PRINT( "        -Bandwidth / Latency  (Bank " <<j <<"): " <<bandwidth[SEQUENTIAL(r,j)] << " GB/s\t\t" <<averageLatency[SEQUENTIAL(r,j)] << " ns");
     //}
   }
 
+  
   resetStats();
+       
 }
 
 MemoryController::~MemoryController()

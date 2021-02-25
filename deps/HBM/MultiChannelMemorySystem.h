@@ -46,6 +46,7 @@ class MultiChannelMemorySystem : public SimulatorObject
     bool willAcceptTransaction(uint64_t addr); 
     void update();
     void printStats(bool finalStats=false);
+    void printStatsToFile(bool finalStats, std::string fileName);
     void RegisterCallbacks(TransactionCompleteCB *readDone,
                            TransactionCompleteCB *writeDone,
                            void (*reportPower)(double bgpower,
