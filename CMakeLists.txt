@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(gcn_sim VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 17)
-option(THERMAL "enable thermal in dramsim" ON)
+#option(THERMAL "enable thermal in dramsim" ON)
 
 add_subdirectory(deps/fmt)
 add_subdirectory(deps/ramulator)
@@ -10,7 +10,7 @@ add_subdirectory(deps/spdlog)
 add_subdirectory(deps/minisat_utils)
 add_subdirectory(data)
 
-message(${THERMAL})
+#message(${THERMAL})
 add_subdirectory(deps/DRAMsim3)
 
 add_compile_options("-Wall")
