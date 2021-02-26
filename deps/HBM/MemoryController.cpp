@@ -74,7 +74,8 @@ MemoryController::MemoryController(unsigned sid, unsigned cid, MemorySystem *par
   
   //set here to avoid compile errors
   currentClockCycle = 0;
-  
+  active_cycles = 0;
+
   //reserve memory for vectors
   transactionQueue.reserve(TRANS_QUEUE_DEPTH);
 
@@ -158,7 +159,11 @@ void MemoryController::updateBankStates()
 
 void MemoryController::update()
 {
+  
   updateBankStates();
+  
+  if( !transactionQueue.empty())
+        active_cycles++;
 
   // check for outgoing row command packets and handle countdowns
   if (outgoingRowCmdPacket != NULL) {
@@ -802,7 +807,9 @@ void MemoryController::printStatsToFile(bool finalStats, std::ofstream &  ofs){
   
   
 
-  uint64_t cyclesElapsed = (currentClockCycle % EPOCH_LENGTH == 0) ? EPOCH_LENGTH : currentClockCycle % EPOCH_LENGTH;
+  //uint64_t cyclesElapsed = (currentClockCycle % EPOCH_LENGTH == 0) ? EPOCH_LENGTH : currentClockCycle % EPOCH_LENGTH;
+  uint64_t cyclesElapsed = active_cycles;//Yue
+  
   unsigned bytesPerTransaction = JEDEC_DATA_BUS_BITS*BL/8;
   if (operationMode == PseudoChannelMode)
     bytesPerTransaction /= 2;
@@ -827,13 +834,15 @@ void MemoryController::printStatsToFile(bool finalStats, std::ofstream &  ofs){
 
   cout.precision(3);
   cout.setf(ios::fixed, ios::floatfield);
-
-  PRINT("Channel " << parentMemorySystem->channelID << " statistics");
+  
+  PRINT(" tCK(ns) " <<tCK<<" #cycles " <<currentClockCycle <<" cycle "<<cyclesElapsed<<" seconds: "<<secondsThisEpoch);
+  PRINT(" Channel " << parentMemorySystem->channelID << " statistics");
   PRINTN(" Total Return Transactions: " << totalTransactions);
   PRINT( " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s");
   
   //Yue
-  ofs<<"Channel " << parentMemorySystem->channelID << " statistics";
+  ofs<<" tCK(ns) " <<tCK<<" #cycles " <<currentClockCycle <<" cycle " <<cyclesElapsed<<" seconds: "<<secondsThisEpoch<<"\n";
+  ofs<<cyclesElapsed<<"  "<<secondsThisEpoch<<" Channel " << parentMemorySystem->channelID << " statistics";
   ofs<<" Total Return Transactions: " << totalTransactions;
   ofs << " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s\n";
   
@@ -858,7 +867,7 @@ void MemoryController::printStatsToFile(bool finalStats, std::ofstream &  ofs){
   }
 
   
-  resetStats();
+  //resetStats();
        
 }
 
