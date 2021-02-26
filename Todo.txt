@@ -5,4 +5,9 @@ Task 1 Feb. 22 2021   Generate correct Reddit graph.
 Task 2 Feb. 25 2021   Fix HBM reported bandwidth issue.
          Guess this is caused by DRAMSim2 frequence or
          tCK setting.
+
+         It was DONE. Feb. 25.
+         The extra large BW is a bug of DRAMSim2. The introduced
+         active_cycles in memory controller can produce reasonable BW.
+
          
