@@ -53,6 +53,7 @@ int Slide_window::getOutputLen() const { return output_len; }
 int Slide_window::getNumNodesInWindow() const { return num_nodes_in_window; }
 
 int Slide_window::getCurrentNodeSize() const { return current_node_size; }
+
 bool Slide_window::operator==(const Slide_window &rhs) const {
   return x == rhs.x && y == rhs.y && xw == rhs.xw && yw == rhs.yw &&
          level == rhs.level && input_addr == rhs.input_addr &&
@@ -62,15 +63,21 @@ bool Slide_window::operator==(const Slide_window &rhs) const {
          num_nodes_in_window == rhs.num_nodes_in_window &&
          current_node_size == rhs.current_node_size;
 }
+
 bool Slide_window::operator!=(const Slide_window &rhs) const {
   return !(rhs == *this);
 }
+
 bool Slide_window::isTheFinalCol() const { return the_final_col; }
+
 bool Slide_window::isTheFinalRow() const { return the_final_row; }
+
 bool Slide_window::isTheFirstRow() const { return the_first_row; }
+
 void Slide_window::setTheFinalRow(bool theFinalRow) {
   the_final_row = theFinalRow;
 }
+
 bool Slide_window::isTheFinalColOfTheLayer() const {
   return the_final_col_of_the_layer;
 }
@@ -97,14 +104,17 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   // each layer
   uint64_t total_len = 0;
   for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
+    
     if (level_i != 0) {
       m_sliding_window_vec.back().setTheFinalRow(true);
       m_sliding_window_multi_level[level_i - 1].back().back().setTheFinalRow(
           true);
     }
+
     m_sliding_window_multi_level.emplace_back();
     auto col_i = 0;
     uint current_layer_input_len = 0;
+    
     while (col_i < m_graph->get_num_nodes()) {
       if (!m_sliding_window_multi_level[level_i].empty()) {
 

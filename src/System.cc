@@ -16,23 +16,27 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int systolic_cols, std::shared_ptr<Graph> graph,
                std::vector<int> node_size, const std::string &dram_config_name,
                std::shared_ptr<Model> mModel)
-    : m_graph(std::move(graph)), input_buffer_size(inputBufferSize),
-      edge_buffer_size(edgeBufferSize), agg_buffer_size(aggBufferSize),
-      output_buffer_size(outputBufferSize),
+    {
 
-      agg_total_cores(aggTotalCores),
+      m_graph = std::move(graph);
+      input_buffer_size = inputBufferSize;
+      edge_buffer_size = edgeBufferSize;
+      agg_buffer_size = aggBufferSize;
+      output_buffer_size = outputBufferSize;
+      agg_total_cores = aggTotalCores;
+      output_buffer = std::make_shared<WriteBuffer>("output_buffer");
+      agg_buffer = std::make_shared<Aggregator_buffer>("agg_buffer");
 
-      output_buffer(std::make_shared<WriteBuffer>("output_buffer")),
+      m_mem = std::make_shared<memory_interface>(dram_config_name,"HBMDevice4GbLegacy.ini",64);
+      m_systolic_array = std::make_shared<SystolicArray>(
+          systolic_rows, systolic_cols, agg_buffer, output_buffer);
 
-      agg_buffer(std::make_shared<Aggregator_buffer>("agg_buffer")),
+      m_model = std::move(mModel);
+      cpu_gap = (double)1.0 / (config::core_freq * 1000000000);
+      dram_gap = (double)1.0 / (config::dram_freq * 1000000000);
+  
+  
 
-      m_mem(std::make_shared<memory_interface>(dram_config_name, 64)),
-      m_systolic_array(std::make_shared<SystolicArray>(
-          systolic_rows, systolic_cols, agg_buffer, output_buffer)),
-
-      m_model(std::move(mModel)),
-      cpu_gap((double)1.0 / (config::core_freq * 1000000000)),
-      dram_gap((double)1.0 / (config::dram_freq * 1000000000)) {
   spdlog::info("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
                dram_gap, cpu_gap, config::dram_freq, config::core_freq);
   // step1, first need to get the max x_w;
@@ -116,20 +120,29 @@ void System::run() {
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
             << std::endl;
   spdlog::info("the result\n"
-               "total_idle_waiting_input {}\n"
-               "total_idle_waiting_edge {}\n"
+               "total_Aggregator_idle_waiting_input {}\n"
+               "total_Aggregator_idle_waiting_edge {}\n"
                "total_idle_waiting_agg_write {}\n"
                "do_aggregate {}\n"
                "do_systolic {}\n"
-               "total_idle_waiting_agg_read {}\n"
+               "total_systolicArray_idle_waiting_agg_read {}\n"
                "total_idle_waiting_out {}\n"
-               "total_read_input_latency {}\n"
-               "total_read_input_times {}\n"
-               "total_read_edge_latency {}\n"
-               "total_read_edge_times {}\n"
+               "ReaderBuffer_total_read_input_latency {} "
+               "total_read_input_len {}  "
+               "total_read_input_times {}  "
+               "avg_read_latency {} "
+               "avg_read_len {}\n"
+               "ReaderBuffer_total_read_edge_latency {}  "
+               "ReaderBuffer_total_read_edge_len {}  "
+               "total_read_edge_times {}  "
+               "avg_read_edge_latency {}  "
+               "avg_read_edge_len {}\n"
                "total_mac_in_systolic_array {}\n"
                "total_read_input_traffic {}\n"
-               "total_read_edge_traffic {}\n",
+               "total_read_edge_traffic {}\n"
+               "total_inputBuffer_idle_cycles {}\n"
+               "total_edgeBuffer_idle_cycles {}\n"
+               "total_cycles {}\n",
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,
                global_definitions.total_waiting_agg_write,
@@ -137,17 +150,30 @@ void System::run() {
                global_definitions.total_waiting_agg_read,
                global_definitions.total_waiting_out,
                global_definitions.total_read_input_latency,
+               global_definitions.total_read_input_len,
                global_definitions.total_read_input_times,
+               global_definitions.total_read_input_latency/global_definitions.total_read_input_times,
+               global_definitions.total_read_input_len/global_definitions.total_read_input_times,
                global_definitions.total_read_edge_latency,
+               global_definitions.total_read_edge_len,
                global_definitions.total_read_edge_times,
+               global_definitions.total_read_edge_latency/global_definitions.total_read_edge_times,
+               global_definitions.total_read_edge_len/global_definitions.total_read_edge_times,
                global_definitions.total_mac_in_systolic_array,
                global_definitions.total_read_input_traffic,
-               global_definitions.total_read_edge_traffic);
+               global_definitions.total_read_edge_traffic,
+               global_definitions.inputBuffer_idle_cycles,
+               global_definitions.edgeBuffer_idle_cycles,
+               global_definitions.cycle
+               );
+
   spdlog::info("the_time_stamp\n{}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), ","));
 }
+
 void System::cycle() {
+  
   input_buffer->cycle();
   edge_buffer->cycle();
   agg_buffer->cycle();

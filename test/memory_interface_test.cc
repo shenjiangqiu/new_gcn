@@ -7,7 +7,7 @@
 #include <fmt/format.h>
 
 TEST_CASE("mem_interface") {
-    memory_interface m_interface("DDR4-config.cfg", 128);
+    memory_interface m_interface("DDR4-config.cfg", "dev-fie.cfg", 128);
     uint64_t cycle = 0;
     for (auto i = 0; i < 100; i++) {
         auto req = std::make_shared<Req>();

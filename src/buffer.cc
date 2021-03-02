@@ -130,6 +130,7 @@ void r(bool &origin) { origin = !origin; }
 bool ReadBuffer::isCurrentReady() const { return current_ready; }
 bool ReadBuffer::isNextEmpty() const { return next_empty; }
 bool ReadBuffer::isNextReady() const { return next_ready; }
+
 EdgeBuffer::EdgeBuffer(const string &name,
                        const shared_ptr<Slide_window_set> &m_set)
     : ReadBuffer(name, m_set) {
@@ -143,24 +144,34 @@ EdgeBuffer::EdgeBuffer(const string &name,
   next_ready = false;
   m_next_iter = m_current_iter.get_next_col();
 }
-void EdgeBuffer::cycle() {
-  if (current_empty and !next_empty) {
-    // move next to current
-    m_current_iter = m_next_iter;
-    current_empty = next_empty;
-    current_ready = next_ready;
-    current_sent = next_sent;
 
-    if (m_next_iter.have_next_col()) {
-      m_next_iter = m_next_iter.get_next_col();
-      next_empty = false;
-      next_sent = false;
-      next_ready = false;
-    } else {
-      next_empty = true;
+void EdgeBuffer::cycle() {
+
+  if (current_empty){
+
+    if( !next_empty) {
+    
+      // move next to current
+      m_current_iter = m_next_iter;
+      current_empty = next_empty;
+      current_ready = next_ready;
+      current_sent = next_sent;
+
+      if (m_next_iter.have_next_col()) {
+        m_next_iter = m_next_iter.get_next_col();
+        next_empty = false;
+        next_sent = false;
+        next_ready = false;
+      } else {
+        next_empty = true;
+      }
+    } else{
+      global_definitions.edgeBuffer_idle_cycles++;
     }
   }
+
 }
+
 shared_ptr<Req> EdgeBuffer::pop_current() {
   assert(!current_empty and !current_sent);
   current_sent = true;
@@ -173,6 +184,7 @@ shared_ptr<Req> EdgeBuffer::pop_current() {
   start_cycle_map[req->id] = global_definitions.cycle;
   return req;
 }
+
 shared_ptr<Req> EdgeBuffer::pop_next() {
   assert(!next_empty and !next_sent);
   next_sent = true;
@@ -199,26 +211,39 @@ InputBuffer::InputBuffer(const string &name,
   next_ready = false;
   m_next_iter = std::next(m_current_iter);
 }
-void InputBuffer::cycle() {
-  if (current_empty and !next_empty) {
-    // move next to current
-    m_current_iter = m_next_iter;
-    current_empty = next_empty;
-    current_ready = next_ready;
-    current_sent = next_sent;
-    current_req = next_req;
 
-    if (m_next_iter.have_next_row()) {
-      m_next_iter++;
-      next_empty = false;
-      next_sent = false;
-      next_ready = false;
-    } else {
-      next_empty = true;
+
+void InputBuffer::cycle() {
+
+  if (current_empty ){
+    
+    if( !next_empty) {
+      // move next to current
+      m_current_iter = m_next_iter;
+      current_empty = next_empty;
+      current_ready = next_ready;
+      current_sent = next_sent;
+      current_req = next_req;
+
+      if (m_next_iter.have_next_row()) {
+        m_next_iter++;
+        next_empty = false;
+        next_sent = false;
+        next_ready = false;
+      } else {
+        next_empty = true;
+      }
+    }else{
+      global_definitions.inputBuffer_idle_cycles++;
     }
+  
   }
+
 }
+
+
 shared_ptr<Req> InputBuffer::pop_current() {
+
   assert(!current_empty and !current_sent);
   current_sent = true;
   auto req = std::make_shared<Req>();
@@ -231,7 +256,10 @@ shared_ptr<Req> InputBuffer::pop_current() {
 
   return req;
 }
+
+
 shared_ptr<Req> InputBuffer::pop_next() {
+
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
@@ -244,6 +272,8 @@ shared_ptr<Req> InputBuffer::pop_next() {
 
   return req;
 }
+
+
 void ReadBuffer::receive(shared_ptr<Req> req) {
 
   auto latency = global_definitions.cycle - start_cycle_map.at(req->id);
@@ -252,11 +282,15 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
   case device_types::edge_buffer:
     global_definitions.total_read_edge_latency += latency;
     global_definitions.total_read_edge_times++;
+    global_definitions.total_read_edge_len += req->len;
     break;
+
   case device_types::input_buffer:
     global_definitions.total_read_input_latency += latency;
     global_definitions.total_read_input_times++;
+    global_definitions.total_read_input_len += req->len;
     break;
+
   default:
     throw std::runtime_error("can't be here");
   }
@@ -270,12 +304,17 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
     next_ready = true;
   }
 }
+
+
 ReadBuffer::ReadBuffer(const string &basicString,
                        const shared_ptr<Slide_window_set> &m_set)
     : Name_object(basicString), m_set(m_set) {}
 const slide_window_set_iterator &ReadBuffer::getMCurrentIter() const {
   return m_current_iter;
 }
+
 bool ReadBuffer::isCurrentEmpty() const { return current_empty; }
+
 bool ReadBuffer::isCurrentSent() const { return current_sent; }
+
 bool ReadBuffer::isNextSent() const { return next_sent; }
