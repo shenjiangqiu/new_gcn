@@ -1,7 +1,7 @@
 //
 // Created by ivy22 on 2/1/2021.
 //
-
+#ifdef USEDRAM3
 #include "dramsim_wrapper.h"
 #include "spdlog/spdlog.h"
 void dramsim_wrapper::send(uint64_t addr, bool is_write) {
@@ -51,3 +51,4 @@ void dramsim_wrapper::receive_read(uint64_t addr) { read_ret.push(addr); }
 void dramsim_wrapper::receive_write(uint64_t addr) {
   // do nothing
 }
+#endif

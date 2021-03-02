@@ -3,13 +3,13 @@
 
 #include "dram_wrapper.h"
 #include "dramsim_wrapper.h"
+#include "globals.h"
 #include <assert.h>
 #include <map>
 #include <memory>
 #include <queue>
 #include <ramulator_wrapper.h>
 #include <types.h>
-#include "globals.h"
 class memory_interface {
 private:
   unsigned waiting_size;
@@ -45,10 +45,13 @@ public:
   memory_interface(const std::string &dram_config_name,
                    unsigned int waitingSize)
       : waiting_size(waitingSize),
+#ifdef USEDRAM3
         m_mem(config::use_dramsim
                   ? (dram_wrapper *)new dramsim_wrapper(dram_config_name)
-                  : (dram_wrapper *)new ramulator_wrapper(dram_config_name,
-                                                          64)) {}
+                  : (dram_wrapper *)new ramulator_wrapper(dram_config_name, 64))
+#endif
+            m_mem((dram_wrapper *)new ramulator_wrapper(dram_config_name, 64)) {
+  }
   virtual ~memory_interface() = default;
   void cycle();
 };

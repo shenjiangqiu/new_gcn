@@ -4,6 +4,7 @@
 
 #ifndef GCN_SIM_DRAMSIM_WRAPPER_H
 #define GCN_SIM_DRAMSIM_WRAPPER_H
+#ifdef USEDRAM3
 #include "dram_wrapper.h"
 #include "dramsim3.h"
 #include "queue"
@@ -29,5 +30,5 @@ private:
   std::queue<uint64_t> read_ret;
 
 };
-
+#endif
 #endif // GCN_SIM_DRAMSIM_WRAPPER_H
