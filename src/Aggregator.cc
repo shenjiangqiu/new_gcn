@@ -15,6 +15,7 @@ Aggregator::Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
     : input_buffer(inputBuffer), edge_buffer(edgeBuffer), agg_buffer(aggBuffer),
       total_cores(totalCores) {}
 
+
 void Aggregator::cycle() {
 
   if (working) {
@@ -23,7 +24,7 @@ void Aggregator::cycle() {
     remaining_cycles--;
     if (remaining_cycles == 0) {
       working = false;
-      spdlog::debug("aggregator finished run task. x: {} y: {},cycle: {}",
+      spdlog::debug("aggregator finished run task. width(x): {} hight(y): {},cycle: {}",
                     current_sliding_window->getX(),
                     current_sliding_window->getY(), global_definitions.cycle);
 

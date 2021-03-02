@@ -26,8 +26,10 @@ public:
   unsigned long long total_waiting_out = 0;
   unsigned long long total_read_input_latency = 0;
   unsigned long long total_read_input_times = 0;
+  unsigned long long total_read_input_len = 0;
   unsigned long long total_read_edge_latency = 0;
   unsigned long long total_read_edge_times = 0;
+  unsigned long long total_read_edge_len = 0;
   unsigned long long total_mac_in_systolic_array = 0;
   unsigned long long total_read_input_traffic = 0;
   unsigned long long total_read_edge_traffic = 0;

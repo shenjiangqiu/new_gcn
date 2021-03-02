@@ -120,17 +120,23 @@ void System::run() {
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
             << std::endl;
   spdlog::info("the result\n"
-               "total_idle_waiting_input {}\n"
-               "total_idle_waiting_edge {}\n"
+               "total_Aggregator_idle_waiting_input {}\n"
+               "total_Aggregator_idle_waiting_edge {}\n"
                "total_idle_waiting_agg_write {}\n"
                "do_aggregate {}\n"
                "do_systolic {}\n"
-               "total_idle_waiting_agg_read {}\n"
+               "total_systolicArray_idle_waiting_agg_read {}\n"
                "total_idle_waiting_out {}\n"
-               "total_read_input_latency {}\n"
-               "total_read_input_times {}\n"
-               "total_read_edge_latency {}\n"
-               "total_read_edge_times {}\n"
+               "ReaderBuffer_total_read_input_latency {} "
+               "total_read_input_len {}  "
+               "total_read_input_times {}  "
+               "avg_read_latency {} "
+               "avg_read_len {}\n"
+               "ReaderBuffer_total_read_edge_latency {}  "
+               "ReaderBuffer_total_read_edge_len {}  "
+               "total_read_edge_times {}  "
+               "avg_read_edge_latency {}  "
+               "avg_read_edge_len {}\n"
                "total_mac_in_systolic_array {}\n"
                "total_read_input_traffic {}\n"
                "total_read_edge_traffic {}\n",
@@ -141,9 +147,15 @@ void System::run() {
                global_definitions.total_waiting_agg_read,
                global_definitions.total_waiting_out,
                global_definitions.total_read_input_latency,
+               global_definitions.total_read_input_len,
                global_definitions.total_read_input_times,
+               global_definitions.total_read_input_latency/global_definitions.total_read_input_times,
+               global_definitions.total_read_input_len/global_definitions.total_read_input_times,
                global_definitions.total_read_edge_latency,
+               global_definitions.total_read_edge_len,
                global_definitions.total_read_edge_times,
+               global_definitions.total_read_edge_latency/global_definitions.total_read_edge_times,
+               global_definitions.total_read_edge_len/global_definitions.total_read_edge_times,
                global_definitions.total_mac_in_systolic_array,
                global_definitions.total_read_input_traffic,
                global_definitions.total_read_edge_traffic);
@@ -151,7 +163,9 @@ void System::run() {
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), ","));
 }
+
 void System::cycle() {
+  
   input_buffer->cycle();
   edge_buffer->cycle();
   agg_buffer->cycle();
