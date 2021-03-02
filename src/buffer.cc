@@ -146,22 +146,30 @@ EdgeBuffer::EdgeBuffer(const string &name,
 }
 
 void EdgeBuffer::cycle() {
-  if (current_empty and !next_empty) {
-    // move next to current
-    m_current_iter = m_next_iter;
-    current_empty = next_empty;
-    current_ready = next_ready;
-    current_sent = next_sent;
 
-    if (m_next_iter.have_next_col()) {
-      m_next_iter = m_next_iter.get_next_col();
-      next_empty = false;
-      next_sent = false;
-      next_ready = false;
-    } else {
-      next_empty = true;
+  if (current_empty){
+
+    if( !next_empty) {
+    
+      // move next to current
+      m_current_iter = m_next_iter;
+      current_empty = next_empty;
+      current_ready = next_ready;
+      current_sent = next_sent;
+
+      if (m_next_iter.have_next_col()) {
+        m_next_iter = m_next_iter.get_next_col();
+        next_empty = false;
+        next_sent = false;
+        next_ready = false;
+      } else {
+        next_empty = true;
+      }
+    } else{
+      global_definitions.edgeBuffer_idle_cycles++;
     }
   }
+
 }
 
 shared_ptr<Req> EdgeBuffer::pop_current() {
@@ -207,22 +215,28 @@ InputBuffer::InputBuffer(const string &name,
 
 void InputBuffer::cycle() {
 
-  if (current_empty and !next_empty) {
-    // move next to current
-    m_current_iter = m_next_iter;
-    current_empty = next_empty;
-    current_ready = next_ready;
-    current_sent = next_sent;
-    current_req = next_req;
+  if (current_empty ){
+    
+    if( !next_empty) {
+      // move next to current
+      m_current_iter = m_next_iter;
+      current_empty = next_empty;
+      current_ready = next_ready;
+      current_sent = next_sent;
+      current_req = next_req;
 
-    if (m_next_iter.have_next_row()) {
-      m_next_iter++;
-      next_empty = false;
-      next_sent = false;
-      next_ready = false;
-    } else {
-      next_empty = true;
+      if (m_next_iter.have_next_row()) {
+        m_next_iter++;
+        next_empty = false;
+        next_sent = false;
+        next_ready = false;
+      } else {
+        next_empty = true;
+      }
+    }else{
+      global_definitions.inputBuffer_idle_cycles++;
     }
+  
   }
 
 }

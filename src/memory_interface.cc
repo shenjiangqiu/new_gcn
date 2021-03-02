@@ -37,6 +37,7 @@ void memory_interface::cycle() {
       }
     }
   }
+  
   if (!response_queue.empty()) {
     auto &resp = response_queue.front();
     auto req = addr_to_req_map.at(resp);

@@ -139,7 +139,10 @@ void System::run() {
                "avg_read_edge_len {}\n"
                "total_mac_in_systolic_array {}\n"
                "total_read_input_traffic {}\n"
-               "total_read_edge_traffic {}\n",
+               "total_read_edge_traffic {}\n"
+               "total_inputBuffer_idle_cycles {}\n"
+               "total_edgeBuffer_idle_cycles {}\n"
+               "total_cycles {}\n",
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,
                global_definitions.total_waiting_agg_write,
@@ -158,7 +161,12 @@ void System::run() {
                global_definitions.total_read_edge_len/global_definitions.total_read_edge_times,
                global_definitions.total_mac_in_systolic_array,
                global_definitions.total_read_input_traffic,
-               global_definitions.total_read_edge_traffic);
+               global_definitions.total_read_edge_traffic,
+               global_definitions.inputBuffer_idle_cycles,
+               global_definitions.edgeBuffer_idle_cycles,
+               global_definitions.cycle
+               );
+
   spdlog::info("the_time_stamp\n{}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), ","));

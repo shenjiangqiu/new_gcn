@@ -12,6 +12,9 @@ class globals {
 public:
   unsigned long long cycle = 0;
 
+  unsigned long long edgeBuffer_idle_cycles = 0;
+  unsigned long long inputBuffer_idle_cycles = 0;
+
   // this will be set by the output buffer when the last col's output is write
   // down to the memory
   bool finished = false;
@@ -33,7 +36,10 @@ public:
   unsigned long long total_mac_in_systolic_array = 0;
   unsigned long long total_read_input_traffic = 0;
   unsigned long long total_read_edge_traffic = 0;
+
+
   std::vector<unsigned long long> finished_time_stamp;
+  
   std::map<std::string, Model> m_models{
       {"gcn", Model("gcn", {16, 16}, false, false, 0)},
       {"gsc", Model("gsc", {512, 512}, false, true, 25)},
