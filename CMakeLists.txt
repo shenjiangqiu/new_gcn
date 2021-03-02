@@ -15,6 +15,7 @@ if(USEDRAMSIM)
 add_subdirectory(deps/DRAMsim3)
 endif(USEDRAMSIM)
 
+add_subdirectory(deps/HBM)
 
 add_compile_options("-Wall")
 file(GLOB lib_srcs src/*.cc)
@@ -27,7 +28,7 @@ target_link_libraries(gcn_sim_lib PUBLIC dramsim3)
 target_compile_options(gcn_sim_lib PUBLIC USEDRAM3)
 endif()
 
-target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles)
+target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles dramsim2)
 
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
 

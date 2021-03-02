@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.0.0)
+project(dramsim2)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} src)
+add_library(dramsim2 ${src})
