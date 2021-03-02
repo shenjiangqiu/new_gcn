@@ -49,7 +49,7 @@ public:
     task_return_queue.pop();
     return ret;
   }
-  memory_interface::memory_interface(const std::string &dram_config_name,
+  memory_interface(const std::string &dram_config_name,
                                      const std::string &dev_config_name,
                                      unsigned int waitingSize);
   virtual ~memory_interface() = default;

@@ -250,6 +250,7 @@ private:
 // only read the edge , do not read edge index now
 class ReadBuffer : public Name_object {
 public:
+  bool idle() { return current_ready and next_ready; }
   explicit ReadBuffer(const string &basicString,
                       const std::shared_ptr<Slide_window_set> &m_set);
   virtual ~ReadBuffer() = default;

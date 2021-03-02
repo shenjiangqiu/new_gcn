@@ -214,7 +214,7 @@ InputBuffer::InputBuffer(const string &name,
 
 
 void InputBuffer::cycle() {
-
+  
   if (current_empty ){
     
     if( !next_empty) {

@@ -36,10 +36,15 @@ public:
   unsigned long long total_mac_in_systolic_array = 0;
   unsigned long long total_read_input_traffic = 0;
   unsigned long long total_read_edge_traffic = 0;
-
+  // this cycle, inputbuffer idle
+  unsigned long long total_input_buffer_idle = 0;
+  // this cycle, edge idle
+  unsigned long long total_edge_buffer_idle = 0;
+  // this cycle, all buffer idle, the dram have no work to do!
+  unsigned long long all_buffer_idle = 0;
 
   std::vector<unsigned long long> finished_time_stamp;
-  
+
   std::map<std::string, Model> m_models{
       {"gcn", Model("gcn", {16, 16}, false, false, 0)},
       {"gsc", Model("gsc", {512, 512}, false, true, 25)},

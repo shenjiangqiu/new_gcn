@@ -2,3 +2,6 @@ build
 /cmake-build-debug/
 /venv/
 /cmake-build-*
+run/gcn_sim
+run/reddit.graph
+
