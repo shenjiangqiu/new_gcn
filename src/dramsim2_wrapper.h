@@ -5,8 +5,8 @@
 #ifndef GCN_SIM_DRAMSIM2_WRAPPER_H
 #define GCN_SIM_DRAMSIM2_WRAPPER_H
 #include "dram_wrapper.h"
-#include "../deps/HBM/DRAMSim.h"
-#include "../deps/HBM/Callback.h"
+#include "DRAMSim.h"
+#include "Callback.h"
 #include "queue"
 
 
