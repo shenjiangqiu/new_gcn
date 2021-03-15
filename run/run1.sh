@@ -6,10 +6,10 @@ then
     ./gcn_sim -input=131072 -output=4194304\
         -edge=2097152 -agg=4194304 -aggCores=512\
         -systolic-rows=32 -systolic-cols=128\
-        -graph-name=pubmed\
+        -graph-name=dblp.gog\
         -dram-name=HBM-config.cfg -model=gsc \
         -ignore-neighbor=0 -ignore-self=0 \
-        -mem-sim=ramulator  -dram-freq=0.5
+        -mem-sim=ramulator  -dram-freq=0.5 > dblp_m0_ramu.txt&
 elif [  $1 = "dram3" ]
 then
     echo "Using DRAMsim3"
@@ -23,13 +23,13 @@ then
 elif [  $1 = "dram2" ]
 then
     echo "Using DRAMSim2"
-    ./gcn_sim -input=131072 -output=4194304\
+    nohup ./gcn_sim -input=131072 -output=4194304\
         -edge=2097152 -agg=4194304 -aggCores=512\
         -systolic-rows=32 -systolic-cols=128\
-        -graph-name=pubmed\
+        -graph-name=dblp.gog\
         -dram-name=HBMSystemLegacy.ini -model=gsc \
         -ignore-neighbor=0 -ignore-self=0 \
-        -mem-sim=dramsim2 -dram-freq=0.5
+        -mem-sim=dramsim2 -dram-freq=0.5 > dblp_m3_dram2.txt&
 else
    echo "invalid memory simulator"
 fi
