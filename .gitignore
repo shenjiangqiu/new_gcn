@@ -4,4 +4,15 @@ build
 /cmake-build-*
 run/gcn_sim
 run/reddit.graph
-
+build-tst
+build*
+data1
+debug
+*.dep
+*.deppo
+*.po
+*.so
+run/*.graph
+run/*.txt
+run/*.ini
+run/*.json
