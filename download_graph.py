@@ -1,4 +1,4 @@
-data=["pump","cite","reddit","cora"]
+data=["pump","cite","reddit","cora","cora_gog","citeseer_gog","cora_ml_gog","dblp.gog","pubmed_gog"]
 data_fullname=[i+".graph" for i in data]
 from genericpath import exists
 from os import mkdir, path, system, times
