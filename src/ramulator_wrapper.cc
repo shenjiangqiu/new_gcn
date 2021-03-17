@@ -46,8 +46,8 @@ ramulator_wrapper::~ramulator_wrapper() {
   delete mem;
 }
 void ramulator_wrapper::finish() {
-  Stats::statlist.printall();
   mem->finish();
+  Stats::statlist.printall();
 }
 void ramulator_wrapper::tick() { mem->tick(); }
 void ramulator_wrapper::send(uint64_t addr, bool is_write) {
