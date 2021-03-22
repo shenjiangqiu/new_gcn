@@ -42,4 +42,13 @@ Minisat::StringOption mem_sim("system", "mem-sim",
                                   "memory simulator",
                                   "ramulator");
 
+Minisat::IntOption enable_feature_sparsity("system", "enable-feature-sparsity", "if enable feature sparsity", 0);
+Minisat::DoubleOption feature_sparse_rate0("system", "feature-sparse-rate0",
+                                "Feature sparse rate layer 0", 0);
+
+Minisat::DoubleOption feature_sparse_rate1("system", "feature-sparse-rate1",
+                                "Feature sparse rate layer 1", 0);
+                                
+Minisat::DoubleOption feature_sparse_rate2("system", "feature-sparse-rate2",
+                                "Feature sparse rate layer 2", 0);
 } // namespace config

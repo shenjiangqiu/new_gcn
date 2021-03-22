@@ -54,6 +54,7 @@ void Aggregator::cycle() {
           std::make_shared<Slide_window>(*(input_buffer->getMCurrentIter()));
       remaining_cycles = calculate_remaining_cycle();
       global_definitions.do_aggregate += remaining_cycles;
+      
       working = true;
 
       if (current_sliding_window->isTheFirstRow()) {
@@ -101,6 +102,15 @@ int Aggregator::calculate_remaining_cycle() {
   assert(node_size > 0);
 
   auto total_elements = total_nodes * node_size;
+  global_definitions.total_input_windows++;
+  global_definitions.total_aggregate_op += total_elements;
+  global_definitions.total_edges += total_nodes;
+  
+  int level = current_sliding_window->getLevel();
+  global_definitions.layer_input_windows[level]++;
+  global_definitions.layer_aggregate_op[level] += total_elements;
+  global_definitions.layer_edges[level] += total_nodes;
+
   spdlog::debug("total elements: {} ,total size: {}", total_elements,
                 total_elements * 4);
 
@@ -109,11 +119,35 @@ int Aggregator::calculate_remaining_cycle() {
       current_sliding_window->getX(), current_sliding_window->getY(),
       (total_elements + total_cores - 1) / total_cores,
       global_definitions.cycle);
+  
+  double sparse_rate = 0;
 
-  auto cycle = (total_elements + total_cores - 1) / total_cores;
+  switch( level ){
+    case  0:
+       sparse_rate = config::feature_sparse_rate0;
+       break;
+
+    case  1:
+       sparse_rate = config::feature_sparse_rate1;
+       break;
+
+    case  2:
+       sparse_rate = config::feature_sparse_rate2;
+       break;
+    
+    default:
+       sparse_rate = 0;
+  }
+
+  auto total_elements_sparse = (total_elements* (1.0 - sparse_rate)); //Yue sparse rate
+  auto cycle = (total_elements_sparse + total_cores - 1) / total_cores;
   // read dram latency;
   auto per_cycle_memory_fetch_time = (total_cores * 4 + 31) / 32;
   auto total_read_memory_time = cycle * per_cycle_memory_fetch_time;
   cycle += total_read_memory_time;
+  
+  
+  global_definitions.layer_do_aggregate[level] += cycle;
+  
   return cycle;
 }

@@ -30,11 +30,18 @@ int main(int argc, char **argv) {
     global_definitions.concate = true;
   }
 
+  if (m_model->isInitialResidual() ) {
+    global_definitions.initialResidual = true;
+  }
+
   if (config::debug) {
     spdlog::set_level(spdlog::level::debug);
   } else {
     spdlog::set_level(spdlog::level::info);
   }
+  
+  spdlog::info("Enable feature sparsity: {}", config::enable_feature_sparsity);
+
 
   std::shared_ptr<Graph> m_graph =
       std::make_shared<Graph>(std::string(config::graph_name));

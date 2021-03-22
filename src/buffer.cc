@@ -205,16 +205,79 @@ InputBuffer::InputBuffer(const string &name,
   current_empty = false;
   current_sent = false;
   current_ready = false;
-  m_current_iter = m_set->begin();
+  
   next_empty = false;
   next_sent = false;
   next_ready = false;
-  m_next_iter = std::next(m_current_iter);
+  
+
+  /*if( config::enable_multiple_input_buffer ){
+     int i = 0;
+     buffer_entry_iter[i] = m_set->begin();
+     buffer_entry_empty[i] = false;
+     buffer_entry_ready[i] = false;
+     buffer_entry_sent[i] = false;
+     buffer_entry_valid[i] = true;
+     for( i = 1; i < num_buffer_entry; i++){
+       buffer_entry_iter[i] = std::next(buffer_entry_iter[i-1]);
+       buffer_entry_empty[i] = false;
+       buffer_entry_ready[i] = false;
+       buffer_entry_sent[i] = false;
+       buffer_entry_valid[i] = true;
+     }
+  }else*/{
+      m_current_iter = m_set->begin();
+      m_next_iter = std::next(m_current_iter);
+  }
+
 }
 
 
+/*void InputBuffer::handle_multiple_input_buffer(){
+    int i =0;
+    
+    //Check if the current input buffere aggregation is done.
+    if( current_buffer_done ){ 
+       // 1. setup the reading the next window 
+       for( i = 0; i < num_buffer_entry; i++){
+          if( !buffer_entry_empty[i]){
+             // move next to current
+            m_current_iter = buffer_entry_iter[i];
+            buffer_entry_empty[curr_entry_idx] = true;
+            buffer_entry_sent[curr_entry_idx] = false;
+            next_iter = std::next(next_iter);
+            if( next_iter != std::end())
+               buffer_entry_iter[current_indx]= next_iter;
+            else{
+               buffer_entry_iter[current_indx] =std::end();
+               buffer_entry_valid[current_indx] = false;
+            }
+            current_buffer_done = false;
+            return;
+          }
+       } 
+    
+    }
+
+    //issue read command
+    for( i = 0 ; i < num_buffer_entry; i++){
+      if(buffer_entry_sent[i] == false &&
+        buffer_entry_valid[i] == true &&
+        buffer_entry_empty[i] == true){
+          assert( buffer_entry_iter[i] =! std::end());
+          // to do issue the read command Yue
+        }
+      )
+    }
+
+}*/
+
 void InputBuffer::cycle() {
-  
+
+  /*if( config::enable_multiple_input_buffer){
+       handle_multiple_input_buffer( );
+       return;
+  }*/
   if (current_empty ){
     
     if( !next_empty) {
@@ -274,6 +337,27 @@ shared_ptr<Req> InputBuffer::pop_next() {
 }
 
 
+/*shared_ptr<Req> InputBuffer::issue_req() {
+  int i = 0;
+  for( ; i< num_buffer_entry; i++){
+       if( buffer_entry_sent[i] == false)
+         break;
+  }
+  if( i == num_buffer_entry)
+    return NULL;
+
+  buffer_entry_sent[i] = true;
+  auto req = std::make_shared<Req>();
+  req->addr = m_next_iter->getInputAddr();
+  req->len = m_next_iter->getInputLen();
+  req->req_type = mem_request::read;
+  req->t = device_types::input_buffer;
+  buffer_entry_req[i] = req;
+  start_cycle_map[req->id] = global_definitions.cycle;
+
+  return req;
+}*/
+
 void ReadBuffer::receive(shared_ptr<Req> req) {
 
   auto latency = global_definitions.cycle - start_cycle_map.at(req->id);
@@ -294,6 +378,17 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
   default:
     throw std::runtime_error("can't be here");
   }
+  
+  /*if( config::enable_multiple_input_buffers ){
+    for(i = 0; i < num_buffer_entry; i++){
+      if( req->id == buffer_entry_req[i] ){
+         buffer_entry_ready[i] = true;
+         return;
+      }
+    }
+    return;
+  }*/
+  
   if (!current_empty and current_sent and !current_ready and
       req->id == current_req->id) {
 
@@ -303,6 +398,7 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
            req->id == next_req->id);
     next_ready = true;
   }
+
 }
 
 

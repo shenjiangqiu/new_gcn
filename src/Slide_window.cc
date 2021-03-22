@@ -220,6 +220,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   m_sliding_window_multi_level.back().back().back().setTheFinalRow(true);
   m_sliding_window_vec.back().setTheFinalRow(true);
 }
+
 slide_window_set_iterator Slide_window_set::begin() {
   for (auto i = m_sliding_window_multi_level.begin();
        i < m_sliding_window_multi_level.end(); i++) {
@@ -232,12 +233,15 @@ slide_window_set_iterator Slide_window_set::begin() {
   }
   throw std::runtime_error("cannot find a valid entry for begin");
 }
+
 slide_window_set_iterator Slide_window_set::end() {
   return begin().setThirdIter(m_sliding_window_multi_level.end());
 }
+
 bool slide_window_set_iterator::have_next_row() {
   return !((*this)->isTheFinalCol() and (*this)->isTheFinalRow());
 }
+
 slide_window_set_iterator::slide_window_set_iterator(
     const std::vector<Slide_window>::iterator &firstIter,
     const std::vector<std::vector<Slide_window>>::iterator &secondIter,

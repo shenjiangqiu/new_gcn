@@ -19,11 +19,21 @@ public:
   // down to the memory
   bool finished = false;
   bool concate = false;
+  bool initialResidual = false;
+
 
   unsigned long long total_waiting_input = 0;
   unsigned long long total_waiting_edge = 0;
   unsigned long long total_waiting_agg_write = 0;
   unsigned long long do_aggregate = 0;
+  unsigned long long total_aggregate_op = 0;
+  unsigned long long total_edges = 0;
+  unsigned long long total_input_windows = 0;
+  std::vector<unsigned long long>layer_input_windows;
+  std::vector<unsigned long long> layer_edges;
+  std::vector<unsigned long long> layer_do_aggregate;
+  std::vector<unsigned long long> layer_aggregate_op;
+  std::vector<unsigned long long>layer_do_systolic;
   unsigned long long do_systolic = 0;
   unsigned long long total_waiting_agg_read = 0;
   unsigned long long total_waiting_out = 0;
@@ -70,5 +80,9 @@ extern Minisat::IntOption ignore_self;
 extern Minisat::DoubleOption core_freq;
 extern Minisat::DoubleOption dram_freq;
 extern Minisat::StringOption mem_sim;
+extern Minisat::IntOption enable_feature_sparsity;
+extern Minisat::DoubleOption feature_sparse_rate0;
+extern Minisat::DoubleOption feature_sparse_rate1;
+extern Minisat::DoubleOption feature_sparse_rate2;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

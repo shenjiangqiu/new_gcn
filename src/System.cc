@@ -57,8 +57,15 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
 
   spdlog::info("xws push back:{}", xw_s.back());
   assert(xw_s.back() > 0 && "the window should be positive");
-  yw_s.push_back((input_buffer_size / 2) /
+  if( config::enable_feature_sparsity ){
+     int effective_size = (node_size[0] - config::ignore_neighbor);
+     effective_size = effective_size *( 1.0 -config::feature_sparse_rate0);
+     yw_s.push_back((input_buffer_size / 2) /
+                 ( effective_size * 4));
+  }else{
+    yw_s.push_back((input_buffer_size / 2) /
                  ((node_size[0] - config::ignore_neighbor) * 4));
+  }
   assert(yw_s.back() > 0 && "the window should be positive");
   spdlog::info("yws push back:{}", yw_s.back());
 
@@ -72,9 +79,38 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     }
     spdlog::info("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
-    yw_s.push_back((input_buffer_size / 2) / (node_size[i] * 4));
+    
+    int effective_node_size = node_size[i];
+    if( config::enable_feature_sparsity ){
+       switch( i ){
+          case 0:
+                  effective_node_size = (int)(effective_node_size*
+                      (1-config::feature_sparse_rate0));
+                  break;    
+          case 1:
+                  effective_node_size = (int)(effective_node_size*
+                      (1-config::feature_sparse_rate1));
+                  break;  
+          case 2:
+                  effective_node_size = (int)(effective_node_size*
+                      (1-config::feature_sparse_rate2));
+                  break; 
+          default:
+                   ;
+       }
+    }
+
+    yw_s.push_back((input_buffer_size / 2) / (effective_node_size * 4));
     assert(yw_s.back() > 0 && "the window should be positive");
-    spdlog::info("yws push back:{}", yw_s.back());
+    spdlog::info("yws push back:{}", yw_s.back());  
+  }
+
+  for( auto i = 0; i < total_level; i++){
+    global_definitions.layer_input_windows.push_back(0);
+    global_definitions.layer_edges.push_back(0);
+    global_definitions.layer_do_aggregate.push_back(0);
+    global_definitions.layer_aggregate_op.push_back(0);
+    global_definitions.layer_do_systolic.push_back(0);
   }
 
   // step 2, build the windows set. and input buffer,edge buffer
@@ -106,6 +142,8 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
                total_size);
 }
+
+
 void System::run() {
 
   while (!finished) {
@@ -122,6 +160,9 @@ void System::run() {
                "total_Aggregator_idle_waiting_edge {}\n"
                "total_idle_waiting_agg_write {}\n"
                "do_aggregate {}\n"
+               "total_aggregate_op {}\n"
+               "total_handle_edges {}\n"
+               "total_input_windows {}\n"
                "do_systolic {}\n"
                "total_systolicArray_idle_waiting_agg_read {}\n"
                "total_idle_waiting_out {}\n"
@@ -146,7 +187,11 @@ void System::run() {
                global_definitions.total_waiting_input,
                global_definitions.total_waiting_edge,
                global_definitions.total_waiting_agg_write,
-               global_definitions.do_aggregate, global_definitions.do_systolic,
+               global_definitions.do_aggregate, 
+               global_definitions.total_aggregate_op,
+               global_definitions.total_edges,
+               global_definitions.total_input_windows,
+               global_definitions.do_systolic,
                global_definitions.total_waiting_agg_read,
                global_definitions.total_waiting_out,
                global_definitions.total_read_input_latency,
@@ -172,9 +217,33 @@ void System::run() {
                global_definitions.total_edge_buffer_idle,
                global_definitions.cycle);
 
-  spdlog::info("the_time_stamp\n{}\n",
+  spdlog::info("layer_completion_time  {}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
-                         global_definitions.finished_time_stamp.end(), ","));
+                         global_definitions.finished_time_stamp.end(), "  "));
+
+  spdlog::info("layer_input_windows  {}\n",
+               fmt::join(global_definitions.layer_input_windows.begin(),
+                         global_definitions.layer_input_windows.end(), "  "));
+
+  spdlog::info("layer_edges  {}\n",
+               fmt::join(global_definitions.layer_edges.begin(),
+                         global_definitions.layer_edges.end(), "  "));
+
+  spdlog::info("layer_do_aggregate(cycles)  {}\n",
+               fmt::join(global_definitions.layer_do_aggregate.begin(),
+                         global_definitions.layer_do_aggregate.end(), "  "));
+
+  spdlog::info("layer_do_systolic(cycles)  {}\n",
+               fmt::join(global_definitions.layer_do_systolic.begin(),
+                         global_definitions.layer_do_systolic.end(), "  "));  
+  
+  spdlog::info("layer_aggregate_op  {}\n",
+               fmt::join(global_definitions.layer_aggregate_op.begin(),
+                         global_definitions.layer_aggregate_op.end(), "  "));                                              
+  
+                                              
+
+
 }
 
 void System::cycle() {
