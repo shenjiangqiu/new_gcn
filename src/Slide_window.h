@@ -57,7 +57,7 @@ public:
 
   bool isTheFinalColOfTheLayer() const;
 
-  [[nodiscard]] int getNumNodesInWindow() const;
+  [[nodiscard]] int getNumEdgesInWindow() const;
 
 private:
    
@@ -68,7 +68,7 @@ private:
   int level;
   uint64_t input_addr, edge_addr, output_addr;
   int input_len, edge_len, output_len;
-  int num_nodes_in_window; //#edges in the window
+  int num_edges_in_window; //#edges in the window
   int current_node_size; // A feature dim.
   bool the_final_col;
   bool the_final_col_of_the_layer;
@@ -118,7 +118,7 @@ template <> struct fmt::formatter<Slide_window> {
                         p.getX(), p.getY(), p.getXw(), p.getYw(), p.getLevel(),
                         p.getInputAddr(), p.getEdgeAddr(), p.getOutputAddr(),
                         p.getInputLen(), p.getEdgeLen(), p.getOutputLen(),
-                        p.getNumNodesInWindow(), p.isTheFinalCol(),
+                        p.getNumEdgesInWindow(), p.isTheFinalCol(),
                         p.isTheFinalRow(), p.isTheFirstRow());
     return out;
   }

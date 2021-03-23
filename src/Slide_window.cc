@@ -21,7 +21,7 @@ Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
     : x(x), y(y), xw(xw), yw(yw), level(level), input_addr(inputAddr),
       edge_addr(edgeAddr), output_addr(outputAddr), input_len(inputLen),
       edge_len(edgeLen), output_len(outputLen),
-      num_nodes_in_window(numNodesInWindow), current_node_size(currentNodeSize),
+      num_edges_in_window(numNodesInWindow), current_node_size(currentNodeSize),
       the_final_col(the_final_col),
       the_final_col_of_the_layer(theFinalColOfTheLayer),
       the_final_row(theFinalRow),
@@ -50,7 +50,7 @@ int Slide_window::getEdgeLen() const { return edge_len; }
 
 int Slide_window::getOutputLen() const { return output_len; }
 
-int Slide_window::getNumNodesInWindow() const { return num_nodes_in_window; }
+int Slide_window::getNumEdgesInWindow() const { return num_edges_in_window; }
 
 int Slide_window::getCurrentNodeSize() const { return current_node_size; }
 
@@ -60,7 +60,7 @@ bool Slide_window::operator==(const Slide_window &rhs) const {
          edge_addr == rhs.edge_addr && output_addr == rhs.output_addr &&
          input_len == rhs.input_len && edge_len == rhs.edge_len &&
          output_len == rhs.output_len &&
-         num_nodes_in_window == rhs.num_nodes_in_window &&
+         num_edges_in_window == rhs.num_edges_in_window &&
          current_node_size == rhs.current_node_size;
 }
 

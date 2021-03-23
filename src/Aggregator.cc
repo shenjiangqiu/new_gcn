@@ -110,7 +110,7 @@ int Aggregator::calculate_remaining_cycle() {
 
   // Update here, now the ignored features are not count for calculation
   assert(current_sliding_window);
-  auto total_nodes = current_sliding_window->getNumNodesInWindow();
+  auto total_nodes = current_sliding_window->getNumEdgesInWindow();
 
   auto node_size = current_sliding_window
                        ->getCurrentNodeSize(); // num features in one node//not
@@ -126,7 +126,7 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.total_edges += total_nodes;
   
   int input_vertix_cnt = current_sliding_window->getYw();
-  int edges_cnt = current_sliding_window->getNumNodesInWindow();
+  int edges_cnt = current_sliding_window->getNumEdgesInWindow();
   float input_efficiency = (float)(edges_cnt)/(float)input_vertix_cnt;
   int eff = (int)(input_efficiency*1000);
    updateEdgesHist(EDGE, edges_cnt);
@@ -144,7 +144,7 @@ int Aggregator::calculate_remaining_cycle() {
                 total_elements * 4);
 
   spdlog::debug(
-      "aggregator culculate window cycles. x: {} y: {}, result: {} ,cycle: {}",
+      "aggregator culculate window cycles. x: {} y: {}, result: {} ,rounds: {}",
       current_sliding_window->getX(), current_sliding_window->getY(),
       (total_elements + total_cores - 1) / total_cores,
       global_definitions.cycle);
@@ -169,16 +169,17 @@ int Aggregator::calculate_remaining_cycle() {
   }
 
   auto total_elements_sparse = (total_elements* (1.0 - sparse_rate)); //Yue sparse rate
-  auto cycle = (total_elements_sparse + total_cores - 1) / total_cores;
+  auto rounds = (total_elements_sparse + total_cores - 1) / total_cores;
   // read dram latency;
-  auto per_cycle_memory_fetch_time = (total_cores * 4 + 31) / 32;
-  auto total_read_memory_time = cycle * per_cycle_memory_fetch_time;
-  cycle += total_read_memory_time;
+  auto per_round_memory_fetch_time = (total_cores * 4 + 31) / 32;
+  //for each round, read the data, and use 1 cycle to process.
+  auto total_time = rounds * (per_round_memory_fetch_time+1);
+
   
   
-  global_definitions.layer_do_aggregate[level] += cycle;
+  global_definitions.layer_do_aggregate[level] += total_time;
   
-  return cycle;
+  return total_time;
 }
 
 bool comp(pair<int,int> a, pair<int,int> b) {
