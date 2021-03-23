@@ -127,16 +127,18 @@ int Aggregator::calculate_remaining_cycle() {
   
   int input_vertix_cnt = current_sliding_window->getYw();
   int edges_cnt = current_sliding_window->getNumNodesInWindow();
-  float input_efficiency = (float)(edges_cnt)/input_vertix_cnt;
+  float input_efficiency = (float)(edges_cnt)/(float)input_vertix_cnt;
   int eff = (int)(input_efficiency*1000);
    updateEdgesHist(EDGE, edges_cnt);
    updateEdgesHist(EFF, eff);
-
+  
+  
 
   int level = current_sliding_window->getLevel();
   global_definitions.layer_input_windows[level]++;
   global_definitions.layer_aggregate_op[level] += total_elements;
   global_definitions.layer_edges[level] += total_nodes;
+  global_definitions.layer_input_vertics[level] += input_vertix_cnt;
 
   spdlog::debug("total elements: {} ,total size: {}", total_elements,
                 total_elements * 4);

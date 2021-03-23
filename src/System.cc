@@ -108,6 +108,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   for( auto i = 0; i < total_level; i++){
     global_definitions.layer_input_windows.push_back(0);
     global_definitions.layer_edges.push_back(0);
+    global_definitions.layer_input_vertics.push_back(0);
     global_definitions.layer_do_aggregate.push_back(0);
     global_definitions.layer_aggregate_op.push_back(0);
     global_definitions.layer_do_systolic.push_back(0);
@@ -228,6 +229,10 @@ void System::run() {
   spdlog::info("layer_edges  {}\n",
                fmt::join(global_definitions.layer_edges.begin(),
                          global_definitions.layer_edges.end(), "  "));
+  
+  spdlog::info("layer_input_vertics  {}\n",
+               fmt::join(global_definitions.layer_input_vertics.begin(),
+                         global_definitions.layer_input_vertics.end(), "  "));
 
   spdlog::info("layer_do_aggregate(cycles)  {}\n",
                fmt::join(global_definitions.layer_do_aggregate.begin(),

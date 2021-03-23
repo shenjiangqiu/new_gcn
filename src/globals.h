@@ -31,6 +31,7 @@ public:
   unsigned long long total_input_windows = 0;
   std::vector<unsigned long long>layer_input_windows;
   std::vector<unsigned long long> layer_edges;
+  std::vector<unsigned long long> layer_input_vertics;
   std::vector<unsigned long long> layer_do_aggregate;
   std::vector<unsigned long long> layer_aggregate_op;
   std::vector<unsigned long long>layer_do_systolic;
