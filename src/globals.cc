@@ -51,4 +51,5 @@ Minisat::DoubleOption feature_sparse_rate1("system", "feature-sparse-rate1",
                                 
 Minisat::DoubleOption feature_sparse_rate2("system", "feature-sparse-rate2",
                                 "Feature sparse rate layer 2", 0);
+Minisat::BoolOption enable_valid_node_only("system","enable-valid-node-only","enable-valid-node-only",false);
 } // namespace config

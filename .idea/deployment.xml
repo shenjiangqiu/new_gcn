@@ -2,30 +2,14 @@
 <project version="4">
   <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="WSL (727f0fb3-6425-40c6-92ea-5d81c00933ee)">
+      <paths name="thesjq.com (559ddfe6-70cb-4b83-becd-25215cb1e272)">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="husky3 (2f77db4d-3cfb-444c-9945-b21137ddee14)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/tmp/tmp.KHv4izvd91" local="$PROJECT_DIR$" />
+            <mapping deploy="/tmp/tmp.z2rHyKGWav" local="$PROJECT_DIR$" />
           </mappings>
           <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
-          </excludedPaths>
-        </serverdata>
-      </paths>
-      <paths name="thesjq (20a56f98-0e84-4008-abde-0daf3fc02044)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/tmp/tmp.CjY3D0Q39a" local="$PROJECT_DIR$" />
-          </mappings>
-          <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-thesjq" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-thesjqcom" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-thesjqcom" />
           </excludedPaths>
         </serverdata>
       </paths>

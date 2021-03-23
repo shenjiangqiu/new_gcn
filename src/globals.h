@@ -85,5 +85,6 @@ extern Minisat::IntOption enable_feature_sparsity;
 extern Minisat::DoubleOption feature_sparse_rate0;
 extern Minisat::DoubleOption feature_sparse_rate1;
 extern Minisat::DoubleOption feature_sparse_rate2;
+extern Minisat::BoolOption enable_valid_node_only;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

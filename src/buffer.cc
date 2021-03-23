@@ -147,10 +147,10 @@ EdgeBuffer::EdgeBuffer(const string &name,
 
 void EdgeBuffer::cycle() {
 
-  if (current_empty){
+  if (current_empty) {
 
-    if( !next_empty) {
-    
+    if (!next_empty) {
+
       // move next to current
       m_current_iter = m_next_iter;
       current_empty = next_empty;
@@ -165,11 +165,10 @@ void EdgeBuffer::cycle() {
       } else {
         next_empty = true;
       }
-    } else{
+    } else {
       global_definitions.edgeBuffer_idle_cycles++;
     }
   }
-
 }
 
 shared_ptr<Req> EdgeBuffer::pop_current() {
@@ -205,11 +204,10 @@ InputBuffer::InputBuffer(const string &name,
   current_empty = false;
   current_sent = false;
   current_ready = false;
-  
+
   next_empty = false;
   next_sent = false;
   next_ready = false;
-  
 
   /*if( config::enable_multiple_input_buffer ){
      int i = 0;
@@ -225,20 +223,19 @@ InputBuffer::InputBuffer(const string &name,
        buffer_entry_sent[i] = false;
        buffer_entry_valid[i] = true;
      }
-  }else*/{
-      m_current_iter = m_set->begin();
-      m_next_iter = std::next(m_current_iter);
+  }else*/
+  {
+    m_current_iter = m_set->begin();
+    m_next_iter = std::next(m_current_iter);
   }
-
 }
-
 
 /*void InputBuffer::handle_multiple_input_buffer(){
     int i =0;
-    
+
     //Check if the current input buffere aggregation is done.
-    if( current_buffer_done ){ 
-       // 1. setup the reading the next window 
+    if( current_buffer_done ){
+       // 1. setup the reading the next window
        for( i = 0; i < num_buffer_entry; i++){
           if( !buffer_entry_empty[i]){
              // move next to current
@@ -255,8 +252,8 @@ InputBuffer::InputBuffer(const string &name,
             current_buffer_done = false;
             return;
           }
-       } 
-    
+       }
+
     }
 
     //issue read command
@@ -278,9 +275,9 @@ void InputBuffer::cycle() {
        handle_multiple_input_buffer( );
        return;
   }*/
-  if (current_empty ){
-    
-    if( !next_empty) {
+  if (current_empty) {
+
+    if (!next_empty) {
       // move next to current
       m_current_iter = m_next_iter;
       current_empty = next_empty;
@@ -296,14 +293,11 @@ void InputBuffer::cycle() {
       } else {
         next_empty = true;
       }
-    }else{
+    } else {
       global_definitions.inputBuffer_idle_cycles++;
     }
-  
   }
-
 }
-
 
 shared_ptr<Req> InputBuffer::pop_current() {
 
@@ -311,7 +305,10 @@ shared_ptr<Req> InputBuffer::pop_current() {
   current_sent = true;
   auto req = std::make_shared<Req>();
   req->addr = m_current_iter->getInputAddr();
-  req->len = m_current_iter->getInputLen();
+  if (config::enable_valid_node_only)
+    req->len = m_current_iter->getValidInputLen();
+  else
+    req->len = m_current_iter->getInputLen();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   current_req = req;
@@ -320,14 +317,16 @@ shared_ptr<Req> InputBuffer::pop_current() {
   return req;
 }
 
-
 shared_ptr<Req> InputBuffer::pop_next() {
 
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
   req->addr = m_next_iter->getInputAddr();
-  req->len = m_next_iter->getInputLen();
+  if (config::enable_valid_node_only)
+    req->len = m_current_iter->getValidInputLen();
+  else
+    req->len = m_current_iter->getInputLen();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   next_req = req;
@@ -335,7 +334,6 @@ shared_ptr<Req> InputBuffer::pop_next() {
 
   return req;
 }
-
 
 /*shared_ptr<Req> InputBuffer::issue_req() {
   int i = 0;
@@ -378,7 +376,7 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
   default:
     throw std::runtime_error("can't be here");
   }
-  
+
   /*if( config::enable_multiple_input_buffers ){
     for(i = 0; i < num_buffer_entry; i++){
       if( req->id == buffer_entry_req[i] ){
@@ -388,7 +386,7 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
     }
     return;
   }*/
-  
+
   if (!current_empty and current_sent and !current_ready and
       req->id == current_req->id) {
 
@@ -398,9 +396,7 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
            req->id == next_req->id);
     next_ready = true;
   }
-
 }
-
 
 ReadBuffer::ReadBuffer(const string &basicString,
                        const shared_ptr<Slide_window_set> &m_set)

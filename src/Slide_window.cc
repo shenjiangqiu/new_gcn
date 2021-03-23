@@ -17,7 +17,7 @@ Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
                            int outputLen, int numNodesInWindow,
                            int currentNodeSize, bool the_final_col,
                            bool theFinalRow, bool theFirstRow,
-                           bool theFinalColOfTheLayer)
+                           bool theFinalColOfTheLayer,int validNodes)
     : x(x), y(y), xw(xw), yw(yw), level(level), input_addr(inputAddr),
       edge_addr(edgeAddr), output_addr(outputAddr), input_len(inputLen),
       edge_len(edgeLen), output_len(outputLen),
@@ -26,7 +26,7 @@ Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
       the_final_col_of_the_layer(theFinalColOfTheLayer),
       the_final_row(theFinalRow),
 
-      the_first_row(theFirstRow) {}
+      the_first_row(theFirstRow),valid_nodes(validNodes) {}
 
 int Slide_window::getX() const { return x; }
 
@@ -80,6 +80,10 @@ void Slide_window::setTheFinalRow(bool theFinalRow) {
 
 bool Slide_window::isTheFinalColOfTheLayer() const {
   return the_final_col_of_the_layer;
+}
+int Slide_window::getValidInputLen() const {
+  //suppose we can skip those nodes that no edge on it.
+  return valid_nodes*current_node_size*4;
 }
 
 Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
@@ -159,9 +163,12 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         assert(row_end > row_i);
         auto lower_bound = row_to_count.lower_bound(row_i);
         auto upper_bound = row_to_count.lower_bound(row_end);
-        auto total_node = std::accumulate(
+        auto total_edges = std::accumulate(
             lower_bound, upper_bound, 0,
             [](int value, auto &&pair) { return value + pair.second; });
+        auto total_valid_node=std::accumulate(
+            lower_bound, upper_bound, 0,
+            [](int value, auto &&pair) { return value + 1; });
         auto &&edge_index = m_graph->get_edge_index();
 
         uint64_t input_addr = 0;
@@ -195,16 +202,20 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         bool the_last_col = ((level_i == total_level - 2) and
                              col_end >= m_graph->get_num_nodes());
         bool the_last_col_of_the_layer = col_end >= m_graph->get_num_nodes();
+
+
         m_sliding_window_vec.emplace_back(
             col_i, row_i, xw_s[level_i], row_end - row_i, level_i, input_addr,
-            edge_addr, output_addr, input_len, edge_len, output_len, total_node,
+            edge_addr, output_addr, input_len, edge_len, output_len,
+            total_edges,
             node_size_s[level_i], the_last_col, false, the_first_row,
-            the_last_col_of_the_layer);
+            the_last_col_of_the_layer,total_valid_node);
         m_sliding_window_multi_level.back().back().emplace_back(
             col_i, row_i, xw_s[level_i], row_end - row_i, level_i, input_addr,
-            edge_addr, output_addr, input_len, edge_len, output_len, total_node,
+            edge_addr, output_addr, input_len, edge_len, output_len,
+            total_edges,
             node_size_s[level_i], the_last_col, false, the_first_row,
-            the_last_col_of_the_layer);
+            the_last_col_of_the_layer,total_valid_node);
         row_i = row_end;
         the_first_row = false;
       }
