@@ -53,12 +53,19 @@ public:
   bool isTheFirstRow() const;
   void setTheFinalRow(bool theFinalRow);
 
+  
+
 private:
-  int x, y, xw, yw, level;
+   
+  int x;  //x: starting vertix ID in the aggeragation buffer
+  int y;  //y: starting vertix ID in the input buffer
+  int xw; // cnt of vertics in the the aggeragation buffer
+  int yw ; // cnt of vertics in the the input buffer
+  int level;
   uint64_t input_addr, edge_addr, output_addr;
   int input_len, edge_len, output_len;
-  int num_nodes_in_window;
-  int current_node_size;
+  int num_nodes_in_window; //#edges in the window
+  int current_node_size; // A feature dimm.
   bool the_final_col;
   bool the_final_col_of_the_layer;
 

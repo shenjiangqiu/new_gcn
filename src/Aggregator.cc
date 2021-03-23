@@ -8,6 +8,8 @@
 #include "spdlog/spdlog.h"
 #include <utility>
 
+#include <algorithm>
+
 Aggregator::Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
                        const shared_ptr<EdgeBuffer> &edgeBuffer,
                        const shared_ptr<Aggregator_buffer> &aggBuffer,
@@ -87,6 +89,23 @@ void Aggregator::add_task(std::shared_ptr<Slide_window> window) {
 }
 */
 
+void Aggregator::updateEdgesHist( int flag, int value){
+  
+  if( flag == EDGE ){
+     if( edgesInWindowHist[value] <= 0)
+        edgesInWindowHist[value] = 1;
+    else
+       edgesInWindowHist[value] +=1;   
+  }else{
+    if( inputEffHist[value] <= 0)
+        inputEffHist[value] = 1;
+    else
+       inputEffHist[value] +=1;  
+  }
+
+
+}
+
 int Aggregator::calculate_remaining_cycle() {
 
   // Update here, now the ignored features are not count for calculation
@@ -106,6 +125,14 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.total_aggregate_op += total_elements;
   global_definitions.total_edges += total_nodes;
   
+  int input_vertix_cnt = current_sliding_window->getYw();
+  int edges_cnt = current_sliding_window->getNumNodesInWindow();
+  float input_efficiency = (float)(edges_cnt)/input_vertix_cnt;
+  int eff = (int)(input_efficiency*1000);
+   updateEdgesHist(EDGE, edges_cnt);
+   updateEdgesHist(EFF, eff);
+
+
   int level = current_sliding_window->getLevel();
   global_definitions.layer_input_windows[level]++;
   global_definitions.layer_aggregate_op[level] += total_elements;
@@ -150,4 +177,40 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.layer_do_aggregate[level] += cycle;
   
   return cycle;
+}
+
+bool comp(pair<int,int> a, pair<int,int> b) {
+    return a.second > b.second;
+}
+
+Aggregator::~Aggregator(){
+
+  std::vector<std::pair<int, uint64_t>> edgeInfo(edgesInWindowHist.begin(), edgesInWindowHist.end());
+  std::sort(edgeInfo.begin(), edgeInfo.end(), comp); 
+
+   
+  std::vector<std::pair<int, uint64_t>> effInfo(inputEffHist.begin(), inputEffHist.end());
+  std::sort(effInfo.begin(), effInfo.end(), comp); 
+  
+   uint64_t sum_eff, sum_edge;
+   sum_eff = 0;
+   sum_edge = 0;
+   int i;
+   for(i = 0; i < edgeInfo.size( ); i++)
+     sum_edge += edgeInfo[i].second;
+   for(i = 0 ; i < effInfo.size( ); i++)
+     sum_eff += effInfo[i].second;   
+   
+   std::cout<<"Edge_hist ";
+   for(i = 0; (i < edgeInfo.size( ) && i<= 20); i++){
+     std::cout<<"  "<<edgeInfo[i].first<<"  "<<(float)edgeInfo[i].second/sum_edge;
+   }
+   std::cout<<"\n";
+   
+   std::cout<<"InputEff_hist ";
+   for(i = 0; (i < effInfo.size( ) && i <= 20) ; i++){
+     std::cout<<"  "<<effInfo[i].first/1000.0<<"  "<<(float)effInfo[i].second/sum_eff;
+   }
+   std::cout<<"\n";
+
 }

@@ -39,26 +39,56 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
   mem = name_to_func[std_name](configs, cacheLine);
   Stats::statlist.output("mem_stats.txt");
   tCK = mem->clk_ns();
+
+  inflight_req_cnt = 0;
+  sum_inflight_req = 0;
+  my_cycles = 0;
+  active_cycles = 0;
+  finished_read_req = 0;
+  finished_write_req = 0;
+  
 }
 ramulator_wrapper::~ramulator_wrapper() {
+  
+  float mlp = (float)sum_inflight_req/active_cycles;
+  float activeRate = (float)active_cycles/my_cycles;
+
+  std::cout<<"Interface MLP "<< mlp <<" memoy activeRate "<<activeRate;
+  std::cout<<" BW "<<(finished_read_req+finished_write_req)*64.0/active_cycles;
+  std::cout<<" readRqt "<<finished_read_req<<"  writeRqt "<<finished_write_req<<"\n";
+  
   finish();
 
   delete mem;
 }
+
 void ramulator_wrapper::finish() {
   mem->finish();
   Stats::statlist.printall();
 }
-void ramulator_wrapper::tick() { mem->tick(); }
+
+void ramulator_wrapper::tick() { 
+  mem->tick(); 
+}
+
 void ramulator_wrapper::send(uint64_t addr, bool is_write) {
   this->in_queue.push({addr, is_write});
+  inflight_req_cnt++;
 }
+
 void ramulator_wrapper::call_back(ramulator::Request &req) {
   outgoing_reqs--;
+  inflight_req_cnt--;
+
   assert((long long)outgoing_reqs >= 0);
   switch (req.type) {
   case Request::Type::READ:
     out_queue.push(req.addr);
+    finished_read_req++;
+    break;
+
+  case Request::Type::WRITE:
+    finished_write_req++;
     break;
 
   default:
@@ -66,7 +96,15 @@ void ramulator_wrapper::call_back(ramulator::Request &req) {
     break;
   }
 }
+
+
 void ramulator_wrapper::cycle() {
+  
+  my_cycles++;
+  if( inflight_req_cnt ){
+        active_cycles++;
+        sum_inflight_req +=inflight_req_cnt;
+  }
 
   if (!in_queue.empty()) {
     auto &req = in_queue.front();
@@ -81,9 +119,11 @@ void ramulator_wrapper::cycle() {
   }
   this->tick();
 }
+
 bool ramulator_wrapper::empty() const {
   return in_queue.empty() and out_queue.empty() and outgoing_reqs == 0;
 }
+
 std::string ramulator_wrapper::get_internal_size() const {
   return fmt::format("name in out outgoing\n mem {} {} {}", in_queue.size(),
                      out_queue.size(), outgoing_reqs);

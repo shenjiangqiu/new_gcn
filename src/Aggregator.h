@@ -9,6 +9,9 @@
 
 #include "Slide_window.h"
 
+#include <unordered_map>
+#include <vector>
+
 class Aggregator {
 public:
   void add_task(std::shared_ptr<Slide_window> window);
@@ -21,6 +24,8 @@ public:
   Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
              const shared_ptr<EdgeBuffer> &edgeBuffer,
              const shared_ptr<Aggregator_buffer> &aggBuffer, int totalCores);
+  
+  ~Aggregator();
 
 private:
   //
@@ -32,6 +37,13 @@ private:
 
   std::shared_ptr<Slide_window> current_sliding_window;
   int total_cores;
+  
+  using HistoCount = std::unordered_map<int, uint64_t>;
+  HistoCount edgesInWindowHist, inputEffHist;
+  
+  #define EDGE 0
+  #define EFF 1
+  void updateEdgesHist( int flag, int edge_cnt);
 
   bool working{false};
 
