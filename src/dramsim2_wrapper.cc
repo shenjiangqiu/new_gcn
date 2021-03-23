@@ -12,7 +12,6 @@ void dramsim2_wrapper::send(uint64_t addr, bool is_write) {
   } else {
     read_queue.push(addr);
   }
-  inflight_req_cnt++;
 }
 
 bool dramsim2_wrapper::available() const {
@@ -21,8 +20,6 @@ bool dramsim2_wrapper::available() const {
 }
 
 void dramsim2_wrapper::cycle() {
-  
-  
   
   my_cycles++;
   if( inflight_req_cnt ){ 
@@ -35,12 +32,15 @@ void dramsim2_wrapper::cycle() {
     if (m_memory_system->willAcceptTransaction( next )) {
       m_memory_system->addTransaction(false, next);
       read_queue.pop();
+      inflight_req_cnt++;
     }
   } else if (!write_queue.empty()) {
     auto &&next = write_queue.front();
     if (m_memory_system->willAcceptTransaction( next)) {
       m_memory_system->addTransaction(true, next);
       write_queue.pop();
+      inflight_req_cnt++;
+      pending_write_req++;
     }
   }
 
@@ -71,10 +71,10 @@ dramsim2_wrapper::dramsim2_wrapper(const std::string& config_file,
     my_cycles = 0;
     active_cycles = 0;
     inflight_req_cnt = 0;
-    sum_inflight_req =0;
+    sum_inflight_req = 0;
     finished_read_req = 0;
     finished_write_req = 0;
-
+    pending_write_req = 0;
      spdlog::info("init dramsim");
 }
 
@@ -84,10 +84,11 @@ dramsim2_wrapper::~dramsim2_wrapper() {
    std::string model = std::string(config::model);
    std::string fileName = graph+"-"+model+"-"+"drm2.txt";
    
-   float mlp = (float)sum_inflight_req/active_cycles;
-   float activeRate = (float)active_cycles/my_cycles;
+   float mlp = (float)(sum_inflight_req)/(float)(active_cycles);
+   float activeRate = (float)(active_cycles)/(float)(my_cycles);
 
-   std::cout<<"Interface MLP "<< mlp <<" memoy activeRate "<<activeRate;
+   std::cout<<"Interface MLP "<< mlp <<" memory activeRate "<<activeRate;
+   std::cout<<" inflight_req "<<inflight_req_cnt<<"  inflight_write_req "<<pending_write_req;
    std::cout<<" BW "<<(finished_read_req+finished_write_req)*64.0/active_cycles;
    std::cout<<" readRqt "<<finished_read_req<<"  writeRqt "<<finished_write_req<<"\n";
 
@@ -106,4 +107,5 @@ void dramsim2_wrapper::receive_read(uint32_t id, uint64_t addr, uint64_t memCycl
 void dramsim2_wrapper::receive_write(uint32_t id, uint64_t addr, uint64_t memCycle) {
   inflight_req_cnt--;
   finished_write_req++;
+  pending_write_req--;
 }
