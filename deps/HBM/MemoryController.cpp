@@ -75,6 +75,8 @@ MemoryController::MemoryController(unsigned sid, unsigned cid, MemorySystem *par
   //set here to avoid compile errors
   currentClockCycle = 0;
   active_cycles = 0;
+  my_cycles = 0;
+  total_requests =0;
 
   //reserve memory for vectors
   transactionQueue.reserve(TRANS_QUEUE_DEPTH);
@@ -162,8 +164,12 @@ void MemoryController::update()
   
   updateBankStates();
   
-  if( !transactionQueue.empty())
+  my_cycles++;
+  if( !transactionQueue.empty()){
         active_cycles++;
+        total_requests += transactionQueue.size()+pendingReadTransactions.size();
+        //total_requests += returnTransaction.size();
+  }      
 
   // check for outgoing row command packets and handle countdowns
   if (outgoingRowCmdPacket != NULL) {
@@ -835,16 +841,21 @@ void MemoryController::printStatsToFile(bool finalStats, std::ofstream &  ofs){
   cout.precision(3);
   cout.setf(ios::fixed, ios::floatfield);
   
-  PRINT(" tCK(ns) " <<tCK<<" #cycles " <<currentClockCycle <<" cycle "<<cyclesElapsed<<" seconds: "<<secondsThisEpoch);
-  PRINT(" Channel " << parentMemorySystem->channelID << " statistics");
-  PRINTN(" Total Return Transactions: " << totalTransactions);
-  PRINT( " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s");
+  float MLP = (float)total_requests/active_cycles; 
+  float activeRate = (float)active_cycles/my_cycles;
+  
+  //PRINT(" tCK(ns) " <<tCK<<" #cycles " <<currentClockCycle <<" cycle "<<cyclesElapsed<<" seconds: "<<secondsThisEpoch);
+  PRINT(" channel " << parentMemorySystem->channelID <<" Tx: " << totalTransactions 
+        << " traffic " << totalBytesTransferred
+        <<" activeRate "<< activeRate <<" MLP "<<MLP<<" BW " << totalBandwidth << " GB/s");
   
   //Yue
-  ofs<<" tCK(ns) " <<tCK<<" #cycles " <<currentClockCycle <<" cycle " <<cyclesElapsed<<" seconds: "<<secondsThisEpoch<<"\n";
-  ofs<<cyclesElapsed<<"  "<<secondsThisEpoch<<" Channel " << parentMemorySystem->channelID << " statistics";
-  ofs<<" Total Return Transactions: " << totalTransactions;
-  ofs << " (" << totalBytesTransferred << " bytes) aggregate average bandwidth " << totalBandwidth << "GB/s\n";
+  //ofs<<" tCK(ns) " <<tCK<<" #cycles " <<currentClockCycle <<" cycle " <<cyclesElapsed<<" seconds: "<<secondsThisEpoch<<"\n";
+  ofs<<cyclesElapsed<<"  "<<secondsThisEpoch;
+  ofs<<"channel " << parentMemorySystem->channelID;
+  ofs<<" Transactions: " << totalTransactions;
+  ofs << " (" << totalBytesTransferred << " bytes)  MLP "<<MLP;
+  ofs << "  BW "<<totalBandwidth << "GB/s\n";
   
 
   //double totalAggregateBandwidth = 0.0;  

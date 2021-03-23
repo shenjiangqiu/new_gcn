@@ -1,0 +1,34 @@
+tparse graph:reddit
+[2021-03-07 19:18:59.602] [info] print out model levels 602,16,16
+[2021-03-07 19:18:59.602] [info] memory simulator: ramulator
+mem_simulator ramulator
+[2021-03-07 19:18:59.603] [info] set up dram_gap:1e-09,cpu_gap:1e-09, with dram_freq:1,cpu_freq:1
+[2021-03-07 19:18:59.603] [info] xws push back:870
+[2021-03-07 19:18:59.603] [info] yws push back:27
+[2021-03-07 19:18:59.603] [info] xws push back:32768
+[2021-03-07 19:18:59.603] [info] yws push back:1024
+2408 232964 870
+[2021-03-07 19:19:31.454] [info] total_nodes:232964, total_feature_length:602,16,total input traffic need to be read:2972681336
+finished run the simulator, cycle:9098052043
+[2021-03-07 20:26:50.271] [info] the result
+total_Aggregator_idle_waiting_input 13947671
+total_Aggregator_idle_waiting_edge 131959
+total_idle_waiting_agg_write 276
+do_aggregate 9084075065
+do_systolic 5897192
+total_systolicArray_idle_waiting_agg_read 9092154851
+total_idle_waiting_out 5896916
+ReaderBuffer_total_read_input_latency 2447411043 total_read_input_len 98396560  total_read_input_times 2247748  avg_read_latency 1088 avg_read_len 43
+ReaderBuffer_total_read_edge_latency 14726808  ReaderBuffer_total_read_edge_len 9192  total_read_edge_times 276  avg_read_edge_latency 53358  avg_read_edge_len 33
+total_mac_in_systolic_array 2312905984
+total_read_input_traffic 141804967440
+total_read_edge_traffic 918786920
+total_inputBuffer_idle_cycles 101893
+total_edgeBuffer_idle_cycles 101893
+total_real_input_idle 6657643657
+total_real_edge_idle 9083252578
+total_cycles 9098052043
+
+[2021-03-07 20:26:50.271] [info] the_time_stamp
+8861320911,9098052042
+

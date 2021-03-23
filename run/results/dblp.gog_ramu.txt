@@ -1,0 +1,34 @@
+parse graph:dblp.gog
+[2021-03-08 19:20:56.665] [info] print out model levels 1639,512,512
+[2021-03-08 19:20:56.665] [info] memory simulator: ramulator
+mem_simulator ramulator
+[2021-03-08 19:20:56.666] [info] set up dram_gap:2e-09,cpu_gap:1e-09, with dram_freq:0.5,cpu_freq:1
+[2021-03-08 19:20:56.666] [info] xws push back:319
+[2021-03-08 19:20:56.666] [info] yws push back:9
+[2021-03-08 19:20:56.666] [info] xws push back:1024
+[2021-03-08 19:20:56.666] [info] yws push back:32
+6556 17716 319
+[2021-03-08 19:20:56.706] [info] total_nodes:17716, total_feature_length:1639,512,total input traffic need to be read:3048530224
+finished run the simulator, cycle:50990691
+[2021-03-08 19:21:21.094] [info] the result
+total_Aggregator_idle_waiting_input 16178101
+total_Aggregator_idle_waiting_edge 112561
+total_idle_waiting_agg_write 74
+do_aggregate 34811660
+do_systolic 5723232
+total_systolicArray_idle_waiting_agg_read 45267459
+total_idle_waiting_out 5723158
+ReaderBuffer_total_read_input_latency 53147551 total_read_input_len 1312536  total_read_input_times 32859  avg_read_latency 1617 avg_read_len 39
+ReaderBuffer_total_read_edge_latency 144076  ReaderBuffer_total_read_edge_len 2320  total_read_edge_times 74  avg_read_edge_latency 1946  avg_read_edge_len 31
+total_mac_in_systolic_array 19822735360
+total_read_input_traffic 1030752856
+total_read_edge_traffic 987600
+total_inputBuffer_idle_cycles 109825
+total_edgeBuffer_idle_cycles 109825
+total_real_input_idle 13717234
+total_real_edge_idle 50739302
+total_cycles 50990691
+
+[2021-03-08 19:21:21.094] [info] the_time_stamp
+37853400,50990690
+

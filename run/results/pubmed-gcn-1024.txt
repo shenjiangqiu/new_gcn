@@ -1,0 +1,30 @@
+parse graph:pubmed
+[2021-02-08 12:15:31.174] [info] print out model levels 500,16,16
+[2021-02-08 12:15:31.174] [info] init dramsim
+[2021-02-08 12:15:31.174] [info] set up dram_gap:1e-09,cpu_gap:1e-09, with dram_freq:1,cpu_freq:1
+[2021-02-08 12:15:31.174] [info] xws push back:1048
+[2021-02-08 12:15:31.174] [info] yws push back:32
+[2021-02-08 12:15:31.174] [info] xws push back:32768
+[2021-02-08 12:15:31.174] [info] yws push back:1024
+2000 19717 1048
+[2021-02-08 12:15:31.199] [info] total_nodes:19717, total_feature_length:500,16,total input traffic need to be read:2803327697
+finished run the simulator, cycle:39407458
+[2021-02-08 12:20:20.379] [info] the result
+total_idle_waiting_input 32145712
+total_idle_waiting_edge 126090
+total_idle_waiting_agg_write 20
+do_aggregate 7257770
+do_systolic 461812
+total_idle_waiting_agg_read 38945646
+total_idle_waiting_out 461792
+total_read_input_latency 68169597
+total_read_input_times 10201
+total_read_edge_latency 218023
+total_read_edge_times 20
+total_mac_in_systolic_array 167684608
+total_read_input_traffic 558971888
+total_read_edge_traffic 867144
+
+[2021-02-08 12:20:20.379] [info] the_time_stamp
+39082682,39407457
+

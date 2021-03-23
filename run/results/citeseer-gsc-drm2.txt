@@ -1,0 +1,24 @@
+ tCK(ns) 2 #cycles 8589147 cycle 358811 seconds: 0.000717622
+358811  0.000717622 Channel 0 statistics Total Return Transactions: 356817 (11418144 bytes) aggregate average bandwidth 14.8184GB/s
+ Rank 0 -  Reads: 356817 (11418144 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 848657 seconds: 0.00169731
+848657  0.00169731 Channel 1 statistics Total Return Transactions: 459214 (14694848 bytes) aggregate average bandwidth 8.06312GB/s
+ Rank 0 -  Reads: 443297 (14185504 bytes) Writes: 15917 (509344 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 358841 seconds: 0.000717682
+358841  0.000717682 Channel 2 statistics Total Return Transactions: 356827 (11418464 bytes) aggregate average bandwidth 14.8175GB/s
+ Rank 0 -  Reads: 356827 (11418464 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 848677 seconds: 0.00169735
+848677  0.00169735 Channel 3 statistics Total Return Transactions: 459181 (14693792 bytes) aggregate average bandwidth 8.06235GB/s
+ Rank 0 -  Reads: 443271 (14184672 bytes) Writes: 15910 (509120 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 358816 seconds: 0.000717632
+358816  0.000717632 Channel 4 statistics Total Return Transactions: 356801 (11417632 bytes) aggregate average bandwidth 14.8175GB/s
+ Rank 0 -  Reads: 356801 (11417632 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 848345 seconds: 0.00169669
+848345  0.00169669 Channel 5 statistics Total Return Transactions: 459185 (14693920 bytes) aggregate average bandwidth 8.06557GB/s
+ Rank 0 -  Reads: 443288 (14185216 bytes) Writes: 15897 (508704 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 358714 seconds: 0.000717428
+358714  0.000717428 Channel 6 statistics Total Return Transactions: 356782 (11417024 bytes) aggregate average bandwidth 14.8209GB/s
+ Rank 0 -  Reads: 356782 (11417024 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 8589147 cycle 848545 seconds: 0.00169709
+848545  0.00169709 Channel 7 statistics Total Return Transactions: 459186 (14693952 bytes) aggregate average bandwidth 8.06369GB/s
+ Rank 0 -  Reads: 443285 (14185120 bytes) Writes: 15901 (508832 bytes)

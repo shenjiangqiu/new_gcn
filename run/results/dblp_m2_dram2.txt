@@ -1,0 +1,67 @@
+parse graph:dblp.gog
+[2021-03-15 12:01:15.425] [info] print out model levels 1639,512,512
+[2021-03-15 12:01:15.425] [info] memory simulator: dramsim2
+mem_simulator dramsim2
+[2021-03-15 12:01:15.425] [info] init dramsim
+[2021-03-15 12:01:15.425] [info] set up dram_gap:2e-09,cpu_gap:1e-09, with dram_freq:0.5,cpu_freq:1
+[2021-03-15 12:01:15.425] [info] xws push back:319
+[2021-03-15 12:01:15.425] [info] yws push back:9
+[2021-03-15 12:01:15.425] [info] xws push back:1024
+[2021-03-15 12:01:15.425] [info] yws push back:32
+6556 17716 319
+[2021-03-15 12:01:15.466] [info] total_nodes:17716, total_feature_length:1639,512,total input traffic need to be read:3048530224
+finished run the simulator, cycle:73591871
+[2021-03-15 12:04:22.722] [info] the result
+total_Aggregator_idle_waiting_input 38778226
+total_Aggregator_idle_waiting_edge 115279
+total_idle_waiting_agg_write 74
+do_aggregate 34811660
+do_systolic 5723232
+total_systolicArray_idle_waiting_agg_read 67868639
+total_idle_waiting_out 5723158
+ReaderBuffer_total_read_input_latency 101230961 total_read_input_len 1312536  total_read_input_times 32859  avg_read_latency 3080 avg_read_len 39
+ReaderBuffer_total_read_edge_latency 225981  ReaderBuffer_total_read_edge_len 2320  total_read_edge_times 74  avg_read_edge_latency 3053  avg_read_edge_len 31
+total_mac_in_systolic_array 19822735360
+total_read_input_traffic 1030752856
+total_read_edge_traffic 987600
+total_inputBuffer_idle_cycles 109824
+total_edgeBuffer_idle_cycles 109824
+total_real_input_idle 8807663
+total_real_edge_idle 73261297
+total_cycles 73591871
+
+[2021-03-15 12:04:22.722] [info] the_time_stamp
+52474438,73591870
+
+ tCK(ns) 2.000 #cycles 36795936 cycle 1501732 seconds: 0.003
+ Channel 0 statistics
+ Total Return Transactions: 1469203 (47014496 bytes) aggregate average bandwidth 14.578GB/s
+ Rank 0 -  Reads: 1469203 (47014496 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 5864242 seconds: 0.012
+ Channel 1 statistics
+ Total Return Transactions: 2636097 (84355104 bytes) aggregate average bandwidth 6.698GB/s
+ Rank 0 -  Reads: 2564073 (82050336 bytes) Writes: 72024 (2304768 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 1501487 seconds: 0.003
+ Channel 2 statistics
+ Total Return Transactions: 1469314 (47018048 bytes) aggregate average bandwidth 14.582GB/s
+ Rank 0 -  Reads: 1469314 (47018048 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 5888985 seconds: 0.012
+ Channel 3 statistics
+ Total Return Transactions: 2636131 (84356192 bytes) aggregate average bandwidth 6.670GB/s
+ Rank 0 -  Reads: 2564074 (82050368 bytes) Writes: 72057 (2305824 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 1501753 seconds: 0.003
+ Channel 4 statistics
+ Total Return Transactions: 1469388 (47020416 bytes) aggregate average bandwidth 14.580GB/s
+ Rank 0 -  Reads: 1469388 (47020416 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 5853116 seconds: 0.012
+ Channel 5 statistics
+ Total Return Transactions: 2635998 (84351936 bytes) aggregate average bandwidth 6.711GB/s
+ Rank 0 -  Reads: 2564014 (82048448 bytes) Writes: 71984 (2303488 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 1501788 seconds: 0.003
+ Channel 6 statistics
+ Total Return Transactions: 1469328 (47018496 bytes) aggregate average bandwidth 14.579GB/s
+ Rank 0 -  Reads: 1469328 (47018496 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2.000 #cycles 36795936 cycle 5851646 seconds: 0.012
+ Channel 7 statistics
+ Total Return Transactions: 2635934 (84349888 bytes) aggregate average bandwidth 6.712GB/s
+ Rank 0 -  Reads: 2563939 (82046048 bytes) Writes: 71995 (2303840 bytes)

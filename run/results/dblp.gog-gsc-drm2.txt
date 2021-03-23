@@ -1,0 +1,24 @@
+ tCK(ns) 2 #cycles 26403766 cycle 1469203 seconds: 0.00293841
+1469203  0.00293841 Channel 0 statistics Total Return Transactions: 1469203 (47014496 bytes) aggregate average bandwidth 14.9012GB/s
+ Rank 0 -  Reads: 1469203 (47014496 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 2847528 seconds: 0.00569506
+2847528  0.00569506 Channel 1 statistics Total Return Transactions: 2605717 (83382944 bytes) aggregate average bandwidth 13.6358GB/s
+ Rank 0 -  Reads: 2564073 (82050336 bytes) Writes: 41644 (1332608 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 1469314 seconds: 0.00293863
+1469314  0.00293863 Channel 2 statistics Total Return Transactions: 1469314 (47018048 bytes) aggregate average bandwidth 14.9012GB/s
+ Rank 0 -  Reads: 1469314 (47018048 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 2847529 seconds: 0.00569506
+2847529  0.00569506 Channel 3 statistics Total Return Transactions: 2605752 (83384064 bytes) aggregate average bandwidth 13.6359GB/s
+ Rank 0 -  Reads: 2564074 (82050368 bytes) Writes: 41678 (1333696 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 1469388 seconds: 0.00293878
+1469388  0.00293878 Channel 4 statistics Total Return Transactions: 1469388 (47020416 bytes) aggregate average bandwidth 14.9012GB/s
+ Rank 0 -  Reads: 1469388 (47020416 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 2847470 seconds: 0.00569494
+2847470  0.00569494 Channel 5 statistics Total Return Transactions: 2605816 (83386112 bytes) aggregate average bandwidth 13.6366GB/s
+ Rank 0 -  Reads: 2564014 (82048448 bytes) Writes: 41802 (1337664 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 1469328 seconds: 0.00293866
+1469328  0.00293866 Channel 6 statistics Total Return Transactions: 1469328 (47018496 bytes) aggregate average bandwidth 14.9012GB/s
+ Rank 0 -  Reads: 1469328 (47018496 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 26403766 cycle 2847395 seconds: 0.00569479
+2847395  0.00569479 Channel 7 statistics Total Return Transactions: 2605745 (83383840 bytes) aggregate average bandwidth 13.6365GB/s
+ Rank 0 -  Reads: 2563939 (82046048 bytes) Writes: 41806 (1337792 bytes)

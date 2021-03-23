@@ -152,6 +152,8 @@ private:
   unsigned refreshRank;
   std::string statsOutputFileName;//Yue
   uint64_t active_cycles;
+  uint64_t my_cycles;
+  uint64_t total_requests;
   
 };
 }

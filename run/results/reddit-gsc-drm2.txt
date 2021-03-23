@@ -1,0 +1,24 @@
+ tCK(ns) 2 #cycles 21448696773 cycle 11721845169 seconds: 23.4437
+11721845169  23.4437 Channel 0 statistics Total Return Transactions: 2119330122 (67818563904 bytes) aggregate average bandwidth 2.69416GB/s
+ Rank 0 -  Reads: 2119330122 (67818563904 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 9271877294 seconds: 18.5438
+9271877294  18.5438 Channel 1 statistics Total Return Transactions: 1668729627 (53399348064 bytes) aggregate average bandwidth 2.68187GB/s
+ Rank 0 -  Reads: 1667676436 (53365645952 bytes) Writes: 1053191 (33702112 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 83128150 seconds: 0.166256
+83128150  0.166256 Channel 2 statistics Total Return Transactions: 7874961 (251998752 bytes) aggregate average bandwidth 1.41163GB/s
+ Rank 0 -  Reads: 7027902 (224892864 bytes) Writes: 847059 (27105888 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 0 seconds: 0
+0  0 Channel 3 statistics Total Return Transactions: 0 (0 bytes) aggregate average bandwidth -nanGB/s
+ Rank 0 -  Reads: 0 (0 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 0 seconds: 0
+0  0 Channel 4 statistics Total Return Transactions: 0 (0 bytes) aggregate average bandwidth -nanGB/s
+ Rank 0 -  Reads: 0 (0 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 0 seconds: 0
+0  0 Channel 5 statistics Total Return Transactions: 0 (0 bytes) aggregate average bandwidth -nanGB/s
+ Rank 0 -  Reads: 0 (0 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 0 seconds: 0
+0  0 Channel 6 statistics Total Return Transactions: 0 (0 bytes) aggregate average bandwidth -nanGB/s
+ Rank 0 -  Reads: 0 (0 bytes) Writes: 0 (0 bytes)
+ tCK(ns) 2 #cycles 21448696773 cycle 341025915 seconds: 0.682052
+341025915  0.682052 Channel 7 statistics Total Return Transactions: 61839534 (1978865088 bytes) aggregate average bandwidth 2.70208GB/s
+ Rank 0 -  Reads: 61839534 (1978865088 bytes) Writes: 0 (0 bytes)

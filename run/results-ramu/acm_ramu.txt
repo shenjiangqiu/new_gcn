@@ -1,0 +1,43 @@
+parse graph:acm
+[2021-03-17 11:43:30.620] [info] print out model levels 1830,512,512
+[2021-03-17 11:43:30.620] [info] memory simulator: ramulator
+mem_simulator ramulator
+addr_mapping is 3  type 3
+[2021-03-17 11:43:30.623] [info] set up dram_gap:2e-09,cpu_gap:1e-09, with dram_freq:0.5,cpu_freq:1
+[2021-03-17 11:43:30.623] [info] xws push back:286
+[2021-03-17 11:43:30.623] [info] yws push back:8
+[2021-03-17 11:43:30.623] [info] xws push back:1024
+[2021-03-17 11:43:30.623] [info] yws push back:32
+7320 3025 286
+[2021-03-17 11:43:30.629] [info] total_nodes:3025, total_feature_length:1830,512,total input traffic need to be read:302553002
+finished run the simulator, cycle:9743283
+[2021-03-17 11:43:33.767] [info] the result
+total_Aggregator_idle_waiting_input 958406
+total_Aggregator_idle_waiting_edge 154945
+total_idle_waiting_agg_write 14
+do_aggregate 8784425
+do_systolic 1070960
+total_systolicArray_idle_waiting_agg_read 8672323
+total_idle_waiting_out 1070946
+ReaderBuffer_total_read_input_latency 4877548 total_read_input_len 118760  total_read_input_times 2508  avg_read_latency 1944 avg_read_len 47
+ReaderBuffer_total_read_edge_latency 33811  ReaderBuffer_total_read_edge_len 456  total_read_edge_times 14  avg_read_edge_latency 2415  avg_read_edge_len 32
+total_mac_in_systolic_array 3752982528
+total_read_input_traffic 110109288
+total_read_edge_traffic 234248
+total_inputBuffer_idle_cycles 152641
+total_edgeBuffer_idle_cycles 152641
+total_real_input_idle 5512099
+total_real_edge_idle 9559091
+total_cycles 9743283
+
+[2021-03-17 11:43:33.767] [info] the_time_stamp
+7541319,9743282
+
+ channel 0 MLP  2.44205 bw 8.57058 A-rate 0.367565 A-rate1 0.334473 readBytes 1.37981e+07 writeBytes 1.5488e+06
+ channel 1 MLP  2.44115 bw 8.57019 A-rate 0.367617 A-rate1 0.334594 readBytes 1.37996e+07 writeBytes 1.5488e+06
+ channel 2 MLP  2.44023 bw 8.56916 A-rate 0.367588 A-rate1 0.334454 readBytes 1.37965e+07 writeBytes 1.5488e+06
+ channel 3 MLP  2.4415 bw 8.57084 A-rate 0.367548 A-rate1 0.334532 readBytes 1.37979e+07 writeBytes 1.54874e+06
+ channel 4 MLP  2.44051 bw 8.57065 A-rate 0.367545 A-rate1 0.334491 readBytes 1.37974e+07 writeBytes 1.5488e+06
+ channel 5 MLP  2.44103 bw 8.57124 A-rate 0.367523 A-rate1 0.33441 readBytes 1.37975e+07 writeBytes 1.5488e+06
+ channel 6 MLP  2.44127 bw 8.57089 A-rate 0.367575 A-rate1 0.334517 readBytes 1.3799e+07 writeBytes 1.5488e+06
+ channel 7 MLP  2.44144 bw 8.56962 A-rate 0.367648 A-rate1 0.334522 readBytes 1.37998e+07 writeBytes 1.5488e+06
