@@ -37,6 +37,7 @@ private:
 
   std::shared_ptr<Slide_window> current_sliding_window;
   int total_cores;
+  int cur_layer;
   
   using HistoCount = std::unordered_map<int, uint64_t>;
   HistoCount edgesInWindowHist, inputEffHist;

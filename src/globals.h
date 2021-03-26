@@ -35,6 +35,7 @@ public:
   std::vector<unsigned long long> layer_do_aggregate;
   std::vector<unsigned long long> layer_aggregate_op;
   std::vector<unsigned long long>layer_do_systolic;
+  std::vector<unsigned long long>layer_wait_input;
   unsigned long long do_systolic = 0;
   unsigned long long total_waiting_agg_read = 0;
   unsigned long long total_waiting_out = 0;

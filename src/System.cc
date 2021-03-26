@@ -110,6 +110,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     global_definitions.layer_edges.push_back(0);
     global_definitions.layer_input_vertics.push_back(0);
     global_definitions.layer_do_aggregate.push_back(0);
+    global_definitions.layer_wait_input.push_back(0);
     global_definitions.layer_aggregate_op.push_back(0);
     global_definitions.layer_do_systolic.push_back(0);
   }
@@ -222,6 +223,14 @@ void System::run() {
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), "  "));
 
+  auto layer_time = global_definitions.finished_time_stamp;
+  int total_level = layer_time.size();
+  for(int i = total_level-1; i > 0; i-- ){
+     layer_time[i] = global_definitions.finished_time_stamp[i] -
+                       global_definitions.finished_time_stamp[i-1];
+  }
+
+  
   spdlog::info("layer_input_windows  {}\n",
                fmt::join(global_definitions.layer_input_windows.begin(),
                          global_definitions.layer_input_windows.end(), "  "));
@@ -234,11 +243,19 @@ void System::run() {
                fmt::join(global_definitions.layer_input_vertics.begin(),
                          global_definitions.layer_input_vertics.end(), "  "));
 
-  spdlog::info("layer_do_aggregate(cycles)  {}\n",
+  spdlog::info("layer_time  {}\n",
+               fmt::join(layer_time.begin(),
+                         layer_time.end(), "  "));
+  
+  spdlog::info("layer_wait_input_time  {}\n",
+               fmt::join(global_definitions.layer_wait_input.begin(),
+                         global_definitions.layer_wait_input.end(), "  "));
+  
+  spdlog::info("layer_aggregate_time  {}\n",
                fmt::join(global_definitions.layer_do_aggregate.begin(),
                          global_definitions.layer_do_aggregate.end(), "  "));
 
-  spdlog::info("layer_do_systolic(cycles)  {}\n",
+  spdlog::info("layer_systolic_time  {}\n",
                fmt::join(global_definitions.layer_do_systolic.begin(),
                          global_definitions.layer_do_systolic.end(), "  "));  
   
@@ -247,8 +264,6 @@ void System::run() {
                          global_definitions.layer_aggregate_op.end(), "  "));                                              
   
                                               
-
-
 }
 
 void System::cycle() {

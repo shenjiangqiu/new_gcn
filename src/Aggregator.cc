@@ -15,7 +15,9 @@ Aggregator::Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
                        const shared_ptr<Aggregator_buffer> &aggBuffer,
                        int totalCores)
     : input_buffer(inputBuffer), edge_buffer(edgeBuffer), agg_buffer(aggBuffer),
-      total_cores(totalCores) {}
+      total_cores(totalCores) {
+           cur_layer = 0;
+      }
 
 
 void Aggregator::cycle() {
@@ -58,6 +60,7 @@ void Aggregator::cycle() {
       global_definitions.do_aggregate += remaining_cycles;
       
       working = true;
+      cur_layer = current_sliding_window->getLevel();
 
       if (current_sliding_window->isTheFirstRow()) {
         agg_buffer->add_new_task(current_sliding_window);
@@ -68,6 +71,7 @@ void Aggregator::cycle() {
     } else {
       if (!input_buffer->isCurrentReady()) {
         global_definitions.total_waiting_input++;
+        global_definitions.layer_wait_input[cur_layer]++;
       }
       if (!edge_buffer->isCurrentReady()) {
         global_definitions.total_waiting_edge++;
