@@ -23,7 +23,7 @@ public:
 
 
 private:
-  dramsim3::MemorySystem *m_memory_system;
+  std::unique_ptr<dramsim3::MemorySystem> m_memory_system;
   void receive_read(uint64_t addr);
   void receive_write(uint64_t addr);
   std::queue<uint64_t> read_queue;

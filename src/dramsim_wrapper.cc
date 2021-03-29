@@ -5,14 +5,21 @@
 #include "dramsim_wrapper.h"
 #include "spdlog/spdlog.h"
 void dramsim_wrapper::send(uint64_t addr, bool is_write) {
+  spdlog::set_level(spdlog::level::debug);
   if (is_write) {
     write_queue.push(addr);
 
   } else {
     read_queue.push(addr);
   }
+  spdlog::debug("this:{}",(void*)this);
+  spdlog::debug("m_memory_system:{}",(void*)m_memory_system.get());
 
   int bank_id = m_memory_system->GetChannel(addr) * 16;
+  spdlog::debug("this:{}",(void*)this);
+  spdlog::debug("m_memory_system:{}",(void*)m_memory_system.get());
+  spdlog::set_level(spdlog::level::info);
+
   bank_id += m_memory_system->GetBankID(addr);
   bank_req_cnt[bank_id]++;
   if (bank_req_cnt[bank_id] == 1)
@@ -71,10 +78,11 @@ dramsim_wrapper::dramsim_wrapper(const std::string &config_file,
   finished_read_req = 0;
   finished_write_req = 0;
 
-  m_memory_system = dramsim3::GetMemorySystem(
-      config_file, output_dir,
-      [this](uint64_t addr) { this->receive_read(addr); },
-      [this](uint64_t addr) { this->receive_write(addr); });
+  m_memory_system =
+      std::unique_ptr<dramsim3::MemorySystem>(dramsim3::GetMemorySystem(
+          config_file, output_dir,
+          [this](uint64_t addr) { this->receive_read(addr); },
+          [this](uint64_t addr) { this->receive_write(addr); }));
 
   spdlog::info("init dramsim");
 }
@@ -93,15 +101,17 @@ dramsim_wrapper::~dramsim_wrapper() {
             << finished_write_req << "\n";
 
   m_memory_system->PrintStats(); // Yue
-  delete m_memory_system;
-  m_memory_system = 0;
 }
 
 void dramsim_wrapper::receive_read(uint64_t addr) {
   read_ret.push(addr);
   inflight_req_cnt--;
-
+  std::cout << this << std::endl;
+  std::cout<<m_memory_system.get()<<std::endl;
   int bank_id = m_memory_system->GetChannel(addr) * 16;
+  std::cout<<m_memory_system.get()<<std::endl;
+  std::cout << this << std::endl;
+
   bank_id += m_memory_system->GetBankID(addr);
   bank_req_cnt[bank_id]--;
   if (bank_req_cnt[bank_id] == 0)

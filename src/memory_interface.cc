@@ -90,6 +90,7 @@ memory_interface::memory_interface(const std::string &dram_config_name,
         std::make_shared<dramsim2_wrapper>(dram_config_name, dev_config_name);
   else {
     spdlog::error("fail to find the dram:{}",mem_simulator);
+    throw;
     m_mem.reset(new ramulator_wrapper(dram_config_name, 64));
   }
 }
