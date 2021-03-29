@@ -16,3 +16,4 @@ run/*.graph
 run/*.txt
 run/*.ini
 run/*.json
+run/results

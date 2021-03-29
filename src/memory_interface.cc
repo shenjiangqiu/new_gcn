@@ -1,5 +1,6 @@
 #include "globals.h"
 #include <memory_interface.h>
+#include<spdlog/spdlog.h>
 void memory_interface::cycle() {
 
   m_mem->cycle();
@@ -87,6 +88,8 @@ memory_interface::memory_interface(const std::string &dram_config_name,
   else if (mem_simulator.compare("dramsim2") == 0)
     m_mem =
         std::make_shared<dramsim2_wrapper>(dram_config_name, dev_config_name);
-  else
+  else {
+    spdlog::error("fail to find the dram:{}",mem_simulator);
     m_mem.reset(new ramulator_wrapper(dram_config_name, 64));
+  }
 }

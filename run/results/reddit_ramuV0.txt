@@ -1,34 +1,63 @@
-tparse graph:reddit
-[2021-03-07 19:18:59.602] [info] print out model levels 602,16,16
-[2021-03-07 19:18:59.602] [info] memory simulator: ramulator
+[2021-03-26 22:42:50.686] [info] Enable feature sparsity: 0
+parse graph:reddit
+[2021-03-26 22:43:09.924] [info] print out model levels 602,512,512
+[2021-03-26 22:43:09.924] [info] memory simulator: ramulator
 mem_simulator ramulator
-[2021-03-07 19:18:59.603] [info] set up dram_gap:1e-09,cpu_gap:1e-09, with dram_freq:1,cpu_freq:1
-[2021-03-07 19:18:59.603] [info] xws push back:870
-[2021-03-07 19:18:59.603] [info] yws push back:27
-[2021-03-07 19:18:59.603] [info] xws push back:32768
-[2021-03-07 19:18:59.603] [info] yws push back:1024
+addr_mapping is 3  type 3
+[2021-03-26 22:43:09.925] [info] set up dram_gap:2e-09,cpu_gap:1e-09, with dram_freq:0.5,cpu_freq:1
+[2021-03-26 22:43:09.925] [info] xws push back:870
+[2021-03-26 22:43:09.925] [info] yws push back:27
+[2021-03-26 22:43:09.925] [info] xws push back:1024
+[2021-03-26 22:43:09.925] [info] yws push back:32
 2408 232964 870
-[2021-03-07 19:19:31.454] [info] total_nodes:232964, total_feature_length:602,16,total input traffic need to be read:2972681336
-finished run the simulator, cycle:9098052043
-[2021-03-07 20:26:50.271] [info] the result
-total_Aggregator_idle_waiting_input 13947671
-total_Aggregator_idle_waiting_edge 131959
-total_idle_waiting_agg_write 276
-do_aggregate 9084075065
-do_systolic 5897192
-total_systolicArray_idle_waiting_agg_read 9092154851
-total_idle_waiting_out 5896916
-ReaderBuffer_total_read_input_latency 2447411043 total_read_input_len 98396560  total_read_input_times 2247748  avg_read_latency 1088 avg_read_len 43
-ReaderBuffer_total_read_edge_latency 14726808  ReaderBuffer_total_read_edge_len 9192  total_read_edge_times 276  avg_read_edge_latency 53358  avg_read_edge_len 33
-total_mac_in_systolic_array 2312905984
-total_read_input_traffic 141804967440
+[2021-03-26 22:43:44.712] [info] total_nodes:232964, total_feature_length:602,512,total input traffic need to be read:2972644448
+finished run the simulator, cycle:16591304100
+[2021-03-27 00:30:16.497] [info] the result
+total_Aggregator_idle_waiting_input 100244390
+total_Aggregator_idle_waiting_edge 183255
+total_idle_waiting_agg_write 496
+do_aggregate 16491001164
+total_aggregate_op 127940531636
+total_handle_edges 229695748
+total_input_windows 3870343
+do_systolic 44350368
+total_systolicArray_idle_waiting_agg_read 16546953732
+total_idle_waiting_out 44349872
+ReaderBuffer_total_read_input_latency 8565277520 total_read_input_len 202242632  total_read_input_times 3870343  avg_read_latency 2213 avg_read_len 52
+ReaderBuffer_total_read_edge_latency 29926046  ReaderBuffer_total_read_edge_len 16616  total_read_edge_times 496  avg_read_edge_latency 60334  avg_read_edge_len 33
+total_mac_in_systolic_array 133068791808
+total_read_input_traffic 245811700360
 total_read_edge_traffic 918786920
-total_inputBuffer_idle_cycles 101893
-total_edgeBuffer_idle_cycles 101893
-total_real_input_idle 6657643657
-total_real_edge_idle 9083252578
-total_cycles 9098052043
+total_inputBuffer_idle_cycles 123137
+total_edgeBuffer_idle_cycles 123137
+total_real_input_idle 8114550906
+total_real_edge_idle 16561313545
+total_cycles 16591304100
 
-[2021-03-07 20:26:50.271] [info] the_time_stamp
-8861320911,9098052042
+[2021-03-27 00:30:16.497] [info] layer_completion_time  8987018877  16591304099
 
+[2021-03-27 00:30:16.497] [info] layer_input_windows  2245924  1624419  0
+
+[2021-03-27 00:30:16.497] [info] layer_edges  114847874  114847874  0
+
+[2021-03-27 00:30:16.497] [info] layer_input_vertics  58839578  50842759  0
+
+[2021-03-27 00:30:16.497] [info] layer_time  8987018877  7604285222
+
+[2021-03-27 00:30:16.497] [info] layer_wait_input_time  64902062  35342328  0
+
+[2021-03-27 00:30:16.497] [info] layer_aggregate_time  8921926538  7569074626  0
+
+[2021-03-27 00:30:16.497] [info] layer_systolic_time  23804832  20545536  0
+
+[2021-03-27 00:30:16.497] [info] layer_aggregate_op  69138420148  58802111488  0
+
+Interface MLP 18.8498 memoy activeRate 0.475103 BW 62.8551 readRqt 3855874402  writeRqt 14909695
+ channel 0 MLP  2.32818  BLP 2.12709e+06  bw 7.96208 A-rate 0.468824 A-rate1 0.436407 readBytes 3.08469e+10 writeBytes 1.19278e+08
+ channel 1 MLP  2.32816  BLP 2.12709e+06  bw 7.9621 A-rate 0.468822 A-rate1 0.436408 readBytes 3.08468e+10 writeBytes 1.19278e+08
+ channel 2 MLP  2.32812  BLP 2.12709e+06  bw 7.96199 A-rate 0.468829 A-rate1 0.436416 readBytes 3.08468e+10 writeBytes 1.19278e+08
+ channel 3 MLP  2.32814  BLP 2.12709e+06  bw 7.96201 A-rate 0.468828 A-rate1 0.436413 readBytes 3.08469e+10 writeBytes 1.19278e+08
+ channel 4 MLP  2.32816  BLP 2.12709e+06  bw 7.96204 A-rate 0.46883 A-rate1 0.436419 readBytes 3.08471e+10 writeBytes 1.19278e+08
+ channel 5 MLP  2.32819  BLP 2.12709e+06  bw 7.96206 A-rate 0.468831 A-rate1 0.436421 readBytes 3.08472e+10 writeBytes 1.19278e+08
+ channel 6 MLP  2.32819  BLP 2.12709e+06  bw 7.962 A-rate 0.468835 A-rate1 0.436423 readBytes 3.08473e+10 writeBytes 1.19278e+08
+ channel 7 MLP  2.32817  BLP 2.12709e+06  bw 7.96194 A-rate 0.468835 A-rate1 0.436422 readBytes 3.0847e+10 writeBytes 1.19278e+08

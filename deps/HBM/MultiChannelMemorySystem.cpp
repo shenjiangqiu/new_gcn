@@ -179,8 +179,10 @@ void MultiChannelMemorySystem::RegisterCallbacks(TransactionCompleteCB *readDone
                         double refreshpower,
                         double actprepower))
 {
-  for (auto x: channels) 
+  for (auto x: channels) {
+   //PRINT("==== register callback for Channel [" << x->channelID << "] ====");
     x->RegisterCallbacks(readDone, writeDone);
+  }
 }
 
 namespace DRAMSim 

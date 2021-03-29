@@ -57,6 +57,11 @@ private:
   std::queue<std::pair<uint64_t, bool>> in_queue;
   std::queue<uint64_t> out_queue;
   ramulator::MemoryBase *mem;
+
+  #define Channel_LEVEL    0
+  #define Rank_LEVEL       1
+  #define BankGroup_LEVEL  2
+  #define Bank_LEVEL       3
 };
 
 #endif

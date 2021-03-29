@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.cu": "cpp",
+        "bitset": "cpp",
+        "initializer_list": "cpp",
+        "array": "cpp",
+        "hashtable": "cpp",
+        "regex": "cpp",
+        "string_view": "cpp",
+        "utility": "cpp"
+    }
+}

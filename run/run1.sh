@@ -19,7 +19,7 @@ then
         -graph-name=acm\
         -dram-name=HBM2_8Gb_x128.ini -model=gsc\
         -ignore-neighbor=0 -ignore-self=0 \
-         -mem-sim=dramsim3 -dram-freq=0.5
+         -mem-sim=dramsim3 -dram-freq=0.5 enable_valid_node_only
 elif [  $1 = "dram2" ]
 then
     echo "Using DRAMSim2"
