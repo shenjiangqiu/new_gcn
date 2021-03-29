@@ -134,7 +134,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   total_size += first_layer_size * m_graph->get_num_nodes() *
                 (m_graph->get_num_nodes() + xw_s[0] - 1 / xw_s[0]);
   fmt::print("{} {} {}\n", first_layer_size, m_graph->get_num_nodes(), xw_s[0]);
-  for (auto i = 1; i < node_size.size() - 1; i++) {
+  for (auto i = 1u; i < node_size.size() - 1; i++) {
     total_size += node_size[i] * 4 * m_graph->get_num_nodes() *
                   m_graph->get_num_nodes() / xw_s[i];
   }

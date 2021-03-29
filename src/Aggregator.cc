@@ -130,7 +130,7 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.total_edges += total_nodes;
   
   int input_vertix_cnt = current_sliding_window->getYw();
-  int edges_cnt = current_sliding_window->getNumEdgesInWindow();
+  //int edges_cnt = current_sliding_window->getNumEdgesInWindow();
   //float input_efficiency = (float)(edges_cnt)/(float)input_vertix_cnt;
   //int eff = (int)(input_efficiency*1000);
   // updateEdgesHist(EDGE, edges_cnt);

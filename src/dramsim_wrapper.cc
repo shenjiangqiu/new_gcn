@@ -5,20 +5,14 @@
 #include "dramsim_wrapper.h"
 #include "spdlog/spdlog.h"
 void dramsim_wrapper::send(uint64_t addr, bool is_write) {
-  spdlog::set_level(spdlog::level::debug);
+
   if (is_write) {
     write_queue.push(addr);
 
   } else {
     read_queue.push(addr);
   }
-  spdlog::debug("this:{}",(void*)this);
-  spdlog::debug("m_memory_system:{}",(void*)m_memory_system.get());
-
   int bank_id = m_memory_system->GetChannel(addr) * 16;
-  spdlog::debug("this:{}",(void*)this);
-  spdlog::debug("m_memory_system:{}",(void*)m_memory_system.get());
-  spdlog::set_level(spdlog::level::info);
 
   bank_id += m_memory_system->GetBankID(addr);
   bank_req_cnt[bank_id]++;

@@ -110,7 +110,7 @@ void ramulator_wrapper::call_back(ramulator::Request &req) {
 
 
 void ramulator_wrapper::cycle() {
-  int bankId;
+
 
   my_cycles++;
   if( inflight_req_cnt ){

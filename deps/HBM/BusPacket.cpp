@@ -47,9 +47,7 @@ BusPacket::BusPacket(BusPacketType packtype, uint64_t physicalAddr,
 
 void BusPacket::print()
 {
-  if (this == NULL) //pointer use makes this a necessary precaution
-    return;
-  else {
+   {
     switch (busPacketType) {
       case READ:
         PRINT("BP [READ] pa[0x" << hex << physicalAddress << dec << "] r[" << rank << "] b[" << bank 

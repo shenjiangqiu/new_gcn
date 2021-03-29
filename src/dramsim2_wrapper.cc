@@ -98,13 +98,13 @@ dramsim2_wrapper::~dramsim2_wrapper() {
 }
 
 //DRAMSimMemory::DRAM_read_return_cb(uint32_t id, uint64_t addr, uint64_t memCycle)
-void dramsim2_wrapper::receive_read(uint32_t id, uint64_t addr, uint64_t memCycle) { 
+void dramsim2_wrapper::receive_read(uint32_t , uint64_t addr, uint64_t ) {
     read_ret.push(addr); 
     inflight_req_cnt--;
     finished_read_req++;
 }
 
-void dramsim2_wrapper::receive_write(uint32_t id, uint64_t addr, uint64_t memCycle) {
+void dramsim2_wrapper::receive_write(uint32_t , uint64_t , uint64_t ) {
   inflight_req_cnt--;
   finished_write_req++;
   pending_write_req--;
