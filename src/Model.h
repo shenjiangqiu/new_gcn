@@ -23,8 +23,8 @@ public:
 private:
   std::string name;
   std::vector<int> m_levels;
-  [[maybe_unused]] int sample_num;
-  [[maybe_unused]] bool is_sample;
+  int sample_num;
+  bool is_sample;
   bool is_concatenate;
   bool is_initial_residual;
 };
