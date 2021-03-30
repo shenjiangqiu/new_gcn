@@ -67,7 +67,7 @@ private:
   int yw ; // cnt of vertices in the the input buffer
   int level;
   uint64_t input_addr, edge_addr, output_addr;
-  int input_len, edge_len, output_len;
+  int input_len, edge_len, output_len; // in unit of bytes.
   int num_edges_in_window; //#edges in the window
   int current_node_size; // A feature dim.
   bool the_final_col;

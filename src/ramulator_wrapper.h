@@ -53,6 +53,8 @@ public:
 private:
   double tCK;
   unsigned long long outgoing_reqs = 0;
+  uint64_t sum_rd_latency = 0;
+
   //addr,iswrite
   std::queue<std::pair<uint64_t, bool>> in_queue;
   std::queue<uint64_t> out_queue;

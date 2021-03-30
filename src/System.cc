@@ -57,14 +57,13 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
 
   spdlog::info("xws push back:{}", xw_s.back());
   assert(xw_s.back() > 0 && "the window should be positive");
-  if( config::enable_feature_sparsity ){
-     int effective_size = (node_size[0] - config::ignore_neighbor);
-     effective_size = effective_size *( 1.0 -config::feature_sparse_rate0);
-     yw_s.push_back((input_buffer_size / 2) /
-                 ( effective_size * 4));
-  }else{
+  if (config::enable_feature_sparsity) {
+    int effective_size = (node_size[0] - config::ignore_neighbor);
+    effective_size = effective_size * (1.0 - config::feature_sparse_rate0);
+    yw_s.push_back((input_buffer_size / 2) / (effective_size * 4));
+  } else {
     yw_s.push_back((input_buffer_size / 2) /
-                 ((node_size[0] - config::ignore_neighbor) * 4));
+                   ((node_size[0] - config::ignore_neighbor) * 4));
   }
   assert(yw_s.back() > 0 && "the window should be positive");
   spdlog::info("yws push back:{}", yw_s.back());
@@ -79,33 +78,32 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     }
     spdlog::info("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
-    
+
     int effective_node_size = node_size[i];
-    if( config::enable_feature_sparsity ){
-       switch( i ){
-          case 0:
-                  effective_node_size = (int)(effective_node_size*
-                      (1-config::feature_sparse_rate0));
-                  break;    
-          case 1:
-                  effective_node_size = (int)(effective_node_size*
-                      (1-config::feature_sparse_rate1));
-                  break;  
-          case 2:
-                  effective_node_size = (int)(effective_node_size*
-                      (1-config::feature_sparse_rate2));
-                  break; 
-          default:
-                   ;
-       }
+    if (config::enable_feature_sparsity) {
+      switch (i) {
+      case 0:
+        effective_node_size =
+            (int)(effective_node_size * (1 - config::feature_sparse_rate0));
+        break;
+      case 1:
+        effective_node_size =
+            (int)(effective_node_size * (1 - config::feature_sparse_rate1));
+        break;
+      case 2:
+        effective_node_size =
+            (int)(effective_node_size * (1 - config::feature_sparse_rate2));
+        break;
+      default:;
+      }
     }
 
     yw_s.push_back((input_buffer_size / 2) / (effective_node_size * 4));
     assert(yw_s.back() > 0 && "the window should be positive");
-    spdlog::info("yws push back:{}", yw_s.back());  
+    spdlog::info("yws push back:{}", yw_s.back());
   }
 
-  for( auto i = 0; i < total_level; i++){
+  for (auto i = 0; i < total_level; i++) {
     global_definitions.layer_input_windows.push_back(0);
     global_definitions.layer_edges.push_back(0);
     global_definitions.layer_input_vertics.push_back(0);
@@ -144,7 +142,37 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
                total_size);
 }
+class kv_maps {
+  std::map<std::string, int> int_map;
+  std::map<std::string, float> float_map;
+  std::map<std::string, unsigned> unsigned_map;
+  std::map<std::string, unsigned long long> ull_map;
+  std::map<std::string, std::string> str_map;
 
+public:
+  void push(std::string k, int v) { int_map.insert({k, v}); }
+  void push(std::string k, float v) { float_map.insert({k, v}); }
+  void push(std::string k, unsigned v) { unsigned_map.insert({k, v}); }
+  void push(std::string k, unsigned long long v) { ull_map.insert({k, v}); }
+  void push(std::string k, std::string  v) { str_map.insert({k, v}); }
+  void print() {
+    for (auto i : int_map) {
+      spdlog::info("{} : {}", i.first, i.second);
+    }
+    for (auto i : float_map) {
+      spdlog::info("{} : {}", i.first, i.second);
+    }
+    for (auto i : unsigned_map) {
+      spdlog::info("{} : {}", i.first, i.second);
+    }
+    for (auto i : ull_map) {
+      spdlog::info("{} : {}", i.first, i.second);
+    }
+    for (auto i : str_map) {
+      spdlog::info("{} : {}", i.first, i.second);
+    }
+  }
+};
 
 void System::run() {
 
@@ -157,80 +185,75 @@ void System::run() {
   }
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
             << std::endl;
-  spdlog::info("the result\n"
-               "total_Aggregator_idle_waiting_input {}\n"
-               "total_Aggregator_idle_waiting_edge {}\n"
-               "total_idle_waiting_agg_write {}\n"
-               "do_aggregate {}\n"
-               "total_aggregate_op {}\n"
-               "total_handle_edges {}\n"
-               "total_input_windows {}\n"
-               "do_systolic {}\n"
-               "total_systolicArray_idle_waiting_agg_read {}\n"
-               "total_idle_waiting_out {}\n"
-               "ReaderBuffer_total_read_input_latency {} "
-               "total_read_input_len {}  "
-               "total_read_input_times {}  "
-               "avg_read_latency {} "
-               "avg_read_len {}\n"
-               "ReaderBuffer_total_read_edge_latency {}  "
-               "ReaderBuffer_total_read_edge_len {}  "
-               "total_read_edge_times {}  "
-               "avg_read_edge_latency {}  "
-               "avg_read_edge_len {}\n"
-               "total_mac_in_systolic_array {}\n"
-               "total_read_input_traffic {}\n"
-               "total_read_edge_traffic {}\n"
-               "total_inputBuffer_idle_cycles {}\n"
-               "total_edgeBuffer_idle_cycles {}\n"
-               "total_real_input_idle {}\n"
-               "total_real_edge_idle {}\n"
-               "total_cycles {}\n",
-               global_definitions.total_waiting_input,
-               global_definitions.total_waiting_edge,
-               global_definitions.total_waiting_agg_write,
-               global_definitions.do_aggregate, 
-               global_definitions.total_aggregate_op,
-               global_definitions.total_edges,
-               global_definitions.total_input_windows,
-               global_definitions.do_systolic,
-               global_definitions.total_waiting_agg_read,
-               global_definitions.total_waiting_out,
-               global_definitions.total_read_input_latency,
-               global_definitions.total_read_input_len,
-               global_definitions.total_read_input_times,
-               global_definitions.total_read_input_latency /
-                   global_definitions.total_read_input_times,
-               global_definitions.total_read_input_len /
-                   global_definitions.total_read_input_times,
-               global_definitions.total_read_edge_latency,
-               global_definitions.total_read_edge_len,
-               global_definitions.total_read_edge_times,
-               global_definitions.total_read_edge_latency /
-                   global_definitions.total_read_edge_times,
-               global_definitions.total_read_edge_len /
-                   global_definitions.total_read_edge_times,
-               global_definitions.total_mac_in_systolic_array,
-               global_definitions.total_read_input_traffic,
-               global_definitions.total_read_edge_traffic,
-               global_definitions.inputBuffer_idle_cycles,
-               global_definitions.edgeBuffer_idle_cycles,
-               global_definitions.total_input_buffer_idle,
-               global_definitions.total_edge_buffer_idle,
-               global_definitions.cycle);
+  kv_maps map;
 
+  map.push(std::string("total_Aggregator_idle_waiting_input"),
+           global_definitions.total_waiting_input);
+  map.push(std::string("total_Aggregator_idle_waiting_edge"),
+           global_definitions.total_waiting_edge);
+  map.push(std::string("total_idle_waiting_agg_write"),
+           global_definitions.total_waiting_agg_write);
+  map.push(std::string("do_aggregate"), global_definitions.do_aggregate);
+  map.push(std::string("total_aggregate_op"),
+           global_definitions.total_aggregate_op);
+  map.push(std::string("total_handle_edges"), global_definitions.total_edges);
+  map.push(std::string("total_input_windows"),
+           global_definitions.total_input_windows);
+  map.push(std::string("do_systolic"), global_definitions.do_systolic);
+  map.push(std::string("total_systolicArray_idle_waiting_agg_read"),
+           global_definitions.total_waiting_agg_read);
+  map.push(std::string("total_idle_waiting_out"),
+           global_definitions.total_waiting_out);
+  map.push(std::string("InputBuffer_latency"),
+           global_definitions.total_read_input_latency);
+  map.push(std::string("len"), global_definitions.total_read_input_len);
+  map.push(std::string("times"), global_definitions.total_read_input_times);
+  map.push(std::string("avg_latency"),
+           global_definitions.total_read_input_latency /
+               global_definitions.total_read_input_times);
+  map.push(std::string("avg_vertices"),
+           global_definitions.total_read_input_vertices_cnt /
+               global_definitions.total_read_input_times);
+  map.push(std::string("avg_len"),
+           global_definitions.total_read_input_len /
+               global_definitions.total_read_input_times);
+  map.push(std::string("EdgeBuffer_read_latency"),
+           global_definitions.total_read_edge_latency);
+  map.push(std::string("len"), global_definitions.total_read_edge_len);
+  map.push(std::string("times"), global_definitions.total_read_edge_times);
+  map.push(std::string("avg_latency"),
+           global_definitions.total_read_edge_latency /
+               global_definitions.total_read_edge_times);
+  map.push(std::string("avg_len"),
+           global_definitions.total_read_edge_len /
+               global_definitions.total_read_edge_times);
+  map.push(std::string("total_mac_in_systolic_array"),
+           global_definitions.total_mac_in_systolic_array);
+  map.push(std::string("total_read_input_traffic"),
+           global_definitions.total_read_input_traffic);
+  map.push(std::string("total_read_edge_traffic"),
+           global_definitions.total_read_edge_traffic);
+  map.push(std::string("total_inputBuffer_idle_cycles"),
+           global_definitions.inputBuffer_idle_cycles);
+  map.push(std::string("total_edgeBuffer_idle_cycles"),
+           global_definitions.edgeBuffer_idle_cycles);
+  map.push(std::string("total_real_input_idle"),
+           global_definitions.total_input_buffer_idle);
+  map.push(std::string("total_real_edge_idle"),
+           global_definitions.total_edge_buffer_idle);
+  map.push(std::string("total_cycles"), global_definitions.cycle);
+  map.print();
   spdlog::info("layer_completion_time  {}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), "  "));
 
   auto layer_time = global_definitions.finished_time_stamp;
   int total_level = layer_time.size();
-  for(int i = total_level-1; i > 0; i-- ){
-     layer_time[i] = global_definitions.finished_time_stamp[i] -
-                       global_definitions.finished_time_stamp[i-1];
+  for (int i = total_level - 1; i > 0; i--) {
+    layer_time[i] = global_definitions.finished_time_stamp[i] -
+                    global_definitions.finished_time_stamp[i - 1];
   }
 
-  
   spdlog::info("layer_input_windows  {}\n",
                fmt::join(global_definitions.layer_input_windows.begin(),
                          global_definitions.layer_input_windows.end(), "  "));
@@ -238,32 +261,29 @@ void System::run() {
   spdlog::info("layer_edges  {}\n",
                fmt::join(global_definitions.layer_edges.begin(),
                          global_definitions.layer_edges.end(), "  "));
-  
+
   spdlog::info("layer_input_vertics  {}\n",
                fmt::join(global_definitions.layer_input_vertics.begin(),
                          global_definitions.layer_input_vertics.end(), "  "));
 
   spdlog::info("layer_time  {}\n",
-               fmt::join(layer_time.begin(),
-                         layer_time.end(), "  "));
-  
+               fmt::join(layer_time.begin(), layer_time.end(), "  "));
+
   spdlog::info("layer_wait_input_time  {}\n",
                fmt::join(global_definitions.layer_wait_input.begin(),
                          global_definitions.layer_wait_input.end(), "  "));
-  
+
   spdlog::info("layer_aggregate_time  {}\n",
                fmt::join(global_definitions.layer_do_aggregate.begin(),
                          global_definitions.layer_do_aggregate.end(), "  "));
 
   spdlog::info("layer_systolic_time  {}\n",
                fmt::join(global_definitions.layer_do_systolic.begin(),
-                         global_definitions.layer_do_systolic.end(), "  "));  
-  
+                         global_definitions.layer_do_systolic.end(), "  "));
+
   spdlog::info("layer_aggregate_op  {}\n",
                fmt::join(global_definitions.layer_aggregate_op.begin(),
-                         global_definitions.layer_aggregate_op.end(), "  "));                                              
-  
-                                              
+                         global_definitions.layer_aggregate_op.end(), "  "));
 }
 
 void System::cycle() {

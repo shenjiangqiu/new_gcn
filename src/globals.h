@@ -8,6 +8,8 @@
 #include "map"
 #include "utils/Options.h"
 #include "vector"
+
+
 class globals {
 public:
   unsigned long long cycle = 0;
@@ -40,6 +42,7 @@ public:
   unsigned long long total_waiting_agg_read = 0;
   unsigned long long total_waiting_out = 0;
   unsigned long long total_read_input_latency = 0;
+  unsigned long long total_read_input_vertices_cnt = 0;
   unsigned long long total_read_input_times = 0;
   unsigned long long total_read_input_len = 0;
   unsigned long long total_read_edge_latency = 0;

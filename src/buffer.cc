@@ -177,6 +177,7 @@ shared_ptr<Req> EdgeBuffer::pop_current() {
   auto req = std::make_shared<Req>();
   req->addr = m_current_iter->getEdgeAddr();
   req->len = m_current_iter->getEdgeLen();
+  req->init_len = req->len;
   req->req_type = mem_request::read;
   req->t = device_types::edge_buffer;
   current_req = req;
@@ -190,6 +191,7 @@ shared_ptr<Req> EdgeBuffer::pop_next() {
   auto req = std::make_shared<Req>();
   req->addr = m_next_iter->getEdgeAddr();
   req->len = m_next_iter->getEdgeLen();
+  req->init_len = req->len;
   req->req_type = mem_request::read;
   req->t = device_types::edge_buffer;
   next_req = req;
@@ -309,6 +311,8 @@ shared_ptr<Req> InputBuffer::pop_current() {
     req->len = m_current_iter->getValidInputLen();
   else
     req->len = m_current_iter->getInputLen();
+  req->init_len = req->len;
+  req->items_cnt= m_current_iter->getYw();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   current_req = req;
@@ -324,9 +328,11 @@ shared_ptr<Req> InputBuffer::pop_next() {
   auto req = std::make_shared<Req>();
   req->addr = m_next_iter->getInputAddr();
   if (config::enable_valid_node_only)
-    req->len = m_current_iter->getValidInputLen();
+    req->len = m_next_iter->getValidInputLen();
   else
-    req->len = m_current_iter->getInputLen();
+    req->len = m_next_iter->getInputLen();
+  req->init_len = req->len;
+  req->items_cnt= m_next_iter->getYw();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   next_req = req;
@@ -364,13 +370,14 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
   case device_types::edge_buffer:
     global_definitions.total_read_edge_latency += latency;
     global_definitions.total_read_edge_times++;
-    global_definitions.total_read_edge_len += req->len;
+    global_definitions.total_read_edge_len += req->init_len;
     break;
 
   case device_types::input_buffer:
     global_definitions.total_read_input_latency += latency;
     global_definitions.total_read_input_times++;
-    global_definitions.total_read_input_len += req->len;
+    global_definitions.total_read_input_len += req->init_len;
+    global_definitions.total_read_input_vertices_cnt += req->items_cnt;
     break;
 
   default:

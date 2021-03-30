@@ -100,11 +100,11 @@ dramsim_wrapper::~dramsim_wrapper() {
 void dramsim_wrapper::receive_read(uint64_t addr) {
   read_ret.push(addr);
   inflight_req_cnt--;
-  std::cout << this << std::endl;
-  std::cout<<m_memory_system.get()<<std::endl;
+  //std::cout << this << std::endl;
+  //std::cout<<m_memory_system.get()<<std::endl;
   int bank_id = m_memory_system->GetChannel(addr) * 16;
-  std::cout<<m_memory_system.get()<<std::endl;
-  std::cout << this << std::endl;
+  //std::cout<<m_memory_system.get()<<std::endl;
+  //std::cout << this << std::endl;
 
   bank_id += m_memory_system->GetBankID(addr);
   bank_req_cnt[bank_id]--;

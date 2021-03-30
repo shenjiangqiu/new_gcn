@@ -46,6 +46,7 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
   active_cycles = 0;
   finished_read_req = 0;
   finished_write_req = 0;
+  sum_rd_latency = 0;
   
 }
 ramulator_wrapper::~ramulator_wrapper() {
@@ -53,9 +54,11 @@ ramulator_wrapper::~ramulator_wrapper() {
   float mlp = (float)sum_inflight_req/active_cycles;
   float activeRate = (float)active_cycles/my_cycles;
   float blp = (float)sum_inflight_bank_req/active_cycles;
+  double avgLatency = (double)sum_rd_latency/finished_read_req;
 
   std::cout<<"Interface MLP "<< mlp <<" BLP  "<<blp<<" memoy activeRate "<<activeRate;
   std::cout<<" BW "<<(finished_read_req+finished_write_req)*64.0/active_cycles;
+  std::cout<<" lat "<<avgLatency;
   std::cout<<" readRqt "<<finished_read_req<<"  writeRqt "<<finished_write_req<<"\n";
   
   finish();
@@ -86,6 +89,7 @@ void ramulator_wrapper::call_back(ramulator::Request &req) {
   case Request::Type::READ:
     out_queue.push(req.addr);
     finished_read_req++;
+    sum_rd_latency += (req.depart - req.arrive);
     break;
 
   case Request::Type::WRITE:
@@ -136,6 +140,7 @@ void ramulator_wrapper::cycle() {
          bank_infligt_req_cnt++;
         
     }
+      
   }
   this->tick();
 }
