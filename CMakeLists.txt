@@ -2,15 +2,18 @@ cmake_minimum_required(VERSION 3.16)
 
 project(gcn_sim VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 17)
-option(THERMAL "enable thermal in dramsim" ON)
-option(USEDRAMSIM "enable dramsim" OFF)
+
+
+option(THERMAL "enable thermal in dramsim" OFF)
+option(USEDRAMSIM "enable dramsim" ON)
 add_subdirectory(deps/fmt)
 add_subdirectory(deps/ramulator)
 add_subdirectory(deps/spdlog)
 add_subdirectory(deps/minisat_utils)
 add_subdirectory(data)
 
-message(${THERMAL})
+message("use thermal:" ${THERMAL})
+message("use dramsim:" ${USEDRAMSIM})
 if(USEDRAMSIM)
 add_subdirectory(deps/DRAMsim3)
 endif(USEDRAMSIM)
@@ -25,11 +28,11 @@ add_library(gcn_sim_lib ${lib_srcs} src/dramsim_wrapper.cc src/dramsim_wrapper.h
 target_include_directories(gcn_sim_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 if(USEDRAMSIM)
 target_link_libraries(gcn_sim_lib PUBLIC dramsim3)
-target_compile_options(gcn_sim_lib PUBLIC USEDRAM3)
+target_compile_definitions(gcn_sim_lib PUBLIC  USEDRAM3)
 endif()
 
 target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles dramsim2)
-
+target_compile_options(gcn_sim_lib PRIVATE -Wall -Wextra -Werror)
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
 
 target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt)

@@ -23,7 +23,7 @@ public:
                uint64_t edgeAddr, uint64_t outputAddr, int inputLen,
                int edgeLen, int outputLen, int numNodesInWindow,
                int currentNodeSize, bool the_final_col, bool theFinalRow,
-               bool theFirstRow, bool theFinalColOfTheLayer);
+               bool theFirstRow, bool theFinalColOfTheLayer,int valid_nodes=0);
 
   [[nodiscard]] int getX() const;
 
@@ -42,6 +42,7 @@ public:
   [[nodiscard]] uint64_t getOutputAddr() const;
 
   [[nodiscard]] int getInputLen() const;
+  [[nodiscard]] int getValidInputLen() const;
 
   [[nodiscard]] int getEdgeLen() const;
 
@@ -53,24 +54,34 @@ public:
   bool isTheFirstRow() const;
   void setTheFinalRow(bool theFinalRow);
 
+
+  bool isTheFinalColOfTheLayer() const;
+
+  [[nodiscard]] int getNumEdgesInWindow() const;
+
 private:
-  int x, y, xw, yw, level;
+   
+  int x;  //x: starting vertex ID in the aggregation buffer
+  int y;  //y: starting vertex ID in the input buffer
+  int xw; // cnt of vertices in the the aggregation buffer
+  int yw ; // cnt of vertices in the the input buffer
+  int level;
   uint64_t input_addr, edge_addr, output_addr;
-  int input_len, edge_len, output_len;
-  int num_nodes_in_window;
-  int current_node_size;
+  int input_len, edge_len, output_len; // in unit of bytes.
+  int num_edges_in_window; //#edges in the window
+  int current_node_size; // A feature dim.
   bool the_final_col;
   bool the_final_col_of_the_layer;
 
-public:
-  bool isTheFinalColOfTheLayer() const;
 
-private:
+
+
   bool the_final_row;
   bool the_first_row;
 
-public:
-  [[nodiscard]] int getNumNodesInWindow() const;
+  //the number of nodes that have edges connected
+  int valid_nodes;
+
 };
 
 template <> struct fmt::formatter<Slide_window> {
@@ -107,7 +118,7 @@ template <> struct fmt::formatter<Slide_window> {
                         p.getX(), p.getY(), p.getXw(), p.getYw(), p.getLevel(),
                         p.getInputAddr(), p.getEdgeAddr(), p.getOutputAddr(),
                         p.getInputLen(), p.getEdgeLen(), p.getOutputLen(),
-                        p.getNumNodesInWindow(), p.isTheFinalCol(),
+                        p.getNumEdgesInWindow(), p.isTheFinalCol(),
                         p.isTheFinalRow(), p.isTheFirstRow());
     return out;
   }
@@ -193,7 +204,7 @@ private:
       m_sliding_window_multi_level;
 
   std::vector<uint64_t> node_addrs; // for each level;
-  [[maybe_unused]] uint number_of_nodes_to_be_read = 0;
+  uint number_of_nodes_to_be_read = 0;
 };
 
 #endif // GCN_SIM_SLIDE_WINDOW_H

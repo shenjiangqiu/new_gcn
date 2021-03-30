@@ -13,3 +13,16 @@ run/reddit.graph
 src/dense-window-lib/target
 vgcore*
 *.txt
+build-tst
+build*
+data1
+debug
+*.dep
+*.deppo
+*.po
+*.so
+run/*.graph
+run/*.txt
+run/*.ini
+run/*.json
+run/results

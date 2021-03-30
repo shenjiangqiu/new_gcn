@@ -9,7 +9,7 @@
 #include "vector"
 class Model {
 public:
-  Model(std::string name, std::vector<int> mLevels, bool isConcatenate,
+  Model(std::string name, std::vector<int> mLevels, bool isConcatenate, bool isInitialResidual=false,
         bool isSample = false, int sampleNum = 0);
   Model(const Model &other) = default;
   Model(Model &&other) = default;
@@ -17,13 +17,16 @@ public:
   [[nodiscard]] const std::string &getName() const;
   [[nodiscard]] const std::vector<int> &getMLevels() const;
   [[nodiscard]] bool isConcatenate() const;
+  [[nodiscard]] bool isInitialResidual() const;
+
 
 private:
   std::string name;
   std::vector<int> m_levels;
-  [[maybe_unused]] int sample_num;
-  [[maybe_unused]] bool is_sample;
+  int sample_num;
+  bool is_sample;
   bool is_concatenate;
+  bool is_initial_residual;
 };
 
 #endif // GCN_SIM_MODEL_H

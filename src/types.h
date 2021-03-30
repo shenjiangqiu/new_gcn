@@ -14,11 +14,16 @@ struct Req {
     static unsigned global_id = 0;
     id = global_id;
     global_id++;
+    init_len = 0;
+    items_cnt = 0;
+    len = 0;
   }
 
   unsigned id;
   unsigned long long addr;
-  unsigned long len;
+  unsigned long len; //#bytes, it is adjusted after a cacheline is issused.
+  unsigned long init_len; // #bytes, it is not changed.
+  int items_cnt; //#vertices or #edges 
   device_types t;
   mem_request req_type;
   bool the_final_request = false;

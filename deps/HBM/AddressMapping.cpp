@@ -74,6 +74,18 @@ void addressMapping(uint64_t addr, unsigned &chn, unsigned &rnk, unsigned &bnk, 
     bnk = sliceLowerBits(addr, bnk_bits);
     rnk = sliceLowerBits(addr, rnk_bits);
     chn = sliceLowerBits(addr, chn_bits);
+  } else if (addressMappingScheme == CoRoBaRaCh) { // col:row:bank:rank:chan
+    chn = sliceLowerBits(addr, chn_bits);    
+    rnk = sliceLowerBits(addr, rnk_bits);
+    bnk = sliceLowerBits(addr, bnk_bits);
+    row = sliceLowerBits(addr, row_bits);
+    col = sliceLowerBits(addr, col_bits);
+  } else if (addressMappingScheme == RoCoBaRaCh) { // row:col:bank:rank:chan
+    chn = sliceLowerBits(addr, chn_bits);    
+    rnk = sliceLowerBits(addr, rnk_bits);
+    bnk = sliceLowerBits(addr, bnk_bits);
+    col = sliceLowerBits(addr, col_bits);
+    row = sliceLowerBits(addr, row_bits);
   } else {
     ERROR("error - unknown address mapping scheme");
     exit(-1);

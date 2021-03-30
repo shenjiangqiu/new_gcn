@@ -20,6 +20,7 @@ int SystolicArray::cal_remaining_cycle() {
   auto num_nodes = current_sliding_window->getXw();
   auto node_size =
       current_sliding_window->getCurrentNodeSize(); // num elements in one node;
+  auto level = current_sliding_window->getLevel();
 
   // might be confused here
   // 1, get the model
@@ -116,6 +117,9 @@ int SystolicArray::cal_remaining_cycle() {
     spdlog::flush_on(spdlog::level::err);
     throw std::runtime_error("wrong cycle happened!");
   }
+
+  global_definitions.layer_do_systolic[level] += total_cycles;
+  
   return total_cycles;
 }
 void SystolicArray::cycle() {

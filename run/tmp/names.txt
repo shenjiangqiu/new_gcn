@@ -1,0 +1,12 @@
+acm
+amazon_cs
+amazon_photo
+blogcatalog
+citeseer_gog
+citeseer
+coauthor_cs
+coauthor_phy
+cora_full
+cora_ml_gog
+flickr
+pubmed

@@ -21,7 +21,7 @@
 class ramulator_wrapper: public dram_wrapper {
 public:
   void send(uint64_t addr, bool is_write) override;
-  bool available() const override { return in_queue.size() <= 64; }
+  bool available() const override { return in_queue.size() <= 512; }
   void tick() ;
 
   void finish();
@@ -53,10 +53,17 @@ public:
 private:
   double tCK;
   unsigned long long outgoing_reqs = 0;
+  uint64_t sum_rd_latency = 0;
+
   //addr,iswrite
   std::queue<std::pair<uint64_t, bool>> in_queue;
   std::queue<uint64_t> out_queue;
   ramulator::MemoryBase *mem;
+
+  #define Channel_LEVEL    0
+  #define Rank_LEVEL       1
+  #define BankGroup_LEVEL  2
+  #define Bank_LEVEL       3
 };
 
 #endif

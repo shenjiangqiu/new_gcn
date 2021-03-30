@@ -247,6 +247,7 @@ private:
   bool write_to_memory_empty{true};
   bool write_to_memory_started{false};
 };
+
 // only read the edge , do not read edge index now
 class ReadBuffer : public Name_object {
 public:
@@ -281,11 +282,17 @@ public:
   const slide_window_set_iterator &getMCurrentIter() const;
 
 protected:
+  #define MAX_REQ   32
+  int num_buffer_entry; //default is 2, double buffer.
   std::shared_ptr<Slide_window_set> m_set;
   slide_window_set_iterator m_current_iter;
   slide_window_set_iterator m_next_iter;
   std::shared_ptr<Req> current_req;
   std::shared_ptr<Req> next_req;
+  std::shared_ptr<Req> buffer_entry_req[MAX_REQ];
+  bool buffer_entry_empty[MAX_REQ];
+  bool buffer_entry_ready[MAX_REQ];
+  bool buffer_entry_sent[MAX_REQ];
   // if current empty but not send, the system should send it,
   bool current_empty{true};
   // if the requests returns, should set return to true;
@@ -294,9 +301,13 @@ protected:
   bool next_empty{true};
   bool next_ready{false};
   bool next_sent{false};
+  
+  int get_ready_buffer_entry( );
 
   std::map<unsigned long long, unsigned long long> start_cycle_map;
 };
+
+
 class EdgeBuffer : public ReadBuffer {
 public:
   explicit EdgeBuffer(const string &name,
@@ -307,6 +318,8 @@ public:
 
 protected:
 };
+
+
 class InputBuffer : public ReadBuffer {
 public:
   InputBuffer(const std::string &name,

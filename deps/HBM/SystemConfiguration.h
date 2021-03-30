@@ -141,7 +141,9 @@ enum TraceType
 enum AddressMappingScheme
 {
   ChRaBaRoCo,
-  RoBaRaCoCh
+  RoBaRaCoCh,
+  CoRoBaRaCh,
+  RoCoBaRaCh
 };
 
 // used in MemoryController and CommandQueue

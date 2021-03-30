@@ -2,10 +2,7 @@
 #define MEMORY_INTERFACE_H
 
 #include "dram_wrapper.h"
-#ifdef USEDRAM3
 #include "dramsim_wrapper.h"
-#endif
-
 #include "dramsim2_wrapper.h"
 #include "globals.h"
 #include <assert.h>

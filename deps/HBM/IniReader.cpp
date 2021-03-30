@@ -381,6 +381,10 @@ void IniReader::InitEnumsFromStrings()
     addressMappingScheme = ChRaBaRoCo;
   else if (ADDRESS_MAPPING_SCHEME == "RoBaRaCoCh")
     addressMappingScheme = RoBaRaCoCh;
+  else if (ADDRESS_MAPPING_SCHEME == "CoRoBaRaCh")
+    addressMappingScheme = CoRoBaRaCh;
+  else if (ADDRESS_MAPPING_SCHEME == "RoCoBaRaCh")
+    addressMappingScheme = RoCoBaRaCh;
   else {
     cout << "WARNING: unknown address mapping scheme '" << ADDRESS_MAPPING_SCHEME << "'; valid "
       "values are 'ChRaBaRoCo' or 'RoBaRaCoCh', defaulting to RoBaRaCoCh" << endl;

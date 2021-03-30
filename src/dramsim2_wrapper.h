@@ -31,6 +31,7 @@ private:
   std::queue<uint64_t> read_queue;
   std::queue<uint64_t> write_queue;
   std::queue<uint64_t> read_ret;
+  uint64_t pending_write_req;
 
 };
 
