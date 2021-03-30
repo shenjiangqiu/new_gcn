@@ -11,7 +11,6 @@
 
 class Aggregator {
 public:
-  void add_task(std::shared_ptr<Slide_window> window);
 
 
   [[nodiscard]] bool isWorking() const { return working; }

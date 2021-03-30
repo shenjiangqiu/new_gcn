@@ -4,4 +4,12 @@ build
 /cmake-build-*
 run/gcn_sim
 run/reddit.graph
+*.o
+*.rlib
+*.lib
+*.so
 
+*.graph
+src/dense-window-lib/target
+vgcore*
+*.txt
