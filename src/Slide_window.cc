@@ -91,8 +91,8 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
                                    std::vector<int> nodeSizeS, int totalLevel)
     : m_graph(std::move(mGraph)), xw_s(std::move(xwS)), yw_s(std::move(ywS)),
       node_size_s(std::move(nodeSizeS)), total_level(totalLevel) {
-  assert(xw_s.size() == total_level - 1);
-  assert(node_size_s.size() == total_level);
+  assert(xw_s.size() == unsigned (total_level - 1));
+  assert(node_size_s.size() == unsigned (total_level));
   bool the_first_row;
   uint64_t start_addr = 0xff11ff00;
   // for the first layer, we should ignore the empty entries

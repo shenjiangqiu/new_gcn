@@ -39,7 +39,7 @@ target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt)
 
 
 aux_source_directory(test TEST_SOURCE)
-add_executable(gcn_sim_test ${TEST_SOURCE})
+add_executable(gcn_sim_test ${TEST_SOURCE} test/mapping_test.cc)
 target_include_directories(gcn_sim_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test)
 target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt)
 configure_file(test/test.graph test.graph COPYONLY)

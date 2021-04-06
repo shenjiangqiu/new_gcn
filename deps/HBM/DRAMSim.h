@@ -35,34 +35,14 @@
 #include "Callback.h"
 #include <string>
 #include "Stats.h"
-
+#include <MultiChannelMemorySystem.h>
 using std::string;
 
 namespace DRAMSim
 {
-  class MultiChannelMemorySystem
-  {
-    public:
-      bool addTransaction(bool isWrite, uint64_t addr);
-      void update();
-      void printStats(bool finalStats);
-      void printStatsToFile(bool finalStats, std::string fileName);//Yue
-      bool willAcceptTransaction();
-      bool willAcceptTransaction(uint64_t addr);
 
-      void RegisterCallbacks(TransactionCompleteCB *readDone,
-                             TransactionCompleteCB *writeDone,
-                             void (*reportPower)(double bgpower,
-                                                 double burstpower,
-                                                 double refreshpower,
-                                                 double actprepower));
 
-      // SST Statistics
-      bool getStats( double *stat, DSIM_STAT metric );
-      bool getStats( uint64_t *stat, DSIM_STAT metric );
-  };
-
-  MultiChannelMemorySystem *getMemorySystemInstance(const string &dev, const string &sys, 
+  MultiChannelMemorySystem *getMemorySystemInstance(const string &dev, const string &sys,
       const string &pwd, unsigned megsOfMemory);
 }
 

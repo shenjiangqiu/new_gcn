@@ -34,7 +34,7 @@
 #include "MemorySystem.h"
 #include "IniReader.h"
 #include "Stats.h"
-
+#include "AddressMapping.h"
 namespace DRAMSim { 
 class MultiChannelMemorySystem : public SimulatorObject 
 {
@@ -43,7 +43,8 @@ class MultiChannelMemorySystem : public SimulatorObject
         megsOfMemory);
     virtual ~MultiChannelMemorySystem();
     bool addTransaction(bool isWrite, uint64_t addr);
-    bool willAcceptTransaction(uint64_t addr); 
+    bool willAcceptTransaction(uint64_t addr);
+
     void update();
     void printStats(bool finalStats=false);
     void printStatsToFile(bool finalStats, std::string fileName);
@@ -57,7 +58,14 @@ class MultiChannelMemorySystem : public SimulatorObject
     // SST Statistics
     bool getStats( double *stat, DSIM_STAT metric );
     bool getStats( uint64_t *stat, DSIM_STAT metric );
-
+    [[nodiscard]] unsigned get_channel_num() const{
+      return channels.size();
+    }
+    static unsigned get_channel_id(uint64_t addr) {
+      unsigned  ch,temp;
+      addressMapping(addr,ch,temp,temp,temp,temp);
+      return ch;
+    }
   private:
     unsigned findChannelNumber(uint64_t addr);
 

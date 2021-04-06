@@ -28,7 +28,7 @@ public:
 
   ramulator_wrapper(ramulator::Config configs, int cacheLine);
 
-  ~ramulator_wrapper();
+  ~ramulator_wrapper() override;
 
   void call_back(ramulator::Request &req);
 
@@ -49,14 +49,16 @@ public:
   [[nodiscard]] bool return_available() const override { return !out_queue.empty(); }
 
   void cycle() override;
-  
+  [[nodiscard]] static unsigned get_channel_num() ;
+  [[nodiscard]] unsigned get_channel_id(uint64_t addr) const;
+
 private:
   double tCK;
   unsigned long long outgoing_reqs = 0;
   uint64_t sum_rd_latency = 0;
 
   //addr,iswrite
-  std::queue<std::pair<uint64_t, bool>> in_queue;
+  std::vector<std::queue<std::pair<uint64_t, bool>>> in_queue;
   std::queue<uint64_t> out_queue;
   ramulator::MemoryBase *mem;
 
