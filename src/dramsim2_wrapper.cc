@@ -15,8 +15,10 @@ void dramsim2_wrapper::send(uint64_t addr, bool is_write) {
   }
 }
 
-bool dramsim2_wrapper::available() const {
-  return read_queue.size() < 256 and write_queue.size() < 256;
+bool dramsim2_wrapper::available(uint64_t addr) const {
+  auto channel_id = get_channel_id(addr);
+
+  return read_queue[channel_id].size() < 256 and write_queue[channel_id].size() < 256;
   // return read_queue.size() < 16 and write_queue.size() < 16;
 }
 

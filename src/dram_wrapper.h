@@ -9,7 +9,7 @@
 class dram_wrapper {
 public:
   virtual void send(uint64_t addr, bool is_write) = 0;
-  [[nodiscard]] virtual bool available() const = 0;
+  [[nodiscard]] virtual bool available(uint64_t addr) const = 0;
   virtual void cycle() = 0;
 
   [[nodiscard]] virtual bool return_available() const = 0;

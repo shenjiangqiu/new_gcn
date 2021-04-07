@@ -21,7 +21,9 @@
 class ramulator_wrapper: public dram_wrapper {
 public:
   void send(uint64_t addr, bool is_write) override;
-  bool available() const override { return in_queue.size() <= 512; }
+  bool available(uint64_t addr) const override { 
+    unsigned channel_id=get_channel_id(addr);
+    return in_queue[channel_id].size() <= 512; }
   void tick() ;
 
   void finish();

@@ -14,7 +14,7 @@ public:
   dramsim_wrapper(const std::string &config_file,
                   const std::string &output_dir=".");
   void send(uint64_t addr, bool is_write) override;
-  bool available() const override;
+  bool available(uint64_t addr) const override;
   void cycle() override;
   bool return_available() const override;
   uint64_t pop() override;

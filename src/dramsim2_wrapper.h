@@ -14,7 +14,7 @@ class dramsim2_wrapper : public dram_wrapper {
 public:
   dramsim2_wrapper(const std::string& config_file, const std::string& sys_file);
   void send(uint64_t addr, bool is_write) override;
-  [[nodiscard]] bool available() const override;
+  [[nodiscard]] bool available(uint64_t addr) const override;
   void cycle() override;
   [[nodiscard]] bool return_available() const override;
   uint64_t pop() override;
