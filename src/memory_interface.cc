@@ -48,7 +48,7 @@ void memory_interface::cycle() {
   }
 
   // to dram
-  if (!out_send_queue.empty() and m_mem->available()) {
+  if (!out_send_queue.empty() and m_mem->available(out_send_queue.front().first)) {
     auto req = out_send_queue.front();
     out_send_queue.pop();
     // addr, is_write
