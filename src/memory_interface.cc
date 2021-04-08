@@ -11,10 +11,10 @@ void memory_interface::cycle() {
     if (next_req->len > 0) {
       // write request will come back immediately when sent, so no need record
       if (next_req->req_type == mem_request::read)
-        addr_to_req_map.insert({next_req->addr, next_req});
+        addr_to_req_map.insert({next_req->get_addr(), next_req});
       // addr, is_write
       out_send_queue.push(
-          {next_req->addr, next_req->req_type == mem_request::write});
+          {next_req->get_addr(), next_req->req_type == mem_request::write});
       // calculate the input buffer traffic
       if (next_req->t == device_types::input_buffer) {
         global_definitions.total_read_input_traffic +=
@@ -30,7 +30,7 @@ void memory_interface::cycle() {
           task_return_queue.push(next_req);
         }
       } else {
-        next_req->addr += 64;
+        next_req->add64();
         next_req->len -= 64;
       }
     }
@@ -49,7 +49,7 @@ void memory_interface::cycle() {
 
   // to dram
   int i = 0;
-  //send 8 requests in a cycle
+  // send 8 requests in a cycle
   for (i = 0; i < 8; i++) {
     if (!out_send_queue.empty() and
         m_mem->available(out_send_queue.front().first)) {
@@ -67,6 +67,9 @@ void memory_interface::cycle() {
 
 void memory_interface::send(std::shared_ptr<Req> req) {
   assert(req_queue.size() < waiting_size);
+  if (req->get_addr() % 64 != 0) {
+    throw "addr must be multiple of 64";
+  }
   req_queue.push(req);
   auto num_reqs = (req->len + 63) / 64;
   // write request will not be back again, so no need to record.

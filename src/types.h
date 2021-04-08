@@ -9,7 +9,8 @@ enum class device_types {
 };
 enum class mem_request { read, write };
 
-struct Req {
+class Req {
+public:
   Req() {
     static unsigned global_id = 0;
     id = global_id;
@@ -20,14 +21,24 @@ struct Req {
   }
 
   unsigned id;
-  unsigned long long addr;
-  unsigned long len; //#bytes, it is adjusted after a cacheline is issused.
+  unsigned long len;      //#bytes, it is adjusted after a cacheline is issused.
   unsigned long init_len; // #bytes, it is not changed.
-  int items_cnt; //#vertices or #edges 
+  int items_cnt;          //#vertices or #edges
   device_types t;
   mem_request req_type;
   bool the_final_request = false;
-  bool the_final_request_of_the_layer=false;
+  bool the_final_request_of_the_layer = false;
+  unsigned long long get_addr() const { return addr; }
+  void set_addr(unsigned long long taddr) {
+    taddr = taddr & ~63;
+    addr = taddr;
+  }
+  void add64(){
+    addr+=64;
+  }
+
+private:
+  unsigned long long addr;
 };
 
 template <> struct fmt::formatter<Req> {
@@ -53,7 +64,7 @@ template <> struct fmt::formatter<Req> {
   auto format(const Req &p, FormatContext &ctx) {
     // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) //
     // c++11 ctx.out() is an output iterator to write to.
-    auto out = format_to(ctx.out(), "{} {} {} {} ", p.id, p.addr, p.len,
+    auto out = format_to(ctx.out(), "{} {} {} {} ", p.id, p.get_addr(), p.len,
                          p.t == device_types::input_buffer  ? "Input"
                          : p.t == device_types::edge_buffer ? "edge"
                                                             : "else");
