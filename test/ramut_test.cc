@@ -13,14 +13,14 @@ TEST_CASE("ramu_test") {
   int on_going = 0;
   int req_cnt = 1000000;
   while (i < req_cnt) {
-    if (m_ramu.available(i * 64)) {
+    while (m_ramu.available(i * 64)) {
       m_ramu.send(i * 64, false); // only read
       i++;
       on_going++;
     }
     m_ramu.cycle();
     cycle++;
-    if (m_ramu.return_available()) {
+    while (m_ramu.return_available()) {
       m_ramu.pop();
       on_going--;
     }
@@ -29,7 +29,7 @@ TEST_CASE("ramu_test") {
   while (on_going > 0) {
     m_ramu.cycle();
     cycle++;
-    if (m_ramu.return_available()) {
+    while (m_ramu.return_available()) {
       m_ramu.pop();
       on_going--;
     }

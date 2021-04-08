@@ -1,6 +1,6 @@
 #include "globals.h"
 #include <memory_interface.h>
-#include<spdlog/spdlog.h>
+#include <spdlog/spdlog.h>
 void memory_interface::cycle() {
 
   m_mem->cycle();
@@ -48,13 +48,18 @@ void memory_interface::cycle() {
   }
 
   // to dram
-  if (!out_send_queue.empty() and m_mem->available(out_send_queue.front().first)) {
-    auto req = out_send_queue.front();
-    out_send_queue.pop();
-    // addr, is_write
-    m_mem->send(req.first, req.second);
+  int i = 0;
+  //send 8 requests in a cycle
+  for (i = 0; i < 8; i++) {
+    if (!out_send_queue.empty() and
+        m_mem->available(out_send_queue.front().first)) {
+      auto req = out_send_queue.front();
+      out_send_queue.pop();
+      // addr, is_write
+      m_mem->send(req.first, req.second);
+    }
   }
-  if (m_mem->return_available()) {
+  while (m_mem->return_available()) {
     auto req = m_mem->pop();
     response_queue.push(req);
   }
@@ -89,7 +94,7 @@ memory_interface::memory_interface(const std::string &dram_config_name,
     m_mem =
         std::make_shared<dramsim2_wrapper>(dram_config_name, dev_config_name);
   else {
-    spdlog::error("fail to find the dram:{}",mem_simulator);
+    spdlog::error("fail to find the dram:{}", mem_simulator);
     throw;
     m_mem.reset(new ramulator_wrapper(dram_config_name, 64));
   }
