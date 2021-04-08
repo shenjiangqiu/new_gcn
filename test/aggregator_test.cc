@@ -3,7 +3,7 @@
 //
 
 #include "Aggregator.h"
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 #include "Slide_window.h"
 #include "memory_interface.h"
 #include "spdlog/spdlog.h"

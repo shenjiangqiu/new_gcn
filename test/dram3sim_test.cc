@@ -2,7 +2,8 @@
 // Created by by Jianhui on 3/22/21.
 //
 
-#include <catch.hpp>
+#include "catch2/catch.hpp"
+
 #include <dramsim_wrapper.h>
 #include <string>
 TEST_CASE("dramsim3_test") {

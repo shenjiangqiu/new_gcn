@@ -39,7 +39,7 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
   mem = name_to_func[std_name](configs, cacheLine);
   Stats::statlist.output("mem_stats.txt");
   tCK = mem->clk_ns();
-
+  in_queue.resize(get_channel_num());
   inflight_req_cnt = 0;
   sum_inflight_req = 0;
   my_cycles = 0;

@@ -86,6 +86,8 @@ dramsim_wrapper::dramsim_wrapper(const std::string &config_file,
           [this](uint64_t addr) { this->receive_write(addr); }));
 
   spdlog::info("init dramsim");
+  read_queue.resize(get_channel_num());
+  write_queue.resize(get_channel_num());
 }
 
 dramsim_wrapper::~dramsim_wrapper() {

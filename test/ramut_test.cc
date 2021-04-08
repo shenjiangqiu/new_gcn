@@ -1,8 +1,8 @@
 //
 // Created by sjq on 1/7/21.
 //
+#include "catch2/catch.hpp"
 
-#include <catch.hpp>
 #include <ramulator_wrapper.h>
 #include <string>
 TEST_CASE("ramu_test") {

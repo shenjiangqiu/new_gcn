@@ -2,7 +2,8 @@
 // Created by sjq on 1/7/21.
 //
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
+
 #include <memory_interface.h>
 #include <fmt/format.h>
 

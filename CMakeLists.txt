@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 3.16)
 
 project(gcn_sim VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 17)
+find_package(Catch2 REQUIRED)
+find_package(fmt REQUIRED)
 
 
 option(THERMAL "enable thermal in dramsim" OFF)
 option(USEDRAMSIM "enable dramsim" ON)
-add_subdirectory(deps/fmt)
+
 add_subdirectory(deps/ramulator)
 add_subdirectory(deps/spdlog)
 add_subdirectory(deps/minisat_utils)
@@ -31,7 +33,7 @@ target_link_libraries(gcn_sim_lib PUBLIC dramsim3)
 target_compile_definitions(gcn_sim_lib PUBLIC  USEDRAM3)
 endif()
 
-target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt spdlog minisat_utiles dramsim2)
+target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt::fmt spdlog minisat_utiles dramsim2)
 target_compile_options(gcn_sim_lib PRIVATE -Wall -Wextra -Werror)
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
 
@@ -41,7 +43,7 @@ target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt)
 aux_source_directory(test TEST_SOURCE)
 add_executable(gcn_sim_test ${TEST_SOURCE} test/mapping_test.cc)
 target_include_directories(gcn_sim_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test)
-target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt)
+target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt::fmt Catch2::Catch2WithMain)
 configure_file(test/test.graph test.graph COPYONLY)
 
 configure_file(data/cora.graph cora.graph COPYONLY)
