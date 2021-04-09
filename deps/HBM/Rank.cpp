@@ -37,7 +37,7 @@
 
 using namespace std;
 using namespace DRAMSim;
-
+using namespace HBM;
 Rank::Rank() :
   id(-1),
   isPowerDown(false),
@@ -98,7 +98,7 @@ void Rank::receiveFromBus(BusPacket *packet)
 
       packet->busPacketType = DATA;
       readReturnPacket.push_back(packet);
-      readReturnCountdown.push_back(RL);
+      readReturnCountdown.push_back(_RL);
       break;
 
     case READ_P:
@@ -141,7 +141,7 @@ void Rank::receiveFromBus(BusPacket *packet)
 
       packet->busPacketType = DATA;
       readReturnPacket.push_back(packet);
-      readReturnCountdown.push_back(RL);
+      readReturnCountdown.push_back(_RL);
       break;
 
     case WRITE:
@@ -161,19 +161,19 @@ void Rank::receiveFromBus(BusPacket *packet)
         if (BANK_GROUPS_ENABLED) {
           if (packet->bankGroup == i / NUM_BANKS_PER_BANKGROUP) {
             // Accesses within the same bank group
-            bankStates[i].nextRead = max(currentClockCycle + WL + BL/2 + tWTRL, 
+            bankStates[i].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRL,
                 bankStates[i].nextRead);
             bankStates[i].nextWrite = max(currentClockCycle + max(BL/2, tCCDL), 
                 bankStates[i].nextWrite);
           } else {
             // Accesses to different bank groups
-            bankStates[i].nextRead = max(currentClockCycle + WL + BL/2 + tWTRS, 
+            bankStates[i].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRS,
                 bankStates[i].nextRead);
             bankStates[i].nextWrite = max(currentClockCycle + max(BL/2, tCCDS), 
                 bankStates[i].nextWrite);
           }
         } else { // BANK_GROUPS_DISABLED
-          bankStates[i].nextRead = max(currentClockCycle + WL + BL/2 + tWTRS, 
+          bankStates[i].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRS,
               bankStates[i].nextRead);
           bankStates[i].nextWrite = max(currentClockCycle + max(BL/2, tCCDS), 
               bankStates[i].nextWrite);
@@ -206,19 +206,19 @@ void Rank::receiveFromBus(BusPacket *packet)
             // Accesses within the same bank group
             bankStates[i].nextWrite = max(currentClockCycle + max(BL/2, tCCDL), 
                 bankStates[i].nextWrite);
-            bankStates[i].nextRead = max(currentClockCycle + WL + BL/2 + tWTRL, 
+            bankStates[i].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRL,
                 bankStates[i].nextRead);
           } else {
             // Accesses to different bank groups
             bankStates[i].nextWrite = max(currentClockCycle + max(BL/2, tCCDS), 
                 bankStates[i].nextWrite);
-            bankStates[i].nextRead = max(currentClockCycle + WL + BL/2 + tWTRS, 
+            bankStates[i].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRS,
                 bankStates[i].nextRead);
           }
         } else { //BANK_GROUPS_DISABLED
           bankStates[i].nextWrite = max(currentClockCycle + max(BL/2, tCCDS), 
               bankStates[i].nextWrite);
-          bankStates[i].nextRead = max(currentClockCycle + WL + BL/2 + tWTRS, 
+          bankStates[i].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRS,
               bankStates[i].nextRead);
         }
       }

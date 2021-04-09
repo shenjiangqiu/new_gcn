@@ -32,7 +32,7 @@
 #include "AddressMapping.h"
 
 using namespace std;
-
+using namespace HBM;
 namespace DRAMSim {
 
 unsigned sliceLowerBits(uint64_t& addr, unsigned bits)

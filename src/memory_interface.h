@@ -2,8 +2,8 @@
 #define MEMORY_INTERFACE_H
 
 #include "dram_wrapper.h"
-#include "dramsim_wrapper.h"
 #include "dramsim2_wrapper.h"
+#include "dramsim_wrapper.h"
 #include "globals.h"
 #include <assert.h>
 #include <map>
@@ -21,7 +21,8 @@ private:
   std::queue<std::shared_ptr<Req>> task_return_queue;
 
   std::map<unsigned, unsigned> id_to_numreqs_map;
-  std::map<unsigned long long, std::shared_ptr<Req>> addr_to_req_map;
+  std::map<unsigned long long, std::vector<std::shared_ptr<Req>>>
+      addr_to_req_map;
   std::shared_ptr<dram_wrapper> m_mem;
   double mem_tCK, cpu_tCK;
   unsigned long cycles;
@@ -47,8 +48,8 @@ public:
     return ret;
   }
   memory_interface(const std::string &dram_config_name,
-                                     const std::string &dev_config_name,
-                                     unsigned int waitingSize);
+                   const std::string &dev_config_name,
+                   unsigned int waitingSize);
   virtual ~memory_interface() = default;
   void cycle();
   void set_CLKs(double mem_CLK, double cpu_CLK);

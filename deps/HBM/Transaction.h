@@ -35,7 +35,7 @@
 #include "BusPacket.h"
 
 using std::ostream; 
-
+using namespace HBM;
 namespace DRAMSim {
 enum TransactionType
 {

@@ -32,10 +32,10 @@
 #include "IniReader.h"
 
 using namespace std;
-
+using namespace HBM;
 // these are the values that are extern'd in SystemConfig.h so that they
 // have global scope even though they are set by IniReader
-
+namespace HBM {
 unsigned NUM_BANKGROUPS;
 unsigned NUM_BANKS;
 unsigned NUM_BANKS_LOG;
@@ -103,7 +103,7 @@ bool DEBUG_BANKS;
 bool DEBUG_POWER;
 
 bool DEBUG_INI_READER = false;
-
+} // namespace HBM
 namespace DRAMSim {
 RowBufferPolicy rowBufferPolicy;
 SchedulingPolicy schedulingPolicy;
@@ -155,7 +155,7 @@ static ConfigMap configMap[] = {
     DEFINE_STRING_PARAM(ROW_BUFFER_POLICY, SYS_PARAM),
     DEFINE_STRING_PARAM(SCHEDULING_POLICY, SYS_PARAM),
     DEFINE_STRING_PARAM(ADDRESS_MAPPING_SCHEME, SYS_PARAM),
-    DEFINE_STRING_PARAM(OPERATION_MODE, SYS_PARAM),
+    DEFINE_STRING_PARAM(HBM::OPERATION_MODE, SYS_PARAM),
     DEFINE_BOOL_PARAM(BANK_GROUPS_ENABLED, SYS_PARAM),
 
     // debug flags
@@ -190,7 +190,7 @@ void IniReader::SetKey(string key, string valueString, bool isSystemParam,
                                         << valueString << "')?");
         }
         *((unsigned *)configMap[i].variablePtr) = intValue;
-        if (DEBUG_INI_READER) {
+        if (HBM::DEBUG_INI_READER) {
           DEBUG("\t - SETTING " << configMap[i].iniKey << "=" << intValue);
         }
         break;
@@ -200,7 +200,7 @@ void IniReader::SetKey(string key, string valueString, bool isSystemParam,
                                         << valueString << "')?");
         }
         *((uint64_t *)configMap[i].variablePtr) = int64Value;
-        if (DEBUG_INI_READER) {
+        if (HBM::DEBUG_INI_READER) {
           DEBUG("\t - SETTING " << configMap[i].iniKey << "=" << int64Value);
         }
         break;
@@ -210,13 +210,13 @@ void IniReader::SetKey(string key, string valueString, bool isSystemParam,
                                         << valueString << "')?");
         }
         *((float *)configMap[i].variablePtr) = floatValue;
-        if (DEBUG_INI_READER) {
+        if (HBM::DEBUG_INI_READER) {
           DEBUG("\t - SETTING " << configMap[i].iniKey << "=" << floatValue);
         }
         break;
       case STRING:
         *((string *)configMap[i].variablePtr) = string(valueString);
-        if (DEBUG_INI_READER) {
+        if (HBM::DEBUG_INI_READER) {
           DEBUG("\t - SETTING " << configMap[i].iniKey << "=" << valueString);
         }
 
@@ -331,7 +331,7 @@ void IniReader::ReadIniFile(string filename, bool isSystemFile) {
   if (JEDEC_DATA_BUS_BITS > 0) {
     BYTE_OFFSET_WIDTH = log2(PAGE_SIZE / NUM_COLS);
     TRANSACTION_SIZE = JEDEC_DATA_BUS_BITS / 8 * BL;
-    if (OPERATION_MODE == "pseudo_channel_mode")
+    if (HBM::OPERATION_MODE == "pseudo_channel_mode")
       TRANSACTION_SIZE /= 2;
   }
 }
@@ -412,12 +412,12 @@ void IniReader::InitEnumsFromStrings() {
     schedulingPolicy = BankThenRankRoundRobin;
   }
 
-  if (OPERATION_MODE == "legacy_mode")
+  if (HBM::OPERATION_MODE == "legacy_mode")
     operationMode = LegacyMode;
-  else if (OPERATION_MODE == "pseudo_channel_mode")
+  else if (HBM::OPERATION_MODE == "pseudo_channel_mode")
     operationMode = PseudoChannelMode;
   else {
-    cout << "WARNING: unknown operation mode '" << OPERATION_MODE
+    cout << "WARNING: unknown operation mode '" << HBM::OPERATION_MODE
          << "'; valid values are "
             "'legacy_mode' or 'pseudo_channel_mode', defaulting to Legacy Mode."
          << endl;
