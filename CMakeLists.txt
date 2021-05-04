@@ -43,7 +43,7 @@ target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt::fmt)
 aux_source_directory(test TEST_SOURCE)
 add_executable(gcn_sim_test ${TEST_SOURCE} test/mapping_test.cc)
 target_include_directories(gcn_sim_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test)
-target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt::fmt Catch2::Catch2WithMain)
+target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt::fmt Catch2::Catch2)
 configure_file(test/test.graph test.graph COPYONLY)
 
 configure_file(data/cora.graph cora.graph COPYONLY)
