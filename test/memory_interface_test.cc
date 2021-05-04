@@ -2,7 +2,8 @@
 // Created by sjq on 1/7/21.
 //
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
+
 #include <memory_interface.h>
 #include <fmt/format.h>
 
@@ -14,7 +15,7 @@ TEST_CASE("mem_interface") {
 
         req->req_type = mem_request::read;
         req->len = 1024;
-        req->addr = i * 2048;
+        req->set_addr( i * 2048);
         req->t = device_types::input_buffer;
         while (!m_interface.available()) {
             m_interface.cycle();
@@ -30,7 +31,7 @@ TEST_CASE("mem_interface") {
             //std::cout << cycle << std::endl;
         }
         auto ret = m_interface.get_req();
-        std::cout << fmt::format("receive id: {} ,addr: {} \n", ret->id, ret->addr);
+        std::cout << fmt::format("receive id: {} ,addr: {} \n", ret->id, ret->get_addr());
     }
     REQUIRE(m_interface.empty() == true);
     std::cout << fmt::format("total cycle: {}\n", cycle);

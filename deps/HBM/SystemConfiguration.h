@@ -48,7 +48,7 @@
 //SystemConfiguration.h
 //
 //Configuration values for the current system
-
+namespace HBM {
 
 extern bool DEBUG_TRANS_Q;
 extern bool DEBUG_CMD_Q;
@@ -76,14 +76,14 @@ extern unsigned PAGE_SIZE;
 extern unsigned BYTE_OFFSET_WIDTH;
 extern unsigned TRANSACTION_SIZE;
 
-//in nanoseconds
+// in nanoseconds
 extern unsigned REFRESH_PERIOD;
 extern float tCK;
 
 extern unsigned CL;
 extern unsigned AL;
-#define RL (CL+AL)
-#define WL (RL-1)
+#define _RL (CL + AL)
+#define _WL (_RL - 1)
 extern unsigned BL;
 extern unsigned tRAS;
 extern unsigned tRCD;
@@ -105,19 +105,19 @@ extern unsigned tXP;
 
 extern unsigned tCMD;
 
-/* For power parameters (current and voltage), see externs in MemoryController.cpp */ 
+/* For power parameters (current and voltage), see externs in MemoryController.cpp */
 
-//same bank
-#define READ_TO_PRE_DELAY (AL+BL/2+ max(tRTP,tCCDS)-tCCDS)
-#define WRITE_TO_PRE_DELAY (WL+BL/2+tWR)
-#define READ_TO_WRITE_DELAY (RL+BL/2+tRTRS-WL)
-#define READ_AUTOPRE_DELAY (AL+tRTP+tRP)
-#define WRITE_AUTOPRE_DELAY (WL+BL/2+tWR+tRP)
-#define WRITE_TO_READ_DELAY_R (WL+BL/2+tRTRS-RL) //interrank
+// same bank
+#define READ_TO_PRE_DELAY (AL + BL / 2 + max(tRTP, tCCDS) - tCCDS)
+#define WRITE_TO_PRE_DELAY (_WL + BL / 2 + tWR)
+#define READ_TO_WRITE_DELAY (_RL + BL / 2 + tRTRS - _WL)
+#define READ_AUTOPRE_DELAY (AL + tRTP + tRP)
+#define WRITE_AUTOPRE_DELAY (_WL + BL / 2 + tWR + tRP)
+#define WRITE_TO_READ_DELAY_R (_WL + BL / 2 + tRTRS - _RL) // interrank
 
 extern unsigned JEDEC_DATA_BUS_BITS;
 
-//Memory Controller related parameters
+// Memory Controller related parameters
 extern unsigned TRANS_QUEUE_DEPTH;
 extern unsigned CMD_QUEUE_DEPTH;
 
@@ -131,51 +131,28 @@ extern std::string ADDRESS_MAPPING_SCHEME;
 extern std::string MODE;
 extern bool BANK_GROUPS_ENABLED;
 
-enum TraceType
-{
-  k6,
-  mase,
-  misc
-};
+enum TraceType { k6, mase, misc };
 
-enum AddressMappingScheme
-{
-  ChRaBaRoCo,
-  RoBaRaCoCh,
-  CoRoBaRaCh,
-  RoCoBaRaCh
-};
+enum AddressMappingScheme { ChRaBaRoCo, RoBaRaCoCh, CoRoBaRaCh, RoCoBaRaCh };
 
 // used in MemoryController and CommandQueue
-enum RowBufferPolicy
-{
-  OpenPage,
-  ClosePage
-};
+enum RowBufferPolicy { OpenPage, ClosePage };
 
-enum SchedulingPolicy
-{
-  RankThenBankRoundRobin,
-  BankThenRankRoundRobin
-};
+enum SchedulingPolicy { RankThenBankRoundRobin, BankThenRankRoundRobin };
 
-enum OperationMode
-{
-  LegacyMode,
-  PseudoChannelMode
-};
+enum OperationMode { LegacyMode, PseudoChannelMode };
 
 // set by IniReader.cpp
 
-
+}
 namespace DRAMSim
 {
 typedef void (*returnCallBack_t)(unsigned id, uint64_t addr, uint64_t clockcycle);
 
-extern RowBufferPolicy rowBufferPolicy;
-extern SchedulingPolicy schedulingPolicy;
-extern AddressMappingScheme addressMappingScheme;
-extern OperationMode operationMode;
+extern HBM::RowBufferPolicy rowBufferPolicy;
+extern HBM::SchedulingPolicy schedulingPolicy;
+extern HBM::AddressMappingScheme addressMappingScheme;
+extern HBM::OperationMode operationMode;
 
 unsigned inline log2(unsigned value)
 {

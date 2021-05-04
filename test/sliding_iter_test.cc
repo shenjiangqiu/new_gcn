@@ -2,7 +2,8 @@
 // Created by sjq on 1/10/21.
 //
 #include "Slide_window.h"
-#include "catch.hpp"
+#include "catch2/catch.hpp"
+
 
 TEST_CASE("sliding_iter") {
   auto m_graph = std::make_shared<Graph>("cora");

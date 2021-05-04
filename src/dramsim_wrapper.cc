@@ -6,11 +6,12 @@
 #include "spdlog/spdlog.h"
 void dramsim_wrapper::send(uint64_t addr, bool is_write) {
 
+  auto channel_id = get_channel_id(addr);
   if (is_write) {
-    write_queue.push(addr);
+    write_queue[channel_id].push(addr);
 
   } else {
-    read_queue.push(addr);
+    read_queue[channel_id].push(addr);
   }
   int bank_id = m_memory_system->GetChannel(addr) * 16;
 
@@ -22,8 +23,10 @@ void dramsim_wrapper::send(uint64_t addr, bool is_write) {
   inflight_req_cnt++;
 }
 
-bool dramsim_wrapper::available() const {
-  return read_queue.size() < 256 and write_queue.size() < 256;
+bool dramsim_wrapper::available(uint64_t addr) const {
+
+  auto channel_id = get_channel_id(addr);
+  return read_queue[channel_id].size() < 256 and write_queue[channel_id].size() < 256;
   // return read_queue.size() < 16 and write_queue.size() < 16;
 }
 
@@ -37,17 +40,21 @@ void dramsim_wrapper::cycle() {
     sum_inflight_bank_req += bank_infligt_req_cnt;
   }
 
-  if (!read_queue.empty()) {
-    auto &&next = read_queue.front();
-    if (m_memory_system->WillAcceptTransaction(next, false)) {
-      m_memory_system->AddTransaction(next, false);
-      read_queue.pop();
-    }
-  } else if (!write_queue.empty()) {
-    auto &&next = write_queue.front();
-    if (m_memory_system->WillAcceptTransaction(next, true)) {
-      m_memory_system->AddTransaction(next, true);
-      write_queue.pop();
+  for (unsigned i = 0; i < get_channel_num(); i++) {
+    if (!read_queue[i].empty()) {
+      auto &&next = read_queue[i].front();
+      if (m_memory_system->WillAcceptTransaction(next,false)) {
+        m_memory_system->AddTransaction(next, false);
+        read_queue[i].pop();
+        inflight_req_cnt++;
+      }
+    } else if (!write_queue[i].empty()) {
+      auto &&next = write_queue[i].front();
+      if (m_memory_system->WillAcceptTransaction(next,true)) {
+        m_memory_system->AddTransaction(next, true);
+        write_queue[i].pop();
+        inflight_req_cnt++;
+      }
     }
   }
 
@@ -79,6 +86,8 @@ dramsim_wrapper::dramsim_wrapper(const std::string &config_file,
           [this](uint64_t addr) { this->receive_write(addr); }));
 
   spdlog::info("init dramsim");
+  read_queue.resize(get_channel_num());
+  write_queue.resize(get_channel_num());
 }
 
 dramsim_wrapper::~dramsim_wrapper() {
@@ -100,11 +109,11 @@ dramsim_wrapper::~dramsim_wrapper() {
 void dramsim_wrapper::receive_read(uint64_t addr) {
   read_ret.push(addr);
   inflight_req_cnt--;
-  //std::cout << this << std::endl;
-  //std::cout<<m_memory_system.get()<<std::endl;
+  // std::cout << this << std::endl;
+  // std::cout<<m_memory_system.get()<<std::endl;
   int bank_id = m_memory_system->GetChannel(addr) * 16;
-  //std::cout<<m_memory_system.get()<<std::endl;
-  //std::cout << this << std::endl;
+  // std::cout<<m_memory_system.get()<<std::endl;
+  // std::cout << this << std::endl;
 
   bank_id += m_memory_system->GetBankID(addr);
   bank_req_cnt[bank_id]--;
@@ -124,5 +133,11 @@ void dramsim_wrapper::receive_write(uint64_t addr) {
     bank_infligt_req_cnt--;
 
   finished_write_req++;
+}
+unsigned dramsim_wrapper::get_channel_num() {
+  return dramsim3::BaseDRAMSystem::total_channels_;
+}
+unsigned dramsim_wrapper::get_channel_id(uint64_t addr) const {
+  return m_memory_system->GetChannel(addr);
 }
 #endif

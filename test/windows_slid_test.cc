@@ -1,5 +1,5 @@
+#include "catch2/catch.hpp"
 
-#include <catch.hpp>
 #include <fmt/format.h>
 #include <graph.h>
 #include <iostream>

@@ -1,46 +1,50 @@
 //
 // Created by Jianhui on 2/24/2021.
 //
-#include "globals.h"
 #include "dramsim2_wrapper.h"
+#include "globals.h"
 #include "spdlog/spdlog.h"
 
 void dramsim2_wrapper::send(uint64_t addr, bool is_write) {
+  auto channel_id = get_channel_id(addr);
   if (is_write) {
-    write_queue.push(addr);
+    write_queue[channel_id].push(addr);
 
   } else {
-    read_queue.push(addr);
+    read_queue[channel_id].push(addr);
   }
 }
 
-bool dramsim2_wrapper::available() const {
-  return read_queue.size() < 256 and write_queue.size() < 256;
-  //return read_queue.size() < 16 and write_queue.size() < 16;
+bool dramsim2_wrapper::available(uint64_t addr) const {
+  auto channel_id = get_channel_id(addr);
+
+  return read_queue[channel_id].size() < 256 and write_queue[channel_id].size() < 256;
+  // return read_queue.size() < 16 and write_queue.size() < 16;
 }
 
 void dramsim2_wrapper::cycle() {
-  
-  my_cycles++;
-  if( inflight_req_cnt ){ 
-       sum_inflight_req += inflight_req_cnt;
-       active_cycles++;
-  }     
 
-  if (!read_queue.empty()) {
-    auto &&next = read_queue.front();
-    if (m_memory_system->willAcceptTransaction( next )) {
-      m_memory_system->addTransaction(false, next);
-      read_queue.pop();
-      inflight_req_cnt++;
-    }
-  } else if (!write_queue.empty()) {
-    auto &&next = write_queue.front();
-    if (m_memory_system->willAcceptTransaction( next)) {
-      m_memory_system->addTransaction(true, next);
-      write_queue.pop();
-      inflight_req_cnt++;
-      pending_write_req++;
+  my_cycles++;
+  if (inflight_req_cnt) {
+    sum_inflight_req += inflight_req_cnt;
+    active_cycles++;
+  }
+  for (unsigned i = 0; i < get_channel_num(); i++) {
+    if (!read_queue[i].empty()) {
+      auto &&next = read_queue[i].front();
+      if (m_memory_system->willAcceptTransaction(next)) {
+        m_memory_system->addTransaction(false, next);
+        read_queue[i].pop();
+        inflight_req_cnt++;
+      }
+    } else if (!write_queue[i].empty()) {
+      auto &&next = write_queue[i].front();
+      if (m_memory_system->willAcceptTransaction(next)) {
+        m_memory_system->addTransaction(true, next);
+        write_queue[i].pop();
+        inflight_req_cnt++;
+        pending_write_req++;
+      }
     }
   }
 
@@ -57,55 +61,71 @@ uint64_t dramsim2_wrapper::pop() {
 
 uint64_t dramsim2_wrapper::get() const { return read_ret.front(); }
 
-dramsim2_wrapper::dramsim2_wrapper(const std::string& config_file,
-                    const std::string& system_file) {
-     
-    m_memory_system =  DRAMSim::getMemorySystemInstance(config_file, system_file,
-                                                  ".",8192);
-  
-    DRAMSim::TransactionCompleteCB *read_cb = new DRAMSim::Callback<dramsim2_wrapper, void, unsigned, uint64_t, uint64_t>(this, &dramsim2_wrapper::receive_read);
-    DRAMSim::TransactionCompleteCB *write_cb = new DRAMSim::Callback<dramsim2_wrapper, void, unsigned, uint64_t, uint64_t>(this, &dramsim2_wrapper::receive_write);
-    //m_memory_system->RegisterCallbacks(receive_read, receive_write, NULL);
-    m_memory_system->RegisterCallbacks(read_cb, write_cb, NULL);
-    
-    my_cycles = 0;
-    active_cycles = 0;
-    inflight_req_cnt = 0;
-    sum_inflight_req = 0;
-    finished_read_req = 0;
-    finished_write_req = 0;
-    pending_write_req = 0;
-     spdlog::info("init dramsim");
+dramsim2_wrapper::dramsim2_wrapper(const std::string &config_file,
+                                   const std::string &system_file) {
+
+  m_memory_system =
+      DRAMSim::getMemorySystemInstance(config_file, system_file, ".", 8192);
+
+  DRAMSim::TransactionCompleteCB *read_cb =
+      new DRAMSim::Callback<dramsim2_wrapper, void, unsigned, uint64_t,
+                            uint64_t>(this, &dramsim2_wrapper::receive_read);
+  DRAMSim::TransactionCompleteCB *write_cb =
+      new DRAMSim::Callback<dramsim2_wrapper, void, unsigned, uint64_t,
+                            uint64_t>(this, &dramsim2_wrapper::receive_write);
+  // m_memory_system->RegisterCallbacks(receive_read, receive_write, NULL);
+  m_memory_system->RegisterCallbacks(read_cb, write_cb, NULL);
+  auto num_channel = get_channel_num();
+  read_queue.resize(num_channel);
+  write_queue.resize(num_channel);
+  my_cycles = 0;
+  active_cycles = 0;
+  inflight_req_cnt = 0;
+  sum_inflight_req = 0;
+  finished_read_req = 0;
+  finished_write_req = 0;
+  pending_write_req = 0;
+  spdlog::info("init dramsim");
 }
 
-dramsim2_wrapper::~dramsim2_wrapper() { 
-   //m_memory_system->printStats(true);//Yue
-   std::string graph = std::string(config::graph_name);
-   std::string model = std::string(config::model);
-   std::string fileName = graph+"-"+model+"-"+"drm2.txt";
-   
-   float mlp = (float)(sum_inflight_req)/(float)(active_cycles);
-   float activeRate = (float)(active_cycles)/(float)(my_cycles);
+dramsim2_wrapper::~dramsim2_wrapper() {
+  // m_memory_system->printStats(true);//Yue
+  std::string graph = std::string(config::graph_name);
+  std::string model = std::string(config::model);
+  std::string fileName = graph + "-" + model + "-" + "drm2.txt";
 
-   std::cout<<"Interface MLP "<< mlp <<" memory activeRate "<<activeRate;
-   std::cout<<" inflight_req "<<inflight_req_cnt<<"  inflight_write_req "<<pending_write_req;
-   std::cout<<" BW "<<(finished_read_req+finished_write_req)*64.0/active_cycles;
-   std::cout<<" readRqt "<<finished_read_req<<"  writeRqt "<<finished_write_req<<"\n";
+  float mlp = (float)(sum_inflight_req) / (float)(active_cycles);
+  float activeRate = (float)(active_cycles) / (float)(my_cycles);
 
-   m_memory_system->printStatsToFile(true, fileName);
+  std::cout << "Interface MLP " << mlp << " memory activeRate " << activeRate;
+  std::cout << " inflight_req " << inflight_req_cnt << "  inflight_write_req "
+            << pending_write_req;
+  std::cout << " BW "
+            << (finished_read_req + finished_write_req) * 64.0 / active_cycles;
+  std::cout << " readRqt " << finished_read_req << "  writeRqt "
+            << finished_write_req << "\n";
 
-   delete m_memory_system; 
+  m_memory_system->printStatsToFile(true, fileName);
+
+  delete m_memory_system;
 }
 
-//DRAMSimMemory::DRAM_read_return_cb(uint32_t id, uint64_t addr, uint64_t memCycle)
-void dramsim2_wrapper::receive_read(uint32_t , uint64_t addr, uint64_t ) {
-    read_ret.push(addr); 
-    inflight_req_cnt--;
-    finished_read_req++;
+// DRAMSimMemory::DRAM_read_return_cb(uint32_t id, uint64_t addr, uint64_t
+// memCycle)
+void dramsim2_wrapper::receive_read(uint32_t, uint64_t addr, uint64_t) {
+  read_ret.push(addr);
+  inflight_req_cnt--;
+  finished_read_req++;
 }
 
-void dramsim2_wrapper::receive_write(uint32_t , uint64_t , uint64_t ) {
+void dramsim2_wrapper::receive_write(uint32_t, uint64_t, uint64_t) {
   inflight_req_cnt--;
   finished_write_req++;
   pending_write_req--;
+}
+unsigned dramsim2_wrapper::get_channel_num() const {
+  return m_memory_system->get_channel_num();
+}
+unsigned dramsim2_wrapper::get_channel_id(uint64_t addr) {
+  return DRAMSim::MultiChannelMemorySystem::get_channel_id(addr);
 }

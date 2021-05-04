@@ -111,6 +111,8 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     global_definitions.layer_wait_input.push_back(0);
     global_definitions.layer_aggregate_op.push_back(0);
     global_definitions.layer_do_systolic.push_back(0);
+    global_definitions.layer_window_avg_agg.push_back(0);
+    global_definitions.layer_window_avg_input.push_back(0);
   }
 
   // step 2, build the windows set. and input buffer,edge buffer
@@ -204,29 +206,7 @@ void System::run() {
            global_definitions.total_waiting_agg_read);
   map.push(std::string("total_idle_waiting_out"),
            global_definitions.total_waiting_out);
-  map.push(std::string("InputBuffer_latency"),
-           global_definitions.total_read_input_latency);
-  map.push(std::string("len"), global_definitions.total_read_input_len);
-  map.push(std::string("times"), global_definitions.total_read_input_times);
-  map.push(std::string("avg_latency"),
-           global_definitions.total_read_input_latency /
-               global_definitions.total_read_input_times);
-  map.push(std::string("avg_vertices"),
-           global_definitions.total_read_input_vertices_cnt /
-               global_definitions.total_read_input_times);
-  map.push(std::string("avg_len"),
-           global_definitions.total_read_input_len /
-               global_definitions.total_read_input_times);
-  map.push(std::string("EdgeBuffer_read_latency"),
-           global_definitions.total_read_edge_latency);
-  map.push(std::string("len"), global_definitions.total_read_edge_len);
-  map.push(std::string("times"), global_definitions.total_read_edge_times);
-  map.push(std::string("avg_latency"),
-           global_definitions.total_read_edge_latency /
-               global_definitions.total_read_edge_times);
-  map.push(std::string("avg_len"),
-           global_definitions.total_read_edge_len /
-               global_definitions.total_read_edge_times);
+  
   map.push(std::string("total_mac_in_systolic_array"),
            global_definitions.total_mac_in_systolic_array);
   map.push(std::string("total_read_input_traffic"),
@@ -243,6 +223,34 @@ void System::run() {
            global_definitions.total_edge_buffer_idle);
   map.push(std::string("total_cycles"), global_definitions.cycle);
   map.print();
+
+
+ std::cout<<"\nEdgeBuffer total_latency "<< global_definitions.total_read_edge_latency
+   <<" len " << global_definitions.total_read_edge_len
+   <<" times " << global_definitions.total_read_edge_times
+   <<" avg_latency "
+   <<  global_definitions.total_read_edge_latency /
+               global_definitions.total_read_edge_times
+   <<" avg_len "
+   << global_definitions.total_read_edge_len /
+               global_definitions.total_read_edge_times
+   <<"\n";
+
+ std::cout<<"InputBuffer total_latency "<<global_definitions.total_read_input_latency
+  <<" len "<<global_definitions.total_read_input_len
+  <<" times " << global_definitions.total_read_input_times
+  <<" avg_latency "<<
+           global_definitions.total_read_input_latency /
+               global_definitions.total_read_input_times
+   <<" avg_vertices "<<
+           global_definitions.total_read_input_vertices_cnt /
+               global_definitions.total_read_input_times
+   <<" avg_len " <<
+           global_definitions.total_read_input_len /
+               global_definitions.total_read_input_times
+  <<"\n\n";
+
+
   spdlog::info("layer_completion_time  {}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), "  "));
@@ -284,6 +292,25 @@ void System::run() {
   spdlog::info("layer_aggregate_op  {}\n",
                fmt::join(global_definitions.layer_aggregate_op.begin(),
                          global_definitions.layer_aggregate_op.end(), "  "));
+
+  for (auto i = 0; i < total_level; i++) {
+     auto cnt = global_definitions.layer_input_windows[i];
+     auto agg_time = global_definitions.layer_do_aggregate[i];
+     auto input_time = global_definitions.layer_wait_input[i];
+     float avg_agg_time = agg_time/cnt;
+     float avg_input_time = input_time/cnt;
+     global_definitions.layer_window_avg_agg[i] = avg_agg_time;
+     global_definitions.layer_window_avg_input[i] = avg_input_time;
+  }
+ 
+ spdlog::info("layer_window_avg_input_lat  {}\n",
+               fmt::join(global_definitions.layer_window_avg_input.begin(),
+                         global_definitions.layer_window_avg_input.end(), "  "));
+
+ spdlog::info("layer_window_avg_agg_lat  {}\n",
+               fmt::join(global_definitions.layer_window_avg_agg.begin(),
+                         global_definitions.layer_window_avg_agg.end(), "  "));
+
 }
 
 void System::cycle() {

@@ -37,7 +37,7 @@
 #define SEQUENTIAL(rank,bank) (rank*NUM_BANKS)+bank
 
 using namespace DRAMSim;
-
+using namespace HBM;
 MemoryController::MemoryController(unsigned sid, unsigned cid, MemorySystem *parent) :
   stackID(sid),
   channelID(cid),
@@ -272,7 +272,7 @@ void MemoryController::update()
       writeDataToSend[poppedBusPacket->rank] = new BusPacket(DATA, poppedBusPacket->physicalAddress, 
           poppedBusPacket->column, poppedBusPacket->row, poppedBusPacket->rank, 
           poppedBusPacket->bank, poppedBusPacket->data);
-      writeDataCountdown[poppedBusPacket->rank] = WL;
+      writeDataCountdown[poppedBusPacket->rank] = _WL;
     }
 
     //update each bank's state based on the command just popped out of the command queue
@@ -372,19 +372,19 @@ void MemoryController::update()
                   // Accesses within the same bank group
                   bankStates[i][j].nextWrite = max(currentClockCycle + max(BL/2, tCCDL),
                       bankStates[i][j].nextWrite);
-                  bankStates[i][j].nextRead = max(currentClockCycle + WL + BL/2 + tWTRL,
+                  bankStates[i][j].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRL,
                       bankStates[i][j].nextRead);
                 } else { 
                   // Accesses to different bank groups
                   bankStates[i][j].nextWrite = max(currentClockCycle + max(BL/2, tCCDS),
                       bankStates[i][j].nextWrite);
-                  bankStates[i][j].nextRead = max(currentClockCycle + WL + BL/2 + tWTRS,
+                  bankStates[i][j].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRS,
                       bankStates[i][j].nextRead);
                 }
               } else { // BANK_GROUPS_DISABLED
                 bankStates[i][j].nextWrite = max(currentClockCycle + max(BL/2, tCCDS),
                     bankStates[i][j].nextWrite);
-                bankStates[i][j].nextRead = max(currentClockCycle + WL + BL/2 + tWTRS, 
+                bankStates[i][j].nextRead = max(currentClockCycle + _WL + BL/2 + tWTRS,
                     bankStates[i][j].nextRead);
               }
             }

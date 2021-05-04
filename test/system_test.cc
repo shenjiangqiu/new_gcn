@@ -3,7 +3,8 @@
 //
 
 #include "System.h"
-#include "catch.hpp"
+#include "catch2/catch.hpp"
+
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include "vector"

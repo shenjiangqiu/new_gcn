@@ -28,8 +28,8 @@
 *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************************/
 
-#ifndef BANKSTATE_H
-#define BANKSTATE_H
+#ifndef HBM_BANKSTATE_H
+#define HBM_BANKSTATE_H
 
 #include "SystemConfiguration.h"
 #include "BusPacket.h"

@@ -175,7 +175,7 @@ shared_ptr<Req> EdgeBuffer::pop_current() {
   assert(!current_empty and !current_sent);
   current_sent = true;
   auto req = std::make_shared<Req>();
-  req->addr = m_current_iter->getEdgeAddr();
+  req->set_addr(m_current_iter->getEdgeAddr());
   req->len = m_current_iter->getEdgeLen();
   req->init_len = req->len;
   req->req_type = mem_request::read;
@@ -189,7 +189,7 @@ shared_ptr<Req> EdgeBuffer::pop_next() {
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
-  req->addr = m_next_iter->getEdgeAddr();
+  req->set_addr(m_next_iter->getEdgeAddr());
   req->len = m_next_iter->getEdgeLen();
   req->init_len = req->len;
   req->req_type = mem_request::read;
@@ -306,7 +306,7 @@ shared_ptr<Req> InputBuffer::pop_current() {
   assert(!current_empty and !current_sent);
   current_sent = true;
   auto req = std::make_shared<Req>();
-  req->addr = m_current_iter->getInputAddr();
+  req->set_addr(m_current_iter->getInputAddr());
   if (config::enable_valid_node_only)
     req->len = m_current_iter->getValidInputLen();
   else
@@ -326,7 +326,7 @@ shared_ptr<Req> InputBuffer::pop_next() {
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
-  req->addr = m_next_iter->getInputAddr();
+  req->set_addr(m_next_iter->getInputAddr());
   if (config::enable_valid_node_only)
     req->len = m_next_iter->getValidInputLen();
   else
@@ -352,7 +352,7 @@ shared_ptr<Req> InputBuffer::pop_next() {
 
   buffer_entry_sent[i] = true;
   auto req = std::make_shared<Req>();
-  req->addr = m_next_iter->getInputAddr();
+  req->set_addr(m_next_iter->getInputAddr());
   req->len = m_next_iter->getInputLen();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;

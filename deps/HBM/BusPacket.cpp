@@ -32,7 +32,7 @@
 
 using namespace DRAMSim;
 using namespace std;
-
+using namespace HBM;
 BusPacket::BusPacket(BusPacketType packtype, uint64_t physicalAddr, 
     unsigned col, unsigned rw, unsigned r, unsigned b, void *dat) :
   busPacketType(packtype),

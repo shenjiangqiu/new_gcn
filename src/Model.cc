@@ -6,9 +6,8 @@
 
 #include <utility>
 Model::Model(std::string name, std::vector<int> mLevels, bool isConcatenate,
-             bool isInitialResidual, bool isSample, int sampleNum)
+             bool isInitialResidual, bool , int )
     : name(std::move(name)), m_levels(std::move(mLevels)),
-      sample_num(sampleNum), is_sample(isSample),
       is_concatenate(isConcatenate), is_initial_residual(isInitialResidual) {}
 const std::string &Model::getName() const { return name; }
 const std::vector<int> &Model::getMLevels() const { return m_levels; }

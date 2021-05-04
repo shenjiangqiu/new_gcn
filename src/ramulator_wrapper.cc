@@ -39,7 +39,7 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
   mem = name_to_func[std_name](configs, cacheLine);
   Stats::statlist.output("mem_stats.txt");
   tCK = mem->clk_ns();
-
+  in_queue.resize(get_channel_num());
   inflight_req_cnt = 0;
   sum_inflight_req = 0;
   my_cycles = 0;
@@ -47,20 +47,22 @@ ramulator_wrapper::ramulator_wrapper(const ramulator::Config configs,
   finished_read_req = 0;
   finished_write_req = 0;
   sum_rd_latency = 0;
-  
 }
 ramulator_wrapper::~ramulator_wrapper() {
-  
-  float mlp = (float)sum_inflight_req/active_cycles;
-  float activeRate = (float)active_cycles/my_cycles;
-  float blp = (float)sum_inflight_bank_req/active_cycles;
-  double avgLatency = (double)sum_rd_latency/finished_read_req;
 
-  std::cout<<"Interface MLP "<< mlp <<" BLP  "<<blp<<" memoy activeRate "<<activeRate;
-  std::cout<<" BW "<<(finished_read_req+finished_write_req)*64.0/active_cycles;
-  std::cout<<" lat "<<avgLatency;
-  std::cout<<" readRqt "<<finished_read_req<<"  writeRqt "<<finished_write_req<<"\n";
-  
+  float mlp = (float)sum_inflight_req / active_cycles;
+  float activeRate = (float)active_cycles / my_cycles;
+  float blp = (float)sum_inflight_bank_req / active_cycles;
+  double avgLatency = (double)sum_rd_latency / finished_read_req;
+
+  std::cout << "Interface MLP " << mlp << " BLP  " << blp
+            << " memoy activeRate " << activeRate;
+  std::cout << " BW "
+            << (finished_read_req + finished_write_req) * 64.0 / active_cycles;
+  std::cout << " lat " << avgLatency;
+  std::cout << " readRqt " << finished_read_req << "  writeRqt "
+            << finished_write_req << "\n";
+
   finish();
 
   delete mem;
@@ -71,13 +73,11 @@ void ramulator_wrapper::finish() {
   Stats::statlist.printall();
 }
 
-void ramulator_wrapper::tick() { 
-  mem->tick(); 
-}
+void ramulator_wrapper::tick() { mem->tick(); }
 
 void ramulator_wrapper::send(uint64_t addr, bool is_write) {
-  this->in_queue.push({addr, is_write});
-  
+  auto channel_id = get_channel_id(addr);
+  this->in_queue[channel_id].push({addr, is_write});
 }
 
 void ramulator_wrapper::call_back(ramulator::Request &req) {
@@ -103,44 +103,41 @@ void ramulator_wrapper::call_back(ramulator::Request &req) {
 
   auto bank = req.addr_vec[Bank_LEVEL];
   auto channel = req.addr_vec[Channel_LEVEL];
-  int bank_id = channel*16+bank;
-   
-  if( bank_req_cnt[bank_id] ){
-      bank_req_cnt[bank_id]--;
-      if(bank_req_cnt[bank_id] == 0)
-           bank_infligt_req_cnt--;
+  int bank_id = channel * 16 + bank;
+
+  if (bank_req_cnt[bank_id]) {
+    bank_req_cnt[bank_id]--;
+    if (bank_req_cnt[bank_id] == 0)
+      bank_infligt_req_cnt--;
   }
 }
 
-
 void ramulator_wrapper::cycle() {
 
-
   my_cycles++;
-  if( inflight_req_cnt ){
-        active_cycles++;
-        sum_inflight_req +=inflight_req_cnt;
-        sum_inflight_bank_req += bank_infligt_req_cnt;
+  if (inflight_req_cnt) {
+    active_cycles++;
+    sum_inflight_req += inflight_req_cnt;
+    sum_inflight_bank_req += bank_infligt_req_cnt;
   }
+  for (unsigned i = 0; i < get_channel_num(); i++) {
+    if (!in_queue[i].empty()) {
+      auto &req = in_queue[i].front();
+      // first addr, second: is_write
+      auto r_req = Request(
+          req.first, req.second ? Request::Type::WRITE : Request::Type::READ,
+          [this](Request &req) { this->call_back(req); });
+      if (mem->send(r_req)) {
+        inflight_req_cnt++;
+        outgoing_reqs++;
+        in_queue[i].pop();
 
-  if (!in_queue.empty()) {
-    auto &req = in_queue.front();
-    // first addr, second: is_write
-    auto r_req = Request(
-        req.first, req.second ? Request::Type::WRITE : Request::Type::READ,
-        [this](Request &req) { this->call_back(req); });
-    if (mem->send(r_req)) {
-      inflight_req_cnt++;
-      outgoing_reqs++;
-      in_queue.pop();
-      
-     int  bank_id = mem->getBankID();
-      bank_req_cnt[bank_id]++;
-       if( bank_req_cnt[bank_id] == 1)
-         bank_infligt_req_cnt++;
-        
+        int bank_id = mem->getBankID();
+        bank_req_cnt[bank_id]++;
+        if (bank_req_cnt[bank_id] == 1)
+          bank_infligt_req_cnt++;
+      }
     }
-      
   }
   this->tick();
 }
@@ -155,3 +152,7 @@ std::string ramulator_wrapper::get_internal_size() const {
 }
 
 std::string ramulator_wrapper::get_line_trace() const { return ""; }
+unsigned ramulator_wrapper::get_channel_num() { return 8; }
+unsigned ramulator_wrapper::get_channel_id(uint64_t addr) const {
+  return mem->get_channel_id(addr);
+}

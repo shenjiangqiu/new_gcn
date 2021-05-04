@@ -33,7 +33,7 @@
 #include <assert.h>
 
 using namespace DRAMSim;
-
+using namespace HBM;
 CommandQueue::CommandQueue(vector<vector<BankState>>& states) :
   bankStates(states),
   nextRank(0),

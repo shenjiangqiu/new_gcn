@@ -14,20 +14,21 @@ public:
   dramsim_wrapper(const std::string &config_file,
                   const std::string &output_dir=".");
   void send(uint64_t addr, bool is_write) override;
-  bool available() const override;
+  bool available(uint64_t addr) const override;
   void cycle() override;
   bool return_available() const override;
   uint64_t pop() override;
   uint64_t get() const override;
   ~dramsim_wrapper() override;
-
+  [[nodiscard]] static unsigned get_channel_num() ;
+  [[nodiscard]] unsigned get_channel_id(uint64_t addr) const;
 
 private:
   std::unique_ptr<dramsim3::MemorySystem> m_memory_system;
   void receive_read(uint64_t addr);
   void receive_write(uint64_t addr);
-  std::queue<uint64_t> read_queue;
-  std::queue<uint64_t> write_queue;
+  std::vector<std::queue<uint64_t>> read_queue;
+  std::vector<std::queue<uint64_t>> write_queue;
   std::queue<uint64_t> read_ret;
 
 };

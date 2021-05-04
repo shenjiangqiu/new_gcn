@@ -3,7 +3,7 @@
 //
 
 #include "Aggregator.h"
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 #include "Slide_window.h"
 #include "memory_interface.h"
 #include "spdlog/spdlog.h"
@@ -13,7 +13,7 @@
 TEST_CASE("aggregator_test") {
   //TODO finish this test
   REQUIRE(1==0);
-    /*spdlog::set_level(spdlog::level::debug);
+    /*spdlog::set_level_struct(spdlog::level::debug);
     auto input_buffer = std::make_shared<InputBuffer>("input buffer");
     auto edge_buffer = std::make_shared<ReadBuffer>("edge buffer");
     auto agg_buffer = std::make_shared<Aggregator_buffer>("agg buffer");

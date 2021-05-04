@@ -119,7 +119,7 @@ int SystolicArray::cal_remaining_cycle() {
   }
 
   global_definitions.layer_do_systolic[level] += total_cycles;
-  
+
   return total_cycles;
 }
 void SystolicArray::cycle() {
@@ -134,7 +134,7 @@ void SystolicArray::cycle() {
     req->the_final_request_of_the_layer =
         current_sliding_window->isTheFinalColOfTheLayer();
 
-    req->addr = current_sliding_window->getOutputAddr();
+    req->set_addr(current_sliding_window->getOutputAddr());
     req->len = current_sliding_window->getOutputLen();
     req->t = device_types::output_buffer;
     req->req_type = mem_request::write;
