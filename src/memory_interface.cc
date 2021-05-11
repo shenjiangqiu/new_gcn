@@ -1,7 +1,9 @@
 #include "boost/range/irange.hpp"
+#include "debug_helper.h"
 #include "globals.h"
 #include <memory_interface.h>
 #include <spdlog/spdlog.h>
+
 struct set_level_struct {
   set_level_struct() {
     l = spdlog::get_level();
@@ -35,20 +37,19 @@ void memory_interface::cycle() {
     };
     // handle write request here.
     if (req->req_type == mem_request::write) {
-      spdlog::debug("{}:{} ,deal with write: {}", __FILE__, __LINE__, *req);
+      GCN_DEBUG("{}:{} ,deal with write: {}", __FILE__, __LINE__, *req);
       // just send it and return
       while (m_mem->available(req->get_single_addr())) {
         auto &&len = req->get_len();
         auto &&addr = req->get_single_addr();
         if (len > 0) {
-          spdlog::debug("{}:{} ,send write: {}", __FILE__, __LINE__, *req);
+          GCN_DEBUG("{}:{} ,send write: {}", __FILE__, __LINE__, *req);
 
           m_mem->send(addr, true);
           // task_return_queue.push(req);
           // req_queue.pop();
           if (len <= 64) {
-            spdlog::debug("{}:{} ,finished write: {}", __FILE__, __LINE__,
-                          *req);
+            GCN_DEBUG("{}:{} ,finished write: {}", __FILE__, __LINE__, *req);
 
             task_return_queue.push(req);
             req_queue.pop();
@@ -59,6 +60,10 @@ void memory_interface::cycle() {
           req->set_addr(addr, len);
         }
       }
+      // do not finished this request, return and waiting further operation
+      //  the request is still in the queue.
+      //
+      return;
     }
 
     if (req->is_single_addr()) {
@@ -82,10 +87,10 @@ void memory_interface::cycle() {
   // handle the return from mem logic
   while (!response_queue.empty()) {
     auto &&ret = response_queue.front();
-    spdlog::debug("finished: {}", ret);
+    GCN_DEBUG("finished: {}", ret);
 
     auto &&finished = receive_req(ret);
-    spdlog::debug("finished req:[{}]", fmt::join(finished, ","));
+    GCN_DEBUG("finished req:[{}]", fmt::join(finished, ","));
     // find req by id
     for (auto &&id : finished) {
       task_return_queue.push(id_to_reqs_map.at(id));
@@ -130,7 +135,7 @@ void memory_interface::send(std::shared_ptr<Req> &req) {
   // immediately when scheduled.
   if (req->req_type == mem_request::read)
     id_to_reqs_map.insert({req->id, req});
-  spdlog::debug("{}:{},received req:{}", __FILE__, __LINE__, *req);
+  GCN_DEBUG("received req:{}", *req);
   req_queue.push(req);
 }
 
@@ -154,7 +159,7 @@ memory_interface::memory_interface(const std::string &dram_config_name,
     m_mem =
         std::make_shared<dramsim2_wrapper>(dram_config_name, dev_config_name);
   else {
-    spdlog::error("fail to find the dram:{}", mem_simulator);
+    GCN_ERROR("fail to find the dram:{}", mem_simulator);
     throw;
     m_mem.reset(new ramulator_wrapper(dram_config_name, 64));
   }

@@ -10,6 +10,7 @@
 
 #include "spdlog/spdlog.h"
 #include "utils/Options.h"
+#include "debug_helper.h"
 
 System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int outputBufferSize, int aggTotalCores, int systolic_rows,
@@ -35,7 +36,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   cpu_gap = (double)1.0 / (config::core_freq * 1000000000);
   dram_gap = (double)1.0 / (config::dram_freq * 1000000000);
 
-  spdlog::info("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
+  GCN_INFO("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
                dram_gap, cpu_gap, config::dram_freq, config::core_freq);
   // step1, first need to get the max x_w;
   int total_level = node_size.size();
@@ -55,7 +56,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                    ((node_size[0] - config::ignore_neighbor) * 4));
   }
 
-  spdlog::info("xws push back:{}", xw_s.back());
+  GCN_INFO("xws push back:{}", xw_s.back());
   assert(xw_s.back() > 0 && "the window should be positive");
   if (config::enable_feature_sparsity) {
     int effective_size = (node_size[0] - config::ignore_neighbor);
@@ -66,7 +67,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                    ((node_size[0] - config::ignore_neighbor) * 4));
   }
   assert(yw_s.back() > 0 && "the window should be positive");
-  spdlog::info("yws push back:{}", yw_s.back());
+  GCN_INFO("yws push back:{}", yw_s.back());
 
   for (auto i = 1; i < total_level - 1; i++) {
     if (m_model->isConcatenate()) {
@@ -76,7 +77,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     } else {
       xw_s.push_back((agg_buffer_size / 2) / ((node_size[i]) * 4));
     }
-    spdlog::info("xws push back:{}", xw_s.back());
+    GCN_INFO("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
 
     int effective_node_size = node_size[i];
@@ -100,7 +101,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
 
     yw_s.push_back((input_buffer_size / 2) / (effective_node_size * 4));
     assert(yw_s.back() > 0 && "the window should be positive");
-    spdlog::info("yws push back:{}", yw_s.back());
+    GCN_INFO("yws push back:{}", yw_s.back());
   }
 
   for (auto i = 0; i < total_level; i++) {
@@ -138,7 +139,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     total_size += node_size[i] * 4 * m_graph->get_num_nodes() *
                   m_graph->get_num_nodes() / xw_s[i];
   }
-  spdlog::info("total_nodes:{}, total_feature_length:{},total input traffic "
+  GCN_INFO("total_nodes:{}, total_feature_length:{},total input traffic "
                "need to be read:{}",
                m_graph->get_num_nodes(),
                fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
@@ -156,22 +157,22 @@ public:
   void push(std::string k, float v) { float_map.insert({k, v}); }
   void push(std::string k, unsigned v) { unsigned_map.insert({k, v}); }
   void push(std::string k, uint64_t v) { ull_map.insert({k, v}); }
-  void push(std::string k, std::string  v) { str_map.insert({k, v}); }
+  void push(std::string k, std::string v) { str_map.insert({k, v}); }
   void print() {
     for (auto i : int_map) {
-      spdlog::info("{} : {}", i.first, i.second);
+      GCN_INFO("{} : {}", i.first, i.second);
     }
     for (auto i : float_map) {
-      spdlog::info("{} : {}", i.first, i.second);
+      GCN_INFO("{} : {}", i.first, i.second);
     }
     for (auto i : unsigned_map) {
-      spdlog::info("{} : {}", i.first, i.second);
+      GCN_INFO("{} : {}", i.first, i.second);
     }
     for (auto i : ull_map) {
-      spdlog::info("{} : {}", i.first, i.second);
+      GCN_INFO("{} : {}", i.first, i.second);
     }
     for (auto i : str_map) {
-      spdlog::info("{} : {}", i.first, i.second);
+      GCN_INFO("{} : {}", i.first, i.second);
     }
   }
 };
@@ -206,7 +207,7 @@ void System::run() {
            global_definitions.total_waiting_agg_read);
   map.push(std::string("total_idle_waiting_out"),
            global_definitions.total_waiting_out);
-  
+
   map.push(std::string("total_mac_in_systolic_array"),
            global_definitions.total_mac_in_systolic_array);
   map.push(std::string("total_read_input_traffic"),
@@ -224,34 +225,32 @@ void System::run() {
   map.push(std::string("total_cycles"), global_definitions.cycle);
   map.print();
 
+  std::cout << "\nEdgeBuffer total_latency "
+            << global_definitions.total_read_edge_latency << " len "
+            << global_definitions.total_read_edge_len << " times "
+            << global_definitions.total_read_edge_times << " avg_latency "
+            << global_definitions.total_read_edge_latency /
+                   global_definitions.total_read_edge_times
+            << " avg_len "
+            << global_definitions.total_read_edge_len /
+                   global_definitions.total_read_edge_times
+            << "\n";
 
- std::cout<<"\nEdgeBuffer total_latency "<< global_definitions.total_read_edge_latency
-   <<" len " << global_definitions.total_read_edge_len
-   <<" times " << global_definitions.total_read_edge_times
-   <<" avg_latency "
-   <<  global_definitions.total_read_edge_latency /
-               global_definitions.total_read_edge_times
-   <<" avg_len "
-   << global_definitions.total_read_edge_len /
-               global_definitions.total_read_edge_times
-   <<"\n";
+  std::cout << "InputBuffer total_latency "
+            << global_definitions.total_read_input_latency << " len "
+            << global_definitions.total_read_input_len << " times "
+            << global_definitions.total_read_input_times << " avg_latency "
+            << global_definitions.total_read_input_latency /
+                   global_definitions.total_read_input_times
+            << " avg_vertices "
+            << global_definitions.total_read_input_vertices_cnt /
+                   global_definitions.total_read_input_times
+            << " avg_len "
+            << global_definitions.total_read_input_len /
+                   global_definitions.total_read_input_times
+            << "\n\n";
 
- std::cout<<"InputBuffer total_latency "<<global_definitions.total_read_input_latency
-  <<" len "<<global_definitions.total_read_input_len
-  <<" times " << global_definitions.total_read_input_times
-  <<" avg_latency "<<
-           global_definitions.total_read_input_latency /
-               global_definitions.total_read_input_times
-   <<" avg_vertices "<<
-           global_definitions.total_read_input_vertices_cnt /
-               global_definitions.total_read_input_times
-   <<" avg_len " <<
-           global_definitions.total_read_input_len /
-               global_definitions.total_read_input_times
-  <<"\n\n";
-
-
-  spdlog::info("layer_completion_time  {}\n",
+  GCN_INFO("layer_completion_time  {}\n",
                fmt::join(global_definitions.finished_time_stamp.begin(),
                          global_definitions.finished_time_stamp.end(), "  "));
 
@@ -262,59 +261,62 @@ void System::run() {
                     global_definitions.finished_time_stamp[i - 1];
   }
 
-  spdlog::info("layer_input_windows  {}\n",
+  GCN_INFO("layer_input_windows  {}\n",
                fmt::join(global_definitions.layer_input_windows.begin(),
                          global_definitions.layer_input_windows.end(), "  "));
 
-  spdlog::info("layer_edges  {}\n",
+  GCN_INFO("layer_edges  {}\n",
                fmt::join(global_definitions.layer_edges.begin(),
                          global_definitions.layer_edges.end(), "  "));
 
-  spdlog::info("layer_input_vertics  {}\n",
+  GCN_INFO("layer_input_vertics  {}\n",
                fmt::join(global_definitions.layer_input_vertics.begin(),
                          global_definitions.layer_input_vertics.end(), "  "));
 
-  spdlog::info("layer_time  {}\n",
+  GCN_INFO("layer_time  {}\n",
                fmt::join(layer_time.begin(), layer_time.end(), "  "));
 
-  spdlog::info("layer_wait_input_time  {}\n",
+  GCN_INFO("layer_wait_input_time  {}\n",
                fmt::join(global_definitions.layer_wait_input.begin(),
                          global_definitions.layer_wait_input.end(), "  "));
 
-  spdlog::info("layer_aggregate_time  {}\n",
+  GCN_INFO("layer_aggregate_time  {}\n",
                fmt::join(global_definitions.layer_do_aggregate.begin(),
                          global_definitions.layer_do_aggregate.end(), "  "));
 
-  spdlog::info("layer_systolic_time  {}\n",
+  GCN_INFO("layer_systolic_time  {}\n",
                fmt::join(global_definitions.layer_do_systolic.begin(),
                          global_definitions.layer_do_systolic.end(), "  "));
 
-  spdlog::info("layer_aggregate_op  {}\n",
+  GCN_INFO("layer_aggregate_op  {}\n",
                fmt::join(global_definitions.layer_aggregate_op.begin(),
                          global_definitions.layer_aggregate_op.end(), "  "));
 
   for (auto i = 0; i < total_level; i++) {
-     auto cnt = global_definitions.layer_input_windows[i];
-     auto agg_time = global_definitions.layer_do_aggregate[i];
-     auto input_time = global_definitions.layer_wait_input[i];
-     float avg_agg_time = agg_time/cnt;
-     float avg_input_time = input_time/cnt;
-     global_definitions.layer_window_avg_agg[i] = avg_agg_time;
-     global_definitions.layer_window_avg_input[i] = avg_input_time;
+    auto cnt = global_definitions.layer_input_windows[i];
+    auto agg_time = global_definitions.layer_do_aggregate[i];
+    auto input_time = global_definitions.layer_wait_input[i];
+    float avg_agg_time = agg_time / cnt;
+    float avg_input_time = input_time / cnt;
+    global_definitions.layer_window_avg_agg[i] = avg_agg_time;
+    global_definitions.layer_window_avg_input[i] = avg_input_time;
   }
- 
- spdlog::info("layer_window_avg_input_lat  {}\n",
-               fmt::join(global_definitions.layer_window_avg_input.begin(),
-                         global_definitions.layer_window_avg_input.end(), "  "));
 
- spdlog::info("layer_window_avg_agg_lat  {}\n",
+  GCN_INFO("layer_window_avg_input_lat  {}\n",
+               fmt::join(global_definitions.layer_window_avg_input.begin(),
+                         global_definitions.layer_window_avg_input.end(),
+                         "  "));
+
+  GCN_INFO("layer_window_avg_agg_lat  {}\n",
                fmt::join(global_definitions.layer_window_avg_agg.begin(),
                          global_definitions.layer_window_avg_agg.end(), "  "));
-
 }
 
 void System::cycle() {
-
+  // if there are 1000 cycle nothing happen, then a dead lock warning will be
+  // triggered it is the 1000 cycle after the last busy cycle
+  static uint64_t dead_lock_detect = 10000;
+  static unsigned total_detected_times = 0;
   input_buffer->cycle();
   edge_buffer->cycle();
   agg_buffer->cycle();
@@ -330,8 +332,31 @@ void System::cycle() {
     global_definitions.total_input_buffer_idle++;
   if (edge_idle)
     global_definitions.total_edge_buffer_idle++;
-  if (input_idle and edge_idle)
+  if (input_idle and edge_idle) {
     global_definitions.all_buffer_idle++;
+    // now test if it's dead lock
+    if (global_definitions.cycle >= dead_lock_detect) {
+      total_detected_times++;
+
+      dead_lock_detect += 100000;
+      // print out dead lock infomation
+      GCN_ERROR("Possible dead lock detected! current cycle:{}",
+                    dead_lock_detect);
+      GCN_ERROR("currnet stats:\ninput buffer:{}\n edge_buffer: {}\n "
+                    "agg_buffer:{} \n out_buffer:{}\n ",
+                    input_buffer->get_line_trace(),
+                    edge_buffer->get_line_trace(), agg_buffer->get_line_trace(),
+                    output_buffer->get_line_trace());
+      if (total_detected_times == 3) {
+        std::cout.flush();
+        std::cerr.flush();
+        throw;
+      }
+    }
+  } else {
+    // it's busy!
+    dead_lock_detect = global_definitions.cycle + 100000;
+  }
 
   // adjust the frequency
   current_system_time += cpu_gap;
@@ -345,29 +370,29 @@ void System::cycle() {
   if (m_mem->available()) {
     if (!input_buffer->isCurrentEmpty() and !input_buffer->isCurrentSent()) {
       auto req = input_buffer->pop_current();
-      spdlog::debug("{}:{},input buffer send req:{},{}", __FILE__, __LINE__,
+      GCN_DEBUG("{}:{},input buffer send req:{},{}", __FILE__, __LINE__,
                     *req, global_definitions.cycle);
       m_mem->send(req);
     } else if (!edge_buffer->isCurrentEmpty() and
                !edge_buffer->isCurrentSent()) {
       auto req = edge_buffer->pop_current();
-      spdlog::debug("{}:{},edge buffer send req:{},{}", __FILE__, __LINE__,
+      GCN_DEBUG("{}:{},edge buffer send req:{},{}", __FILE__, __LINE__,
                     (*req), global_definitions.cycle);
       m_mem->send(req);
     } else if (!input_buffer->isNextEmpty() and !input_buffer->isNextSent()) {
       auto req = input_buffer->pop_next();
-      spdlog::debug("{}:{},input_next buffer send req:{},{}", __FILE__,
+      GCN_DEBUG("{}:{},input_next buffer send req:{},{}", __FILE__,
                     __LINE__, (*req), global_definitions.cycle);
       m_mem->send(req);
     } else if (!edge_buffer->isNextEmpty() and !edge_buffer->isNextSent()) {
       auto req = edge_buffer->pop_next();
-      spdlog::debug("{}:{},edge_next buffer send req:{},{}", __FILE__, __LINE__,
+      GCN_DEBUG("{}:{},edge_next buffer send req:{},{}", __FILE__, __LINE__,
                     (*req), global_definitions.cycle);
       m_mem->send(req);
     } else if (!output_buffer->isWriteToMemoryEmpty() and
                !output_buffer->isWriteToMemoryStarted()) {
       auto req = output_buffer->popWriteToMemReq();
-      spdlog::debug("{}:{},output buffer send req:{},{}", __FILE__, __LINE__,
+      GCN_DEBUG("{}:{},output buffer send req:{},{}", __FILE__, __LINE__,
                     (*req), global_definitions.cycle);
       m_mem->send(req);
     }
@@ -376,13 +401,13 @@ void System::cycle() {
   if (m_mem->ret_available()) {
     auto ret = m_mem->get_req();
     if (ret->t == device_types::input_buffer) {
-      spdlog::debug(" input  req received,req:{},cycle:{} ", *ret,
+      GCN_DEBUG(" input  req received,req:{},cycle:{} ", *ret,
                     global_definitions.cycle);
 
       input_buffer->receive(ret);
     } else if (ret->t == device_types::edge_buffer) {
 
-      spdlog::debug(" edge  req received,req:{},cycle:{} ", *ret,
+      GCN_DEBUG(" edge  req received,req:{},cycle:{} ", *ret,
                     global_definitions.cycle);
 
       edge_buffer->receive(ret);
@@ -390,7 +415,7 @@ void System::cycle() {
       // do not report write done
       assert(ret->t == device_types::output_buffer);
       output_buffer->finished_write_memory();
-      spdlog::debug("output buffer finished write to memory: cycle:{}",
+      GCN_DEBUG("output buffer finished write to memory: cycle:{}",
                     global_definitions.cycle);
     }
   } /*
@@ -399,7 +424,7 @@ void System::cycle() {
      // every time we find it empty, just remove current buffer, move next
    buffer
      // to current and run
-     spdlog::debug("{}:{},the aggregator is emtpy,cycle:{}", __FILE__, __LINE__,
+     GCN_DEBUG("{}:{},the aggregator is emtpy,cycle:{}", __FILE__, __LINE__,
                    global_definitions.cycle);
      // this is a copy
      auto j = *current_iter;
@@ -413,7 +438,7 @@ void System::cycle() {
      // agg_buffer->finish_current_move_next();
      // now need to prefetch
      if (j != m_slide_window_set->end()) {
-       spdlog::debug(
+       GCN_DEBUG(
            "{}:{},the aggregator is emtpy,fetch the next input,cycle:{}",
            __FILE__, __LINE__, global_definitions.cycle);
 
@@ -432,7 +457,7 @@ void System::cycle() {
        // which means, currently we are going to execute a new col.
        // finished current col.
        // prefetch the next col
-       spdlog::debug("{}:{},the aggregator is emtpy,fetch the next output and "
+       GCN_DEBUG("{}:{},the aggregator is emtpy,fetch the next output and "
                      "agg,cycle:{}",
                      __FILE__, __LINE__, global_definitions.cycle);
 

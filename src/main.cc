@@ -3,9 +3,9 @@
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include "utils/Options.h"
+#include <debug_helper.h>
 #include <fmt/format.h>
 #include <graph.h>
-
 using namespace Minisat;
 
 int main(int argc, char **argv) {
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     global_definitions.concate = true;
   }
 
-  if (m_model->isInitialResidual() ) {
+  if (m_model->isInitialResidual()) {
     global_definitions.initialResidual = true;
   }
 
@@ -36,9 +36,8 @@ int main(int argc, char **argv) {
   } else {
     spdlog::set_level(spdlog::level::info);
   }
-  
-  spdlog::info("Enable feature sparsity: {}", config::enable_feature_sparsity);
 
+  GCN_INFO("Enable feature sparsity: {}", config::enable_feature_sparsity);
 
   std::shared_ptr<Graph> m_graph =
       std::make_shared<Graph>(std::string(config::graph_name));
@@ -47,7 +46,7 @@ int main(int argc, char **argv) {
   if (global_definitions.concate) {
     if (config::ignore_self >= m_graph->getNodeFeatures() or
         config::ignore_neighbor >= m_graph->getNodeFeatures()) {
-      spdlog::error(
+      GCN_ERROR(
           "the ignored feature should be less than the node feature size, node "
           "feature size:{},ignore_neighbor:{},ignore_self:{}",
           m_graph->getNodeFeatures(), config::ignore_neighbor,
@@ -57,13 +56,13 @@ int main(int argc, char **argv) {
     }
   } else {
     if (config::ignore_self != 0) {
-      spdlog::error(
+      GCN_ERROR_S(
           "when this is not concatenate, the ignore self should be zero!");
       spdlog::flush_on(spdlog::level::err);
       throw std::runtime_error("error in check size");
     }
     if (config::ignore_self >= m_graph->getNodeFeatures()) {
-      spdlog::error(
+      GCN_ERROR(
           "the ignored feature should be less than the node feature size, node "
           "feature size:{},ignore_neighbor:{}",
           m_graph->getNodeFeatures(), config::ignore_neighbor);
@@ -76,9 +75,9 @@ int main(int argc, char **argv) {
   std::vector<int> node_sizes = {node_feature_size};
   node_sizes.insert(node_sizes.end(), m_model->getMLevels().begin(),
                     m_model->getMLevels().end());
-  spdlog::info("print out model levels {}", fmt::join(node_sizes, ","));
+  GCN_INFO("print out model levels {}", fmt::join(node_sizes, ","));
 
-  spdlog::info("memory simulator: {}", config::mem_sim);
+  GCN_INFO("memory simulator: {}", config::mem_sim);
 
   System m_system(config::inputSize, config::edgeSize, config::aggSize,
                   config::outputSize, config::aggCores, config::systolic_rows,

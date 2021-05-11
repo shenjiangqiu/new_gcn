@@ -13,7 +13,7 @@ class Graph {
   // the csc format graph
 
 public:
-  // for simulation, we should get the dege index addr when to access the dege
+  // for simulation, we should get the edge index addr when to access the dege
   // index
   [[nodiscard]] unsigned get_num_nodes() const { return edge_index.size() - 1; }
 

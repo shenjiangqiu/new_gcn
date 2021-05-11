@@ -7,6 +7,8 @@
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include <memory>
+#include"debug_helper.h"
+
 SystolicArray::SystolicArray(int totalRows, int totalCols,
                              const shared_ptr<Aggregator_buffer> &aggBuffer,
                              const shared_ptr<WriteBuffer> &outputBuffer)
@@ -45,7 +47,7 @@ int SystolicArray::cal_remaining_cycle() {
     assert(node_size > 0);
   }
   if (node_size <= 0) {
-    spdlog::error("node size < 0 happend,concate:{}, origin node "
+    GCN_ERROR("node size < 0 happend,concate:{}, origin node "
                   "size:{},ignore_nei:{},ignore_self:{},level:{}",
                   global_definitions.concate,
                   current_sliding_window->getCurrentNodeSize(),
@@ -73,7 +75,7 @@ int SystolicArray::cal_remaining_cycle() {
     if (total_rows + next_node_size - ((elements_steps - 1) * total_cols) +
             node_size <=
         0) {
-      spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
+      GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
                     "total_rows:{},next_node_size:{},elements_steps*total_cols:"
                     "{},node_size:{}",
                     steps, elements_steps, total_rows, next_node_size,
@@ -93,7 +95,7 @@ int SystolicArray::cal_remaining_cycle() {
     total_cycles += remaining_rows + remaining_cols + node_size;
     total_cycles += (total_rows * total_cols / 4) / 32;
     if (remaining_rows <= 0 or remaining_rows > total_rows) {
-      spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
+      GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
                     "total_rows:{},next_node_size:{},elements_steps*total_cols:"
                     "{},node_size:{}",
                     steps, elements_steps, total_rows, next_node_size,
@@ -109,7 +111,7 @@ int SystolicArray::cal_remaining_cycle() {
 
   if (remaining_rows <= 0 or remaining_cols <= 0 or
       remaining_rows > total_rows or remaining_cols > total_cols) {
-    spdlog::error("wrong cycle happened: steps:{},elements_steps:{}\n "
+    GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
                   "total_rows:{},next_node_size:{},elements_steps*total_cols:"
                   "{},node_size:{}",
                   steps, elements_steps, total_rows, next_node_size,
@@ -125,7 +127,7 @@ int SystolicArray::cal_remaining_cycle() {
 void SystolicArray::cycle() {
   if (empty and agg_buffer->isReadReady() and !agg_buffer->isReadBusy() and
       !agg_buffer->isReadEmpty() and output_buffer->isWriteToBufferEmpty()) {
-    spdlog::debug("systolic array start a new task,cycle:{}",
+    GCN_DEBUG("systolic array start a new task,cycle:{}",
                   global_definitions.cycle);
     // generate the output buffer request.
     current_sliding_window = agg_buffer->getReadWindow();
@@ -153,7 +155,7 @@ void SystolicArray::cycle() {
     // start agg buffer read
     agg_buffer->start_read();
 
-    spdlog::debug("start a new systolic task: window:{}, total_cycle:{}, "
+    GCN_DEBUG("start a new systolic task: window:{}, total_cycle:{}, "
                   "current cycle:{}",
                   *current_sliding_window, remaining_cycle,
                   global_definitions.cycle);
@@ -170,7 +172,7 @@ void SystolicArray::cycle() {
   if (remaining_cycle != 0) {
     remaining_cycle--;
     if (remaining_cycle == 0) {
-      spdlog::debug("end a systolic array, window:{}, current_cycle:{}",
+      GCN_DEBUG("end a systolic array, window:{}, current_cycle:{}",
                     *current_sliding_window, global_definitions.cycle);
       current_sliding_window = nullptr;
 

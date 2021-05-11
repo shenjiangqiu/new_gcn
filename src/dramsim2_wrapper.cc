@@ -4,7 +4,7 @@
 #include "dramsim2_wrapper.h"
 #include "globals.h"
 #include "spdlog/spdlog.h"
-
+#include"debug_helper.h"
 void dramsim2_wrapper::send(uint64_t addr, bool is_write) {
   auto channel_id = get_channel_id(addr);
   if (is_write) {
@@ -85,7 +85,7 @@ dramsim2_wrapper::dramsim2_wrapper(const std::string &config_file,
   finished_read_req = 0;
   finished_write_req = 0;
   pending_write_req = 0;
-  spdlog::info("init dramsim");
+  GCN_INFO_S("init dramsim");
 }
 
 dramsim2_wrapper::~dramsim2_wrapper() {

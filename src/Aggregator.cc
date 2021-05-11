@@ -9,7 +9,7 @@
 #include <utility>
 
 #include <algorithm>
-
+#include "debug_helper.h"
 Aggregator::Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
                        const shared_ptr<EdgeBuffer> &edgeBuffer,
                        const shared_ptr<Aggregator_buffer> &aggBuffer,
@@ -27,7 +27,7 @@ void Aggregator::cycle() {
     remaining_cycles--;
     if (remaining_cycles == 0) {
       working = false;
-      spdlog::debug(
+      GCN_DEBUG(
           "aggregator finished run task. width(x): {} hight(y): {},cycle: {}",
           current_sliding_window->getX(),
           fmt::join(current_sliding_window->getY(), ","),
@@ -66,7 +66,7 @@ void Aggregator::cycle() {
       if (current_sliding_window->isTheFirstRow()) {
         agg_buffer->add_new_task(current_sliding_window);
       }
-      spdlog::debug("aggregator start to run task x: {} y: {} ,cycle: {}",
+      GCN_DEBUG("aggregator start to run task x: {} y: {} ,cycle: {}",
                     current_sliding_window->getX(),
                     fmt::join(current_sliding_window->getY(), ","),
                     global_definitions.cycle);
@@ -89,7 +89,7 @@ void Aggregator::add_task(std::shared_ptr<dense_window> window) {
   current_sliding_window = std::move(window);
   empty = false;
   finished = false;
-  spdlog::debug("aggregator add aggregator task. x: {} y: {},cycle: {}",
+  GCN_DEBUG("aggregator add aggregator task. x: {} y: {},cycle: {}",
                 current_sliding_window->getX(), current_sliding_window->getY(),
                 global_definitions.cycle);
 }
@@ -142,10 +142,10 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.layer_edges[level] += total_nodes;
   global_definitions.layer_input_vertics[level] += input_vertices_cnt;
 
-  spdlog::debug("total elements: {} ,total size: {}", total_elements,
+  GCN_DEBUG("total elements: {} ,total size: {}", total_elements,
                 total_elements * 4);
 
-  spdlog::debug(
+  GCN_DEBUG(
       "aggregator culculate window cycles. x: {} y: {}, result: {} ,rounds: {}",
       current_sliding_window->getX(),
       fmt::join(current_sliding_window->getY(), ","),

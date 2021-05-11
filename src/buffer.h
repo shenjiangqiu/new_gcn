@@ -3,89 +3,36 @@
 
 #include "sliding_window_dense.h"
 #include <cassert>
+#include <fmt/format.h>
 #include <memory>
 #include <queue>
 #include <ramulator_wrapper.h>
 #include <string>
 #include <types.h>
 #include <utility>
+
 void r(bool &origin);
 class Name_object {
 public:
   explicit Name_object(std::string name) : name(std::move(name)) {}
   const std::string &get_name() { return name; }
+  virtual std::string get_line_trace() {
+    return std::string("no line_trace provided");
+  }
 
 private:
   std::string name;
-};
-class Buffer_base : public Name_object {
-public:
-  virtual ~Buffer_base() = default;
-  [[nodiscard]] bool isCurrentEmpty() const { return current_empty; }
-
-  [[nodiscard]] bool isCurrentReady() const { return current_ready; }
-
-  [[nodiscard]] bool isNextEmpty() const { return next_empty; }
-
-  [[nodiscard]] bool isNextReady() const { return next_ready; }
-
-  explicit Buffer_base(std::string name) : Name_object(std::move(name)) {}
-
-  // by default, do nothing
-  virtual void cycle(){};
-
-  [[nodiscard]] const shared_ptr<Req> &getCurrentReq() const {
-    return current_req;
-  }
-
-  [[nodiscard]] const shared_ptr<Req> &getNextReq() const { return next_req; }
-
-  virtual void add_next(std::shared_ptr<Req> req) {
-    assert(next_empty and !next_ready);
-    next_empty = false;
-    next_req = std::move(req);
-  }
-
-  virtual void finish_current_move_next() {
-    current_req = std::move(next_req);
-    current_empty = next_empty;
-    current_ready = next_ready;
-
-    next_req = nullptr;
-    next_empty = true;
-    next_ready = false;
-  }
-
-protected:
-  virtual void add_current(std::shared_ptr<Req> req) {
-    assert(current_empty and !current_ready);
-    current_empty = false;
-    current_req = std::move(req);
-  }
-
-  void setCurrentEmpty(bool currentEmpty) { current_empty = currentEmpty; }
-
-  void setCurrentReady(bool currentReady) { current_ready = currentReady; }
-
-  void setNextEmpty(bool nextEmpty) { next_empty = nextEmpty; }
-
-  void setNextReady(bool nextReady) { next_ready = nextReady; }
-
-private:
-  std::shared_ptr<Req> current_req;
-  std::shared_ptr<Req> next_req;
-
-  bool current_empty{true};
-  bool current_ready{false};
-  bool next_empty{true};
-  bool next_ready{false};
-  std::shared_ptr<dense_window> m_window;
 };
 
 class Aggregator_buffer : public Name_object {
 public:
   explicit Aggregator_buffer(string name);
-
+  virtual std::string get_line_trace() override {
+    return fmt::format("write_empty={} write_ready={} read_empty={} "
+                       "read_ready={} read_busy={}",
+                       write_empty, write_ready, read_empty, read_ready,
+                       read_busy);
+  }
   void cycle();
 
   // means no data exists in the write buffer
@@ -197,6 +144,14 @@ private:
 */
 class WriteBuffer : public Name_object {
 public:
+  virtual std::string get_line_trace() override {
+    return fmt::format("write_to_buffer_empty={} write_to_buffer_started={} "
+                       "write_to_buffer_finished={} "
+                       "write_to_memory_empty={} write_to_memory_started={}",
+                       write_to_buffer_empty, write_to_buffer_started,
+                       write_to_buffer_finished, write_to_memory_empty,
+                       write_to_memory_started);
+  }
   explicit WriteBuffer(std::string name) : Name_object(std::move(name)) {}
   void start_write_to_buffer(std::shared_ptr<Req> req) {
     assert(write_to_buffer_empty and !write_to_buffer_started and
@@ -251,6 +206,14 @@ private:
 // only read the edge , do not read edge index now
 class ReadBuffer : public Name_object {
 public:
+  virtual std::string get_line_trace() override {
+    return fmt::format("current_empty={} current_ready={} "
+                       "current_sent={} "
+                       "next_empty={} next_ready={} next_sent={}",
+                       current_empty, current_ready,
+                       current_sent, next_empty,
+                       next_ready,next_sent);
+  }
   bool idle() { return current_ready and next_ready; }
   explicit ReadBuffer(const string &basicString,
                       const std::shared_ptr<dense_window_set> &m_set);
@@ -282,8 +245,8 @@ public:
   [[nodiscard]] const dense_window_iter &getMCurrentIter() const;
 
 protected:
-  #define MAX_REQ   32
-  int num_buffer_entry; //default is 2, double buffer.
+#define MAX_REQ 32
+  int num_buffer_entry; // default is 2, double buffer.
   std::shared_ptr<dense_window_set> m_set;
   dense_window_iter m_current_iter;
   dense_window_iter m_next_iter;
@@ -299,12 +262,11 @@ protected:
   bool next_empty{true};
   bool next_ready{false};
   bool next_sent{false};
-  
-  int get_ready_buffer_entry( );
+
+  int get_ready_buffer_entry();
 
   std::map<uint64_t, uint64_t> start_cycle_map;
 };
-
 
 class EdgeBuffer : public ReadBuffer {
 public:
@@ -316,7 +278,6 @@ public:
 
 protected:
 };
-
 
 class InputBuffer : public ReadBuffer {
 public:

@@ -3,10 +3,12 @@
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include <utility>
+#include "debug_helper.h"
 template <typename T>
 void move_to(std::shared_ptr<T> &from, std::shared_ptr<T> &to) {
   to = std::move(from);
   from = nullptr;
+
 }
 
 // find the first rol of the next col based on current col
@@ -43,7 +45,7 @@ void Aggregator_buffer::cycle() {
     read_empty = false;
     read_window = std::move(write_window);
 
-    spdlog::debug("aggbuffer move the write buffer to read buffer");
+    GCN_DEBUG_S("aggbuffer move the write buffer to read buffer");
   }
 }
 
@@ -59,7 +61,7 @@ void Aggregator_buffer::add_new_task(std::shared_ptr<dense_window> window) {
   assert(write_empty and !write_ready and write_window == nullptr);
   r(write_empty);
   write_window = std::move(window);
-  spdlog::debug("aggregator add new task:{}", *write_window);
+  GCN_DEBUG("aggregator add new task:{}", *write_window);
 }
 
 void Aggregator_buffer::finish_write() {
@@ -72,7 +74,7 @@ void Aggregator_buffer::finish_read() {
   read_ready = false;
   read_busy = false;
   read_empty = true;
-  spdlog::debug("aggbuffer finished read");
+  GCN_DEBUG_S("aggbuffer finished read");
 }
 
 const shared_ptr<dense_window> &Aggregator_buffer::getReadWindow() const {

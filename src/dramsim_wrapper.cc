@@ -4,6 +4,8 @@
 #ifdef USEDRAM3
 #include "dramsim_wrapper.h"
 #include "spdlog/spdlog.h"
+#include"debug_helper.h"
+
 void dramsim_wrapper::send(uint64_t addr, bool is_write) {
 
   auto channel_id = get_channel_id(addr);
@@ -85,7 +87,7 @@ dramsim_wrapper::dramsim_wrapper(const std::string &config_file,
           [this](uint64_t addr) { this->receive_read(addr); },
           [this](uint64_t addr) { this->receive_write(addr); }));
 
-  spdlog::info("init dramsim");
+  GCN_INFO_S("init dramsim");
   read_queue.resize(get_channel_num());
   write_queue.resize(get_channel_num());
 }
