@@ -148,14 +148,14 @@ class kv_maps {
   std::map<std::string, int> int_map;
   std::map<std::string, float> float_map;
   std::map<std::string, unsigned> unsigned_map;
-  std::map<std::string, unsigned long long> ull_map;
+  std::map<std::string, uint64_t> ull_map;
   std::map<std::string, std::string> str_map;
 
 public:
   void push(std::string k, int v) { int_map.insert({k, v}); }
   void push(std::string k, float v) { float_map.insert({k, v}); }
   void push(std::string k, unsigned v) { unsigned_map.insert({k, v}); }
-  void push(std::string k, unsigned long long v) { ull_map.insert({k, v}); }
+  void push(std::string k, uint64_t v) { ull_map.insert({k, v}); }
   void push(std::string k, std::string  v) { str_map.insert({k, v}); }
   void print() {
     for (auto i : int_map) {

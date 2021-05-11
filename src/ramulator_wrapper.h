@@ -56,7 +56,7 @@ public:
 
 private:
   double tCK;
-  unsigned long long outgoing_reqs = 0;
+  uint64_t outgoing_reqs = 0;
   uint64_t sum_rd_latency = 0;
 
   //addr,iswrite

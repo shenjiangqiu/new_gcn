@@ -3,7 +3,7 @@
 //
 
 #include "catch2/catch.hpp"
-
+#include <cstdint>
 #include <fmt/format.h>
 #include <memory_interface.h>
 
@@ -14,8 +14,7 @@ TEST_CASE("mem_interface") {
     auto req = std::make_shared<Req>();
 
     req->req_type = mem_request::read;
-    req->set_addr(
-        std::vector<unsigned long long>{(unsigned long long)(i)*2048});
+    req->set_addr(std::vector<uint64_t>{(uint64_t)(i)*2048});
     req->t = device_types::input_buffer;
     while (!m_interface.available()) {
       m_interface.cycle();

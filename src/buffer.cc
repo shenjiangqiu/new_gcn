@@ -196,8 +196,8 @@ shared_ptr<Req> EdgeBuffer::pop_current() {
   assert(!current_empty and !current_sent);
   current_sent = true;
   auto req = std::make_shared<Req>();
-  std::vector<unsigned long long> all_addrs;
-  unsigned long long start_addr = m_current_iter->getEdgeAddr();
+  std::vector<uint64_t> all_addrs;
+  uint64_t start_addr = m_current_iter->getEdgeAddr();
   long total_len = m_current_iter->getEdgeLen();
 
   req->set_addr(start_addr, total_len);
@@ -212,8 +212,8 @@ shared_ptr<Req> EdgeBuffer::pop_next() {
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
-  std::vector<unsigned long long> all_addrs;
-  unsigned long long start_addr = m_next_iter->getEdgeAddr();
+  std::vector<uint64_t> all_addrs;
+  uint64_t start_addr = m_next_iter->getEdgeAddr();
   long total_len = m_next_iter->getEdgeLen();
   req->set_addr(start_addr, total_len);
   req->req_type = mem_request::read;

@@ -302,7 +302,7 @@ protected:
   
   int get_ready_buffer_entry( );
 
-  std::map<unsigned long long, unsigned long long> start_cycle_map;
+  std::map<uint64_t, uint64_t> start_cycle_map;
 };
 
 

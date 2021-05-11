@@ -24,15 +24,15 @@ public:
   mem_request req_type;
   bool the_final_request = false;
   bool the_final_request_of_the_layer = false;
-  [[nodiscard]] const std::vector<unsigned long long> &get_addr() const {
+  [[nodiscard]] const std::vector<uint64_t> &get_addr() const {
     return addr;
   }
-  [[nodiscard]] unsigned long long get_single_addr() const {
+  [[nodiscard]] uint64_t get_single_addr() const {
     return single_addr;
   }
 
   [[nodiscard]] bool is_single_addr() const { return use_continue_addr; }
-  void set_addr(std::vector<unsigned long long> taddr) {
+  void set_addr(std::vector<uint64_t> taddr) {
     for (auto &&i : taddr)
       i = i & ~63;
     addr = taddr;
@@ -40,7 +40,7 @@ public:
   // will adjust addr and len
   // be carefully
   // this function will set single_addr and single_len
-  void set_addr(unsigned long long t_addr, unsigned len) {
+  void set_addr(uint64_t t_addr, unsigned len) {
     use_continue_addr = true;
 
     // the number of bytes rounded
@@ -62,8 +62,8 @@ public:
   }*/
 
 private:
-  std::vector<unsigned long long> addr;
-  unsigned long long single_addr;
+  std::vector<uint64_t> addr;
+  uint64_t single_addr;
   bool use_continue_addr = false;
   unsigned single_len = 0;
 };

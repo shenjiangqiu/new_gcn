@@ -25,7 +25,7 @@ public:
   void set_location(unsigned x, unsigned _xw, std::vector<unsigned> _y,
                     unsigned _level);
 
-  void set_addr(std::vector<unsigned long long int> inputAddr,
+  void set_addr(std::vector<uint64_t > inputAddr,
                 unsigned inputLen, uint64_t edgeAddr, unsigned edgeLen,
                 uint64_t outputAddr, unsigned outputLen);
 
@@ -42,7 +42,7 @@ public:
 
   [[nodiscard]] unsigned getLevel() const;
 
-  [[nodiscard]] std::vector<unsigned long long int> getInputAddr() const;
+  [[nodiscard]] std::vector<uint64_t > getInputAddr() const;
 
   [[nodiscard]] uint64_t getEdgeAddr() const;
 
@@ -68,8 +68,8 @@ private:
   std::vector<unsigned> y; // y: starting vertex ID in the input buffer
   unsigned xw{};           // cnt of vertices in the the aggregation buffer
   unsigned level{};
-  std::vector<unsigned long long> input_addr;
-  unsigned long long edge_addr{}, output_addr{};
+  std::vector<uint64_t> input_addr;
+  uint64_t edge_addr{}, output_addr{};
   unsigned input_len{}, edge_len{}, output_len{};
   unsigned num_edges_in_window{}; //#edges in the window
   unsigned current_node_size{};   // A feature dim.

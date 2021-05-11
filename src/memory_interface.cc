@@ -23,7 +23,7 @@ void memory_interface::cycle() {
 
     // the function to insert a request
     //  insert to requst to mem, record the req info
-    auto send_reqs = [&](unsigned long long addr, std::shared_ptr<Req> &req) {
+    auto send_reqs = [&](uint64_t addr, std::shared_ptr<Req> &req) {
       // the addr is all new! send it to lower memroy
       if (!addr_to_req_map.contains(addr)) {
 

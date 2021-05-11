@@ -10,7 +10,7 @@ class dram_wrapper {
 public:
   virtual void send(uint64_t addr, bool is_write) = 0;
   [[nodiscard]] virtual unsigned get_channel_num() const = 0;
-  [[nodiscard]] virtual unsigned get_channel_id(unsigned long long addr) const = 0;
+  [[nodiscard]] virtual unsigned get_channel_id(uint64_t addr) const = 0;
   [[nodiscard]] virtual bool available(uint64_t addr) const = 0;
   virtual void cycle() = 0;
 

@@ -13,7 +13,7 @@
 #include <types.h>
 
 using uint = unsigned;
-using ull = unsigned long long;
+using ull = uint64_t;
 class memory_interface {
 private:
   unsigned waiting_size;
@@ -21,7 +21,7 @@ private:
   std::queue<std::shared_ptr<Req>> req_queue;
   // addr, is_write
   std::queue<std::pair<ull, bool>> out_send_queue;
-  std::queue<unsigned long long> response_queue;
+  std::queue<uint64_t> response_queue;
   std::queue<std::shared_ptr<Req>> task_return_queue;
 
   std::map<unsigned, std::shared_ptr<Req>> id_to_reqs_map;

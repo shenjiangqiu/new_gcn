@@ -16,7 +16,7 @@ SystolicArray::SystolicArray(int totalRows, int totalCols,
 int SystolicArray::cal_remaining_cycle() {
   // TODO: Add output latency, the weight is decided by output layer dimension.
   assert(current_sliding_window);
-  unsigned long long total_cycles = 0;
+  uint64_t total_cycles = 0;
   auto num_nodes = current_sliding_window->getXw();
   auto node_size =
       current_sliding_window->getCurrentNodeSize(); // num elements in one node;

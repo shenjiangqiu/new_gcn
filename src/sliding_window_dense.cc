@@ -27,7 +27,7 @@ unsigned dense_window::getXw() const { return xw; }
 
 unsigned dense_window::getLevel() const { return level; }
 
-std::vector<unsigned long long int> dense_window::getInputAddr() const {
+std::vector<uint64_t > dense_window::getInputAddr() const {
   return input_addr;
 }
 
@@ -78,7 +78,7 @@ void dense_window::set_location(unsigned int _x, unsigned int _xw,
   this->y = std::move(_y);
   this->level = _level;
 }
-void dense_window::set_addr(std::vector<unsigned long long int> inputAddr,
+void dense_window::set_addr(std::vector<uint64_t > inputAddr,
                             unsigned int inputLen, uint64_t edgeAddr,
                             unsigned int edgeLen, uint64_t outputAddr,
                             unsigned int outputLen) {
@@ -199,7 +199,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
 
       unsigned output_len =
           (col_end - col_i) * node_size_s.at(level_i + 1) * single_node_size;
-      unsigned long long output_addr =
+      uint64_t output_addr =
           node_addrs.at(level_i + 1) +
           col_i * node_size_s.at(level_i + 1) * single_node_size;
 
@@ -250,7 +250,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
         // all the nodes in this window
         std::vector<unsigned> input_nodes;
         // all the nodes addrs in this window
-        std::vector<unsigned long long> input_addrs;
+        std::vector<uint64_t> input_addrs;
 
         // a simple function to get the node addr by node id
         auto get_addr_by_node = [&](unsigned node_id) {

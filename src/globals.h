@@ -12,10 +12,10 @@
 
 class globals {
 public:
-  unsigned long long cycle = 0;
+  uint64_t cycle = 0;
 
-  unsigned long long edgeBuffer_idle_cycles = 0;
-  unsigned long long inputBuffer_idle_cycles = 0;
+  uint64_t edgeBuffer_idle_cycles = 0;
+  uint64_t inputBuffer_idle_cycles = 0;
 
   // this will be set by the output buffer when the last col's output is write
   // down to the memory
@@ -24,43 +24,43 @@ public:
   bool initialResidual = false;
 
 
-  unsigned long long total_waiting_input = 0;
-  unsigned long long total_waiting_edge = 0;
-  unsigned long long total_waiting_agg_write = 0;
-  unsigned long long do_aggregate = 0;
-  unsigned long long total_aggregate_op = 0;
-  unsigned long long total_edges = 0;
-  unsigned long long total_input_windows = 0;
-  std::vector<unsigned long long>layer_input_windows;
-  std::vector<unsigned long long> layer_edges;
-  std::vector<unsigned long long> layer_input_vertics;
-  std::vector<unsigned long long> layer_do_aggregate;
-  std::vector<unsigned long long> layer_aggregate_op;
-  std::vector<unsigned long long>layer_do_systolic;
-  std::vector<unsigned long long>layer_wait_input;
+  uint64_t total_waiting_input = 0;
+  uint64_t total_waiting_edge = 0;
+  uint64_t total_waiting_agg_write = 0;
+  uint64_t do_aggregate = 0;
+  uint64_t total_aggregate_op = 0;
+  uint64_t total_edges = 0;
+  uint64_t total_input_windows = 0;
+  std::vector<uint64_t>layer_input_windows;
+  std::vector<uint64_t> layer_edges;
+  std::vector<uint64_t> layer_input_vertics;
+  std::vector<uint64_t> layer_do_aggregate;
+  std::vector<uint64_t> layer_aggregate_op;
+  std::vector<uint64_t>layer_do_systolic;
+  std::vector<uint64_t>layer_wait_input;
   std::vector<float>layer_window_avg_agg;
   std::vector<float>layer_window_avg_input;
-  unsigned long long do_systolic = 0;
-  unsigned long long total_waiting_agg_read = 0;
-  unsigned long long total_waiting_out = 0;
-  unsigned long long total_read_input_latency = 0;
-  unsigned long long total_read_input_vertices_cnt = 0;
-  unsigned long long total_read_input_times = 0;
-  unsigned long long total_read_input_len = 0;
-  unsigned long long total_read_edge_latency = 0;
-  unsigned long long total_read_edge_times = 0;
-  unsigned long long total_read_edge_len = 0;
-  unsigned long long total_mac_in_systolic_array = 0;
-  unsigned long long total_read_input_traffic = 0;
-  unsigned long long total_read_edge_traffic = 0;
+  uint64_t do_systolic = 0;
+  uint64_t total_waiting_agg_read = 0;
+  uint64_t total_waiting_out = 0;
+  uint64_t total_read_input_latency = 0;
+  uint64_t total_read_input_vertices_cnt = 0;
+  uint64_t total_read_input_times = 0;
+  uint64_t total_read_input_len = 0;
+  uint64_t total_read_edge_latency = 0;
+  uint64_t total_read_edge_times = 0;
+  uint64_t total_read_edge_len = 0;
+  uint64_t total_mac_in_systolic_array = 0;
+  uint64_t total_read_input_traffic = 0;
+  uint64_t total_read_edge_traffic = 0;
   // this cycle, inputbuffer idle
-  unsigned long long total_input_buffer_idle = 0;
+  uint64_t total_input_buffer_idle = 0;
   // this cycle, edge idle
-  unsigned long long total_edge_buffer_idle = 0;
+  uint64_t total_edge_buffer_idle = 0;
   // this cycle, all buffer idle, the dram have no work to do!
-  unsigned long long all_buffer_idle = 0;
+  uint64_t all_buffer_idle = 0;
 
-  std::vector<unsigned long long> finished_time_stamp;
+  std::vector<uint64_t> finished_time_stamp;
 
   std::map<std::string, Model> m_models{
       {"gcn", Model("gcn", {16, 16}, false, false, 0)},

@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 class Graph {
-  using ull = unsigned long long;
+  using ull = uint64_t;
   // the csc format graph
 
 public:
