@@ -116,11 +116,11 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   }
 
   // step 2, build the windows set. and input buffer,edge buffer
-  m_slide_window_set = std::make_shared<Slide_window_set>(
+  m_slide_window_set = std::make_shared<dense_window_set>(
       m_graph, xw_s, yw_s, node_size, total_level);
   current_iter =
-      std::make_shared<slide_window_set_iterator>(m_slide_window_set->begin());
-  prev_iter = std::make_shared<slide_window_set_iterator>(*current_iter);
+      std::make_shared<dense_window_iter>(m_slide_window_set->begin());
+  prev_iter = std::make_shared<dense_window_iter>(*current_iter);
 
   input_buffer =
       std::make_shared<InputBuffer>("input_buffer", m_slide_window_set);
@@ -178,7 +178,7 @@ public:
 
 void System::run() {
 
-  while (!finished) {
+  while (true) {
     cycle();
     global_definitions.cycle++;
     if (global_definitions.finished) {
@@ -406,7 +406,7 @@ void System::cycle() {
      auto i = *current_iter;
      j++;
 
-     m_aggregator->add_task(std::make_shared<Slide_window>(*i));
+     m_aggregator->add_task(std::make_shared<dense_window>(*i));
      // load the prefetch data
      input_buffer->finish_current_move_next();
 
@@ -448,6 +448,6 @@ void System::cycle() {
          agg_buffer->finish_write();
      }
      prev_iter = current_iter;
-     current_iter = std::make_shared<slide_window_set_iterator>(j);
+     current_iter = std::make_shared<dense_window_iter>(j);
    }*/
 }

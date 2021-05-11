@@ -1,13 +1,10 @@
 #include "Model.h"
 #include "System.h"
 #include "globals.h"
-#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 #include "utils/Options.h"
 #include <fmt/format.h>
-#include <fstream>
 #include <graph.h>
-#include <iostream>
 
 using namespace Minisat;
 

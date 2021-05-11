@@ -16,7 +16,7 @@ SystolicArray::SystolicArray(int totalRows, int totalCols,
 int SystolicArray::cal_remaining_cycle() {
   // TODO: Add output latency, the weight is decided by output layer dimension.
   assert(current_sliding_window);
-  int total_cycles = 0;
+  unsigned long long total_cycles = 0;
   auto num_nodes = current_sliding_window->getXw();
   auto node_size =
       current_sliding_window->getCurrentNodeSize(); // num elements in one node;
@@ -63,8 +63,8 @@ int SystolicArray::cal_remaining_cycle() {
   auto steps = (total_rows + num_nodes - 1) / total_rows;
 
   auto elements_steps = (next_node_size + total_cols - 1) / total_cols;
-  for (auto i = 0; i < steps - 1; i++) {
-    for (auto j = 0; j < elements_steps - 1; j++) {
+  for (auto i = 0u; i < steps - 1; i++) {
+    for (auto j = 0u; j < elements_steps - 1; j++) {
       // fix bug here, the windows should contain the node size
       total_cycles += (total_rows + total_cols + node_size);
       total_cycles += (total_rows * total_cols / 4) / 32;
@@ -86,7 +86,7 @@ int SystolicArray::cal_remaining_cycle() {
     total_cycles += remaining_rows + remaining_cols + node_size;
     total_cycles += (total_rows * total_cols / 4) / 32;
   }
-  for (auto j = 0; j < elements_steps - 1; j++) {
+  for (auto j = 0u; j < elements_steps - 1; j++) {
     // calculate the last row
     auto remaining_rows = num_nodes - ((steps - 1) * total_rows);
     auto remaining_cols = total_cols;
@@ -130,12 +130,15 @@ void SystolicArray::cycle() {
     // generate the output buffer request.
     current_sliding_window = agg_buffer->getReadWindow();
     auto req = std::make_shared<Req>();
-    req->the_final_request = current_sliding_window->isTheFinalCol();
-    req->the_final_request_of_the_layer =
-        current_sliding_window->isTheFinalColOfTheLayer();
+    req->the_final_request = current_sliding_window->isTheFinalCol() and
+                             current_sliding_window->isTheFinalLayer();
 
-    req->set_addr(current_sliding_window->getOutputAddr());
-    req->len = current_sliding_window->getOutputLen();
+    req->the_final_request_of_the_layer =
+        current_sliding_window->isTheFinalRow() and
+        current_sliding_window->isTheFinalCol();
+
+    req->set_addr(current_sliding_window->getOutputAddr(),
+                  current_sliding_window->getOutputLen());
     req->t = device_types::output_buffer;
     req->req_type = mem_request::write;
     output_buffer->start_write_to_buffer(req);

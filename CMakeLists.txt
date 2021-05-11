@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(gcn_sim VERSION 0.0.1)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 find_package(Catch2 REQUIRED)
 find_package(fmt REQUIRED)
+find_package(spdlog REQUIRED)
 
 
 option(THERMAL "enable thermal in dramsim" OFF)
 option(USEDRAMSIM "enable dramsim" ON)
 
 add_subdirectory(deps/ramulator)
-add_subdirectory(deps/spdlog)
 add_subdirectory(deps/minisat_utils)
 add_subdirectory(data)
 
@@ -37,13 +37,13 @@ target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt::fmt spdlog minisat_utile
 target_compile_options(gcn_sim_lib PRIVATE -Wall -Wextra)
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
 
-target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt::fmt)
+target_link_libraries(gcn_sim PUBLIC gcn_sim_lib fmt::fmt-header-only)
 
 
 aux_source_directory(test TEST_SOURCE)
 add_executable(gcn_sim_test ${TEST_SOURCE} test/mapping_test.cc)
 target_include_directories(gcn_sim_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/test)
-target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt::fmt Catch2::Catch2)
+target_link_libraries(gcn_sim_test PUBLIC gcn_sim_lib fmt::fmt-header-only Catch2::Catch2)
 configure_file(test/test.graph test.graph COPYONLY)
 
 configure_file(data/cora.graph cora.graph COPYONLY)

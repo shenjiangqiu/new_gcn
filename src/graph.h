@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "fmt/format.h"
+#include <fmt/core.h>
 #include <array>
 #include <fstream>
 #include <iostream>

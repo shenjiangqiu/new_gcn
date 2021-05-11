@@ -152,7 +152,7 @@ std::string ramulator_wrapper::get_internal_size() const {
 }
 
 std::string ramulator_wrapper::get_line_trace() const { return ""; }
-unsigned ramulator_wrapper::get_channel_num() { return 8; }
+unsigned ramulator_wrapper::get_channel_num() const { return 8; }
 unsigned ramulator_wrapper::get_channel_id(uint64_t addr) const {
   return mem->get_channel_id(addr);
 }

@@ -23,8 +23,8 @@ public:
 
 
 private:
-  [[nodiscard]] unsigned get_channel_num() const;
-  [[nodiscard]] static unsigned get_channel_id(uint64_t addr) ;
+  [[nodiscard]] unsigned get_channel_num() const override;
+  [[nodiscard]] unsigned get_channel_id(uint64_t addr) const override ;
   DRAMSim::MultiChannelMemorySystem* m_memory_system;
   //void receive_read(uint64_t addr);
   //void receive_write(uint64_t addr);

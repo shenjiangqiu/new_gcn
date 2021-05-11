@@ -1,7 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include "Slide_window.h"
+#include "sliding_window_dense.h"
 #include <cassert>
 #include <memory>
 #include <queue>
@@ -79,7 +79,7 @@ private:
   bool current_ready{false};
   bool next_empty{true};
   bool next_ready{false};
-  std::shared_ptr<Slide_window> m_window;
+  std::shared_ptr<dense_window> m_window;
 };
 
 class Aggregator_buffer : public Name_object {
@@ -102,7 +102,7 @@ public:
 
   [[nodiscard]] const string &getName() const;
 
-  void add_new_task(std::shared_ptr<Slide_window> window);
+  void add_new_task(std::shared_ptr<dense_window> window);
   void start_read();
   void finish_write();
 
@@ -120,15 +120,15 @@ private:
   // currently we are reading, do not erase me!
   bool read_busy{false};
 
-  std::shared_ptr<Slide_window> read_window;
+  std::shared_ptr<dense_window> read_window;
 
 public:
-  [[nodiscard]] const shared_ptr<Slide_window> &getReadWindow() const;
+  [[nodiscard]] const shared_ptr<dense_window> &getReadWindow() const;
 
-  [[nodiscard]] const shared_ptr<Slide_window> &getWriteWindow() const;
+  [[nodiscard]] const shared_ptr<dense_window> &getWriteWindow() const;
 
 private:
-  std::shared_ptr<Slide_window> write_window;
+  std::shared_ptr<dense_window> write_window;
 
   //
 };
@@ -253,7 +253,7 @@ class ReadBuffer : public Name_object {
 public:
   bool idle() { return current_ready and next_ready; }
   explicit ReadBuffer(const string &basicString,
-                      const std::shared_ptr<Slide_window_set> &m_set);
+                      const std::shared_ptr<dense_window_set> &m_set);
   virtual ~ReadBuffer() = default;
   virtual void cycle() = 0;
 
@@ -279,20 +279,18 @@ public:
     current_sent = false;
     current_ready = false;
   }
-  const slide_window_set_iterator &getMCurrentIter() const;
+  [[nodiscard]] const dense_window_iter &getMCurrentIter() const;
 
 protected:
   #define MAX_REQ   32
   int num_buffer_entry; //default is 2, double buffer.
-  std::shared_ptr<Slide_window_set> m_set;
-  slide_window_set_iterator m_current_iter;
-  slide_window_set_iterator m_next_iter;
+  std::shared_ptr<dense_window_set> m_set;
+  dense_window_iter m_current_iter;
+  dense_window_iter m_next_iter;
+  dense_window_iter final_iter;
   std::shared_ptr<Req> current_req;
   std::shared_ptr<Req> next_req;
-  std::shared_ptr<Req> buffer_entry_req[MAX_REQ];
-  bool buffer_entry_empty[MAX_REQ];
-  bool buffer_entry_ready[MAX_REQ];
-  bool buffer_entry_sent[MAX_REQ];
+
   // if current empty but not send, the system should send it,
   bool current_empty{true};
   // if the requests returns, should set return to true;
@@ -311,7 +309,7 @@ protected:
 class EdgeBuffer : public ReadBuffer {
 public:
   explicit EdgeBuffer(const string &name,
-                      const std::shared_ptr<Slide_window_set> &m_set);
+                      const std::shared_ptr<dense_window_set> &m_set);
   void cycle() override;
   shared_ptr<Req> pop_current() override;
   shared_ptr<Req> pop_next() override;
@@ -323,7 +321,7 @@ protected:
 class InputBuffer : public ReadBuffer {
 public:
   InputBuffer(const std::string &name,
-              const std::shared_ptr<Slide_window_set> &m_set);
+              const std::shared_ptr<dense_window_set> &m_set);
   void cycle() override;
   shared_ptr<Req> pop_current() override;
   shared_ptr<Req> pop_next() override;

@@ -22,6 +22,7 @@ public:
 
   void cycle();
   void run();
+  auto &&get_sliding_window() { return m_slide_window_set; }
 
 private:
   std::shared_ptr<Graph> m_graph;
@@ -32,7 +33,7 @@ private:
   int output_buffer_size;
 
   int agg_total_cores;
-  std::shared_ptr<Slide_window_set> m_slide_window_set;
+  std::shared_ptr<dense_window_set> m_slide_window_set;
   std::shared_ptr<InputBuffer> input_buffer;
   std::shared_ptr<EdgeBuffer> edge_buffer;
   std::shared_ptr<WriteBuffer> output_buffer;
@@ -42,8 +43,8 @@ private:
   std::shared_ptr<SystolicArray> m_systolic_array;
 
   bool finished{false};
-  std::shared_ptr<slide_window_set_iterator> current_iter;
-  std::shared_ptr<slide_window_set_iterator> prev_iter;
+  std::shared_ptr<dense_window_iter> current_iter;
+  std::shared_ptr<dense_window_iter> prev_iter;
   std::shared_ptr<Model> m_model;
   double current_system_time = 0;
   double current_dram_time = 0;

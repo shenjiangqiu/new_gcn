@@ -134,7 +134,7 @@ void dramsim_wrapper::receive_write(uint64_t addr) {
 
   finished_write_req++;
 }
-unsigned dramsim_wrapper::get_channel_num() {
+unsigned dramsim_wrapper::get_channel_num() const{
   return dramsim3::BaseDRAMSystem::total_channels_;
 }
 unsigned dramsim_wrapper::get_channel_id(uint64_t addr) const {

@@ -1,7 +1,7 @@
+#include "boost/range/irange.hpp"
 #include "globals.h"
 #include <memory_interface.h>
 #include <spdlog/spdlog.h>
-
 struct set_level_struct {
   set_level_struct() {
     l = spdlog::get_level();
@@ -11,102 +11,127 @@ struct set_level_struct {
   spdlog::level::level_enum l;
 };
 void memory_interface::cycle() {
-  //auto level= set_level_struct();
+  // auto level= set_level_struct();
   m_mem->cycle();
 
   // send policy changed here
-  if (!req_queue.empty()) {
-    auto next_req = req_queue.front();
-    assert(next_req->len > 0);
-    bool already_send = addr_to_req_map.count(next_req->get_addr()) > 0;
-    // write request will come back immediately when sent, so no need record
-    if (next_req->req_type == mem_request::read) {
-      spdlog::debug("memory_interface::cycle,from req_queue to addr_map: "
-                    "addr:{},already_map:{}",
-                    next_req->get_addr(), already_send);
-      addr_to_req_map[next_req->get_addr()].push_back(next_req);
-    }
-    // addr, is_write
-    if (already_send and next_req->req_type == mem_request::write) {
-      throw "can't happen!";
-    }
-    if (!already_send) {
+  while (!req_queue.empty()) {
+    auto &req = req_queue.front();
+    // there are two cases:
+    // 1, single addr with a len
+    // 2, multiple addr
 
-      spdlog::debug("memory_interface::cycle,from req_queue to outsendqueue: "
-                    "addr:{},already_map:{}",
-                    next_req->get_addr(), already_send);
-      out_send_queue.push(
-          {next_req->get_addr(), next_req->req_type == mem_request::write});
-    }
-    // calculate the input buffer traffic
-    if (next_req->t == device_types::input_buffer) {
-      global_definitions.total_read_input_traffic +=
-          next_req->len > 64 ? 64 : next_req->len;
+    // the function to insert a request
+    //  insert to requst to mem, record the req info
+    auto send_reqs = [&](unsigned long long addr, std::shared_ptr<Req> &req) {
+      // the addr is all new! send it to lower memroy
+      if (!addr_to_req_map.contains(addr)) {
 
-    } else if (next_req->t == device_types::edge_buffer) {
-      global_definitions.total_read_edge_traffic +=
-          next_req->len > 64 ? 64 : next_req->len;
+        out_send_queue.push({addr, req->req_type == mem_request::write});
+      }
+
+      // add the req to the record
+      insert_pending_request(addr, req->id);
+    };
+    // handle write request here.
+    if (req->req_type == mem_request::write) {
+      spdlog::debug("{}:{} ,deal with write: {}", __FILE__, __LINE__, *req);
+      // just send it and return
+      while (m_mem->available(req->get_single_addr())) {
+        auto &&len = req->get_len();
+        auto &&addr = req->get_single_addr();
+        if (len > 0) {
+          spdlog::debug("{}:{} ,send write: {}", __FILE__, __LINE__, *req);
+
+          m_mem->send(addr, true);
+          // task_return_queue.push(req);
+          // req_queue.pop();
+          if (len <= 64) {
+            spdlog::debug("{}:{} ,finished write: {}", __FILE__, __LINE__,
+                          *req);
+
+            task_return_queue.push(req);
+            req_queue.pop();
+            return;
+          }
+          len -= 64;
+          addr += 64;
+          req->set_addr(addr, len);
+        }
+      }
     }
-    if (int(next_req->len - 64) <= 0) {
-      req_queue.pop();
-      if (next_req->req_type == mem_request::write) {
-        task_return_queue.push(next_req);
+
+    if (req->is_single_addr()) {
+      // it's single addr
+      auto addr = req->get_single_addr();
+      auto len = req->get_len();
+      auto count = (len + 63) / 64;
+      for (auto i : boost::irange(0u, count)) {
+        send_reqs(addr + i * 64, req);
       }
     } else {
-      next_req->add64();
-      next_req->len -= 64;
+      auto &&addrs = req->get_addr();
+      for (auto addr : addrs) {
+        send_reqs(addr, req);
+      }
     }
+
+    req_queue.pop();
   }
 
-  if (!response_queue.empty()) {
-    auto &resp = response_queue.front();
-    auto reqs = addr_to_req_map.at(resp);
-    addr_to_req_map.erase(resp);
-    for (auto &req : reqs) {
+  // handle the return from mem logic
+  while (!response_queue.empty()) {
+    auto &&ret = response_queue.front();
+    spdlog::debug("finished: {}", ret);
 
-      spdlog::debug("memory_interface::cycle,from response to out: "
-                    "id:{} addr:{},current_numbers:{}",
-                    req->id, req->get_addr(), id_to_numreqs_map.at(req->id));
-      assert(id_to_numreqs_map.at(req->id) > 0);
-      if (--id_to_numreqs_map.at(req->id) == 0) {
-        spdlog::debug("finished one task");
-        id_to_numreqs_map.erase(req->id);
-        task_return_queue.push(req);
-      }
+    auto &&finished = receive_req(ret);
+    spdlog::debug("finished req:[{}]", fmt::join(finished, ","));
+    // find req by id
+    for (auto &&id : finished) {
+      task_return_queue.push(id_to_reqs_map.at(id));
+      id_to_reqs_map.erase(id);
     }
     response_queue.pop();
   }
 
   // to dram
-  int i = 0;
-  // send 8 requests in a cycle
-  for (i = 0; i < 8; i++) {
-    if (!out_send_queue.empty() and
-        m_mem->available(out_send_queue.front().first)) {
-      auto req = out_send_queue.front();
+  // noticed here, inorder to simulate HBM multichannel behavior, we need to
+  // try to send one request for each channel Fixed here, because the channel
+  // logic is already implemented in the mem_wrapper, so here we just need to
+  // send them all to the wrapper
+  while (!out_send_queue.empty()) {
+    auto &&addr_is_write = out_send_queue.front();
+    if (m_mem->available(addr_is_write.first)) {
+      m_mem->send(addr_is_write.first, addr_is_write.second);
       out_send_queue.pop();
-      // addr, is_write
-      m_mem->send(req.first, req.second);
+    } else {
+      break;
     }
   }
+
+  // from dram
   while (m_mem->return_available()) {
     auto req = m_mem->pop();
     response_queue.push(req);
   }
 }
 
-void memory_interface::send(std::shared_ptr<Req> req) {
+void memory_interface::send(std::shared_ptr<Req> &req) {
   assert(req_queue.size() < waiting_size);
-  if (req->get_addr() % 64 != 0) {
-    throw "addr must be multiple of 64";
+  auto &&addrs = req->get_addr();
+#ifdef DEBUG
+  // check if the address are aligned by 64 bytes.
+  if (std::any_of(addrs.begin(), addrs.end(),
+                  [](auto addr) { return addr % 64 != 0; })) {
+    throw std::runtime_error("addr must be multiple of 64");
   }
-  req_queue.push(req);
-  auto num_reqs = (req->len + 63) / 64;
-  // write request will not be back again, so no need to record.
-  spdlog::debug("mem_interface::send,addr={},number={}", req->get_addr(),
-                num_reqs);
+#endif
+  // we just only need to record the read request, write request are return
+  // immediately when scheduled.
   if (req->req_type == mem_request::read)
-    id_to_numreqs_map.insert({req->id, num_reqs});
+    id_to_reqs_map.insert({req->id, req});
+  spdlog::debug("{}:{},received req:{}", __FILE__, __LINE__, *req);
+  req_queue.push(req);
 }
 
 memory_interface::memory_interface(const std::string &dram_config_name,

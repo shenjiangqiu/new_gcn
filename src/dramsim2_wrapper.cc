@@ -126,6 +126,6 @@ void dramsim2_wrapper::receive_write(uint32_t, uint64_t, uint64_t) {
 unsigned dramsim2_wrapper::get_channel_num() const {
   return m_memory_system->get_channel_num();
 }
-unsigned dramsim2_wrapper::get_channel_id(uint64_t addr) {
+unsigned dramsim2_wrapper::get_channel_id(uint64_t addr) const {
   return DRAMSim::MultiChannelMemorySystem::get_channel_id(addr);
 }

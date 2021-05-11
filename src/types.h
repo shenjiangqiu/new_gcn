@@ -15,30 +15,57 @@ public:
     static unsigned global_id = 0;
     id = global_id;
     global_id++;
-    init_len = 0;
     items_cnt = 0;
-    len = 0;
   }
 
   unsigned id;
-  unsigned long len;      //#bytes, it is adjusted after a cacheline is issused.
-  unsigned long init_len; // #bytes, it is not changed.
-  int items_cnt;          //#vertices or #edges
+  int items_cnt; //#vertices or #edges
   device_types t;
   mem_request req_type;
   bool the_final_request = false;
   bool the_final_request_of_the_layer = false;
-  unsigned long long get_addr() const { return addr; }
-  void set_addr(unsigned long long taddr) {
-    taddr = taddr & ~63;
-    addr = taddr;
+  [[nodiscard]] const std::vector<unsigned long long> &get_addr() const {
+    return addr;
   }
-  void add64(){
-    addr+=64;
+  [[nodiscard]] unsigned long long get_single_addr() const {
+    return single_addr;
   }
 
+  [[nodiscard]] bool is_single_addr() const { return use_continue_addr; }
+  void set_addr(std::vector<unsigned long long> taddr) {
+    for (auto &&i : taddr)
+      i = i & ~63;
+    addr = taddr;
+  }
+  // will adjust addr and len
+  // be carefully
+  // this function will set single_addr and single_len
+  void set_addr(unsigned long long t_addr, unsigned len) {
+    use_continue_addr = true;
+
+    // the number of bytes rounded
+    // like addr=70, will be rounded to 64, so rounded=6, this part will be
+    // added to the total_len. because the start+len should be identical to the
+    // original one!
+    auto rounded = (t_addr % 63);
+
+    t_addr = t_addr & ~63;
+    single_addr = t_addr;
+    single_len = len;
+    single_len += rounded;
+  }
+
+  unsigned get_len() const { return use_continue_addr ? single_len : addr.size(); }
+
+  /*void add64(){
+    addr+=64;
+  }*/
+
 private:
-  unsigned long long addr;
+  std::vector<unsigned long long> addr;
+  unsigned long long single_addr;
+  bool use_continue_addr = false;
+  unsigned single_len = 0;
 };
 
 template <> struct fmt::formatter<Req> {
@@ -64,10 +91,14 @@ template <> struct fmt::formatter<Req> {
   auto format(const Req &p, FormatContext &ctx) {
     // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) //
     // c++11 ctx.out() is an output iterator to write to.
-    auto out = format_to(ctx.out(), "{} {} {} {} ", p.id, p.get_addr(), p.len,
-                         p.t == device_types::input_buffer  ? "Input"
-                         : p.t == device_types::edge_buffer ? "edge"
-                                                            : "else");
+    auto out = format_to(
+        ctx.out(), "id:{} addr:{} size:{} type:{} ", p.id,
+        p.is_single_addr() ? fmt::format("{}", p.get_single_addr())
+                           : fmt::format("[{}]", fmt::join(p.get_addr(), ",")),
+        p.get_len(),
+        p.t == device_types::input_buffer  ? "Input"
+        : p.t == device_types::edge_buffer ? "edge"
+                                           : "else");
 
     return out;
   }

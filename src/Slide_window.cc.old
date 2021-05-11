@@ -2,7 +2,7 @@
 // Created by sjq on 1/4/21.
 //
 
-#include "Slide_window.h"
+#include "sliding_window_dense.h"
 
 #include "globals.h"
 #include "size.h"

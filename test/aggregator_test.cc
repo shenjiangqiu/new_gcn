@@ -3,8 +3,8 @@
 //
 
 #include "Aggregator.h"
+#include "sliding_window_dense.h"
 #include "catch2/catch.hpp"
-#include "Slide_window.h"
 #include "memory_interface.h"
 #include "spdlog/spdlog.h"
 
@@ -43,7 +43,7 @@ TEST_CASE("aggregator_test") {
     for (auto i = m_set.get_windows().begin(); i != m_set.get_windows().end(); i++) {
         auto j = std::next(i);
 
-        m_agg.add_task(std::make_shared<Slide_window>(*i));
+        m_agg.add_task(std::make_shared<dense_window>(*i));
         //load the prefetch data
         input_buffer->finish_current_move_next();
 

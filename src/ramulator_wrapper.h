@@ -51,8 +51,8 @@ public:
   [[nodiscard]] bool return_available() const override { return !out_queue.empty(); }
 
   void cycle() override;
-  [[nodiscard]] static unsigned get_channel_num() ;
-  [[nodiscard]] unsigned get_channel_id(uint64_t addr) const;
+  [[nodiscard]]  unsigned get_channel_num() const override;
+  [[nodiscard]] unsigned get_channel_id(uint64_t addr) const override;
 
 private:
   double tCK;

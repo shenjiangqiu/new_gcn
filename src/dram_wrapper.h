@@ -9,11 +9,12 @@
 class dram_wrapper {
 public:
   virtual void send(uint64_t addr, bool is_write) = 0;
+  [[nodiscard]] virtual unsigned get_channel_num() const = 0;
+  [[nodiscard]] virtual unsigned get_channel_id(unsigned long long addr) const = 0;
   [[nodiscard]] virtual bool available(uint64_t addr) const = 0;
   virtual void cycle() = 0;
 
   [[nodiscard]] virtual bool return_available() const = 0;
-  
 
   virtual uint64_t pop() = 0;
   [[nodiscard]] virtual uint64_t get() const = 0;
@@ -24,12 +25,12 @@ public:
   u_int64_t active_cycles;
   u_int64_t inflight_req_cnt;
   u_int64_t sum_inflight_req;
-  u_int64_t  finished_read_req;
-  u_int64_t  finished_write_req ;
+  u_int64_t finished_read_req;
+  u_int64_t finished_write_req;
 
-  //BLP at the interface
+  // BLP at the interface
   int bank_req_cnt[512];
-  int  bank_infligt_req_cnt;
+  int bank_infligt_req_cnt;
   u_int64_t sum_inflight_bank_req;
 };
 

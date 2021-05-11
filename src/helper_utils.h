@@ -4,12 +4,6 @@
 
 #ifndef GCN_SIM_HELPER_UTILS_H
 #define GCN_SIM_HELPER_UTILS_H
-#include "Slide_window.h"
-class helper_utils {
-public:
-  static slide_window_set_iterator next(slide_window_set_iterator i) {
-    return ++i;
-  }
-};
+#include "sliding_window_dense.h"
 
 #endif // GCN_SIM_HELPER_UTILS_H

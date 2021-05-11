@@ -2,8 +2,8 @@
 // Created by sjq on 1/4/21.
 //
 
-#ifndef GCN_SIM_SLIDE_WINDOW_H
-#define GCN_SIM_SLIDE_WINDOW_H
+#ifndef GCN_SIM_SLIDE_WINDOW_H_OLD
+#define GCN_SIM_SLIDE_WINDOW_H_OLD
 
 #include "fmt/format.h"
 #include <algorithm>
@@ -207,4 +207,4 @@ private:
   //uint number_of_nodes_to_be_read = 0;
 };
 
-#endif // GCN_SIM_SLIDE_WINDOW_H
+#endif // GCN_SIM_SLIDE_WINDOW_H_OLD

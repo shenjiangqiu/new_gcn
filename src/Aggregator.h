@@ -7,7 +7,7 @@
 
 #include "buffer.h"
 
-#include "Slide_window.h"
+#include "sliding_window_dense.h"
 
 #include <unordered_map>
 #include <vector>
@@ -34,7 +34,7 @@ private:
 
   int calculate_remaining_cycle();
 
-  std::shared_ptr<Slide_window> current_sliding_window;
+  std::shared_ptr<dense_window> current_sliding_window;
   int total_cores;
   int cur_layer;
   
