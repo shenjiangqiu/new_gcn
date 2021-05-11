@@ -8,9 +8,9 @@
 #include <memory>
 #include <utility>
 
+#include "debug_helper.h"
 #include "spdlog/spdlog.h"
 #include "utils/Options.h"
-#include "debug_helper.h"
 
 System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int outputBufferSize, int aggTotalCores, int systolic_rows,
@@ -37,7 +37,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   dram_gap = (double)1.0 / (config::dram_freq * 1000000000);
 
   GCN_INFO("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
-               dram_gap, cpu_gap, config::dram_freq, config::core_freq);
+           dram_gap, cpu_gap, config::dram_freq, config::core_freq);
   // step1, first need to get the max x_w;
   int total_level = node_size.size();
 
@@ -140,10 +140,10 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                   m_graph->get_num_nodes() / xw_s[i];
   }
   GCN_INFO("total_nodes:{}, total_feature_length:{},total input traffic "
-               "need to be read:{}",
-               m_graph->get_num_nodes(),
-               fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
-               total_size);
+           "need to be read:{}",
+           m_graph->get_num_nodes(),
+           fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
+           total_size);
 }
 class kv_maps {
   std::map<std::string, int> int_map;
@@ -251,8 +251,8 @@ void System::run() {
             << "\n\n";
 
   GCN_INFO("layer_completion_time  {}\n",
-               fmt::join(global_definitions.finished_time_stamp.begin(),
-                         global_definitions.finished_time_stamp.end(), "  "));
+           fmt::join(global_definitions.finished_time_stamp.begin(),
+                     global_definitions.finished_time_stamp.end(), "  "));
 
   auto layer_time = global_definitions.finished_time_stamp;
   int total_level = layer_time.size();
@@ -262,35 +262,35 @@ void System::run() {
   }
 
   GCN_INFO("layer_input_windows  {}\n",
-               fmt::join(global_definitions.layer_input_windows.begin(),
-                         global_definitions.layer_input_windows.end(), "  "));
+           fmt::join(global_definitions.layer_input_windows.begin(),
+                     global_definitions.layer_input_windows.end(), "  "));
 
   GCN_INFO("layer_edges  {}\n",
-               fmt::join(global_definitions.layer_edges.begin(),
-                         global_definitions.layer_edges.end(), "  "));
+           fmt::join(global_definitions.layer_edges.begin(),
+                     global_definitions.layer_edges.end(), "  "));
 
   GCN_INFO("layer_input_vertics  {}\n",
-               fmt::join(global_definitions.layer_input_vertics.begin(),
-                         global_definitions.layer_input_vertics.end(), "  "));
+           fmt::join(global_definitions.layer_input_vertics.begin(),
+                     global_definitions.layer_input_vertics.end(), "  "));
 
   GCN_INFO("layer_time  {}\n",
-               fmt::join(layer_time.begin(), layer_time.end(), "  "));
+           fmt::join(layer_time.begin(), layer_time.end(), "  "));
 
   GCN_INFO("layer_wait_input_time  {}\n",
-               fmt::join(global_definitions.layer_wait_input.begin(),
-                         global_definitions.layer_wait_input.end(), "  "));
+           fmt::join(global_definitions.layer_wait_input.begin(),
+                     global_definitions.layer_wait_input.end(), "  "));
 
   GCN_INFO("layer_aggregate_time  {}\n",
-               fmt::join(global_definitions.layer_do_aggregate.begin(),
-                         global_definitions.layer_do_aggregate.end(), "  "));
+           fmt::join(global_definitions.layer_do_aggregate.begin(),
+                     global_definitions.layer_do_aggregate.end(), "  "));
 
   GCN_INFO("layer_systolic_time  {}\n",
-               fmt::join(global_definitions.layer_do_systolic.begin(),
-                         global_definitions.layer_do_systolic.end(), "  "));
+           fmt::join(global_definitions.layer_do_systolic.begin(),
+                     global_definitions.layer_do_systolic.end(), "  "));
 
   GCN_INFO("layer_aggregate_op  {}\n",
-               fmt::join(global_definitions.layer_aggregate_op.begin(),
-                         global_definitions.layer_aggregate_op.end(), "  "));
+           fmt::join(global_definitions.layer_aggregate_op.begin(),
+                     global_definitions.layer_aggregate_op.end(), "  "));
 
   for (auto i = 0; i < total_level; i++) {
     auto cnt = global_definitions.layer_input_windows[i];
@@ -303,13 +303,12 @@ void System::run() {
   }
 
   GCN_INFO("layer_window_avg_input_lat  {}\n",
-               fmt::join(global_definitions.layer_window_avg_input.begin(),
-                         global_definitions.layer_window_avg_input.end(),
-                         "  "));
+           fmt::join(global_definitions.layer_window_avg_input.begin(),
+                     global_definitions.layer_window_avg_input.end(), "  "));
 
   GCN_INFO("layer_window_avg_agg_lat  {}\n",
-               fmt::join(global_definitions.layer_window_avg_agg.begin(),
-                         global_definitions.layer_window_avg_agg.end(), "  "));
+           fmt::join(global_definitions.layer_window_avg_agg.begin(),
+                     global_definitions.layer_window_avg_agg.end(), "  "));
 }
 
 void System::cycle() {
@@ -341,12 +340,11 @@ void System::cycle() {
       dead_lock_detect += 100000;
       // print out dead lock infomation
       GCN_ERROR("Possible dead lock detected! current cycle:{}",
-                    dead_lock_detect);
+                dead_lock_detect);
       GCN_ERROR("currnet stats:\ninput buffer:{}\n edge_buffer: {}\n "
-                    "agg_buffer:{} \n out_buffer:{}\n ",
-                    input_buffer->get_line_trace(),
-                    edge_buffer->get_line_trace(), agg_buffer->get_line_trace(),
-                    output_buffer->get_line_trace());
+                "agg_buffer:{} \n out_buffer:{}\n ",
+                input_buffer->get_line_trace(), edge_buffer->get_line_trace(),
+                agg_buffer->get_line_trace(), output_buffer->get_line_trace());
       if (total_detected_times == 3) {
         std::cout.flush();
         std::cerr.flush();
@@ -370,30 +368,30 @@ void System::cycle() {
   if (m_mem->available()) {
     if (!input_buffer->isCurrentEmpty() and !input_buffer->isCurrentSent()) {
       auto req = input_buffer->pop_current();
-      GCN_DEBUG("{}:{},input buffer send req:{},{}", __FILE__, __LINE__,
-                    *req, global_definitions.cycle);
+      GCN_DEBUG("{}:{},input buffer send req:{},{}", __FILE__, __LINE__, *req,
+                global_definitions.cycle);
       m_mem->send(req);
     } else if (!edge_buffer->isCurrentEmpty() and
                !edge_buffer->isCurrentSent()) {
       auto req = edge_buffer->pop_current();
-      GCN_DEBUG("{}:{},edge buffer send req:{},{}", __FILE__, __LINE__,
-                    (*req), global_definitions.cycle);
+      GCN_DEBUG("{}:{},edge buffer send req:{},{}", __FILE__, __LINE__, (*req),
+                global_definitions.cycle);
       m_mem->send(req);
     } else if (!input_buffer->isNextEmpty() and !input_buffer->isNextSent()) {
       auto req = input_buffer->pop_next();
-      GCN_DEBUG("{}:{},input_next buffer send req:{},{}", __FILE__,
-                    __LINE__, (*req), global_definitions.cycle);
+      GCN_DEBUG("{}:{},input_next buffer send req:{},{}", __FILE__, __LINE__,
+                (*req), global_definitions.cycle);
       m_mem->send(req);
     } else if (!edge_buffer->isNextEmpty() and !edge_buffer->isNextSent()) {
       auto req = edge_buffer->pop_next();
       GCN_DEBUG("{}:{},edge_next buffer send req:{},{}", __FILE__, __LINE__,
-                    (*req), global_definitions.cycle);
+                (*req), global_definitions.cycle);
       m_mem->send(req);
     } else if (!output_buffer->isWriteToMemoryEmpty() and
                !output_buffer->isWriteToMemoryStarted()) {
       auto req = output_buffer->popWriteToMemReq();
       GCN_DEBUG("{}:{},output buffer send req:{},{}", __FILE__, __LINE__,
-                    (*req), global_definitions.cycle);
+                (*req), global_definitions.cycle);
       m_mem->send(req);
     }
   }
@@ -402,13 +400,13 @@ void System::cycle() {
     auto ret = m_mem->get_req();
     if (ret->t == device_types::input_buffer) {
       GCN_DEBUG(" input  req received,req:{},cycle:{} ", *ret,
-                    global_definitions.cycle);
+                global_definitions.cycle);
 
       input_buffer->receive(ret);
     } else if (ret->t == device_types::edge_buffer) {
 
       GCN_DEBUG(" edge  req received,req:{},cycle:{} ", *ret,
-                    global_definitions.cycle);
+                global_definitions.cycle);
 
       edge_buffer->receive(ret);
     } else {
@@ -416,7 +414,7 @@ void System::cycle() {
       assert(ret->t == device_types::output_buffer);
       output_buffer->finished_write_memory();
       GCN_DEBUG("output buffer finished write to memory: cycle:{}",
-                    global_definitions.cycle);
+                global_definitions.cycle);
     }
   } /*
    // add new task
