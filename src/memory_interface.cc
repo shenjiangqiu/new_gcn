@@ -14,6 +14,25 @@ struct set_level_struct {
 };
 void memory_interface::cycle() {
   // auto level= set_level_struct();
+  auto update_traffic = [](unsigned size, device_types type) {
+    switch (type) {
+    case device_types::input_buffer:
+      global_definitions.total_read_traffic_input += size;
+      global_definitions.total_read_traffic += size;
+      break;
+    case device_types::edge_buffer:
+      global_definitions.total_read_traffic += size;
+      global_definitions.total_read_traffic_edge += size;
+      break;
+    case device_types::output_buffer:
+      global_definitions.total_write_traffic += size;
+      break;
+
+    default:
+      throw;
+    }
+  };
+
   m_mem->cycle();
 
   // send policy changed here
@@ -48,6 +67,7 @@ void memory_interface::cycle() {
           m_mem->send(addr, true);
           // task_return_queue.push(req);
           // req_queue.pop();
+          update_traffic(64, req->t);
           if (len <= 64) {
             GCN_DEBUG("{}:{} ,finished write: {}", __FILE__, __LINE__, *req);
 
@@ -61,22 +81,27 @@ void memory_interface::cycle() {
         }
       }
       // do not finished this request, return and waiting further operation
-      //  the request is still in the queue.
-      //
+      // the request is still in the queue.
+      // fix bug here, I forgot to return ....
       return;
     }
 
+    // now it's read because write return above
+
     if (req->is_single_addr()) {
-      // it's single addr
+      // it's a continues addr,like edge, output...,
       auto addr = req->get_single_addr();
       auto len = req->get_len();
       auto count = (len + 63) / 64;
+      update_traffic(64, req->t);
       for (auto i : boost::irange(0u, count)) {
         send_reqs(addr + i * 64, req);
       }
     } else {
       auto &&addrs = req->get_addr();
       for (auto addr : addrs) {
+        update_traffic(64, req->t);
+
         send_reqs(addr, req);
       }
     }

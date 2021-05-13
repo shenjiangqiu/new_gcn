@@ -10,7 +10,7 @@
 #include <string>
 #include <types.h>
 #include <utility>
-
+using ull = unsigned long long;
 void r(bool &origin);
 class Name_object {
 public:
@@ -19,6 +19,7 @@ public:
   virtual std::string get_line_trace() {
     return std::string("no line_trace provided");
   }
+  virtual std::string get_stats() = 0;
 
 private:
   std::string name;
@@ -34,7 +35,7 @@ public:
                        read_busy);
   }
   void cycle();
-
+  string get_stats() override;
   // means no data exists in the write buffer
   [[nodiscard]] bool isWriteEmpty() const;
 
@@ -144,6 +145,7 @@ private:
 */
 class WriteBuffer : public Name_object {
 public:
+  string get_stats() override;
   virtual std::string get_line_trace() override {
     return fmt::format("write_to_buffer_empty={} write_to_buffer_started={} "
                        "write_to_buffer_finished={} "
@@ -152,6 +154,7 @@ public:
                        write_to_buffer_finished, write_to_memory_empty,
                        write_to_memory_started);
   }
+
   explicit WriteBuffer(std::string name) : Name_object(std::move(name)) {}
   void start_write_to_buffer(std::shared_ptr<Req> req) {
     assert(write_to_buffer_empty and !write_to_buffer_started and
@@ -190,6 +193,7 @@ public:
     start_write_memory();
     return getWriteToMemReq();
   }
+  ull total_write_traffic = 0;
 
 private:
   std::shared_ptr<Req> write_to_buffer_req;
@@ -206,13 +210,13 @@ private:
 // only read the edge , do not read edge index now
 class ReadBuffer : public Name_object {
 public:
+  string get_stats() override;
   virtual std::string get_line_trace() override {
     return fmt::format("current_empty={} current_ready={} "
                        "current_sent={} "
                        "next_empty={} next_ready={} next_sent={}",
-                       current_empty, current_ready,
-                       current_sent, next_empty,
-                       next_ready,next_sent);
+                       current_empty, current_ready, current_sent, next_empty,
+                       next_ready, next_sent);
   }
   bool idle() { return current_ready and next_ready; }
   explicit ReadBuffer(const string &basicString,
@@ -243,6 +247,7 @@ public:
     current_ready = false;
   }
   [[nodiscard]] const dense_window_iter &getMCurrentIter() const;
+  ull total_read_traffic = 0;
 
 protected:
 #define MAX_REQ 32

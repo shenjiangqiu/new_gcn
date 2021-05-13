@@ -183,6 +183,9 @@ void System::run() {
     cycle();
     global_definitions.cycle++;
     if (global_definitions.finished) {
+      // finishing up
+      print();
+
       break;
     }
   }
@@ -223,6 +226,7 @@ void System::run() {
   map.push(std::string("total_real_edge_idle"),
            global_definitions.total_edge_buffer_idle);
   map.push(std::string("total_cycles"), global_definitions.cycle);
+
   map.print();
 
   std::cout << "\nEdgeBuffer total_latency "
@@ -309,6 +313,15 @@ void System::run() {
   GCN_INFO("layer_window_avg_agg_lat  {}\n",
            fmt::join(global_definitions.layer_window_avg_agg.begin(),
                      global_definitions.layer_window_avg_agg.end(), "  "));
+
+  fmt::print("total_read_traffic: {}\n", global_definitions.total_read_traffic);
+  fmt::print("total_write_traffic: {}\n",
+             global_definitions.total_write_traffic);
+  fmt::print("total_read_traffic_input: {}\n",
+             global_definitions.total_read_traffic_input);
+
+  fmt::print("total_read_traffic_edge: {}\n",
+             global_definitions.total_read_traffic_edge);
 }
 
 void System::cycle() {
@@ -368,30 +381,28 @@ void System::cycle() {
   if (m_mem->available()) {
     if (!input_buffer->isCurrentEmpty() and !input_buffer->isCurrentSent()) {
       auto req = input_buffer->pop_current();
-      GCN_DEBUG("{}:{},input buffer send req:{},{}", __FILE__, __LINE__, *req,
-                global_definitions.cycle);
+      GCN_DEBUG("input buffer send req:{},{}", *req, global_definitions.cycle);
       m_mem->send(req);
     } else if (!edge_buffer->isCurrentEmpty() and
                !edge_buffer->isCurrentSent()) {
       auto req = edge_buffer->pop_current();
-      GCN_DEBUG("{}:{},edge buffer send req:{},{}", __FILE__, __LINE__, (*req),
-                global_definitions.cycle);
+      GCN_DEBUG("edge buffer send req:{},{}", (*req), global_definitions.cycle);
       m_mem->send(req);
     } else if (!input_buffer->isNextEmpty() and !input_buffer->isNextSent()) {
       auto req = input_buffer->pop_next();
-      GCN_DEBUG("{}:{},input_next buffer send req:{},{}", __FILE__, __LINE__,
-                (*req), global_definitions.cycle);
+      GCN_DEBUG("input_next buffer send req:{},{}", (*req),
+                global_definitions.cycle);
       m_mem->send(req);
     } else if (!edge_buffer->isNextEmpty() and !edge_buffer->isNextSent()) {
       auto req = edge_buffer->pop_next();
-      GCN_DEBUG("{}:{},edge_next buffer send req:{},{}", __FILE__, __LINE__,
-                (*req), global_definitions.cycle);
+      GCN_DEBUG("edge_next buffer send req:{},{}", (*req),
+                global_definitions.cycle);
       m_mem->send(req);
     } else if (!output_buffer->isWriteToMemoryEmpty() and
                !output_buffer->isWriteToMemoryStarted()) {
       auto req = output_buffer->popWriteToMemReq();
-      GCN_DEBUG("{}:{},output buffer send req:{},{}", __FILE__, __LINE__,
-                (*req), global_definitions.cycle);
+      GCN_DEBUG("output buffer send req:{},{}", (*req),
+                global_definitions.cycle);
       m_mem->send(req);
     }
   }
@@ -422,7 +433,7 @@ void System::cycle() {
      // every time we find it empty, just remove current buffer, move next
    buffer
      // to current and run
-     GCN_DEBUG("{}:{},the aggregator is emtpy,cycle:{}", __FILE__, __LINE__,
+     GCN_DEBUG("{}:{},the aggregator is emtpy,cycle:{}",
                    global_definitions.cycle);
      // this is a copy
      auto j = *current_iter;
@@ -438,7 +449,7 @@ void System::cycle() {
      if (j != m_slide_window_set->end()) {
        GCN_DEBUG(
            "{}:{},the aggregator is emtpy,fetch the next input,cycle:{}",
-           __FILE__, __LINE__, global_definitions.cycle);
+            global_definitions.cycle);
 
        // prefetch the next input buffer
        auto next_input_req = std::make_shared<Req>();
@@ -457,7 +468,7 @@ void System::cycle() {
        // prefetch the next col
        GCN_DEBUG("{}:{},the aggregator is emtpy,fetch the next output and "
                      "agg,cycle:{}",
-                     __FILE__, __LINE__, global_definitions.cycle);
+                      global_definitions.cycle);
 
        edge_buffer->finish_current_move_next();
 
@@ -474,3 +485,6 @@ void System::cycle() {
      current_iter = std::make_shared<dense_window_iter>(j);
    }*/
 }
+
+// print out all element's status
+void System::print() const { fmt::print("{}\n", m_mem->get_final_result()); }

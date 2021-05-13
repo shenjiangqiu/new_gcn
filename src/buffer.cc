@@ -1,14 +1,13 @@
 #include <buffer.h>
 
+#include "debug_helper.h"
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include <utility>
-#include "debug_helper.h"
 template <typename T>
 void move_to(std::shared_ptr<T> &from, std::shared_ptr<T> &to) {
   to = std::move(from);
   from = nullptr;
-
 }
 
 // find the first rol of the next col based on current col
@@ -89,6 +88,9 @@ void Aggregator_buffer::start_read() {
   assert(read_ready and !read_busy and !read_empty);
   read_busy = true;
 }
+string Aggregator_buffer::get_stats() {
+  return "aggbuffer:\n no traffic to mem";
+}
 
 bool WriteBuffer::is_write_to_memory_empty() const {
   return write_to_memory_empty;
@@ -146,6 +148,10 @@ void WriteBuffer::finished_write_memory() {
 
 const shared_ptr<Req> &WriteBuffer::getWriteToMemReq() const {
   return write_to_mem_req;
+}
+string WriteBuffer::get_stats() {
+  return fmt::format("write_buffer:\ntotal_write_traffic: {}",
+                     total_write_traffic);
 }
 void r(bool &origin) { origin = !origin; }
 
@@ -415,3 +421,6 @@ bool ReadBuffer::isCurrentEmpty() const { return current_empty; }
 bool ReadBuffer::isCurrentSent() const { return current_sent; }
 
 bool ReadBuffer::isNextSent() const { return next_sent; }
+string ReadBuffer::get_stats() {
+  return fmt::format("read_buffer:\ntotal_read_traffic: {}",total_read_traffic);
+}

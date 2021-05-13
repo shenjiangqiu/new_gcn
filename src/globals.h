@@ -8,10 +8,16 @@
 #include "map"
 #include "utils/Options.h"
 #include "vector"
-
+#define add_config_uint64() { \
+                              \
+  }
+#define add_config_ull() {}
+#define add_config_ull_v() {}
+#define add_config_uint64_v() {}
 
 class globals {
 public:
+
   uint64_t cycle = 0;
 
   uint64_t edgeBuffer_idle_cycles = 0;
@@ -23,6 +29,11 @@ public:
   bool concate = false;
   bool initialResidual = false;
 
+  using ull = unsigned long long;
+  ull total_read_traffic = 0;
+  ull total_write_traffic = 0;
+  ull total_read_traffic_input = 0;
+  ull total_read_traffic_edge = 0;
 
   uint64_t total_waiting_input = 0;
   uint64_t total_waiting_edge = 0;
@@ -31,15 +42,15 @@ public:
   uint64_t total_aggregate_op = 0;
   uint64_t total_edges = 0;
   uint64_t total_input_windows = 0;
-  std::vector<uint64_t>layer_input_windows;
+  std::vector<uint64_t> layer_input_windows;
   std::vector<uint64_t> layer_edges;
   std::vector<uint64_t> layer_input_vertics;
   std::vector<uint64_t> layer_do_aggregate;
   std::vector<uint64_t> layer_aggregate_op;
-  std::vector<uint64_t>layer_do_systolic;
-  std::vector<uint64_t>layer_wait_input;
-  std::vector<float>layer_window_avg_agg;
-  std::vector<float>layer_window_avg_input;
+  std::vector<uint64_t> layer_do_systolic;
+  std::vector<uint64_t> layer_wait_input;
+  std::vector<float> layer_window_avg_agg;
+  std::vector<float> layer_window_avg_input;
   uint64_t do_systolic = 0;
   uint64_t total_waiting_agg_read = 0;
   uint64_t total_waiting_out = 0;
@@ -66,6 +77,12 @@ public:
       {"gcn", Model("gcn", {16, 16}, false, false, 0)},
       {"gsc", Model("gsc", {512, 512}, false, true, 25)},
       {"gin", Model("gin", {64, 64, 64, 64, 64}, false, false, 0)}};
+
+  std::map<std::string, uint64_t> config_uint64;
+  std::map<std::string, ull> config_ull;
+
+  std::map<std::string, std::vector<uint64_t>> config_uint64_v;
+  std::map<std::string, std::vector<ull>> config_ull_v;
 };
 extern globals global_definitions;
 

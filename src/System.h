@@ -19,7 +19,7 @@ public:
          int systolic_cols, std::shared_ptr<Graph> graph,
          std::vector<int> node_size, const std::string &dram_config_name,
          std::shared_ptr<Model> mModel);
-
+  void print() const;
   void cycle();
   void run();
   auto &&get_sliding_window() { return m_slide_window_set; }

@@ -59,8 +59,17 @@ private:
     // return the all finished reqs
     return finished_reqs;
   }
+  unsigned long long total_traffic = 0;
+  ull total_read = 0;
+  ull total_write = 0;
 
 public:
+  [[nodiscard]] std::string get_final_result() const {
+    auto ret = fmt::format(
+        "mem_interface:\nfinal_traffic: {}\ntotal_read: {}\ntotal_write: {}\n",
+        total_traffic, total_read, total_write);
+    return ret;
+  }
   bool empty() {
     return req_queue.empty() and out_send_queue.empty() and
            response_queue.empty() and task_return_queue.empty() and
