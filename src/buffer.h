@@ -14,6 +14,7 @@ using ull = unsigned long long;
 void r(bool &origin);
 class Name_object {
 public:
+  virtual ~Name_object()=default;
   explicit Name_object(std::string name) : name(std::move(name)) {}
   const std::string &get_name() { return name; }
   virtual std::string get_line_trace() {
@@ -27,6 +28,7 @@ private:
 
 class Aggregator_buffer : public Name_object {
 public:
+  virtual ~Aggregator_buffer()=default;
   explicit Aggregator_buffer(string name);
   virtual std::string get_line_trace() override {
     return fmt::format("write_empty={} write_ready={} read_empty={} "
@@ -145,6 +147,7 @@ private:
 */
 class WriteBuffer : public Name_object {
 public:
+  virtual ~WriteBuffer()=default;
   string get_stats() override;
   virtual std::string get_line_trace() override {
     return fmt::format("write_to_buffer_empty={} write_to_buffer_started={} "
@@ -210,6 +213,7 @@ private:
 // only read the edge , do not read edge index now
 class ReadBuffer : public Name_object {
 public:
+  virtual ~ReadBuffer()=default;
   string get_stats() override;
   virtual std::string get_line_trace() override {
     return fmt::format("current_empty={} current_ready={} "
@@ -221,7 +225,6 @@ public:
   bool idle() { return current_ready and next_ready; }
   explicit ReadBuffer(const string &basicString,
                       const std::shared_ptr<dense_window_set> &m_set);
-  virtual ~ReadBuffer() = default;
   virtual void cycle() = 0;
 
   [[nodiscard]] bool isCurrentReady() const;
@@ -276,6 +279,7 @@ protected:
 
 class EdgeBuffer : public ReadBuffer {
 public:
+  virtual ~EdgeBuffer()=default;
   explicit EdgeBuffer(const string &name,
                       const std::shared_ptr<dense_window_set> &m_set);
   void cycle() override;

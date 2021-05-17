@@ -1,5 +1,6 @@
 #include <buffer.h>
 
+#include "Slide_window.h"
 #include "debug_helper.h"
 #include "globals.h"
 #include "spdlog/spdlog.h"
@@ -144,9 +145,11 @@ void WriteBuffer::finished_write_memory() {
   r(write_to_memory_started);
   if (write_to_mem_req->the_final_request) {
     global_definitions.finished = true;
+    fmt::print("the final one!:{}\n", *write_to_mem_req);
   }
   if (write_to_mem_req->the_final_request_of_the_layer) {
     global_definitions.finished_time_stamp.push_back(global_definitions.cycle);
+    fmt::print("the final col:{}\n", *write_to_mem_req);
   }
   write_to_mem_req = nullptr;
 }
@@ -326,13 +329,23 @@ shared_ptr<Req> InputBuffer::pop_current() {
   assert(!current_empty and !current_sent);
   current_sent = true;
   auto req = std::make_shared<Req>();
-  if(config::enable_dense_window){
+  if (config::enable_dense_window)
+    GCN_DEBUG("inputbuffer pop current:{}",
+              *std::static_pointer_cast<dense_window>(*m_current_iter));
+  else
+    GCN_DEBUG("inputbuffer pop current:{}",
+              *std::static_pointer_cast<Slide_window>(*m_current_iter));
+
+  if (config::enable_dense_window) {
     req->set_addr((**m_current_iter).getInputAddr());
 
-  }else{
-    req->set_addr((**m_current_iter).getInputAddr_c(),(**m_current_iter).getInputLen());
+  } else {
+    req->set_addr((**m_current_iter).getInputAddr_c(),
+                  (**m_current_iter).getInputLen());
   }
-  req->items_cnt =config::enable_dense_window? (**m_current_iter).getY().size():(**m_current_iter).getYw();
+  req->items_cnt = config::enable_dense_window
+                       ? (**m_current_iter).getY().size()
+                       : (**m_current_iter).getYw();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   current_req = req;
@@ -346,13 +359,21 @@ shared_ptr<Req> InputBuffer::pop_next() {
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
-  if(config::enable_dense_window){
-    req->set_addr((**m_current_iter).getInputAddr());
+  if (config::enable_dense_window)
+    GCN_DEBUG("inputbuffer pop next:{}",
+              *std::static_pointer_cast<dense_window>(*m_next_iter));
+  else
+    GCN_DEBUG("inputbuffer pop next:{}",
+              *std::static_pointer_cast<Slide_window>(*m_next_iter));
+  if (config::enable_dense_window) {
+    req->set_addr((**m_next_iter).getInputAddr());
 
-  }else{
-    req->set_addr((**m_current_iter).getInputAddr_c(),(**m_current_iter).getInputLen());
+  } else {
+    req->set_addr((**m_next_iter).getInputAddr_c(),
+                  (**m_next_iter).getInputLen());
   }
-  req->items_cnt = config::enable_dense_window? (**m_current_iter).getY().size():(**m_current_iter).getYw();
+  req->items_cnt = config::enable_dense_window ? (**m_next_iter).getY().size()
+                                               : (**m_next_iter).getYw();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   next_req = req;

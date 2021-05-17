@@ -68,7 +68,7 @@ public:
 
   bool isTheFinalColOfTheLayer() const;
 
-  [[nodiscard]] unsigned getNumEdgesInWindow() const;
+  [[nodiscard]] unsigned getNumEdgesInWindow() const override;
 
 private:
   unsigned x{};  // x: starting vertex ID in the aggregation buffer
@@ -115,13 +115,13 @@ template <> struct fmt::formatter<Slide_window> {
     auto out =
         simple
             ? format_to(ctx.out(), "{} {} {} {} {} fnc:{} fnr:{} fsr:{}",
-                        p.getX(), p.getY(), p.getXw(), p.getYw(), p.getLevel(),
+                        p.getX(), p.getY_c(), p.getXw(), p.getYw(), p.getLevel(),
                         p.isTheFinalCol(), p.isTheFinalRow(), p.isTheFirstRow())
             : format_to(ctx.out(),
                         "x {} y {} {} {} l {} i_a {} e_a {} o_a {} i_l {} "
                         "e_l {} o_l {} n_n:{} fnc:{} fnr:{} fsr:{}",
-                        p.getX(), p.getY(), p.getXw(), p.getYw(), p.getLevel(),
-                        p.getInputAddr(), p.getEdgeAddr(), p.getOutputAddr(),
+                        p.getX(), p.getY_c(), p.getXw(), p.getYw(), p.getLevel(),
+                        p.getInputAddr_c(), p.getEdgeAddr(), p.getOutputAddr(),
                         p.getInputLen(), p.getEdgeLen(), p.getOutputLen(),
                         p.getNumEdgesInWindow(), p.isTheFinalCol(),
                         p.isTheFinalRow(), p.isTheFirstRow());

@@ -104,7 +104,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     GCN_INFO("yws push back:{}", yw_s.back());
   }
 
-  for (auto i = 0; i < total_level; i++) {
+  for (auto i = 0; i < total_level-1; i++) {
     global_definitions.layer_input_windows.push_back(0);
     global_definitions.layer_edges.push_back(0);
     global_definitions.layer_input_vertics.push_back(0);
@@ -195,6 +195,8 @@ void System::run() {
             << std::endl;
   kv_maps map;
 
+
+
   map.push(std::string("total_Aggregator_idle_waiting_input"),
            global_definitions.total_waiting_input);
   map.push(std::string("total_Aggregator_idle_waiting_edge"),
@@ -256,49 +258,49 @@ void System::run() {
                    global_definitions.total_read_input_times
             << "\n\n";
 
-  GCN_INFO("layer_completion_time  {}\n",
+  GCN_INFO("layer_completion_time  {}",
            fmt::join(global_definitions.finished_time_stamp.begin(),
                      global_definitions.finished_time_stamp.end(), "  "));
 
   auto layer_time = global_definitions.finished_time_stamp;
-  int total_level = layer_time.size();
-  for (int i = total_level - 1; i > 0; i--) {
+  int total_level_r = layer_time.size();
+  for (int i = total_level_r; i > 0; i--) {
     layer_time[i] = global_definitions.finished_time_stamp[i] -
                     global_definitions.finished_time_stamp[i - 1];
   }
 
-  GCN_INFO("layer_input_windows  {}\n",
+  GCN_INFO("layer_input_windows  {}",
            fmt::join(global_definitions.layer_input_windows.begin(),
                      global_definitions.layer_input_windows.end(), "  "));
 
-  GCN_INFO("layer_edges  {}\n",
+  GCN_INFO("layer_edges  {}",
            fmt::join(global_definitions.layer_edges.begin(),
                      global_definitions.layer_edges.end(), "  "));
 
-  GCN_INFO("layer_input_vertics  {}\n",
+  GCN_INFO("layer_input_vertics  {}",
            fmt::join(global_definitions.layer_input_vertics.begin(),
                      global_definitions.layer_input_vertics.end(), "  "));
 
-  GCN_INFO("layer_time  {}\n",
+  GCN_INFO("layer_time  {}",
            fmt::join(layer_time.begin(), layer_time.end(), "  "));
 
-  GCN_INFO("layer_wait_input_time  {}\n",
+  GCN_INFO("layer_wait_input_time  {}",
            fmt::join(global_definitions.layer_wait_input.begin(),
                      global_definitions.layer_wait_input.end(), "  "));
 
-  GCN_INFO("layer_aggregate_time  {}\n",
+  GCN_INFO("layer_aggregate_time  {}",
            fmt::join(global_definitions.layer_do_aggregate.begin(),
                      global_definitions.layer_do_aggregate.end(), "  "));
 
-  GCN_INFO("layer_systolic_time  {}\n",
+  GCN_INFO("layer_systolic_time  {}",
            fmt::join(global_definitions.layer_do_systolic.begin(),
                      global_definitions.layer_do_systolic.end(), "  "));
 
-  GCN_INFO("layer_aggregate_op  {}\n",
+  GCN_INFO("layer_aggregate_op  {}",
            fmt::join(global_definitions.layer_aggregate_op.begin(),
                      global_definitions.layer_aggregate_op.end(), "  "));
 
-  for (auto i = 0; i < total_level; i++) {
+  for (auto i = 0; i < total_level_r; i++) {
     auto cnt = global_definitions.layer_input_windows[i];
     auto agg_time = global_definitions.layer_do_aggregate[i];
     auto input_time = global_definitions.layer_wait_input[i];
@@ -308,11 +310,11 @@ void System::run() {
     global_definitions.layer_window_avg_input[i] = avg_input_time;
   }
 
-  GCN_INFO("layer_window_avg_input_lat  {}\n",
+  GCN_INFO("layer_window_avg_input_lat  {}",
            fmt::join(global_definitions.layer_window_avg_input.begin(),
                      global_definitions.layer_window_avg_input.end(), "  "));
 
-  GCN_INFO("layer_window_avg_agg_lat  {}\n",
+  GCN_INFO("layer_window_avg_agg_lat  {}",
            fmt::join(global_definitions.layer_window_avg_agg.begin(),
                      global_definitions.layer_window_avg_agg.end(), "  "));
 

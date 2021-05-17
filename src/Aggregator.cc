@@ -27,11 +27,17 @@ void Aggregator::cycle() {
     remaining_cycles--;
     if (remaining_cycles == 0) {
       working = false;
-      GCN_DEBUG(
-          "aggregator finished run task. width(x): {} hight(y): {},cycle: {}",
-          current_sliding_window->getX(),
-          fmt::join(current_sliding_window->getY(), ","),
-          global_definitions.cycle);
+      if (config::enable_dense_window)
+        GCN_DEBUG(
+            "aggregator finished run task. width(x): {} hight(y): {},cycle: {}",
+            current_sliding_window->getX(),
+            fmt::join(current_sliding_window->getY(), ","),
+            global_definitions.cycle);
+      else
+        GCN_DEBUG(
+            "aggregator finished run task. width(x): {} hight(y): {},cycle: {}",
+            current_sliding_window->getX(), current_sliding_window->getY_c(),
+            global_definitions.cycle);
 
       input_buffer->finished_current();
       // decide if finished edge buffer
@@ -65,10 +71,15 @@ void Aggregator::cycle() {
       if (current_sliding_window->isTheFirstRow()) {
         agg_buffer->add_new_task(current_sliding_window);
       }
-      GCN_DEBUG("aggregator start to run task x: {} y: {} ,cycle: {}",
-                current_sliding_window->getX(),
-                fmt::join(current_sliding_window->getY(), ","),
-                global_definitions.cycle);
+      if (config::enable_dense_window)
+        GCN_DEBUG("aggregator start to run task x: {} y: {} ,cycle: {}",
+                  current_sliding_window->getX(),
+                  fmt::join(current_sliding_window->getY(), ","),
+                  global_definitions.cycle);
+      else
+        GCN_DEBUG("aggregator start to run task x: {} y: {} ,cycle: {}",
+                  current_sliding_window->getX(),
+                  current_sliding_window->getY_c(), global_definitions.cycle);
     } else {
       if (!input_buffer->isCurrentReady()) {
         global_definitions.total_waiting_input++;
@@ -128,7 +139,9 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.total_aggregate_op += total_elements;
   global_definitions.total_edges += total_nodes;
 
-  auto input_vertices_cnt = config::enable_dense_window? current_sliding_window->getY().size():current_sliding_window->getYw();
+  auto input_vertices_cnt = config::enable_dense_window
+                                ? current_sliding_window->getY().size()
+                                : current_sliding_window->getYw();
   // int edges_cnt = current_sliding_window->getNumEdgesInWindow();
   // float input_efficiency = (float)(edges_cnt)/(float)input_vertices_cnt;
   // int eff = (int)(input_efficiency*1000);
@@ -143,13 +156,19 @@ int Aggregator::calculate_remaining_cycle() {
 
   GCN_DEBUG("total elements: {} ,total size: {}", total_elements,
             total_elements * 4);
-
-  GCN_DEBUG(
-      "aggregator culculate window cycles. x: {} y: {}, result: {} ,rounds: {}",
-      current_sliding_window->getX(),
-      fmt::join(current_sliding_window->getY(), ","),
-      (total_elements + total_cores - 1) / total_cores,
-      global_definitions.cycle);
+  if (config::enable_dense_window)
+    GCN_DEBUG("aggregator culculate window cycles. x: {} y: {}, result: {} "
+              ",rounds: {}",
+              current_sliding_window->getX(),
+              fmt::join(current_sliding_window->getY(), ","),
+              (total_elements + total_cores - 1) / total_cores,
+              global_definitions.cycle);
+  else
+    GCN_DEBUG("aggregator culculate window cycles. x: {} y: {}, result: {} "
+              ",rounds: {}",
+              current_sliding_window->getX(), current_sliding_window->getY_c(),
+              (total_elements + total_cores - 1) / total_cores,
+              global_definitions.cycle);
 
   double sparse_rate = 0;
 

@@ -22,7 +22,7 @@ public:
   void print() const;
   void cycle();
   void run();
-  auto &&get_sliding_window() { return m_slide_window_set; }
+  std::shared_ptr<dense_window_set> get_sliding_window() { return m_slide_window_set; }
 
 private:
   std::shared_ptr<Graph> m_graph;
@@ -42,7 +42,6 @@ private:
   std::shared_ptr<Aggregator> m_aggregator;
   std::shared_ptr<SystolicArray> m_systolic_array;
 
-  bool finished{false};
   window_iter current_iter;
   window_iter prev_iter;
   std::shared_ptr<Model> m_model;

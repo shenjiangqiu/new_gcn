@@ -4,11 +4,11 @@
 
 #include "SystolicArray.h"
 
+#include "Slide_window.h"
+#include "debug_helper.h"
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include <memory>
-#include"debug_helper.h"
-
 SystolicArray::SystolicArray(int totalRows, int totalCols,
                              const shared_ptr<Aggregator_buffer> &aggBuffer,
                              const shared_ptr<WriteBuffer> &outputBuffer)
@@ -48,10 +48,10 @@ int SystolicArray::cal_remaining_cycle() {
   }
   if (node_size <= 0) {
     GCN_ERROR("node size < 0 happend,concate:{}, origin node "
-                  "size:{},ignore_nei:{},ignore_self:{},level:{}",
-                  global_definitions.concate,
-                  current_sliding_window->getCurrentNodeSize(),
-                  config::ignore_neighbor, config::ignore_self);
+              "size:{},ignore_nei:{},ignore_self:{},level:{}",
+              global_definitions.concate,
+              current_sliding_window->getCurrentNodeSize(),
+              config::ignore_neighbor, config::ignore_self);
     spdlog::flush_on(spdlog::level::err);
     throw std::runtime_error("can't check the size");
   }
@@ -76,10 +76,10 @@ int SystolicArray::cal_remaining_cycle() {
             node_size <=
         0) {
       GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
-                    "total_rows:{},next_node_size:{},elements_steps*total_cols:"
-                    "{},node_size:{}",
-                    steps, elements_steps, total_rows, next_node_size,
-                    elements_steps * total_cols, node_size);
+                "total_rows:{},next_node_size:{},elements_steps*total_cols:"
+                "{},node_size:{}",
+                steps, elements_steps, total_rows, next_node_size,
+                elements_steps * total_cols, node_size);
       spdlog::flush_on(spdlog::level::err);
       throw std::runtime_error("wrong cycle happened!");
     }
@@ -96,10 +96,10 @@ int SystolicArray::cal_remaining_cycle() {
     total_cycles += (total_rows * total_cols / 4) / 32;
     if (remaining_rows <= 0 or remaining_rows > total_rows) {
       GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
-                    "total_rows:{},next_node_size:{},elements_steps*total_cols:"
-                    "{},node_size:{}",
-                    steps, elements_steps, total_rows, next_node_size,
-                    elements_steps * total_cols, node_size);
+                "total_rows:{},next_node_size:{},elements_steps*total_cols:"
+                "{},node_size:{}",
+                steps, elements_steps, total_rows, next_node_size,
+                elements_steps * total_cols, node_size);
     }
   }
   // calculate the last row the last col
@@ -112,10 +112,10 @@ int SystolicArray::cal_remaining_cycle() {
   if (remaining_rows <= 0 or remaining_cols <= 0 or
       remaining_rows > total_rows or remaining_cols > total_cols) {
     GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
-                  "total_rows:{},next_node_size:{},elements_steps*total_cols:"
-                  "{},node_size:{}",
-                  steps, elements_steps, total_rows, next_node_size,
-                  elements_steps * total_cols, node_size);
+              "total_rows:{},next_node_size:{},elements_steps*total_cols:"
+              "{},node_size:{}",
+              steps, elements_steps, total_rows, next_node_size,
+              elements_steps * total_cols, node_size);
     spdlog::flush_on(spdlog::level::err);
     throw std::runtime_error("wrong cycle happened!");
   }
@@ -128,16 +128,27 @@ void SystolicArray::cycle() {
   if (empty and agg_buffer->isReadReady() and !agg_buffer->isReadBusy() and
       !agg_buffer->isReadEmpty() and output_buffer->isWriteToBufferEmpty()) {
     GCN_DEBUG("systolic array start a new task,cycle:{}",
-                  global_definitions.cycle);
+              global_definitions.cycle);
     // generate the output buffer request.
     current_sliding_window = agg_buffer->getReadWindow();
     auto req = std::make_shared<Req>();
     req->the_final_request = current_sliding_window->isTheFinalCol() and
                              current_sliding_window->isTheFinalLayer();
+    // fix bug here, because each col will only apeare once, so only the first
+    // row will be here.so do not need to test if it's the last row.
+    // old:current_sliding_window->isTheFinalCol() and
+    // current_sliding_window->isTheFinalRow()
 
     req->the_final_request_of_the_layer =
-        current_sliding_window->isTheFinalRow() and
         current_sliding_window->isTheFinalCol();
+    if (config::enable_dense_window)
+      GCN_DEBUG("window:{}, final_request:{}, final_request_of_row:{}",
+                *std::static_pointer_cast<dense_window>(current_sliding_window),
+                req->the_final_request, req->the_final_request_of_the_layer);
+    else
+      GCN_DEBUG("window:{}, final_request:{}, final_request_of_row:{}",
+                *std::static_pointer_cast<Slide_window>(current_sliding_window),
+                req->the_final_request, req->the_final_request_of_the_layer);
 
     req->set_addr(current_sliding_window->getOutputAddr(),
                   current_sliding_window->getOutputLen());
@@ -154,7 +165,6 @@ void SystolicArray::cycle() {
     global_definitions.do_systolic += remaining_cycle;
     // start agg buffer read
     agg_buffer->start_read();
-
 
   } else {
     if (!agg_buffer->isReadReady()) {
