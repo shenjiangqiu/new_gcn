@@ -40,6 +40,9 @@ TEST_CASE("mix_test") {
                   (std::string)config::dram_name, m_model);
 
   m_system.run();
+  delete[] argv[0];
+  delete[] argv[1];
+  delete[] argv;
 }
 
 TEST_CASE("cont_test") {
@@ -73,4 +76,7 @@ TEST_CASE("cont_test") {
                   (std::string)config::dram_name, m_model);
 
   m_system.run();
+  delete[] argv[0];
+  delete[] argv[1];
+  delete[] argv;
 }
