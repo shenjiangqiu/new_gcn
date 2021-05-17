@@ -264,7 +264,13 @@ void System::run() {
 
   auto layer_time = global_definitions.finished_time_stamp;
   int total_level_r = layer_time.size();
-  for (int i = total_level_r; i > 0; i--) {
+
+  // fix bug here, finished time_stamp[0] is alread layer time
+  // if finished_time_stamp is [1,2]
+  // the layer time should be [1-0,2-1]
+  // so we need to calculate f[1]-f[0], i=1, end, so i begin at size-1, end at 1
+  // before: i = total_level //
+  for (int i = total_level_r-1; i > 0; i--) {
     layer_time[i] = global_definitions.finished_time_stamp[i] -
                     global_definitions.finished_time_stamp[i - 1];
   }
