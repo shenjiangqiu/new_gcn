@@ -12,8 +12,8 @@
 TEST_CASE("mix_test") {
   // first test dense
   char **argv = new char *[10];
-  argv[0] = new char[10];
-  argv[1] = new char[10];
+  argv[0] = new char[100];
+  argv[1] = new char[100];
   spdlog::set_level(spdlog::level::info);
 
   strcpy(argv[0], "test");
@@ -48,8 +48,8 @@ TEST_CASE("mix_test") {
 TEST_CASE("cont_test") {
 
   char **argv = new char *[10];
-  argv[0] = new char[10];
-  argv[1] = new char[10];
+  argv[0] = new char[100];
+  argv[1] = new char[100];
   spdlog::set_level(spdlog::level::info);
 
   strcpy(argv[0], "test");
