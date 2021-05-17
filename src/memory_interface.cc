@@ -46,9 +46,13 @@ void memory_interface::cycle() {
     //  insert to requst to mem, record the req info
     auto send_reqs = [&](uint64_t addr, std::shared_ptr<Req> &req) {
       // the addr is all new! send it to lower memroy
-      if (!addr_to_req_map.contains(addr)) {
+      if (!addr_to_req_map.count(addr)) {
 
         out_send_queue.push({addr, req->req_type == mem_request::write});
+        // fix bug here
+        // the traffic should only contain those really send to dram.
+        // before(update every time call send_reqs!!)
+        update_traffic(64,req->t);
       }
 
       // add the req to the record
@@ -67,7 +71,10 @@ void memory_interface::cycle() {
           m_mem->send(addr, true);
           // task_return_queue.push(req);
           // req_queue.pop();
-          update_traffic(64, req->t);
+
+          //the write traffic!
+          assert(req->t==device_types::output_buffer);
+          update_traffic(64, device_types::output_buffer);
           if (len <= 64) {
             GCN_DEBUG("{}:{} ,finished write: {}", __FILE__, __LINE__, *req);
 
@@ -93,15 +100,12 @@ void memory_interface::cycle() {
       auto addr = req->get_single_addr();
       auto len = req->get_len();
       auto count = (len + 63) / 64;
-      update_traffic(64, req->t);
       for (auto i : boost::irange(0u, count)) {
         send_reqs(addr + i * 64, req);
       }
     } else {
       auto &&addrs = req->get_addr();
       for (auto addr : addrs) {
-        update_traffic(64, req->t);
-
         send_reqs(addr, req);
       }
     }

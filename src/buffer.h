@@ -10,7 +10,6 @@
 #include <string>
 #include <types.h>
 #include <utility>
-using ull = unsigned long long;
 void r(bool &origin);
 class Name_object {
 public:
@@ -196,7 +195,7 @@ public:
     start_write_memory();
     return getWriteToMemReq();
   }
-  ull total_write_traffic = 0;
+  unsigned long long total_write_traffic = 0;
 
 private:
   std::shared_ptr<Req> write_to_buffer_req;
@@ -251,7 +250,7 @@ public:
   }
 
   [[nodiscard]] const window_iter &getMCurrentIter() const;
-  ull total_read_traffic = 0;
+  unsigned long long total_read_traffic = 0;
 
 protected:
 #define MAX_REQ 32

@@ -13,33 +13,32 @@
 #include <types.h>
 
 using uint = unsigned;
-using ull = uint64_t;
 class memory_interface {
 private:
   unsigned waiting_size;
 
   std::queue<std::shared_ptr<Req>> req_queue;
   // addr, is_write
-  std::queue<std::pair<ull, bool>> out_send_queue;
+  std::queue<std::pair<uint64_t, bool>> out_send_queue;
   std::queue<uint64_t> response_queue;
   std::queue<std::shared_ptr<Req>> task_return_queue;
 
   std::map<unsigned, std::shared_ptr<Req>> id_to_reqs_map;
   std::shared_ptr<dram_wrapper> m_mem;
 
-  std::map<uint, std::set<ull>> req_id_to_addr_map;
-  std::map<ull, std::set<uint>> addr_to_req_map;
+  std::map<uint, std::set<uint64_t>> req_id_to_addr_map;
+  std::map<uint64_t, std::set<uint>> addr_to_req_map;
 
   // record the request, when the request returned, we can find all the id
   // related to this addr, and find all addrs related to this id to decide if to
   // return or not
-  void insert_pending_request(ull addr, uint req_id) {
+  void insert_pending_request(uint64_t addr, uint req_id) {
     req_id_to_addr_map[req_id].insert(addr);
     addr_to_req_map[addr].insert(req_id);
   }
 
   // the request returned from the lower memory
-  std::vector<uint> receive_req(ull addr) {
+  std::vector<uint> receive_req(uint64_t addr) {
     std::vector<uint> finished_reqs;
     // find all id related to this addr
     auto &id_set = addr_to_req_map[addr];
@@ -60,8 +59,8 @@ private:
     return finished_reqs;
   }
   unsigned long long total_traffic = 0;
-  ull total_read = 0;
-  ull total_write = 0;
+  uint64_t total_read = 0;
+  uint64_t total_write = 0;
 
 public:
   [[nodiscard]] std::string get_final_result() const {

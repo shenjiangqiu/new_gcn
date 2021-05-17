@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 class Graph {
-  using ull = uint64_t;
   // the csc format graph
 
 public:
@@ -17,11 +16,11 @@ public:
   // index
   [[nodiscard]] unsigned get_num_nodes() const { return edge_index.size() - 1; }
 
-  [[nodiscard]] ull get_edge_index_addr(unsigned index) const {
-    return (ull) & (edge_index.at(index));
+  [[nodiscard]] uint64_t get_edge_index_addr(unsigned index) const {
+    return (uint64_t) & (edge_index.at(index));
   }
 
-  [[nodiscard]] ull get_edge_addr(unsigned index) const { return (ull) & (edges.at(index)); }
+  [[nodiscard]] uint64_t get_edge_addr(unsigned index) const { return (uint64_t) & (edges.at(index)); }
 
   [[nodiscard]] unsigned get_edge_size(unsigned index) const {
     return edge_index.at(index + 1) - edge_index.at(index);
