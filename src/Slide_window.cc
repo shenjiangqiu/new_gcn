@@ -2,7 +2,7 @@
 // Created by sjq on 1/4/21.
 //
 
-#include "sliding_window_dense.h"
+#include "Slide_window.h"
 
 #include "globals.h"
 #include "size.h"
@@ -11,52 +11,41 @@
 #include <map>
 #include <numeric>
 #include <utility>
-Slide_window::Slide_window(int x, int y, int xw, int yw, int level,
-                           uint64_t inputAddr, uint64_t edgeAddr,
-                           uint64_t outputAddr, int inputLen, int edgeLen,
-                           int outputLen, int numNodesInWindow,
-                           int currentNodeSize, bool the_final_col,
-                           bool theFinalRow, bool theFirstRow,
-                           bool theFinalColOfTheLayer,int validNodes)
-    : x(x), y(y), xw(xw), yw(yw), level(level), input_addr(inputAddr),
-      edge_addr(edgeAddr), output_addr(outputAddr), input_len(inputLen),
-      edge_len(edgeLen), output_len(outputLen),
-      num_edges_in_window(numNodesInWindow), current_node_size(currentNodeSize),
-      the_final_col(the_final_col),
-      the_final_col_of_the_layer(theFinalColOfTheLayer),
-      the_final_row(theFinalRow),
+unsigned Slide_window::getX() const { return x; }
 
-      the_first_row(theFirstRow),valid_nodes(validNodes) {}
+std::vector<unsigned> Slide_window::getY() const {
+  throw std::runtime_error("error");
+}
 
-int Slide_window::getX() const { return x; }
+unsigned Slide_window::getXw() const { return xw; }
 
-int Slide_window::getY() const { return y; }
+unsigned Slide_window::getYw() const { return yw; }
 
-int Slide_window::getXw() const { return xw; }
+unsigned Slide_window::getLevel() const { return level; }
 
-int Slide_window::getYw() const { return yw; }
-
-int Slide_window::getLevel() const { return level; }
-
-uint64_t Slide_window::getInputAddr() const { return input_addr; }
+std::vector<uint64_t> Slide_window::getInputAddr() const {
+  throw std::runtime_error("Error");
+}
 
 uint64_t Slide_window::getEdgeAddr() const { return edge_addr; }
 
 uint64_t Slide_window::getOutputAddr() const { return output_addr; }
 
-int Slide_window::getInputLen() const { return input_len; }
+unsigned Slide_window::getInputLen() const { return input_len; }
 
-int Slide_window::getEdgeLen() const { return edge_len; }
+unsigned Slide_window::getEdgeLen() const { return edge_len; }
 
-int Slide_window::getOutputLen() const { return output_len; }
+unsigned Slide_window::getOutputLen() const { return output_len; }
 
-int Slide_window::getNumEdgesInWindow() const { return num_edges_in_window; }
+unsigned Slide_window::getNumEdgesInWindow() const {
+  return num_edges_in_window;
+}
 
-int Slide_window::getCurrentNodeSize() const { return current_node_size; }
+unsigned Slide_window::getCurrentNodeSize() const { return current_node_size; }
 
 bool Slide_window::operator==(const Slide_window &rhs) const {
   return x == rhs.x && y == rhs.y && xw == rhs.xw && yw == rhs.yw &&
-         level == rhs.level && input_addr == rhs.input_addr &&
+         level == rhs.level && input_addr_c == rhs.input_addr_c &&
          edge_addr == rhs.edge_addr && output_addr == rhs.output_addr &&
          input_len == rhs.input_len && edge_len == rhs.edge_len &&
          output_len == rhs.output_len &&
@@ -78,21 +67,13 @@ void Slide_window::setTheFinalRow(bool theFinalRow) {
   the_final_row = theFinalRow;
 }
 
-bool Slide_window::isTheFinalColOfTheLayer() const {
-  return the_final_col_of_the_layer;
-}
-int Slide_window::getValidInputLen() const {
-  //suppose we can skip those nodes that no edge on it.
-  return valid_nodes*current_node_size*4;
-}
-
 Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
                                    std::vector<int> xwS, std::vector<int> ywS,
                                    std::vector<int> nodeSizeS, int totalLevel)
     : m_graph(std::move(mGraph)), xw_s(std::move(xwS)), yw_s(std::move(ywS)),
       node_size_s(std::move(nodeSizeS)), total_level(totalLevel) {
-  assert(xw_s.size() == unsigned (total_level - 1));
-  assert(node_size_s.size() == unsigned (total_level));
+  assert(xw_s.size() == unsigned(total_level - 1));
+  assert(node_size_s.size() == unsigned(total_level));
   bool the_first_row;
   uint64_t start_addr = 0xff11ff00;
   // for the first layer, we should ignore the empty entries
@@ -108,7 +89,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
   // each layer
   uint64_t total_len = 0;
   for (auto level_i = 0; level_i < totalLevel - 1; level_i++) {
-    
+
     if (level_i != 0) {
       m_sliding_window_vec.back().setTheFinalRow(true);
       m_sliding_window_multi_level[level_i - 1].back().back().setTheFinalRow(
@@ -118,7 +99,7 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
     m_sliding_window_multi_level.emplace_back();
     auto col_i = 0;
     uint current_layer_input_len = 0;
-    
+
     while (col_i < (int)m_graph->get_num_nodes()) {
       if (!m_sliding_window_multi_level[level_i].empty()) {
 
@@ -166,9 +147,9 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         auto total_edges = std::accumulate(
             lower_bound, upper_bound, 0,
             [](int value, auto &&pair) { return value + pair.second; });
-        auto total_valid_node=std::accumulate(
-            lower_bound, upper_bound, 0,
-            [](int value, auto &&) { return value + 1; });
+        auto total_valid_node =
+            std::accumulate(lower_bound, upper_bound, 0,
+                            [](int value, auto &&) { return value + 1; });
         auto &&edge_index = m_graph->get_edge_index();
 
         uint64_t input_addr = 0;
@@ -201,33 +182,22 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
             (col_end - col_i) * node_size_s.at(level_i + 1) * single_node_size;
         bool the_last_col = ((level_i == total_level - 2) and
                              col_end >= (int)m_graph->get_num_nodes());
-        bool the_last_col_of_the_layer = col_end >= (int)m_graph->get_num_nodes();
+        bool the_last_col_of_the_layer =
+            col_end >= (int)m_graph->get_num_nodes();
 
-
-        m_sliding_window_vec.emplace_back(
-            col_i, row_i, xw_s[level_i], row_end - row_i, level_i, input_addr,
-            edge_addr, output_addr, input_len, edge_len, output_len,
-            total_edges,
-            node_size_s[level_i], the_last_col, false, the_first_row,
-            the_last_col_of_the_layer,total_valid_node);
-        m_sliding_window_multi_level.back().back().emplace_back(
-            col_i, row_i, xw_s[level_i], row_end - row_i, level_i, input_addr,
-            edge_addr, output_addr, input_len, edge_len, output_len,
-            total_edges,
-            node_size_s[level_i], the_last_col, false, the_first_row,
-            the_last_col_of_the_layer,total_valid_node);
+        // TODO create window here
         row_i = row_end;
         the_first_row = false;
       }
-      //std::cout << "col input len: " << current_col_input_len << std::endl;
+      // std::cout << "col input len: " << current_col_input_len << std::endl;
       current_layer_input_len += current_col_input_len;
       col_i = col_end;
     }
-    //std::cout << "\n\nlayer input len: " << current_layer_input_len
-    //          << std::endl;
+    // std::cout << "\n\nlayer input len: " << current_layer_input_len
+    //           << std::endl;
     total_len += current_layer_input_len;
   }
-  //std::cout << "\n\ntotal_len: " << total_len << std::endl;
+  // std::cout << "\n\ntotal_len: " << total_len << std::endl;
   m_sliding_window_multi_level.back().back().back().setTheFinalRow(true);
   m_sliding_window_vec.back().setTheFinalRow(true);
 }
@@ -455,4 +425,49 @@ slide_window_set_iterator slide_window_set_iterator::setThirdIter(
 }
 const Slide_window &slide_window_set_iterator::operator*() const {
   return *first_iter;
+}
+void Slide_window::set_location(unsigned int , unsigned int ,
+                                std::vector<unsigned int> ,
+                                unsigned int ) {
+  throw std::runtime_error("not supported!");
+}
+void Slide_window::set_addr(std::vector<uint64_t> ,
+                            unsigned int , uint64_t ,
+                            unsigned int , uint64_t ,
+                            unsigned int ) {
+  throw std::runtime_error("not supported!");
+}
+void Slide_window::set_addr(uint64_t inputAddr, unsigned int inputLen,
+                            uint64_t edgeAddr, unsigned int edgeLen,
+                            uint64_t outputAddr, unsigned int outputLen) {
+  this->input_addr_c = inputAddr;
+  this->input_len = inputLen;
+  this->edge_addr = edgeAddr;
+  this->edge_len = edgeLen;
+  this->output_addr = outputAddr;
+  this->output_len = outputLen;
+}
+void Slide_window::set_size(unsigned int currentEdges,
+                            unsigned int currentNodeSize) {
+  this->num_edges_in_window = currentEdges;
+  this->current_node_size = currentNodeSize;
+}
+void Slide_window::set_prop(bool theFinalCol, bool theFinalRow,
+                            bool theFirstRow, bool theFinalLayer) {
+  this->the_final_col = theFinalCol;
+  this->the_final_row = theFinalRow;
+  this->the_first_row = theFirstRow;
+  this->the_final_layer = theFinalLayer;
+}
+unsigned int Slide_window::getY_c() const { return this->y; }
+uint64_t Slide_window::getInputAddr_c() const { return this->input_addr_c; }
+bool Slide_window::isTheFinalLayer() const { return the_final_layer; }
+void Slide_window::set_location(unsigned int _x, unsigned int _xw,
+                                unsigned int _y, unsigned int _yw,
+                                unsigned int _level) {
+  this->x = _x;
+  this->xw = _xw;
+  this->y = _y;
+  this->yw = _yw;
+  this->level = _level;
 }

@@ -13,14 +13,17 @@ void move_to(std::shared_ptr<T> &from, std::shared_ptr<T> &to) {
 // find the first rol of the next col based on current col
 // if the next col do not exsis
 // return the end()
-dense_window_iter find_next_col(dense_window_iter current_iter,
-                                dense_window_iter final_iter) {
+std::vector<std::shared_ptr<sliding_window_interface>>::iterator
+find_next_col(std::vector<std::shared_ptr<sliding_window_interface>>::iterator
+                  current_iter,
+              std::vector<std::shared_ptr<sliding_window_interface>>::iterator
+                  final_iter) {
   // jump to next
   current_iter++;
   // find until the end()
   while (current_iter != final_iter) {
     // it's the first row of the column, so it must be the new col
-    if (current_iter->isTheFirstRow()) {
+    if ((**current_iter).isTheFirstRow()) {
       return current_iter;
     }
     // go to the next
@@ -56,11 +59,11 @@ bool Aggregator_buffer::isReadEmpty() const { return read_empty; }
 
 bool Aggregator_buffer::isReadReady() const { return read_ready; }
 
-void Aggregator_buffer::add_new_task(std::shared_ptr<dense_window> window) {
+void Aggregator_buffer::add_new_task(
+    shared_ptr<sliding_window_interface> window) {
   assert(write_empty and !write_ready and write_window == nullptr);
   r(write_empty);
   write_window = std::move(window);
-  GCN_DEBUG("aggregator add new task:{}", *write_window);
 }
 
 void Aggregator_buffer::finish_write() {
@@ -76,11 +79,13 @@ void Aggregator_buffer::finish_read() {
   GCN_DEBUG_S("aggbuffer finished read");
 }
 
-const shared_ptr<dense_window> &Aggregator_buffer::getReadWindow() const {
+const shared_ptr<sliding_window_interface> &
+Aggregator_buffer::getReadWindow() const {
   return read_window;
 }
 
-const shared_ptr<dense_window> &Aggregator_buffer::getWriteWindow() const {
+const shared_ptr<sliding_window_interface> &
+Aggregator_buffer::getWriteWindow() const {
   return write_window;
 }
 bool Aggregator_buffer::isReadBusy() const { return read_busy; }
@@ -205,8 +210,8 @@ shared_ptr<Req> EdgeBuffer::pop_current() {
   current_sent = true;
   auto req = std::make_shared<Req>();
   std::vector<uint64_t> all_addrs;
-  uint64_t start_addr = m_current_iter->getEdgeAddr();
-  long total_len = m_current_iter->getEdgeLen();
+  uint64_t start_addr = (**m_current_iter).getEdgeAddr();
+  long total_len = (**m_current_iter).getEdgeLen();
 
   req->set_addr(start_addr, total_len);
   req->req_type = mem_request::read;
@@ -221,8 +226,8 @@ shared_ptr<Req> EdgeBuffer::pop_next() {
   next_sent = true;
   auto req = std::make_shared<Req>();
   std::vector<uint64_t> all_addrs;
-  uint64_t start_addr = m_next_iter->getEdgeAddr();
-  long total_len = m_next_iter->getEdgeLen();
+  uint64_t start_addr = (**m_next_iter).getEdgeAddr();
+  long total_len = (**m_next_iter).getEdgeLen();
   req->set_addr(start_addr, total_len);
   req->req_type = mem_request::read;
   req->t = device_types::edge_buffer;
@@ -321,8 +326,13 @@ shared_ptr<Req> InputBuffer::pop_current() {
   assert(!current_empty and !current_sent);
   current_sent = true;
   auto req = std::make_shared<Req>();
-  req->set_addr(m_current_iter->getInputAddr());
-  req->items_cnt = m_current_iter->getY().size();
+  if(config::enable_dense_window){
+    req->set_addr((**m_current_iter).getInputAddr());
+
+  }else{
+    req->set_addr((**m_current_iter).getInputAddr_c(),(**m_current_iter).getInputLen());
+  }
+  req->items_cnt =config::enable_dense_window? (**m_current_iter).getY().size():(**m_current_iter).getYw();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   current_req = req;
@@ -336,9 +346,13 @@ shared_ptr<Req> InputBuffer::pop_next() {
   assert(!next_empty and !next_sent);
   next_sent = true;
   auto req = std::make_shared<Req>();
-  req->set_addr(m_next_iter->getInputAddr());
+  if(config::enable_dense_window){
+    req->set_addr((**m_current_iter).getInputAddr());
 
-  req->items_cnt = m_next_iter->getY().size();
+  }else{
+    req->set_addr((**m_current_iter).getInputAddr_c(),(**m_current_iter).getInputLen());
+  }
+  req->items_cnt = config::enable_dense_window? (**m_current_iter).getY().size():(**m_current_iter).getYw();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   next_req = req;
@@ -358,8 +372,8 @@ shared_ptr<Req> InputBuffer::pop_next() {
 
   buffer_entry_sent[i] = true;
   auto req = std::make_shared<Req>();
-  req->set_addr(m_next_iter->getInputAddr());
-  req->len = m_next_iter->getInputLen();
+  req->set_addr((**m_next_iter).getInputAddr());
+  req->len = (**m_next_iter).getInputLen();
   req->req_type = mem_request::read;
   req->t = device_types::input_buffer;
   buffer_entry_req[i] = req;
@@ -412,7 +426,7 @@ void ReadBuffer::receive(shared_ptr<Req> req) {
 ReadBuffer::ReadBuffer(const string &basicString,
                        const shared_ptr<dense_window_set> &m_set)
     : Name_object(basicString), m_set(m_set) {}
-const dense_window_iter &ReadBuffer::getMCurrentIter() const {
+const window_iter &ReadBuffer::getMCurrentIter() const {
   return m_current_iter;
 }
 
@@ -422,5 +436,6 @@ bool ReadBuffer::isCurrentSent() const { return current_sent; }
 
 bool ReadBuffer::isNextSent() const { return next_sent; }
 string ReadBuffer::get_stats() {
-  return fmt::format("read_buffer:\ntotal_read_traffic: {}",total_read_traffic);
+  return fmt::format("read_buffer:\ntotal_read_traffic: {}",
+                     total_read_traffic);
 }

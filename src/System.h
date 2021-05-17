@@ -43,8 +43,8 @@ private:
   std::shared_ptr<SystolicArray> m_systolic_array;
 
   bool finished{false};
-  std::shared_ptr<dense_window_iter> current_iter;
-  std::shared_ptr<dense_window_iter> prev_iter;
+  window_iter current_iter;
+  window_iter prev_iter;
   std::shared_ptr<Model> m_model;
   double current_system_time = 0;
   double current_dram_time = 0;

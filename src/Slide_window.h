@@ -6,82 +6,87 @@
 #define GCN_SIM_SLIDE_WINDOW_H_OLD
 
 #include "fmt/format.h"
+#include "sliding_window_interface.h"
 #include <algorithm>
 #include <graph.h>
 #include <iostream>
 #include <memory>
+class Slide_window : public sliding_window_interface {
+public:
 
-class Slide_window {
+  void set_location(unsigned int x, unsigned int _xw, unsigned int _y,
+                    unsigned int yw, unsigned int _level) override;
+
+  void set_location(unsigned int x, unsigned int _xw,
+                    std::vector<unsigned int> _y, unsigned int _level) override;
+  void set_addr(std::vector<uint64_t> inputAddr, unsigned int inputLen,
+                uint64_t edgeAddr, unsigned int edgeLen, uint64_t outputAddr,
+                unsigned int outputLen) override;
+  void set_addr(uint64_t inputAddr, unsigned int inputLen, uint64_t edgeAddr,
+                unsigned int edgeLen, uint64_t outputAddr,
+                unsigned int outputLen) override;
+  void set_size(unsigned int currentEdges,
+                unsigned int currentNodeSize) override;
+  void set_prop(bool theFinalCol, bool theFinalRow, bool theFirstRow,
+                bool theFinalLayer) override;
+  unsigned int getY_c() const override;
+  uint64_t getInputAddr_c() const override;
+  bool isTheFinalLayer() const override;
+
 public:
   bool operator==(const Slide_window &rhs) const;
 
   bool operator!=(const Slide_window &rhs) const;
 
-  Slide_window() = default;
+  [[nodiscard]] unsigned getX() const override;
 
-  Slide_window(int x, int y, int xw, int yw, int level, uint64_t inputAddr,
-               uint64_t edgeAddr, uint64_t outputAddr, int inputLen,
-               int edgeLen, int outputLen, int numNodesInWindow,
-               int currentNodeSize, bool the_final_col, bool theFinalRow,
-               bool theFirstRow, bool theFinalColOfTheLayer,int valid_nodes=0);
+  [[nodiscard]] std::vector<unsigned> getY() const override;
 
-  [[nodiscard]] int getX() const;
+  [[nodiscard]] unsigned getXw() const override;
 
-  [[nodiscard]] int getY() const;
+  [[nodiscard]] unsigned getYw() const override;
 
-  [[nodiscard]] int getXw() const;
+  [[nodiscard]] unsigned getLevel() const override;
 
-  [[nodiscard]] int getYw() const;
+  [[nodiscard]] std::vector<uint64_t> getInputAddr() const override;
 
-  [[nodiscard]] int getLevel() const;
+  [[nodiscard]] uint64_t getEdgeAddr() const override;
 
-  [[nodiscard]] uint64_t getInputAddr() const;
+  [[nodiscard]] uint64_t getOutputAddr() const override;
 
-  [[nodiscard]] uint64_t getEdgeAddr() const;
+  [[nodiscard]] unsigned getInputLen() const override;
 
-  [[nodiscard]] uint64_t getOutputAddr() const;
+  [[nodiscard]] unsigned getEdgeLen() const override;
 
-  [[nodiscard]] int getInputLen() const;
-  [[nodiscard]] int getValidInputLen() const;
+  [[nodiscard]] unsigned getOutputLen() const override;
 
-  [[nodiscard]] int getEdgeLen() const;
-
-  [[nodiscard]] int getOutputLen() const;
-
-  [[nodiscard]] int getCurrentNodeSize() const;
-  bool isTheFinalCol() const;
-  bool isTheFinalRow() const;
-  bool isTheFirstRow() const;
-  void setTheFinalRow(bool theFinalRow);
-
+  [[nodiscard]] unsigned getCurrentNodeSize() const override;
+  [[nodiscard]] bool isTheFinalCol() const override;
+  [[nodiscard]] bool isTheFinalRow() const override;
+  [[nodiscard]] bool isTheFirstRow() const override;
+  void setTheFinalRow(bool theFinalRow) override;
 
   bool isTheFinalColOfTheLayer() const;
 
-  [[nodiscard]] int getNumEdgesInWindow() const;
+  [[nodiscard]] unsigned getNumEdgesInWindow() const;
 
 private:
-   
-  int x;  //x: starting vertex ID in the aggregation buffer
-  int y;  //y: starting vertex ID in the input buffer
-  int xw; // cnt of vertices in the the aggregation buffer
-  int yw ; // cnt of vertices in the the input buffer
-  int level;
-  uint64_t input_addr, edge_addr, output_addr;
-  int input_len, edge_len, output_len; // in unit of bytes.
-  int num_edges_in_window; //#edges in the window
-  int current_node_size; // A feature dim.
-  bool the_final_col;
-  bool the_final_col_of_the_layer;
+  unsigned x{};  // x: starting vertex ID in the aggregation buffer
+  unsigned y{};  // y: starting vertex ID in the input buffer
+  unsigned xw{}; // cnt of vertices in the the aggregation buffer
+  unsigned yw{}; // cnt of vertices in the the input buffer
+  unsigned level{};
+  uint64_t input_addr_c{}, edge_addr{}, output_addr{};
+  unsigned input_len{}, edge_len{}, output_len{}; // in unit of bytes.
+  unsigned num_edges_in_window{};                 //#edges in the window
+  unsigned current_node_size{};                   // A feature dim.
+  bool the_final_col{};
+  bool the_final_row{};
+  bool the_first_row{};
+  bool the_final_layer{};
 
-
-
-
-  bool the_final_row;
-  bool the_first_row;
-
-  //the number of nodes that have edges connected
-  int valid_nodes;
-
+  // the number of nodes that have edges connected
+  unsigned valid_nodes{};
 };
 
 template <> struct fmt::formatter<Slide_window> {
@@ -174,7 +179,7 @@ private:
   std::vector<std::vector<std::vector<Slide_window>>>::iterator third_end;
 };
 
-class Slide_window_set {
+class [[maybe_unused]] Slide_window_set {
 public:
   Slide_window_set(std::shared_ptr<Graph> mGraph, std::vector<int> xwS,
                    std::vector<int> ywS, std::vector<int> nodeSizeS,
@@ -204,7 +209,7 @@ private:
       m_sliding_window_multi_level;
 
   std::vector<uint64_t> node_addrs; // for each level;
-  //uint number_of_nodes_to_be_read = 0;
+  // uint number_of_nodes_to_be_read = 0;
 };
 
 #endif // GCN_SIM_SLIDE_WINDOW_H_OLD

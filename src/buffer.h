@@ -50,7 +50,7 @@ public:
 
   [[nodiscard]] const string &getName() const;
 
-  void add_new_task(std::shared_ptr<dense_window> window);
+  void add_new_task(shared_ptr<sliding_window_interface> window);
   void start_read();
   void finish_write();
 
@@ -68,15 +68,15 @@ private:
   // currently we are reading, do not erase me!
   bool read_busy{false};
 
-  std::shared_ptr<dense_window> read_window;
+  std::shared_ptr<sliding_window_interface> read_window;
 
 public:
-  [[nodiscard]] const shared_ptr<dense_window> &getReadWindow() const;
+  [[nodiscard]] const shared_ptr<sliding_window_interface> &getReadWindow() const;
 
-  [[nodiscard]] const shared_ptr<dense_window> &getWriteWindow() const;
+  [[nodiscard]] const shared_ptr<sliding_window_interface> &getWriteWindow() const;
 
 private:
-  std::shared_ptr<dense_window> write_window;
+  std::shared_ptr<sliding_window_interface> write_window;
 
   //
 };
@@ -246,16 +246,17 @@ public:
     current_sent = false;
     current_ready = false;
   }
-  [[nodiscard]] const dense_window_iter &getMCurrentIter() const;
+
+  [[nodiscard]] const window_iter &getMCurrentIter() const;
   ull total_read_traffic = 0;
 
 protected:
 #define MAX_REQ 32
   int num_buffer_entry; // default is 2, double buffer.
   std::shared_ptr<dense_window_set> m_set;
-  dense_window_iter m_current_iter;
-  dense_window_iter m_next_iter;
-  dense_window_iter final_iter;
+  window_iter m_current_iter;
+  window_iter m_next_iter;
+  window_iter final_iter;
   std::shared_ptr<Req> current_req;
   std::shared_ptr<Req> next_req;
 

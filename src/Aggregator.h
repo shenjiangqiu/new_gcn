@@ -14,8 +14,6 @@
 
 class Aggregator {
 public:
-
-
   [[nodiscard]] bool isWorking() const { return working; }
   // TODO read buffer have latency
   void cycle();
@@ -23,7 +21,7 @@ public:
   Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
              const shared_ptr<EdgeBuffer> &edgeBuffer,
              const shared_ptr<Aggregator_buffer> &aggBuffer, int totalCores);
-  
+
   ~Aggregator();
 
 private:
@@ -34,16 +32,16 @@ private:
 
   int calculate_remaining_cycle();
 
-  std::shared_ptr<dense_window> current_sliding_window;
+  std::shared_ptr<sliding_window_interface> current_sliding_window;
   int total_cores;
   int cur_layer;
-  
+
   using HistoCount = std::unordered_map<int, uint64_t>;
   HistoCount edgesInWindowHist, inputEffHist;
-  
-  #define EDGE 0
-  #define EFF 1
-  void updateEdgesHist( int flag, int edge_cnt);
+
+#define EDGE 0
+#define EFF 1
+  void updateEdgesHist(int flag, int edge_cnt);
 
   bool working{false};
 

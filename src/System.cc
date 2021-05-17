@@ -118,10 +118,12 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
 
   // step 2, build the windows set. and input buffer,edge buffer
   m_slide_window_set = std::make_shared<dense_window_set>(
-      m_graph, xw_s, yw_s, node_size, total_level);
+      m_graph, xw_s, yw_s, node_size, total_level,config::enable_dense_window);
+
+
   current_iter =
-      std::make_shared<dense_window_iter>(m_slide_window_set->begin());
-  prev_iter = std::make_shared<dense_window_iter>(*current_iter);
+      m_slide_window_set->begin();
+  prev_iter = current_iter;
 
   input_buffer =
       std::make_shared<InputBuffer>("input_buffer", m_slide_window_set);

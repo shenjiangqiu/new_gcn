@@ -8,8 +8,8 @@
 #include "spdlog/spdlog.h"
 #include <utility>
 
-#include <algorithm>
 #include "debug_helper.h"
+#include <algorithm>
 Aggregator::Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
                        const shared_ptr<EdgeBuffer> &edgeBuffer,
                        const shared_ptr<Aggregator_buffer> &aggBuffer,
@@ -55,8 +55,7 @@ void Aggregator::cycle() {
          (current_sliding_window and agg_buffer->getWriteWindow()->getX() ==
                                          current_sliding_window->getX()))) {
 
-      current_sliding_window =
-          std::make_shared<dense_window>(*(input_buffer->getMCurrentIter()));
+      current_sliding_window = *(input_buffer->getMCurrentIter());
       remaining_cycles = calculate_remaining_cycle();
       global_definitions.do_aggregate += remaining_cycles;
 
@@ -67,9 +66,9 @@ void Aggregator::cycle() {
         agg_buffer->add_new_task(current_sliding_window);
       }
       GCN_DEBUG("aggregator start to run task x: {} y: {} ,cycle: {}",
-                    current_sliding_window->getX(),
-                    fmt::join(current_sliding_window->getY(), ","),
-                    global_definitions.cycle);
+                current_sliding_window->getX(),
+                fmt::join(current_sliding_window->getY(), ","),
+                global_definitions.cycle);
     } else {
       if (!input_buffer->isCurrentReady()) {
         global_definitions.total_waiting_input++;
@@ -129,7 +128,7 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.total_aggregate_op += total_elements;
   global_definitions.total_edges += total_nodes;
 
-  auto input_vertices_cnt = current_sliding_window->getY().size();
+  auto input_vertices_cnt = config::enable_dense_window? current_sliding_window->getY().size():current_sliding_window->getYw();
   // int edges_cnt = current_sliding_window->getNumEdgesInWindow();
   // float input_efficiency = (float)(edges_cnt)/(float)input_vertices_cnt;
   // int eff = (int)(input_efficiency*1000);
@@ -143,7 +142,7 @@ int Aggregator::calculate_remaining_cycle() {
   global_definitions.layer_input_vertics[level] += input_vertices_cnt;
 
   GCN_DEBUG("total elements: {} ,total size: {}", total_elements,
-                total_elements * 4);
+            total_elements * 4);
 
   GCN_DEBUG(
       "aggregator culculate window cycles. x: {} y: {}, result: {} ,rounds: {}",

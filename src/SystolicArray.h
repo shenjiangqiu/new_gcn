@@ -17,7 +17,7 @@ public:
 private:
   unsigned total_rows;
   unsigned total_cols;
-  std::shared_ptr<dense_window> current_sliding_window;
+  std::shared_ptr<sliding_window_interface> current_sliding_window;
   std::shared_ptr<Aggregator_buffer> agg_buffer;
   std::shared_ptr<WriteBuffer> output_buffer;
 

@@ -155,10 +155,6 @@ void SystolicArray::cycle() {
     // start agg buffer read
     agg_buffer->start_read();
 
-    GCN_DEBUG("start a new systolic task: window:{}, total_cycle:{}, "
-                  "current cycle:{}",
-                  *current_sliding_window, remaining_cycle,
-                  global_definitions.cycle);
 
   } else {
     if (!agg_buffer->isReadReady()) {
@@ -172,8 +168,7 @@ void SystolicArray::cycle() {
   if (remaining_cycle != 0) {
     remaining_cycle--;
     if (remaining_cycle == 0) {
-      GCN_DEBUG("end a systolic array, window:{}, current_cycle:{}",
-                    *current_sliding_window, global_definitions.cycle);
+
       current_sliding_window = nullptr;
 
       agg_buffer->finish_read();
