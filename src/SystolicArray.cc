@@ -167,11 +167,16 @@ void SystolicArray::cycle() {
     agg_buffer->start_read();
 
   } else {
-    if (!agg_buffer->isReadReady()) {
-      global_definitions.total_waiting_agg_read++;
-    }
-    if (!output_buffer->isWriteToBufferEmpty()) {
-      global_definitions.total_waiting_out++;
+    // fix bug here!
+    // only when it's empy we can consider it's idle and count
+    if(empty){
+      //it's empty but cannot serve! find the reason!!
+      if (!agg_buffer->isReadReady()) {
+        global_definitions.total_waiting_agg_read++;
+      }
+      if (!output_buffer->isWriteToBufferEmpty()) {
+        global_definitions.total_waiting_out++;
+      }
     }
   }
 

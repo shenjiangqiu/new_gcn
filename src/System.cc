@@ -116,6 +116,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     global_definitions.layer_window_avg_input.push_back(0);
   }
 
+  GCN_INFO("build the window: dense:{}",(bool)config::enable_dense_window);
   // step 2, build the windows set. and input buffer,edge buffer
   m_slide_window_set = std::make_shared<dense_window_set>(
       m_graph, xw_s, yw_s, node_size, total_level,config::enable_dense_window);
