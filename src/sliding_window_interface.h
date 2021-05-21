@@ -10,6 +10,7 @@
 #include <memory>
 class sliding_window_interface {
 public:
+  virtual ~sliding_window_interface()=default;
   // setting the window size and location,x:begin of x, _xw:x width
   // _y:all rows
   virtual void set_location(unsigned x, unsigned _xw, std::vector<unsigned> _y,

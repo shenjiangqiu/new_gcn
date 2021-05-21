@@ -30,7 +30,7 @@ public:
   bool operator!=(const dense_window &rhs) const;
 
   dense_window() = default;
-
+  virtual ~dense_window() = default;
   // setting the window size and location,x:begin of x, _xw:x width
   // _y:all rows
   void set_location(unsigned x, unsigned _xw, std::vector<unsigned> _y,

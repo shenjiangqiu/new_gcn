@@ -30,7 +30,9 @@ private:
   std::shared_ptr<EdgeBuffer> edge_buffer;
   std::shared_ptr<Aggregator_buffer> agg_buffer;
 
+  //get remaining cycle base on current_sliding_window
   int calculate_remaining_cycle();
+
 
   std::shared_ptr<sliding_window_interface> current_sliding_window;
   int total_cores;
