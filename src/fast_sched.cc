@@ -8,7 +8,7 @@
 #include "limits"
 #include <utility>
 using namespace fast_ched;
-fast_ched::output_poll::output_poll(const Graph &m_graph) {
+fast_ched::output_pool::output_pool(const Graph &m_graph) {
   const auto &ptr = m_graph.get_edge_index();
   const auto &idx = m_graph.get_edges();
   auto num_node = m_graph.get_num_nodes();
@@ -27,7 +27,7 @@ fast_ched::output_poll::output_poll(const Graph &m_graph) {
     this->all_remaining_output_nodes.push_back(out_nd);
   }
 }
-const output_node &output_poll::get_next_input_line() {
+const output_node &output_pool::get_next_input_line() {
   return this->all_remaining_output_nodes[current_position++];
 }
 
@@ -80,23 +80,29 @@ void output_node::invalid_input(const std::vector<unsigned int> &input) {
 
 void current_working_window::invalid(unsigned int id) {
   this->current_valid[id] = false;
+  all_finished_col.insert(id);
 }
 void current_working_window::add(unsigned id, const output_node &nd) {
   this->current_valid[id] = true;
   this->current_window[id] = nd;
+  if (all_finished_col.count(id)) {
+    all_finished_col.erase(id);
+  }
 }
 
 void current_working_window::invalid_and_add(unsigned int id,
                                              const output_node &nd) {
-  invalid(id);
-  add(id, nd);
+  current_valid[id] = true;
+  current_window[id] = nd;
+  if (all_finished_col.count(id)) {
+    all_finished_col.erase(id);
+  }
 }
 
 // according to each output nd, choose the smallest node
 std::vector<unsigned> current_working_window::get_next_input_nodes() {
   auto smallest = UINT_MAX;
   auto selected = 0u;
-
   // select the smalllest col
   for (auto i = 0u; i < sz; i++) {
     if (this->current_valid[i]) {
@@ -135,7 +141,11 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
 current_working_window::current_working_window(unsigned int size,
                                                unsigned int numInputCapacity)
     : sz(size), current_window(size), current_valid(size, false),
-      num_input_capacity(numInputCapacity) {}
+      num_input_capacity(numInputCapacity) {
+  for (auto i = 0u; i < sz; i++) {
+    all_finished_col.insert(i);
+  }
+}
 const std::set<unsigned int> &
 current_working_window::getAllFinishedCol() const {
   return all_finished_col;

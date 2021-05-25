@@ -9,6 +9,7 @@
 #ifndef GCN_SIM_FAST_SCHED_H
 #define GCN_SIM_FAST_SCHED_H
 #include "bitset"
+#include "fmt/format.h"
 #include "graph.h"
 #include "map"
 #include "set"
@@ -22,7 +23,19 @@ class output_node {
 public:
   explicit output_node(const std::vector<unsigned> &input_nodes);
   explicit output_node(std::set<unsigned> input_nodes);
-
+  std::string get_line_trace() {
+    std::string out;
+    for (auto i : input_nodes) {
+      if (not_processed_nodes.count(i)) {
+        out += " .";
+        out += std::to_string(i);
+      } else {
+        out += " x";
+        out += std::to_string(i);
+      }
+    }
+    return out;
+  }
   output_node() = default;
   [[nodiscard]] const std::set<unsigned int> &getInputNodes() const;
   void setInputNodes(const std::set<unsigned int> &inputNodes);
@@ -53,6 +66,19 @@ public:
 
   void invalid_and_add(unsigned id, const output_node &nd);
   std::vector<unsigned> get_next_input_nodes();
+  std::string get_line_trace() {
+    std::string out;
+    for (auto i = 0u; i < sz; i++) {
+      if (current_valid[i]) {
+        out += "o ";
+      } else {
+        out += "x ";
+      }
+      out += current_window[i].get_line_trace();
+      out += "\n";
+    }
+    return out;
+  }
 
 private:
   unsigned sz;
@@ -66,11 +92,27 @@ public:
   [[nodiscard]] const std::set<unsigned int> &getAllFinishedCol() const;
 };
 
-class output_poll {
+class output_pool {
 public:
-  explicit output_poll(const Graph &m_graph);
+  explicit output_pool(const Graph &m_graph);
   // get a new input line
   const output_node &get_next_input_line();
+  void reset() { current_position = 0; }
+  std::string get_line_trace() {
+    std::string out;
+    auto count = 0;
+    for (auto i : all_remaining_output_nodes) {
+      if (count < current_position) {
+        out += "x ";
+      } else {
+        out += "o ";
+      }
+      count++;
+      out += i.get_line_trace();
+      out += "\n";
+    }
+    return out;
+  }
 
 private:
   std::vector<output_node> all_remaining_output_nodes;
@@ -78,5 +120,4 @@ private:
 };
 
 } // namespace fast_ched
-
 #endif // GCN_SIM_FAST_SCHED_H
