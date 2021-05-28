@@ -3,8 +3,10 @@
 //
 #include "catch2/catch.hpp"
 #include "controller.h"
+#include <spdlog/spdlog.h>
 using namespace fast_sched;
 TEST_CASE("controller_test") {
+  spdlog::set_level(spdlog::level::debug);
   auto m_graph = Graph("test");
   auto i_bf = std::make_shared<InputBuffer>();
   auto m_agg = std::make_shared<Aggregator_fast>(128);

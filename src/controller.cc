@@ -15,6 +15,7 @@ void controller::cycle() {
   // 5, check pool
   // 6, send memory request to memory
   // 7, check if everything is finished
+  // 8, change ibuffer stats
 
   // 1, send read request to input buffer
   if (i_bf->getNextState() == InputBufferState::empty and
@@ -35,13 +36,18 @@ void controller::cycle() {
     }
     req->set_addr(addrs);
     req->t = device_types::input_buffer;
+    req->req_type = mem_request::read;
+    req->items_cnt = m_current_work.get_current_item_count();
+    req->nodeSize = currentNodeSize;
     i_bf->send(req);
   }
 
   // 2, send task to agg
   if (i_bf->getCurrentState() == InputBufferState::readyToRead and
       !agg->isWorking()) {
-    agg->add_task(i_bf->getCurrentReq(), currentNodeSize);
+    auto& req=i_bf->getCurrentReq();
+    assert(req->nodeSize>0);
+    agg->add_task(req, req->nodeSize);
     i_bf->setCurrentState(InputBufferState::reading);
   }
   // 3, check mem
@@ -70,13 +76,15 @@ void controller::cycle() {
       currentLayer++;
       if (currentLayer == finalLayer) {
         pool_all_finished = true;
+      } else {
+        m_current_pool.reset();
+        // set up the environments
+        currentInputBaseAddr += currentNodeSize * 4 * totalNodes;
+        assert(currentLayer<nodeSizes.size());
+        currentNodeSize = nodeSizes[currentLayer];
+        m_current_work =
+            work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
       }
-      m_current_pool.reset();
-      // set up the environments
-      currentInputBaseAddr += currentNodeSize * 4 * totalNodes;
-      currentNodeSize = nodeSizes[currentLayer];
-      m_current_work =
-          work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
     }
   }
 
@@ -96,6 +104,12 @@ void controller::cycle() {
       i_bf->getCurrentState() == InputBufferState::empty and
       i_bf->getNextState() == InputBufferState::empty and !agg->isWorking()) {
     all_finished = true;
+  }
+
+  // 8, change ibuffer stats
+  if (!agg->isWorking() and
+      i_bf->getCurrentState() == InputBufferState::reading) {
+    i_bf->setCurrentState(InputBufferState::empty);
   }
 }
 

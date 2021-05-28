@@ -33,7 +33,8 @@ target_link_libraries(gcn_sim_lib PUBLIC dramsim3)
 target_compile_definitions(gcn_sim_lib PUBLIC  USEDRAM3)
 endif()
 
-target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt::fmt-header-only spdlog minisat_utiles dramsim2)
+target_link_libraries(gcn_sim_lib PUBLIC ramulator fmt::fmt-header-only  minisat_utiles dramsim2)
+target_link_libraries(gcn_sim_lib PRIVATE spdlog)
 target_compile_options(gcn_sim_lib PRIVATE -Wall -Wextra)
 add_executable(gcn_sim ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc)
 

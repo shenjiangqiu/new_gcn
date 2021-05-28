@@ -68,12 +68,15 @@ std::vector<unsigned> output_node::get_next_n_input(unsigned int n) const {
   return out;
 }
 
-void output_node::invalid_input(const std::vector<unsigned int> &input) {
+unsigned output_node::invalid_input(const std::vector<unsigned int> &input) {
+  unsigned invalid_items=0;
   for (auto &&i : input) {
     if (not_processed_nodes.count(i)) {
       not_processed_nodes.erase(i);
+      invalid_items++;
     }
   }
+  return invalid_items;
 }
 
 void current_working_window::invalid(unsigned int id) {
@@ -116,6 +119,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
   // get the next input window
   auto &selected_window = current_window[selected];
   auto next_input = selected_window.get_next_n_input(num_input_capacity);
+  unsigned item_count=0;
   // mark all elements in this vector invalid in all other working set
   for (auto i = 0u; i < sz; i++) {
     if (this->current_valid[i]) {
@@ -124,7 +128,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
         all_finished_col.insert(i);
       } else {
         // valid and not all processed
-        current_window[i].invalid_input(next_input);
+        item_count+=current_window[i].invalid_input(next_input);
         if (current_window[i].is_all_processed()) {
           all_finished_col.insert(i);
           current_valid[i] = false;
@@ -132,6 +136,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
       }
     }
   }
+  current_item_count=item_count;
 
   return next_input;
 }

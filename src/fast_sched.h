@@ -43,7 +43,7 @@ public:
 
   // this will consume the next n input
   [[nodiscard]] std::vector<unsigned> get_next_n_input(unsigned n) const;
-  void invalid_input(const std::vector<unsigned> &input);
+  unsigned invalid_input(const std::vector<unsigned> &input);
   [[nodiscard]] bool is_all_processed() const {
     return not_processed_nodes.empty();
   }
@@ -54,12 +54,16 @@ private:
   // all nodes that is not processed yet
   std::set<unsigned> not_processed_nodes;
   // true: already processed, false: not precessed
+
 };
 
 // contains multiple output_nodes
 
 class current_working_window {
 public:
+  unsigned get_current_item_count() const{
+    return current_item_count;
+  }
   bool have_next_input_node() {
     return std::any_of(current_valid.begin(), current_valid.end(),
                        [](bool v) { return v; });
@@ -92,6 +96,7 @@ private:
   unsigned num_input_capacity;
   // those col is empty, need to be replaced!
   std::set<unsigned> all_finished_col;
+  unsigned current_item_count=0;
 
 public:
   [[nodiscard]] const std::set<unsigned int> getAllFinishedCol() const;
