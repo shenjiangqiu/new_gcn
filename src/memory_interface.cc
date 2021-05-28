@@ -150,7 +150,7 @@ void memory_interface::cycle() {
   }
 }
 
-void memory_interface::send(std::shared_ptr<Req> &req) {
+void memory_interface::send(const std::shared_ptr<Req> &req) {
   assert(req_queue.size() < waiting_size);
   auto &&addrs = req->get_addr();
 #ifdef DEBUG

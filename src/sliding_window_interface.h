@@ -10,31 +10,34 @@
 #include <memory>
 class sliding_window_interface {
 public:
-  virtual ~sliding_window_interface()=default;
+  virtual ~sliding_window_interface() = default;
   // setting the window size and location,x:begin of x, _xw:x width
   // _y:all rows
   virtual void set_location(unsigned x, unsigned _xw, std::vector<unsigned> _y,
                             unsigned _level) = 0;
   virtual void set_location(unsigned x, unsigned _xw, unsigned _y, unsigned yw,
                             unsigned _level) = 0;
+  virtual void set_location(std::vector<unsigned> x, std::vector<unsigned> _y,
+                            unsigned _level) {}
   virtual void set_addr(std::vector<uint64_t> inputAddr, unsigned inputLen,
                         uint64_t edgeAddr, unsigned edgeLen,
                         uint64_t outputAddr, unsigned outputLen) = 0;
   virtual void set_addr(uint64_t inputAddr, unsigned inputLen,
                         uint64_t edgeAddr, unsigned edgeLen,
                         uint64_t outputAddr, unsigned outputLen) = 0;
-
   virtual void set_size(unsigned currentEdges, unsigned currentNodeSize) = 0;
 
   virtual void set_prop(bool the_final_col, bool theFinalRow, bool theFirstRow,
                         bool the_final_layer) = 0;
 
   [[nodiscard]] virtual unsigned getX() const = 0;
+  [[nodiscard]] virtual std::vector<unsigned int> getX_fast() const {
+    return std::vector<unsigned int>();
+  }
 
   [[nodiscard]] virtual std::vector<unsigned int> getY() const = 0;
   [[nodiscard]] virtual unsigned int getY_c() const = 0;
   [[nodiscard]] virtual unsigned getYw() const = 0;
-
 
   [[nodiscard]] virtual unsigned getXw() const = 0;
 
@@ -46,6 +49,7 @@ public:
   [[nodiscard]] virtual uint64_t getEdgeAddr() const = 0;
 
   [[nodiscard]] virtual uint64_t getOutputAddr() const = 0;
+  [[nodiscard]] virtual uint64_t getOutputAddr_fast() const {}
 
   [[nodiscard]] virtual unsigned getInputLen() const = 0;
 

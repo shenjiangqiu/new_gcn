@@ -13,9 +13,10 @@
 #include "graph.h"
 #include "map"
 #include "set"
+#include "sliding_window_interface.h"
 #include "string"
 #include "vector"
-namespace fast_ched {
+namespace fast_sched {
 
 // represent one vertical line in matrix
 class output_node {
@@ -59,6 +60,10 @@ private:
 
 class current_working_window {
 public:
+  bool have_next_input_node() {
+    return std::any_of(current_valid.begin(), current_valid.end(),
+                       [](bool v) { return v; });
+  }
   explicit current_working_window(unsigned int size,
                                   unsigned int numInputCapacity);
   void invalid(unsigned);
@@ -89,15 +94,19 @@ private:
   std::set<unsigned> all_finished_col;
 
 public:
-  [[nodiscard]] const std::set<unsigned int> &getAllFinishedCol() const;
+  [[nodiscard]] const std::set<unsigned int> getAllFinishedCol() const;
 };
 
 class output_pool {
 public:
   explicit output_pool(const Graph &m_graph);
   // get a new input line
-  const output_node &get_next_input_line();
+  output_node get_next_input_line();
   void reset() { current_position = 0; }
+
+  bool have_next_col() {
+    return current_position < all_remaining_output_nodes.size();
+  }
   std::string get_line_trace() {
     std::string out;
     auto count = 0;
@@ -119,5 +128,5 @@ private:
   unsigned current_position = 0;
 };
 
-} // namespace fast_ched
+} // namespace fast_sched
 #endif // GCN_SIM_FAST_SCHED_H

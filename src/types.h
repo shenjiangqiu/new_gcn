@@ -55,7 +55,7 @@ public:
     single_len += rounded;
   }
 
-  unsigned get_len() const { return use_continue_addr ? single_len : addr.size(); }
+  [[nodiscard]] unsigned get_len() const { return use_continue_addr ? single_len : addr.size(); }
 
   /*void add64(){
     addr+=64;

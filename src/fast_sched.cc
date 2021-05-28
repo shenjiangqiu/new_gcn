@@ -7,8 +7,8 @@
 #include "cstdint"
 #include "limits"
 #include <utility>
-using namespace fast_ched;
-fast_ched::output_pool::output_pool(const Graph &m_graph) {
+using namespace fast_sched;
+output_pool::output_pool(const Graph &m_graph) {
   const auto &ptr = m_graph.get_edge_index();
   const auto &idx = m_graph.get_edges();
   auto num_node = m_graph.get_num_nodes();
@@ -27,24 +27,22 @@ fast_ched::output_pool::output_pool(const Graph &m_graph) {
     this->all_remaining_output_nodes.push_back(out_nd);
   }
 }
-const output_node &output_pool::get_next_input_line() {
+output_node output_pool::get_next_input_line() {
   return this->all_remaining_output_nodes[current_position++];
 }
 
-fast_ched::output_node::output_node(
-    const std::vector<unsigned int> &_input_nodes) {
+output_node::output_node(const std::vector<unsigned int> &_input_nodes) {
   for (auto &&i : _input_nodes) {
     input_nodes.insert(i);
   }
   not_processed_nodes = input_nodes;
 }
 
-const std::set<unsigned int> &fast_ched::output_node::getInputNodes() const {
+const std::set<unsigned int> &output_node::getInputNodes() const {
   return input_nodes;
 }
 
-void fast_ched::output_node::setInputNodes(
-    const std::set<unsigned int> &inputNodes) {
+void output_node::setInputNodes(const std::set<unsigned int> &inputNodes) {
   input_nodes = inputNodes;
 }
 
@@ -146,7 +144,7 @@ current_working_window::current_working_window(unsigned int size,
     all_finished_col.insert(i);
   }
 }
-const std::set<unsigned int> &
+const std::set<unsigned int>
 current_working_window::getAllFinishedCol() const {
   return all_finished_col;
 }

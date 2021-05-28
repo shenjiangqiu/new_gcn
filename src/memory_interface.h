@@ -78,13 +78,17 @@ public:
 
   bool available() { return req_queue.size() < waiting_size; }
 
-  void send(std::shared_ptr<Req> &req);
+  void send(const std::shared_ptr<Req> &req);
 
   bool ret_available() { return !task_return_queue.empty(); }
 
   std::shared_ptr<Req> get_req() {
     auto ret = task_return_queue.front();
     task_return_queue.pop();
+    return ret;
+  }
+  [[nodiscard]] std::shared_ptr<Req> peek_req() const {
+    auto ret = task_return_queue.front();
     return ret;
   }
   memory_interface(const std::string &dram_config_name,
