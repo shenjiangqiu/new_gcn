@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "spdlog/spdlog.h"
 #include "utils/Options.h"
+#include <controller.h>
 #include <debug_helper.h>
 #include <fmt/format.h>
 #include <graph.h>
@@ -78,12 +79,39 @@ int main(int argc, char **argv) {
   GCN_INFO("print out model levels {}", fmt::join(node_sizes, ","));
 
   GCN_INFO("memory simulator: {}", config::mem_sim);
+  if (config::enable_fast_sched) {
+    auto i_bf = std::make_shared<fast_sched::InputBuffer>();
+    auto m_agg =
+        std::make_shared<fast_sched::Aggregator_fast>(config::aggCores);
+    auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
+    std::vector<unsigned> m_node_sizes;
+    std::vector<unsigned> m_input_num;
+    std::vector<unsigned> m_output_num;
+    for (auto i = 0; i < node_sizes.size() - 1; i++) {
+      m_node_sizes.push_back(node_sizes[i]);
+      m_input_num.push_back((config::inputSize / 2) / node_sizes[i]);
+      m_output_num.push_back((config::aggSize / 2) / node_sizes[i]);
+    }
 
-  System m_system(config::inputSize, config::edgeSize, config::aggSize,
-                  config::outputSize, config::aggCores, config::systolic_rows,
-                  config::systolic_cols, m_graph, node_sizes,
-                  (std::string)config::dram_name, m_model);
-  m_system.run();
+    auto m_controller = fast_sched::controller(
+        *m_graph, i_bf, m_node_sizes, m_input_num, m_output_num, m_agg, m_mem);
+    uint64_t cycle = 0;
+    while (!m_controller.isAllFinished()) {
+      m_controller.cycle();
+      i_bf->cycle();
+      m_agg->cycle();
+      m_mem->cycle();
+      cycle++;
+    }
+    fmt::print("cycle: {}", cycle);
+
+  } else {
+    System m_system(config::inputSize, config::edgeSize, config::aggSize,
+                    config::outputSize, config::aggCores, config::systolic_rows,
+                    config::systolic_cols, m_graph, node_sizes,
+                    (std::string)config::dram_name, m_model);
+    m_system.run();
+  }
 
   return 0;
 }
