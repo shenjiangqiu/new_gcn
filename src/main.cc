@@ -96,11 +96,18 @@ int main(int argc, char **argv) {
     auto m_controller = fast_sched::controller(
         *m_graph, i_bf, m_node_sizes, m_input_num, m_output_num, m_agg, m_mem);
     uint64_t cycle = 0;
+    uint mem_rount = 0;
     while (!m_controller.isAllFinished()) {
+      
       m_controller.cycle();
       i_bf->cycle();
       m_agg->cycle();
-      m_mem->cycle();
+      if (mem_rount == 0) {
+        m_mem->cycle();
+      }
+      mem_rount++;
+      mem_rount%=2;
+      
       cycle++;
     }
     fmt::print("cycle: {}", cycle);
