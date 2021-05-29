@@ -49,7 +49,7 @@ public:
   [[nodiscard]] virtual uint64_t getEdgeAddr() const = 0;
 
   [[nodiscard]] virtual uint64_t getOutputAddr() const = 0;
-  [[nodiscard]] virtual uint64_t getOutputAddr_fast() const {}
+  [[nodiscard]] virtual uint64_t getOutputAddr_fast() const {return 0;}
 
   [[nodiscard]] virtual unsigned getInputLen() const = 0;
 

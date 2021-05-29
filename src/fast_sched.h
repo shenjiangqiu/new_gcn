@@ -114,7 +114,7 @@ public:
   }
   std::string get_line_trace() {
     std::string out;
-    auto count = 0;
+    auto count = 0u;
     for (auto i : all_remaining_output_nodes) {
       if (count < current_position) {
         out += "x ";

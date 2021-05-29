@@ -36,8 +36,6 @@ private:
 
   std::shared_ptr<InputBuffer> i_bf;
 
-  std::shared_ptr<Aggregator_fast> agg;
-  std::shared_ptr<memory_interface> m_mem;
 
   // all window is end;
   bool pool_all_finished = false;
@@ -53,6 +51,8 @@ private:
 
   std::vector<unsigned> m_outputNodeNum;
   std::vector<unsigned> m_inputNodeNum;
+  std::shared_ptr<Aggregator_fast> agg;
+  std::shared_ptr<memory_interface> m_mem;
 
 public:
   [[nodiscard]] bool isAllFinished() const;

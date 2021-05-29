@@ -5,6 +5,7 @@
 #include "controller.h"
 #include "spdlog/spdlog.h"
 #include <utility>
+#include "debug_helper.h"
 namespace fast_sched {
 
 void controller::cycle() {
@@ -75,13 +76,16 @@ void controller::cycle() {
       // move to next layer
       currentLayer++;
       if (currentLayer == finalLayer) {
+        GCN_INFO("finished the pool:current layer:{}",currentLayer);
         pool_all_finished = true;
       } else {
+        GCN_INFO("switch to next layer:layer:{}",currentLayer);
         m_current_pool.reset();
         // set up the environments
         currentInputBaseAddr += currentNodeSize * 4 * totalNodes;
         assert(currentLayer<nodeSizes.size());
         currentNodeSize = nodeSizes[currentLayer];
+        GCN_INFO("setup new window: outputNodes:{},inputNodes:{}",m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
         m_current_work =
             work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
       }

@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
     std::vector<unsigned> m_node_sizes;
     std::vector<unsigned> m_input_num;
     std::vector<unsigned> m_output_num;
-    for (auto i = 0; i < node_sizes.size() - 1; i++) {
+    for (auto i = 0u; i < node_sizes.size() - 1; i++) {
       m_node_sizes.push_back(node_sizes[i]);
       m_input_num.push_back((config::inputSize / 2) / node_sizes[i]);
       m_output_num.push_back((config::aggSize / 2) / node_sizes[i]);
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
 
     auto m_controller = fast_sched::controller(
         *m_graph, i_bf, m_node_sizes, m_input_num, m_output_num, m_agg, m_mem);
-    uint64_t cycle = 0;
+    global_definitions.cycle = 0;
     uint mem_rount = 0;
     while (!m_controller.isAllFinished()) {
       
@@ -108,9 +108,12 @@ int main(int argc, char **argv) {
       mem_rount++;
       mem_rount%=2;
       
-      cycle++;
+      global_definitions.cycle++;
     }
-    fmt::print("cycle: {}", cycle);
+    fmt::print("cycle: {}", global_definitions.cycle);
+    fmt::print("total_agg: {}",m_agg->get_total_operations());
+    fmt::print("total_rounds_in_agg: {}",m_agg->get_total_rounds());
+    
 
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,
