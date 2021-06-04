@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
     global_definitions.cycle = 0;
     uint mem_rount = 0;
     while (!m_controller.isAllFinished()) {
-      
+
       m_controller.cycle();
       i_bf->cycle();
       m_agg->cycle();
@@ -106,14 +106,20 @@ int main(int argc, char **argv) {
         m_mem->cycle();
       }
       mem_rount++;
-      mem_rount%=2;
-      
+      mem_rount %= 2;
+
       global_definitions.cycle++;
     }
     fmt::print("cycle: {}\n", global_definitions.cycle);
-    fmt::print("total_agg: {}\n",m_agg->get_total_operations());
-    fmt::print("total_rounds_in_agg: {}\n",m_agg->get_total_rounds());
-    
+    fmt::print("total_agg: {}\n", m_agg->get_total_operations());
+    fmt::print("total_rounds_in_agg: {}\n", m_agg->get_total_rounds());
+    fmt::print("do_agg: {}\n", global_definitions.do_aggregate);
+    fmt::print("agg_ops: {}\n", global_definitions.total_aggregate_op);
+    fmt::print("global_definitions.total_input_windows: {}\n",
+               global_definitions.total_input_windows);
+    fmt::print("global_definitions.total_edges: {}\n",
+               global_definitions.total_edges);
+               
 
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,

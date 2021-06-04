@@ -45,9 +45,15 @@ void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_size) {
   total_rounds++;
   auto rounds = (total_edges * node_size + total_cores - 1) / total_cores;
   // read dram latency;
-  auto per_round_memory_fetch_time = (total_cores * 4 + 31) / 32;
+  auto per_round_memory_fetch_time = 1;
   // for each round, read the data, and use 1 cycle to process.
   auto total_time = rounds * (per_round_memory_fetch_time + 1);
+
+
+  global_definitions.do_aggregate+=total_time;
+  global_definitions.total_aggregate_op+=total_edges*node_size;
+  global_definitions.total_input_windows++;
+  global_definitions.total_edges += total_edges;
 
   remaining_cycle = total_time;
   if(remaining_cycle>=100000){

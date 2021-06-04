@@ -194,7 +194,7 @@ int Aggregator::calculate_remaining_cycle() {
       (total_elements * (1.0 - sparse_rate)); // Yue sparse rate
   auto rounds = (total_elements_sparse + total_cores - 1) / total_cores;
   // read dram latency;
-  auto per_round_memory_fetch_time = (total_cores * 4 + 31) / 32;
+  auto per_round_memory_fetch_time = 1;
   // for each round, read the data, and use 1 cycle to process.
   auto total_time = rounds * (per_round_memory_fetch_time + 1);
 

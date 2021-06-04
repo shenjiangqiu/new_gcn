@@ -8,6 +8,10 @@
 #include "limits"
 #include <utility>
 using namespace fast_sched;
+template <typename C> bool all_false(C &c) {
+  return std::all_of(c.begin(), c.end(), [](auto v) { return v == false; });
+}
+
 output_pool::output_pool(const Graph &m_graph) {
   const auto &ptr = m_graph.get_edge_index();
   const auto &idx = m_graph.get_edges();
@@ -69,7 +73,7 @@ std::vector<unsigned> output_node::get_next_n_input(unsigned int n) const {
 }
 
 unsigned output_node::invalid_input(const std::vector<unsigned int> &input) {
-  unsigned invalid_items=0;
+  unsigned invalid_items = 0;
   for (auto &&i : input) {
     if (not_processed_nodes.count(i)) {
       not_processed_nodes.erase(i);
@@ -102,43 +106,69 @@ void current_working_window::invalid_and_add(unsigned int id,
 
 // according to each output nd, choose the smallest node
 std::vector<unsigned> current_working_window::get_next_input_nodes() {
-  auto smallest = UINT_MAX;
-  auto selected = 0u;
-  // select the smalllest col
-  for (auto i = 0u; i < sz; i++) {
-    if (this->current_valid[i]) {
-      auto &current_node = current_window[i];
-      auto size = current_node.get_remaining();
-      if (size < smallest) {
-        smallest = size;
-        selected = i;
-      }
-    }
-  }
+  // fix bug here, if the selected node reture a vecotor that is smaller than
+  // sz, then choose the next one
 
-  // get the next input window
-  auto &selected_window = current_window[selected];
-  auto next_input = selected_window.get_next_n_input(num_input_capacity);
-  unsigned item_count=0;
-  // mark all elements in this vector invalid in all other working set
-  for (auto i = 0u; i < sz; i++) {
-    if (this->current_valid[i]) {
-      if (current_window[i].is_all_processed()) {
-        current_valid[i] = false;
-        all_finished_col.insert(i);
-      } else {
-        // valid and not all processed
-        item_count+=current_window[i].invalid_input(next_input);
-        if (current_window[i].is_all_processed()) {
-          all_finished_col.insert(i);
-          current_valid[i] = false;
+  auto remainings = num_input_capacity;
+  std::vector<unsigned> all_input;
+
+  // the number of edges returned in the input window
+  unsigned item_count = 0;
+
+  // in this while loop, we will try to find next sz input nodes to be loaded
+  // into the input buffer
+  while (remainings > 0) {
+
+    // first step, find a node with fewest input edges.
+    auto smallest = UINT_MAX;
+    auto selected = 0u;
+    // select the smalllest col
+    for (auto i = 0u; i < sz; i++) {
+      if (this->current_valid[i]) {
+        auto &current_node = current_window[i];
+        auto size = current_node.get_remaining();
+        if (size < smallest) {
+          smallest = size;
+          selected = i;
         }
       }
     }
-  }
-  current_item_count=item_count;
 
-  return next_input;
+    // get the next input window from the selected node
+    auto &selected_window = current_window[selected];
+    auto next_input = selected_window.get_next_n_input(remainings);
+    if (next_input.empty()) {
+      // we didn't select a valid node, all node are invalid now;
+      assert(all_false(current_valid));
+      break;
+    }
+    // mark all elements in this vector invalid in all other working set, this
+    // step prevent choose redundent input nodes
+    for (auto i = 0u; i < sz; i++) {
+      if (this->current_valid[i]) {
+        if (current_window[i].is_all_processed()) {
+          current_valid[i] = false;
+          all_finished_col.insert(i);
+        } else {
+          // valid and not all processed
+          item_count += current_window[i].invalid_input(next_input);
+          if (current_window[i].is_all_processed()) {
+            all_finished_col.insert(i);
+            current_valid[i] = false;
+          }
+        }
+      }
+    }
+
+    all_input.insert(all_input.end(), next_input.begin(), next_input.end());
+
+    // the size of the next input means number of nodes we chooses in this nodes
+    remainings -= next_input.size();
+  }
+
+  current_item_count = item_count;
+
+  return all_input;
 }
 
 current_working_window::current_working_window(unsigned int size,
@@ -149,7 +179,6 @@ current_working_window::current_working_window(unsigned int size,
     all_finished_col.insert(i);
   }
 }
-const std::set<unsigned int>
-current_working_window::getAllFinishedCol() const {
+const std::set<unsigned int> current_working_window::getAllFinishedCol() const {
   return all_finished_col;
 }
