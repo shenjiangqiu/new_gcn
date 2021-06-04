@@ -1,14 +1,16 @@
-import os
 
 from multiprocessing import Pool
 import subprocess
-workloads = ["acm", "blogcatalog",   "coauthor_cs",  "pubmed",
-             "amazon_cs", "citeseer_gog", "coauthor_phy", "flickr",
-             "amazon_photo", "citeseer",  "cora_full",  "cora_ml_gog"
-             "Graph_saint_ogbn-arxiv", "Graph_saint_ogbn-arxiv_undirected",
-             "Graph_saint_flick", "Graph_saint_ppi-large", "Graph_saint_ppi",
-             "Graph_saint_yelp"]
-workloads = ["Graph_saint_reddit"]
+
+workloads = ["acm_graph_data",            "coauthor_cs_graph_data",   "dblp_graph_data",
+             "amazon_cs_graph_data",      "coauthor_phy_graph_data",  "flickr_graph_data",
+             "amazon_photo_graph_data",   "cora_full_graph_data",                    "pubmed_gog",
+             "blogcatalog_graph_data",    "cora_gog",                                "pubmed",
+             "cite",                      "cora",                                  "pubmed_graph_data",
+             "citeseer_full_graph_data",  "cora_graph_data",            "pump",
+             "citeseer_gog",              "cora_ml_gog",                        "reddit",
+             "citeseer",                  "cora_ml_graph_data",                          "test",
+             "citeseer_graph_data",       "dblp.gog",                              "uai_graph_data"]
 
 #workloads1=["Graph_saint_flickr", "Graph_saint_ogbn-arxiv",  "Graph_saint_ogbn-arxiv_undirected", "Graph_saint_ppi",  "Graph_saint_ppi-large",  "Graph_saint_yelp"]
 
@@ -44,5 +46,5 @@ def run_task(command):
     subprocess.run(command, shell=True)
 
 
-with Pool(int(1)) as p:
+with Pool(int(4)) as p:
     p.map(run_task, cmds)
