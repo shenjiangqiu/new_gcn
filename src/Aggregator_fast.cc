@@ -50,8 +50,8 @@ void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_size) {
   auto total_time = rounds * (per_round_memory_fetch_time + 1);
 
   remaining_cycle = total_time;
-  if(remaining_cycle>=1000){
-    throw;
+  if(remaining_cycle>=100000){
+    GCN_INFO("remaining_cycle too large:{}",remaining_cycle);
   }
   working = true;
 }

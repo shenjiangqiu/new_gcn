@@ -292,7 +292,13 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
             auto count = item.second;
             total_edges += count;
             input_nodes.push_back(node_id);
-            input_addrs.push_back(get_addr_by_node(node_id));
+            auto node_addr = get_addr_by_node(node_id);
+            auto len = node_size_s[level_i] * 4;
+            while (len > 0) {
+              input_addrs.push_back(node_addr);
+              len -= 64;
+              node_addr += 64;
+            }
           }
 
           // start to setup the window

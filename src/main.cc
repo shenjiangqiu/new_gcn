@@ -110,9 +110,9 @@ int main(int argc, char **argv) {
       
       global_definitions.cycle++;
     }
-    fmt::print("cycle: {}", global_definitions.cycle);
-    fmt::print("total_agg: {}",m_agg->get_total_operations());
-    fmt::print("total_rounds_in_agg: {}",m_agg->get_total_rounds());
+    fmt::print("cycle: {}\n", global_definitions.cycle);
+    fmt::print("total_agg: {}\n",m_agg->get_total_operations());
+    fmt::print("total_rounds_in_agg: {}\n",m_agg->get_total_rounds());
     
 
   } else {
