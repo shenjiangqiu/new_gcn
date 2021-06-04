@@ -25,7 +25,7 @@ public:
   virtual void set_addr(uint64_t inputAddr, unsigned inputLen,
                         uint64_t edgeAddr, unsigned edgeLen,
                         uint64_t outputAddr, unsigned outputLen) = 0;
-  virtual void set_size(unsigned currentEdges, unsigned currentNodeSize) = 0;
+  virtual void set_size(unsigned currentEdges, unsigned currentnodeDim) = 0;
 
   virtual void set_prop(bool the_final_col, bool theFinalRow, bool theFirstRow,
                         bool the_final_layer) = 0;
@@ -57,7 +57,7 @@ public:
 
   [[nodiscard]] virtual unsigned getOutputLen() const = 0;
 
-  [[nodiscard]] virtual unsigned getCurrentNodeSize() const = 0;
+  [[nodiscard]] virtual unsigned getCurrentnodeDim() const = 0;
   [[nodiscard]] virtual bool isTheFinalCol() const = 0;
   [[nodiscard]] virtual bool isTheFinalRow() const = 0;
   [[nodiscard]] virtual bool isTheFirstRow() const = 0;

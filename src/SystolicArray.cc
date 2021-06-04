@@ -20,102 +20,102 @@ int SystolicArray::cal_remaining_cycle() {
   assert(current_sliding_window);
   uint64_t total_cycles = 0;
   auto num_nodes = current_sliding_window->getXw();
-  auto node_size =
-      current_sliding_window->getCurrentNodeSize(); // num elements in one node;
+  auto node_dim =
+      current_sliding_window->getCurrentnodeDim(); // num elements in one node;
   auto level = current_sliding_window->getLevel();
 
   // might be confused here
   // 1, get the model
   // 2, the model.level[0] means the level 1, so we always get the next level
   // when using current level.
-  auto next_node_size =
+  auto next_node_dim =
       global_definitions.m_models.at(std::string(config::model))
           .getMLevels()
           .at(current_sliding_window->getLevel());
 
   if (global_definitions.concate) {
-    node_size *= 2;
+    node_dim *= 2;
   }
   // first layer, we should ignore the
   if (current_sliding_window->getLevel() == 0) {
     // the first layer, we should remove the ignored feature
-    node_size -= config::ignore_neighbor;
+    node_dim -= config::ignore_neighbor;
 
     if (global_definitions.concate) {
-      node_size -= config::ignore_self;
+      node_dim -= config::ignore_self;
     }
-    assert(node_size > 0);
+    assert(node_dim > 0);
   }
-  if (node_size <= 0) {
+  if (node_dim <= 0) {
     GCN_ERROR("node size < 0 happend,concate:{}, origin node "
               "size:{},ignore_nei:{},ignore_self:{},level:{}",
               global_definitions.concate,
-              current_sliding_window->getCurrentNodeSize(),
+              current_sliding_window->getCurrentnodeDim(),
               config::ignore_neighbor, config::ignore_self);
     spdlog::flush_on(spdlog::level::err);
     throw std::runtime_error("can't check the size");
   }
 
-  // to this now, the node size, next_node_size and num_nodes are finishied.
+  // to this now, the node size, next_node_dim and num_nodes are finishied.
   global_definitions.total_mac_in_systolic_array +=
-      num_nodes * node_size * next_node_size;
+      num_nodes * node_dim * next_node_dim;
 
   // fix bug here
 
   auto steps = (total_rows + num_nodes - 1) / total_rows;
 
-  auto elements_steps = (next_node_size + total_cols - 1) / total_cols;
+  auto elements_steps = (next_node_dim + total_cols - 1) / total_cols;
   for (auto i = 0u; i < steps - 1; i++) {
     for (auto j = 0u; j < elements_steps - 1; j++) {
       // fix bug here, the windows should contain the node size
-      total_cycles += (total_rows + total_cols + node_size);
+      total_cycles += (total_rows + total_cols + node_dim);
       total_cycles += (total_rows * total_cols / 4) / 32;
     }
 
-    if (total_rows + next_node_size - ((elements_steps - 1) * total_cols) +
-            node_size <=
+    if (total_rows + next_node_dim - ((elements_steps - 1) * total_cols) +
+            node_dim <=
         0) {
       GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
-                "total_rows:{},next_node_size:{},elements_steps*total_cols:"
-                "{},node_size:{}",
-                steps, elements_steps, total_rows, next_node_size,
-                elements_steps * total_cols, node_size);
+                "total_rows:{},next_node_dim:{},elements_steps*total_cols:"
+                "{},node_dim:{}",
+                steps, elements_steps, total_rows, next_node_dim,
+                elements_steps * total_cols, node_dim);
       spdlog::flush_on(spdlog::level::err);
       throw std::runtime_error("wrong cycle happened!");
     }
     auto remaining_rows = total_rows;
-    auto remaining_cols = next_node_size - ((elements_steps - 1) * total_cols);
-    total_cycles += remaining_rows + remaining_cols + node_size;
+    auto remaining_cols = next_node_dim - ((elements_steps - 1) * total_cols);
+    total_cycles += remaining_rows + remaining_cols + node_dim;
     total_cycles += (total_rows * total_cols / 4) / 32;
   }
   for (auto j = 0u; j < elements_steps - 1; j++) {
     // calculate the last row
     auto remaining_rows = num_nodes - ((steps - 1) * total_rows);
     auto remaining_cols = total_cols;
-    total_cycles += remaining_rows + remaining_cols + node_size;
+    total_cycles += remaining_rows + remaining_cols + node_dim;
     total_cycles += (total_rows * total_cols / 4) / 32;
     if (remaining_rows <= 0 or remaining_rows > total_rows) {
       GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
-                "total_rows:{},next_node_size:{},elements_steps*total_cols:"
-                "{},node_size:{}",
-                steps, elements_steps, total_rows, next_node_size,
-                elements_steps * total_cols, node_size);
+                "total_rows:{},next_node_dim:{},elements_steps*total_cols:"
+                "{},node_dim:{}",
+                steps, elements_steps, total_rows, next_node_dim,
+                elements_steps * total_cols, node_dim);
     }
   }
   // calculate the last row the last col
   auto remaining_rows = num_nodes - ((steps - 1) * total_rows);
-  auto remaining_cols = next_node_size - ((elements_steps - 1) * total_cols);
+  auto remaining_cols = next_node_dim - ((elements_steps - 1) * total_cols);
 
-  total_cycles += remaining_rows + remaining_cols + node_size;
+  total_cycles += remaining_rows + remaining_cols + node_dim;
   total_cycles += (total_rows * total_cols / 4) / 32;
 
   if (remaining_rows <= 0 or remaining_cols <= 0 or
       remaining_rows > total_rows or remaining_cols > total_cols) {
     GCN_ERROR("wrong cycle happened: steps:{},elements_steps:{}\n "
-              "total_rows:{},next_node_size:{},elements_steps*total_cols:"
-              "{},node_size:{}",
-              steps, elements_steps, total_rows, next_node_size,
-              elements_steps * total_cols, node_size);
+              "total_rows:{},next_node_dim:{},elements_steps*total_cols:"
+              "{},node_dim:{}",
+              steps, elements_steps, total_rows, next_node_dim,
+              elements_steps * total_cols, node_dim);
     spdlog::flush_on(spdlog::level::err);
     throw std::runtime_error("wrong cycle happened!");
   }

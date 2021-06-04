@@ -44,7 +44,7 @@ unsigned dense_window::getNumEdgesInWindow() const {
   return num_edges_in_window;
 }
 
-unsigned dense_window::getCurrentNodeSize() const { return current_node_size; }
+unsigned dense_window::getCurrentnodeDim() const { return current_node_dim; }
 
 bool dense_window::operator==(const dense_window &rhs) const {
   return x == rhs.x && y == rhs.y && xw == rhs.xw && level == rhs.level &&
@@ -52,7 +52,7 @@ bool dense_window::operator==(const dense_window &rhs) const {
          output_addr == rhs.output_addr && input_len == rhs.input_len &&
          edge_len == rhs.edge_len && output_len == rhs.output_len &&
          num_edges_in_window == rhs.num_edges_in_window &&
-         current_node_size == rhs.current_node_size;
+         current_node_dim == rhs.current_node_dim;
 }
 
 bool dense_window::operator!=(const dense_window &rhs) const {
@@ -101,9 +101,9 @@ void dense_window::set_addr(uint64_t inputAddr, unsigned int inputLen,
   this->output_len = outputLen;
 }
 void dense_window::set_size(unsigned int currentEdges,
-                            unsigned int currentNodeSize) {
+                            unsigned int currentnodeDim) {
   this->num_edges_in_window = currentEdges;
-  this->current_node_size = currentNodeSize;
+  this->current_node_dim = currentnodeDim;
 }
 void dense_window::set_prop(bool _the_final_col, bool theFinalRow,
                             bool theFirstRow, bool theFinalLayer) {
@@ -126,10 +126,10 @@ unsigned int dense_window::getYw() const { return y.size(); }
 
 dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
                                    std::vector<int> xwS, std::vector<int> ywS,
-                                   std::vector<int> nodeSizeS, int totalLevel,
+                                   std::vector<int> nodeDimS, int totalLevel,
                                    bool is_dense)
     : m_graph(std::move(mGraph)), xw_s(std::move(xwS)), yw_s(std::move(ywS)),
-      node_size_s(std::move(nodeSizeS)), total_level(totalLevel) {
+      node_dim_s(std::move(nodeDimS)), total_level(totalLevel) {
   // we need to build a multilevel windows. the levels are layer->column->row
   if (totalLevel < 2) {
     throw std::runtime_error("at lease 2 layer needed");
@@ -138,7 +138,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
   if (xw_s.size() != unsigned(total_level - 1)) {
     throw;
   }
-  if (node_size_s.size() != unsigned(total_level)) {
+  if (node_dim_s.size() != unsigned(total_level)) {
     throw;
   }
 
@@ -148,11 +148,11 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
   // for the first layer, we should ignore the empty entries
   node_addrs.push_back(start_addr);
   start_addr += m_graph->get_num_nodes() *
-                (node_size_s[0] - config::ignore_neighbor) * single_node_size;
+                (node_dim_s[0] - config::ignore_neighbor) * single_node_dim;
   // for the remaining layer, keep all the entries.
   for (auto l : irange(1, total_level)) {
     node_addrs.push_back(start_addr);
-    start_addr += m_graph->get_num_nodes() * node_size_s[l] * single_node_size;
+    start_addr += m_graph->get_num_nodes() * node_dim_s[l] * single_node_dim;
   }
 
   // each layer
@@ -218,10 +218,10 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
       auto edge_len = (end_edge_index - start_edge_index) * 4;
 
       unsigned output_len =
-          (col_end - col_i) * node_size_s.at(level_i + 1) * single_node_size;
+          (col_end - col_i) * node_dim_s.at(level_i + 1) * single_node_dim;
       uint64_t output_addr =
           node_addrs.at(level_i + 1) +
-          col_i * node_size_s.at(level_i + 1) * single_node_size;
+          col_i * node_dim_s.at(level_i + 1) * single_node_dim;
 
       // count the edges for each row.
       for (auto e_index : irange(start_edge_index, end_edge_index)) {
@@ -277,11 +277,11 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           auto get_addr_by_node = [&](unsigned node_id) {
             if (level_i == 0) {
               return node_addrs[0] +
-                     node_id * (node_size_s[0] - config::ignore_neighbor) *
-                         single_node_size;
+                     node_id * (node_dim_s[0] - config::ignore_neighbor) *
+                         single_node_dim;
             } else {
               return node_addrs[level_i] +
-                     node_id * node_size_s[level_i] * single_node_size;
+                     node_id * node_dim_s[level_i] * single_node_dim;
             }
           };
 
@@ -293,7 +293,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
             total_edges += count;
             input_nodes.push_back(node_id);
             auto node_addr = get_addr_by_node(node_id);
-            auto len = node_size_s[level_i] * 4;
+            auto len = node_dim_s[level_i] * 4;
             while (len > 0) {
               input_addrs.push_back(node_addr);
               len -= 64;
@@ -306,7 +306,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           window->set_location(col_i, col_end - col_i, input_nodes, level_i);
           window->set_addr(input_addrs, input_addrs.size(), start_edge_addr,
                            edge_len, output_addr, output_len);
-          window->set_size(total_edges, node_size_s[level_i]);
+          window->set_size(total_edges, node_dim_s[level_i]);
           window->set_prop(the_final_col, the_last_row, the_first_row,
                            the_last_layer);
 
@@ -314,7 +314,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
               std::static_pointer_cast<sliding_window_interface>(window));
 
           current_row_input_len =
-              input_nodes.size() * node_size_s[level_i] * single_node_size;
+              input_nodes.size() * node_dim_s[level_i] * single_node_dim;
           current_col_input_len += current_row_input_len;
         }
       } else {
@@ -362,20 +362,20 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           uint64_t input_addr = 0;
           if (level_i == 0) {
             input_addr = node_addrs.at(level_i) +
-                         row_i * (node_size_s.at(0) - config::ignore_neighbor) *
-                             single_node_size;
+                         row_i * (node_dim_s.at(0) - config::ignore_neighbor) *
+                             single_node_dim;
           } else {
             input_addr = node_addrs.at(level_i) +
-                         row_i * node_size_s.at(level_i) * single_node_size;
+                         row_i * node_dim_s.at(level_i) * single_node_dim;
           }
 
           // the first layer should ignore the empty entries
           unsigned input_len =
               level_i == 0 ? (row_end - row_i) *
-                                 (node_size_s.at(0) - config::ignore_neighbor) *
-                                 single_node_size
-                           : (row_end - row_i) * node_size_s.at(level_i) *
-                                 single_node_size;
+                                 (node_dim_s.at(0) - config::ignore_neighbor) *
+                                 single_node_dim
+                           : (row_end - row_i) * node_dim_s.at(level_i) *
+                                 single_node_dim;
 
           current_col_input_len += input_len;
 
@@ -384,7 +384,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
                                level_i);
           window->set_addr(input_addr, input_len, start_edge_addr, edge_len,
                            output_addr, output_len);
-          window->set_size(total_edges, node_size_s[level_i]);
+          window->set_size(total_edges, node_dim_s[level_i]);
           bool the_last_row = false;
           // to determine the_last_row, we need to test the row_to_count
           //
@@ -398,7 +398,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
               std::static_pointer_cast<sliding_window_interface>(window));
 
           current_col_input_len +=
-              input_len * node_size_s[level_i] * single_node_size;
+              input_len * node_dim_s[level_i] * single_node_dim;
 
           row_i = row_end;
         }

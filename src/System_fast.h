@@ -19,7 +19,7 @@ public:
   System(int inputBuffer_fastSize, int edgeBufferSize, int aggBufferSize,
          int outputBufferSize, int aggTotalCores, int systolic_rows,
          int systolic_cols, std::shared_ptr<Graph> graph,
-         std::vector<int> node_size, const std::string &dram_config_name,
+         std::vector<int> node_dim, const std::string &dram_config_name,
          std::shared_ptr<Model> mModel);
   void print() const;
   void cycle();

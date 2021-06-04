@@ -38,20 +38,20 @@ void Aggregator_fast::add_task(std::shared_ptr<dense_window> window) {
 
 // 123
 
-void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_size) {
+void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_dim) {
   assert(working == false);
   auto total_edges = req->items_cnt;
   total_operations+=total_edges;
   total_rounds++;
-  auto rounds = (total_edges * node_size + total_cores - 1) / total_cores;
+  auto rounds = (total_edges * node_dim + total_cores - 1) / total_cores;
   // read dram latency;
   auto per_round_memory_fetch_time = 1;
   // for each round, read the data, and use 1 cycle to process.
-  auto total_time = rounds * (per_round_memory_fetch_time + 1);
+  auto total_time = rounds * (per_round_memory_fetch_time);
 
 
   global_definitions.do_aggregate+=total_time;
-  global_definitions.total_aggregate_op+=total_edges*node_size;
+  global_definitions.total_aggregate_op+=total_edges*node_dim;
   global_definitions.total_input_windows++;
   global_definitions.total_edges += total_edges;
 

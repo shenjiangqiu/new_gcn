@@ -40,7 +40,7 @@ public:
                 uint64_t edgeAddr, unsigned edgeLen, uint64_t outputAddr,
                 unsigned outputLen) override;
 
-  void set_size(unsigned currentEdges, unsigned currentNodeSize) override;
+  void set_size(unsigned currentEdges, unsigned currentnodeDim) override;
 
   void set_prop(bool the_final_col, bool theFinalRow, bool theFirstRow,
                 bool the_final_layer) override;
@@ -65,7 +65,7 @@ public:
 
   [[nodiscard]] unsigned getOutputLen() const override;
 
-  [[nodiscard]] unsigned getCurrentNodeSize() const override;
+  [[nodiscard]] unsigned getCurrentnodeDim() const override;
   [[nodiscard]] bool isTheFinalCol() const override;
   [[nodiscard]] bool isTheFinalRow() const override;
   [[nodiscard]] bool isTheFirstRow() const override;
@@ -88,7 +88,7 @@ private:
   uint64_t edge_addr{}, output_addr{};
   unsigned input_len{}, edge_len{}, output_len{};
   unsigned num_edges_in_window{}; //#edges in the window
-  unsigned current_node_size{};   // A feature dim.
+  unsigned current_node_dim{};   // A feature dim.
   bool the_final_col{};
   bool the_final_layer{};
 
@@ -141,7 +141,7 @@ using dense_window_iter = std::vector<dense_window>::iterator;
 class dense_window_set {
 public:
   dense_window_set(std::shared_ptr<Graph> mGraph, std::vector<int> xwS,
-                   std::vector<int> ywS, std::vector<int> nodeSizeS,
+                   std::vector<int> ywS, std::vector<int> nodeDimS,
                    int totalLevel, bool is_dense);
 
   const std::vector<std::shared_ptr<sliding_window_interface>> &get_windows() {
@@ -157,7 +157,7 @@ private:
   std::vector<int> xw_s;
   std::vector<int> yw_s;
 
-  std::vector<int> node_size_s;
+  std::vector<int> node_dim_s;
 
   int total_level;
 

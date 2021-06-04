@@ -17,7 +17,7 @@ public:
     global_id++;
     items_cnt = 0;
   }
-  unsigned nodeSize;
+  unsigned nodeDim;
   unsigned id;
   int items_cnt; //#vertices or #edges
   device_types t;

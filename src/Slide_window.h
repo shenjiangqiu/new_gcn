@@ -26,7 +26,7 @@ public:
                 unsigned int edgeLen, uint64_t outputAddr,
                 unsigned int outputLen) override;
   void set_size(unsigned int currentEdges,
-                unsigned int currentNodeSize) override;
+                unsigned int currentnodeDim) override;
   void set_prop(bool theFinalCol, bool theFinalRow, bool theFirstRow,
                 bool theFinalLayer) override;
   unsigned int getY_c() const override;
@@ -60,7 +60,7 @@ public:
 
   [[nodiscard]] unsigned getOutputLen() const override;
 
-  [[nodiscard]] unsigned getCurrentNodeSize() const override;
+  [[nodiscard]] unsigned getCurrentnodeDim() const override;
   [[nodiscard]] bool isTheFinalCol() const override;
   [[nodiscard]] bool isTheFinalRow() const override;
   [[nodiscard]] bool isTheFirstRow() const override;
@@ -79,7 +79,7 @@ private:
   uint64_t input_addr_c{}, edge_addr{}, output_addr{};
   unsigned input_len{}, edge_len{}, output_len{}; // in unit of bytes.
   unsigned num_edges_in_window{};                 //#edges in the window
-  unsigned current_node_size{};                   // A feature dim.
+  unsigned current_node_dim{};                   // A feature dim.
   bool the_final_col{};
   bool the_final_row{};
   bool the_first_row{};
@@ -182,7 +182,7 @@ private:
 class [[maybe_unused]] Slide_window_set {
 public:
   Slide_window_set(std::shared_ptr<Graph> mGraph, std::vector<int> xwS,
-                   std::vector<int> ywS, std::vector<int> nodeSizeS,
+                   std::vector<int> ywS, std::vector<int> nodeDimS,
                    int totalLevel);
 
   const std::vector<Slide_window> &get_windows() {
@@ -198,7 +198,7 @@ private:
   std::vector<int> xw_s;
   std::vector<int> yw_s;
 
-  std::vector<int> node_size_s;
+  std::vector<int> node_dim_s;
 
   int total_level;
 

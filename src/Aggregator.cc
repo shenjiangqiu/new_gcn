@@ -127,15 +127,15 @@ int Aggregator::calculate_remaining_cycle() {
   assert(current_sliding_window);
   auto total_nodes = current_sliding_window->getNumEdgesInWindow();
 
-  auto node_size = current_sliding_window
-                       ->getCurrentNodeSize(); // num features in one node//not
+  auto node_dim = current_sliding_window
+                       ->getCurrentnodeDim(); // num features in one node//not
                                                // the bytes in one nodes
 
   if (current_sliding_window->getLevel() == 0)
-    node_size -= config::ignore_neighbor;
-  assert(node_size > 0);
+    node_dim -= config::ignore_neighbor;
+  assert(node_dim > 0);
 
-  auto total_elements = total_nodes * node_size;
+  auto total_elements = total_nodes * node_dim;
   global_definitions.total_input_windows++;
   global_definitions.total_aggregate_op += total_elements;
   global_definitions.total_edges += total_nodes;
@@ -196,7 +196,7 @@ int Aggregator::calculate_remaining_cycle() {
   // read dram latency;
   auto per_round_memory_fetch_time = 1;
   // for each round, read the data, and use 1 cycle to process.
-  auto total_time = rounds * (per_round_memory_fetch_time + 1);
+  auto total_time = rounds * (per_round_memory_fetch_time);
 
   global_definitions.layer_do_aggregate[level] += total_time;
 

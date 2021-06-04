@@ -15,7 +15,7 @@
 System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int outputBufferSize, int aggTotalCores, int systolic_rows,
                int systolic_cols, std::shared_ptr<Graph> graph,
-               std::vector<int> node_size, const std::string &dram_config_name,
+               std::vector<int> node_dim, const std::string &dram_config_name,
                std::shared_ptr<Model> mModel) {
 
   m_graph = std::move(graph);
@@ -39,7 +39,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   GCN_INFO("set up dram_gap:{},cpu_gap:{}, with dram_freq:{},cpu_freq:{}",
            dram_gap, cpu_gap, config::dram_freq, config::core_freq);
   // step1, first need to get the max x_w;
-  int total_level = node_size.size();
+  int total_level = node_dim.size();
 
   std::vector<int> xw_s;
   std::vector<int> yw_s;
@@ -48,23 +48,23 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     // the aggregator's result will concatenate the origin node.
     auto size =
         ((agg_buffer_size / 2) /
-         ((2 * node_size[0] - config::ignore_neighbor - config::ignore_self) *
+         ((2 * node_dim[0] - config::ignore_neighbor - config::ignore_self) *
           4));
     xw_s.push_back(size);
   } else {
     xw_s.push_back((agg_buffer_size / 2) /
-                   ((node_size[0] - config::ignore_neighbor) * 4));
+                   ((node_dim[0] - config::ignore_neighbor) * 4));
   }
 
   GCN_INFO("xws push back:{}", xw_s.back());
   assert(xw_s.back() > 0 && "the window should be positive");
   if (config::enable_feature_sparsity) {
-    int effective_size = (node_size[0] - config::ignore_neighbor);
+    int effective_size = (node_dim[0] - config::ignore_neighbor);
     effective_size = effective_size * (1.0 - config::feature_sparse_rate0);
     yw_s.push_back((input_buffer_size / 2) / (effective_size * 4));
   } else {
     yw_s.push_back((input_buffer_size / 2) /
-                   ((node_size[0] - config::ignore_neighbor) * 4));
+                   ((node_dim[0] - config::ignore_neighbor) * 4));
   }
   assert(yw_s.back() > 0 && "the window should be positive");
   GCN_INFO("yws push back:{}", yw_s.back());
@@ -72,34 +72,34 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   for (auto i = 1; i < total_level - 1; i++) {
     if (m_model->isConcatenate()) {
       // the aggregator's result will concatenate the origin node.
-      auto size = ((agg_buffer_size / 2) / ((2 * node_size[i]) * 4));
+      auto size = ((agg_buffer_size / 2) / ((2 * node_dim[i]) * 4));
       xw_s.push_back(size);
     } else {
-      xw_s.push_back((agg_buffer_size / 2) / ((node_size[i]) * 4));
+      xw_s.push_back((agg_buffer_size / 2) / ((node_dim[i]) * 4));
     }
     GCN_INFO("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
 
-    int effective_node_size = node_size[i];
+    int effective_node_dim = node_dim[i];
     if (config::enable_feature_sparsity) {
       switch (i) {
       case 0:
-        effective_node_size =
-            (int)(effective_node_size * (1 - config::feature_sparse_rate0));
+        effective_node_dim =
+            (int)(effective_node_dim * (1 - config::feature_sparse_rate0));
         break;
       case 1:
-        effective_node_size =
-            (int)(effective_node_size * (1 - config::feature_sparse_rate1));
+        effective_node_dim =
+            (int)(effective_node_dim * (1 - config::feature_sparse_rate1));
         break;
       case 2:
-        effective_node_size =
-            (int)(effective_node_size * (1 - config::feature_sparse_rate2));
+        effective_node_dim =
+            (int)(effective_node_dim * (1 - config::feature_sparse_rate2));
         break;
       default:;
       }
     }
 
-    yw_s.push_back((input_buffer_size / 2) / (effective_node_size * 4));
+    yw_s.push_back((input_buffer_size / 2) / (effective_node_dim * 4));
     assert(yw_s.back() > 0 && "the window should be positive");
     GCN_INFO("yws push back:{}", yw_s.back());
   }
@@ -119,7 +119,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   GCN_INFO("build the window: dense:{}",(bool)config::enable_dense_window);
   // step 2, build the windows set. and input buffer,edge buffer
   m_slide_window_set = std::make_shared<dense_window_set>(
-      m_graph, xw_s, yw_s, node_size, total_level,config::enable_dense_window);
+      m_graph, xw_s, yw_s, node_dim, total_level,config::enable_dense_window);
 
 
   current_iter =
@@ -134,18 +134,18 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
 
   // output the number of the memory read requests need to be read
   uint64_t total_size = 0;
-  auto first_layer_size = (node_size[0] - config::ignore_neighbor) * 4;
+  auto first_layer_size = (node_dim[0] - config::ignore_neighbor) * 4;
   total_size += first_layer_size * m_graph->get_num_nodes() *
                 (m_graph->get_num_nodes() + xw_s[0] - 1 / xw_s[0]);
   fmt::print("{} {} {}\n", first_layer_size, m_graph->get_num_nodes(), xw_s[0]);
-  for (auto i = 1u; i < node_size.size() - 1; i++) {
-    total_size += node_size[i] * 4 * m_graph->get_num_nodes() *
+  for (auto i = 1u; i < node_dim.size() - 1; i++) {
+    total_size += node_dim[i] * 4 * m_graph->get_num_nodes() *
                   m_graph->get_num_nodes() / xw_s[i];
   }
   GCN_INFO("total_nodes:{}, total_feature_length:{},total input traffic "
            "need to be read:{}",
            m_graph->get_num_nodes(),
-           fmt::join(node_size.begin(), std::prev(node_size.end()), ","),
+           fmt::join(node_dim.begin(), std::prev(node_dim.end()), ","),
            total_size);
 }
 class kv_maps {

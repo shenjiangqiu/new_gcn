@@ -1,6 +1,13 @@
 import re
-workloads = ["acm_graph_data", "dblp_graph_data", "amazon_cs_graph_data", "flickr_graph_data", "amazon_photo_graph_data", "Graph_saint_amazon", "blogcatalog_graph_data", "Graph_saint_flickr", "cite", "Graph_saint_ogbn-arxiv", "citeseer_full_graph_data", "Graph_saint_ogbn-arxiv_undirected", "citeseer_gog",       "Graph_saint_ogbn-products", "citeseer",
-             "Graph_saint_ppi", "citeseer_graph_data",       "Graph_saint_ppi-large", "coauthor_cs_graph_data", "Graph_saint_reddit", "coauthor_phy_graph_data", "Graph_saint_yelp", "cora_full_graph_data", "pubmed_gog", "cora_gog", "pubmed", "cora", "pubmed_graph_data", "cora_graph_data", "pump", "cora_ml_gog", "reddit", "cora_ml_graph_data", "uai_graph_data", "dblp.gog"]
+workloads = ["acm_graph_data",            "coauthor_cs_graph_data",   "dblp_graph_data",
+             "amazon_cs_graph_data",      "coauthor_phy_graph_data",  "flickr_graph_data",
+             "amazon_photo_graph_data",   "cora_full_graph_data",                    "pubmed_gog",
+             "blogcatalog_graph_data",    "cora_gog",                                "pubmed",
+             "cite",                      "cora",                                  "pubmed_graph_data",
+             "citeseer_full_graph_data",  "cora_graph_data",            "pump",
+             "citeseer_gog",              "cora_ml_gog",                        "reddit",
+             "citeseer",                  "cora_ml_graph_data",                          "test",
+             "citeseer_graph_data",       "dblp.gog",                              "uai_graph_data"]
 
 
 workloads=["Graph_saint_reddit"]

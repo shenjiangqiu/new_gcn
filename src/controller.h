@@ -20,7 +20,7 @@ class controller {
 public:
   // constructor
   controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
-             std::vector<unsigned int> nodeSizes,
+             std::vector<unsigned int> nodeDims,
              std::vector<unsigned int> inputNodesNum,
              std::vector<unsigned int> outputNodeNum,
              std::shared_ptr<Aggregator_fast> agg,
@@ -39,12 +39,12 @@ private:
 
   // all window is end;
   bool pool_all_finished = false;
-  std::vector<unsigned> nodeSizes;
+  std::vector<unsigned> nodeDims;
   unsigned totalNodes;
   // the start address of the current input
   uint64_t currentInputBaseAddr;
   // how many features per node in this layer
-  unsigned currentNodeSize;
+  unsigned currentnodeDim;
   unsigned currentLayer;
   unsigned finalLayer;
   bool all_finished = false;

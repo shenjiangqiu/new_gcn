@@ -28,8 +28,8 @@ void controller::cycle() {
     std::vector<uint64_t> addrs;
     // from nodes to addres
     for (auto &&i : next_input_nodes) {
-      uint64_t start_addr = i * currentNodeSize * 4 + currentInputBaseAddr;
-      uint64_t end_addr = start_addr + currentNodeSize * 4;
+      uint64_t start_addr = i * currentnodeDim * 4 + currentInputBaseAddr;
+      uint64_t end_addr = start_addr + currentnodeDim * 4;
       while (start_addr < end_addr) {
         addrs.push_back(start_addr);
         start_addr += 64;
@@ -39,7 +39,7 @@ void controller::cycle() {
     req->t = device_types::input_buffer;
     req->req_type = mem_request::read;
     req->items_cnt = m_current_work.get_current_item_count();
-    req->nodeSize = currentNodeSize;
+    req->nodeDim = currentnodeDim;
     i_bf->send(req);
   }
 
@@ -47,8 +47,8 @@ void controller::cycle() {
   if (i_bf->getCurrentState() == InputBufferState::readyToRead and
       !agg->isWorking()) {
     auto& req=i_bf->getCurrentReq();
-    assert(req->nodeSize>0);
-    agg->add_task(req, req->nodeSize);
+    assert(req->nodeDim>0);
+    agg->add_task(req, req->nodeDim);
     i_bf->setCurrentState(InputBufferState::reading);
   }
   // 3, check mem
@@ -82,9 +82,9 @@ void controller::cycle() {
         GCN_INFO("switch to next layer:layer:{}",currentLayer);
         m_current_pool.reset();
         // set up the environments
-        currentInputBaseAddr += currentNodeSize * 4 * totalNodes;
-        assert(currentLayer<nodeSizes.size());
-        currentNodeSize = nodeSizes[currentLayer];
+        currentInputBaseAddr += currentnodeDim * 4 * totalNodes;
+        assert(currentLayer<nodeDims.size());
+        currentnodeDim = nodeDims[currentLayer];
         GCN_INFO("setup new window: outputNodes:{},inputNodes:{}",m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
         m_current_work =
             work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
@@ -118,16 +118,16 @@ void controller::cycle() {
 }
 
 controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
-                       std::vector<unsigned int> nodeSizes,
+                       std::vector<unsigned int> nodeDims,
                        std::vector<unsigned int> inputNodesNum,
                        std::vector<unsigned int> outputNodeNum,
                        std::shared_ptr<Aggregator_fast> agg,
                        std::shared_ptr<memory_interface> mMem)
     : m_current_pool(m_graph),
       m_current_work(outputNodeNum[0], inputNodesNum[0]), i_bf(iBf),
-      nodeSizes(std::move(nodeSizes)), totalNodes(m_graph.get_num_nodes()),
-      currentInputBaseAddr(0x00ff00), currentNodeSize(this->nodeSizes[0]),
-      currentLayer(0), finalLayer(this->nodeSizes.size()),
+      nodeDims(std::move(nodeDims)), totalNodes(m_graph.get_num_nodes()),
+      currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
+      currentLayer(0), finalLayer(this->nodeDims.size()),
       m_outputNodeNum(outputNodeNum), m_inputNodeNum(inputNodesNum),
       agg(std::move(agg)), m_mem(std::move(mMem)) {}
 bool controller::isAllFinished() const { return all_finished; }

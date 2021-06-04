@@ -19,7 +19,7 @@ public:
 
   explicit Aggregator_fast(int totalCores);
 
-  void add_task(const shared_ptr<Req> &req, unsigned node_size);
+  void add_task(const shared_ptr<Req> &req, unsigned node_dim);
   unsigned get_total_rounds() const{
     return total_rounds;
   }

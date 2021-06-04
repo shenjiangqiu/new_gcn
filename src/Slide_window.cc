@@ -41,7 +41,7 @@ unsigned Slide_window::getNumEdgesInWindow() const {
   return num_edges_in_window;
 }
 
-unsigned Slide_window::getCurrentNodeSize() const { return current_node_size; }
+unsigned Slide_window::getCurrentnodeDim() const { return current_node_dim; }
 
 bool Slide_window::operator==(const Slide_window &rhs) const {
   return x == rhs.x && y == rhs.y && xw == rhs.xw && yw == rhs.yw &&
@@ -50,7 +50,7 @@ bool Slide_window::operator==(const Slide_window &rhs) const {
          input_len == rhs.input_len && edge_len == rhs.edge_len &&
          output_len == rhs.output_len &&
          num_edges_in_window == rhs.num_edges_in_window &&
-         current_node_size == rhs.current_node_size;
+         current_node_dim == rhs.current_node_dim;
 }
 
 bool Slide_window::operator!=(const Slide_window &rhs) const {
@@ -69,21 +69,21 @@ void Slide_window::setTheFinalRow(bool theFinalRow) {
 
 Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
                                    std::vector<int> xwS, std::vector<int> ywS,
-                                   std::vector<int> nodeSizeS, int totalLevel)
+                                   std::vector<int> nodeDimS, int totalLevel)
     : m_graph(std::move(mGraph)), xw_s(std::move(xwS)), yw_s(std::move(ywS)),
-      node_size_s(std::move(nodeSizeS)), total_level(totalLevel) {
+      node_dim_s(std::move(nodeDimS)), total_level(totalLevel) {
   assert(xw_s.size() == unsigned(total_level - 1));
-  assert(node_size_s.size() == unsigned(total_level));
+  assert(node_dim_s.size() == unsigned(total_level));
   bool the_first_row;
   uint64_t start_addr = 0xff11ff00;
   // for the first layer, we should ignore the empty entries
   node_addrs.push_back(start_addr);
   start_addr += m_graph->get_num_nodes() *
-                (node_size_s[0] - config::ignore_neighbor) * single_node_size;
+                (node_dim_s[0] - config::ignore_neighbor) * single_node_dim;
   // for the remaining layer, keep all the entries.
   for (auto l = 1; l < totalLevel; l++) {
     node_addrs.push_back(start_addr);
-    start_addr += m_graph->get_num_nodes() * node_size_s[l] * single_node_size;
+    start_addr += m_graph->get_num_nodes() * node_dim_s[l] * single_node_dim;
   }
 
   // each layer
@@ -155,31 +155,31 @@ Slide_window_set::Slide_window_set(std::shared_ptr<Graph> mGraph,
         uint64_t input_addr = 0;
         if (level_i == 0) {
           input_addr = node_addrs.at(level_i) +
-                       row_i * (node_size_s.at(0) - config::ignore_neighbor) *
-                           single_node_size;
+                       row_i * (node_dim_s.at(0) - config::ignore_neighbor) *
+                           single_node_dim;
         } else {
           input_addr = node_addrs.at(level_i) +
-                       row_i * node_size_s.at(level_i) * single_node_size;
+                       row_i * node_dim_s.at(level_i) * single_node_dim;
         }
 
         uint64_t edge_addr = m_graph->get_edge_addr(edge_index.at(col_i));
 
         uint64_t output_addr =
             node_addrs.at(level_i + 1) +
-            col_i * node_size_s.at(level_i + 1) * single_node_size;
+            col_i * node_dim_s.at(level_i + 1) * single_node_dim;
 
         // the first layer should ignore the empty entries
         int input_len =
             level_i == 0 ? (row_end - row_i) *
-                               (node_size_s.at(0) - config::ignore_neighbor) *
-                               single_node_size
-                         : (row_end - row_i) * node_size_s.at(level_i) *
-                               single_node_size;
+                               (node_dim_s.at(0) - config::ignore_neighbor) *
+                               single_node_dim
+                         : (row_end - row_i) * node_dim_s.at(level_i) *
+                               single_node_dim;
         current_col_input_len += input_len;
         auto edge_len = (edge_index.at(col_end) - edge_index.at(col_i)) * 4;
 
         int output_len =
-            (col_end - col_i) * node_size_s.at(level_i + 1) * single_node_size;
+            (col_end - col_i) * node_dim_s.at(level_i + 1) * single_node_dim;
         bool the_last_col = ((level_i == total_level - 2) and
                              col_end >= (int)m_graph->get_num_nodes());
         bool the_last_col_of_the_layer =
@@ -448,9 +448,9 @@ void Slide_window::set_addr(uint64_t inputAddr, unsigned int inputLen,
   this->output_len = outputLen;
 }
 void Slide_window::set_size(unsigned int currentEdges,
-                            unsigned int currentNodeSize) {
+                            unsigned int currentnodeDim) {
   this->num_edges_in_window = currentEdges;
-  this->current_node_size = currentNodeSize;
+  this->current_node_dim = currentnodeDim;
 }
 void Slide_window::set_prop(bool theFinalCol, bool theFinalRow,
                             bool theFirstRow, bool theFinalLayer) {

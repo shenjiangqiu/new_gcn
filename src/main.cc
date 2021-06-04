@@ -73,10 +73,10 @@ int main(int argc, char **argv) {
   }
 
   node_feature_size = m_graph->getNodeFeatures();
-  std::vector<int> node_sizes = {node_feature_size};
-  node_sizes.insert(node_sizes.end(), m_model->getMLevels().begin(),
+  std::vector<int> node_dim_per_layer = {node_feature_size};
+  node_dim_per_layer.insert(node_dim_per_layer.end(), m_model->getMLevels().begin(),
                     m_model->getMLevels().end());
-  GCN_INFO("print out model levels {}", fmt::join(node_sizes, ","));
+  GCN_INFO("print out model levels {}", fmt::join(node_dim_per_layer, ","));
 
   GCN_INFO("memory simulator: {}", config::mem_sim);
   if (config::enable_fast_sched) {
@@ -84,17 +84,22 @@ int main(int argc, char **argv) {
     auto m_agg =
         std::make_shared<fast_sched::Aggregator_fast>(config::aggCores);
     auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
-    std::vector<unsigned> m_node_sizes;
+    std::vector<unsigned> m_node_feature_dim;
     std::vector<unsigned> m_input_num;
     std::vector<unsigned> m_output_num;
-    for (auto i = 0u; i < node_sizes.size() - 1; i++) {
-      m_node_sizes.push_back(node_sizes[i]);
-      m_input_num.push_back((config::inputSize / 2) / node_sizes[i]);
-      m_output_num.push_back((config::aggSize / 2) / node_sizes[i]);
+    // fix bug here, nodeDim is the number of features per node, not the real node size,//maybe rename it? do it!
+    for (auto i = 0u; i < node_dim_per_layer.size() - 1; i++) {
+      m_node_feature_dim.push_back(node_dim_per_layer[i]);
+      m_input_num.push_back((config::inputSize / 2) / (node_dim_per_layer[i] * 4));
+      m_output_num.push_back((config::aggSize / 2) / (node_dim_per_layer[i] * 4));
     }
+    GCN_INFO("the input num: {}", fmt::join(m_input_num, ","));
+    GCN_INFO("the output num: {}", fmt::join(m_output_num, ","));
+    GCN_INFO("the nodeDim num: {}", fmt::join(node_dim_per_layer, ","));
+    GCN_INFO("the buffersize num: {}", config::inputSize);
 
     auto m_controller = fast_sched::controller(
-        *m_graph, i_bf, m_node_sizes, m_input_num, m_output_num, m_agg, m_mem);
+        *m_graph, i_bf, m_node_feature_dim, m_input_num, m_output_num, m_agg, m_mem);
     global_definitions.cycle = 0;
     uint mem_rount = 0;
     while (!m_controller.isAllFinished()) {
@@ -119,12 +124,21 @@ int main(int argc, char **argv) {
                global_definitions.total_input_windows);
     fmt::print("global_definitions.total_edges: {}\n",
                global_definitions.total_edges);
-               
+
+    fmt::print("total_read_traffic: {}\n",
+               global_definitions.total_read_traffic);
+    fmt::print("total_write_traffic: {}\n",
+               global_definitions.total_write_traffic);
+    fmt::print("total_read_traffic_input: {}\n",
+               global_definitions.total_read_traffic_input);
+
+    fmt::print("total_read_traffic_edge: {}\n",
+               global_definitions.total_read_traffic_edge);
 
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,
                     config::outputSize, config::aggCores, config::systolic_rows,
-                    config::systolic_cols, m_graph, node_sizes,
+                    config::systolic_cols, m_graph, node_dim_per_layer,
                     (std::string)config::dram_name, m_model);
     m_system.run();
   }
