@@ -26,3 +26,8 @@ run/*.txt
 run/*.ini
 run/*.json
 run/results
+*.graph
+*.out
+*.result
+*.ini
+*.cfg
