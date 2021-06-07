@@ -3,12 +3,89 @@
 //
 
 #include "controller.h"
+#include "debug_helper.h"
 #include "spdlog/spdlog.h"
 #include <utility>
-#include "debug_helper.h"
 namespace fast_sched {
 
+// note here, we do not count the latency of read csc format edge from dram to
+// on-chip buffer, because the bottleneck should be signal generation process
+void fast_sched::controll_info_generator::cycle() {
+
+  // 1. when have work, do work
+
+  if (working)
+    if (next_sequence_remaining_cycle > 0) {
+      next_sequence_remaining_cycle--;
+      if (next_sequence_remaining_cycle == 0) {
+        // this task finished
+        sequence++;
+        working = false;
+      }
+      return;
+    }
+  // not working
+
+  // should add new task because remaining cycle is 0
+
+  // 2, not working, from working_window to generate working set
+  if (m_work.have_next_input_node()) {
+    // get the next input req and send it to the Inputbuffer
+    auto valid_nodes = m_work.get_num_valid_work();
+    auto next_input_nodes = m_work.get_next_input_nodes();
+    auto total_query = valid_nodes * next_input_nodes.size();
+
+    // noticed here, why we use += not =, because might need additional cycle:
+    // insert a new output node!!!! read the next stage.
+    next_sequence_remaining_cycle += total_query * per_query_cycle;
+    working = true;
+  }
+
+  // 3, when there are empty slotes in working window, add them in
+  if (!m_work.getAllFinishedCol().empty() and m_pool.have_next_col()) {
+    for (auto &&i : m_work.getAllFinishedCol()) {
+      if (m_pool.have_next_col()) {
+        auto next_input_line = m_pool.get_next_input_line();
+        auto line_size = next_input_line.getInputNodes().size();
+        m_work.add(i, next_input_line);
+        next_sequence_remaining_cycle += line_size * insert_cycle_per_node;
+      } else {
+        break;
+      }
+    }
+  }
+
+  // switch to next layer
+  if (!m_pool.have_next_col() and not pool_all_finished) {
+    // waiting until all current layer finished
+    if (!m_work.have_next_input_node()) {
+      // move to next layer
+      // should insert a new layer
+      GCN_INFO("in_controll_info_generator,switch to next_layer:{}",
+               currentLayer + 1);
+
+      currentLayer++;
+      if (currentLayer == final_layer) {
+        GCN_INFO("finished the pool:current layer:{}", currentLayer);
+        pool_all_finished = true;
+      } else {
+        GCN_INFO("switch to next layer:layer:{}", currentLayer);
+        m_pool.reset();
+        // set up the environments
+        assert(currentLayer < nodeDims.size());
+
+        m_work =
+            work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
+      }
+    }
+  }
+}
+
 void controller::cycle() {
+  // update the controller signal
+
+  // need to sync with the controller signal
+  m_controll_info_generator.cycle();
   // 1, send read request to input buffer
   // 2, send task to agg
   // 3, check mem
@@ -44,12 +121,25 @@ void controller::cycle() {
   }
 
   // 2, send task to agg
+  // fix bug here,
+  // fix again , this not a bug, the edges to be read is obviousely, no need to
+  // waiting the control signal, just ignore it!!!
   if (i_bf->getCurrentState() == InputBufferState::readyToRead and
       !agg->isWorking()) {
-    auto& req=i_bf->getCurrentReq();
-    assert(req->nodeDim>0);
-    agg->add_task(req, req->nodeDim);
-    i_bf->setCurrentState(InputBufferState::reading);
+    // start point, current_sequence_number=1,
+    // m_controll_info_generator.get_current_generation_sequence()=0, will need
+    // to wait the first control signal.
+    if (current_sequence_number >
+        m_controll_info_generator.get_current_generation_sequence()) {
+      // controller signal not ready, wait!! note that the controller signal
+      // generation is fully async with agg Do nothing
+    } else {
+      current_sequence_number++;
+      auto &req = i_bf->getCurrentReq();
+      assert(req->nodeDim > 0);
+      agg->add_task(req, req->nodeDim);
+      i_bf->setCurrentState(InputBufferState::reading);
+    }
   }
   // 3, check mem
 
@@ -69,6 +159,7 @@ void controller::cycle() {
       }
     }
   }
+
   // 5, check pool
   if (!m_current_pool.have_next_col() and not pool_all_finished) {
     // waiting until all current layer finished
@@ -76,16 +167,17 @@ void controller::cycle() {
       // move to next layer
       currentLayer++;
       if (currentLayer == finalLayer) {
-        GCN_INFO("finished the pool:current layer:{}",currentLayer);
+        GCN_INFO("finished the pool:current layer:{}", currentLayer);
         pool_all_finished = true;
       } else {
-        GCN_INFO("switch to next layer:layer:{}",currentLayer);
+        GCN_INFO("switch to next layer:layer:{}", currentLayer);
         m_current_pool.reset();
         // set up the environments
         currentInputBaseAddr += currentnodeDim * 4 * totalNodes;
-        assert(currentLayer<nodeDims.size());
+        assert(currentLayer < nodeDims.size());
         currentnodeDim = nodeDims[currentLayer];
-        GCN_INFO("setup new window: outputNodes:{},inputNodes:{}",m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
+        GCN_INFO("setup new window: outputNodes:{},inputNodes:{}",
+                 m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
         m_current_work =
             work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
       }
@@ -129,6 +221,8 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
       currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
       currentLayer(0), finalLayer(this->nodeDims.size()),
       m_outputNodeNum(outputNodeNum), m_inputNodeNum(inputNodesNum),
-      agg(std::move(agg)), m_mem(std::move(mMem)) {}
+      agg(std::move(agg)), m_mem(std::move(mMem)),
+      m_controll_info_generator(m_graph, this->nodeDims, inputNodesNum,
+                                outputNodeNum) {}
 bool controller::isAllFinished() const { return all_finished; }
 } // namespace fast_sched

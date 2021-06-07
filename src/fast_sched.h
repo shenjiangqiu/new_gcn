@@ -72,7 +72,16 @@ public:
                                   unsigned int numInputCapacity);
   void invalid(unsigned);
   void add(unsigned, const output_node &nd);
-
+  
+  unsigned get_num_valid_work() const{
+    auto ret=0;
+    for(const auto i:current_valid){
+      if(i){
+        ret++;
+      }
+    }
+    return ret;
+  }
   void invalid_and_add(unsigned id, const output_node &nd);
   std::vector<unsigned> get_next_input_nodes();
   std::string get_line_trace() {
