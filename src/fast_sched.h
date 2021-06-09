@@ -48,22 +48,23 @@ public:
     return not_processed_nodes.empty();
   }
   unsigned get_remaining() { return not_processed_nodes.size(); }
+  bool exists(unsigned id) const { return not_processed_nodes.count(id) > 0; }
+  const std::set<unsigned> &get_not_processed() const {
+    return not_processed_nodes;
+  }
 
 private:
   std::set<unsigned> input_nodes;
   // all nodes that is not processed yet
   std::set<unsigned> not_processed_nodes;
   // true: already processed, false: not precessed
-
 };
 
 // contains multiple output_nodes
 
 class current_working_window {
 public:
-  unsigned get_current_item_count() const{
-    return current_item_count;
-  }
+  unsigned get_current_item_count() const { return current_item_count; }
   bool have_next_input_node() {
     return std::any_of(current_valid.begin(), current_valid.end(),
                        [](bool v) { return v; });
@@ -72,11 +73,11 @@ public:
                                   unsigned int numInputCapacity);
   void invalid(unsigned);
   void add(unsigned, const output_node &nd);
-  
-  unsigned get_num_valid_work() const{
-    auto ret=0;
-    for(const auto i:current_valid){
-      if(i){
+
+  unsigned get_num_valid_work() const {
+    auto ret = 0;
+    for (const auto i : current_valid) {
+      if (i) {
         ret++;
       }
     }
@@ -105,7 +106,7 @@ private:
   unsigned num_input_capacity;
   // those col is empty, need to be replaced!
   std::set<unsigned> all_finished_col;
-  unsigned current_item_count=0;
+  unsigned current_item_count = 0;
 
 public:
   [[nodiscard]] const std::set<unsigned int> getAllFinishedCol() const;

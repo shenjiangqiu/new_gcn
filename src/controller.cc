@@ -37,7 +37,16 @@ void fast_sched::controll_info_generator::cycle() {
 
     // noticed here, why we use += not =, because might need additional cycle:
     // insert a new output node!!!! read the next stage.
-    next_sequence_remaining_cycle += total_query * per_query_cycle;
+
+    // update here, real query
+    auto cycle = 0;
+    for (auto input : next_input_nodes) {
+      cycle += m_hash_table.query(input);
+      cycle += m_hash_table.invalid(input);
+    }
+
+    next_sequence_remaining_cycle += cycle;
+
     working = true;
   }
 
@@ -48,7 +57,14 @@ void fast_sched::controll_info_generator::cycle() {
         auto next_input_line = m_pool.get_next_input_line();
         auto line_size = next_input_line.getInputNodes().size();
         m_work.add(i, next_input_line);
-        next_sequence_remaining_cycle += line_size * insert_cycle_per_node;
+
+        // update here, real insert
+        auto cycle = 0;
+        for (auto input : next_input_line.get_not_processed()) {
+          cycle += m_hash_table.insert(input);
+        }
+
+        next_sequence_remaining_cycle += cycle;
       } else {
         break;
       }
@@ -61,18 +77,20 @@ void fast_sched::controll_info_generator::cycle() {
     if (!m_work.have_next_input_node()) {
       // move to next layer
       // should insert a new layer
-      GCN_INFO("in_controll_info_generator,switch to next_layer:{}",
+      GCN_INFO("in_controller_signal:in_controll_info_generator,switch to "
+               "next_layer:{}",
                currentLayer + 1);
 
       currentLayer++;
       if (currentLayer == final_layer) {
-        GCN_INFO("finished the pool:current layer:{}", currentLayer);
+        GCN_INFO("in_controller_signal:finished the pool:current layer:{}",
+                 currentLayer);
         pool_all_finished = true;
       } else {
-        GCN_INFO("switch to next layer:layer:{}", currentLayer);
+        GCN_INFO("in_controller_signal:switch to next layer:layer:{}",
+                 currentLayer);
         m_pool.reset();
         // set up the environments
-        assert(currentLayer < nodeDims.size());
 
         m_work =
             work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);

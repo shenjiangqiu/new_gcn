@@ -80,6 +80,8 @@ public:
   std::map<std::string, uint64_t> config_uint64;
 
   std::map<std::string, std::vector<uint64_t>> config_uint64_v;
+
+  std::map<unsigned,unsigned> number_to_count_map_for_query;
 };
 extern globals global_definitions;
 

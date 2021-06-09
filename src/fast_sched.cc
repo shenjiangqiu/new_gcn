@@ -3,9 +3,9 @@
 //
 
 #include "fast_sched.h"
-
 #include "cstdint"
 #include "limits"
+#include <globals.h>
 #include <utility>
 using namespace fast_sched;
 template <typename C> bool all_false(C &c) {
@@ -142,6 +142,20 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
       assert(all_false(current_valid));
       break;
     }
+    // for histogram stats, record the number of output for each input
+
+    for (auto i : next_input) {
+      auto count = 0u;
+      for (auto j = 0; j < sz; j++) {
+        if (current_valid[j]) {
+          // count the number of occurence of this input
+          if (current_window[j].exists(i))
+            count++;
+        }
+      }
+      global_definitions.number_to_count_map_for_query[count]++;
+    }
+
     // mark all elements in this vector invalid in all other working set, this
     // step prevent choose redundent input nodes
     for (auto i = 0u; i < sz; i++) {

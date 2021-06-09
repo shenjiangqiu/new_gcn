@@ -10,6 +10,7 @@
 #include "buffer_fast.h"
 
 #include "fast_sched.h"
+#include <Hash_table.h>
 namespace fast_sched {
 using pool = output_pool;
 using node = output_node;
@@ -29,7 +30,7 @@ public:
                           std::vector<unsigned int> outputNodeNum)
       : m_pool(m_graph), m_work(outputNodeNum[0], inputNodesNum[0]),
         m_outputNodeNum(outputNodeNum), m_inputNodeNum(inputNodesNum),
-        final_layer(nodeDims.size()) {}
+        final_layer(nodeDims.size()), m_hash_table(524288) {}
 
   unsigned get_current_generation_sequence() const { return sequence; }
   void cycle();
@@ -53,6 +54,7 @@ private:
   // this should be set at contstructor
   unsigned next_sequence_remaining_cycle = 0;
   bool working = false;
+  sjq::hash_table m_hash_table;
 };
 
 struct agg_signal {
