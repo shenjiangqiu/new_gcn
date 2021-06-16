@@ -42,7 +42,6 @@ void fast_sched::controll_info_generator::cycle() {
     auto cycle = 0;
     for (auto input : next_input_nodes) {
       cycle += m_hash_table.query(input);
-      cycle += m_hash_table.invalid(input);
     }
 
     next_sequence_remaining_cycle += cycle;
