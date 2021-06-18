@@ -111,9 +111,9 @@ void current_working_window::add(const output_node &nd) {
   assert(total_edge_buffer_usage <= (unsigned)config::edgeSize);
   assert(total_agg_buffer_usage <= (unsigned)config::aggSize);
 
-  spdlog::info("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
+  spdlog::trace("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
                 (int)config::edgeSize);
-  spdlog::info("agg_buffer_ocupy: {} of_total {}", total_agg_buffer_usage,
+  spdlog::trace("agg_buffer_ocupy: {} of_total {}", total_agg_buffer_usage,
                 (int)config::aggSize);
 }
 

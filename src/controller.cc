@@ -7,7 +7,14 @@
 #include "spdlog/spdlog.h"
 #include <utility>
 
-#define WINDOW_PRINT_GAP 1
+#define WINDOW_PRINT_GAP 100
+
+#ifndef NDEBUG
+
+#include <map>
+
+std::map<unsigned, std::vector<unsigned>> window_compare;
+#endif
 namespace fast_sched {
 void print_window(const current_working_window &m_current_work,
                   const std::vector<unsigned> &next_input_nodes,
@@ -19,6 +26,19 @@ void print_window(const current_working_window &m_current_work,
            m_current_work.get_output_size(), m_current_work.get_input_size(),
            m_current_work.get_agg_usage(), m_current_work.get_edge_usage(),
            m_current_work.get_current_output_node_size());
+#ifndef NDEBUG
+  if (window_compare.contains(print_sign)) {
+    assert(window_compare.at(print_sign) == next_input_nodes);
+
+    GCN_INFO("find {} , match!!", print_sign);
+    window_compare.erase(print_sign);
+  } else {
+    window_compare.insert({print_sign, next_input_nodes});
+    GCN_INFO("insert: {} with {}", print_sign,
+             fmt::join(next_input_nodes, ","));
+  }
+
+#endif
 }
 // note here, we do not count the latency of read csc format edge from dram to
 // on-chip buffer, because the bottleneck should be signal generation process
@@ -147,10 +167,7 @@ void controller::cycle() {
       print_window(m_current_work, next_input_nodes, print_sign, "self");
     }
     print_sign++;
-    if (print_sign == 10) {
-      std::cout.flush();
-      throw;
-    }
+  
     // from nodes to address
     std::vector<uint64_t> addrs;
     // from nodes to addres
