@@ -3,10 +3,10 @@
 **A hy_gcn simulator**
 
 To build the code:
-```
+```shell
 git clone --recursive https://github.com/shenjiangqiu/new_gcn
 cd new_gcn
-mkdir build&&cmake ..&&make
+mkdir build && cd build && cmake .. &&make
 ```
 
 
