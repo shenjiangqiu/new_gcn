@@ -28,8 +28,8 @@ public:
                           std::vector<unsigned int> nodeDims,
                           std::vector<unsigned int> inputNodesNum)
       : m_pool(m_graph), m_work(inputNodesNum[0], nodeDims[0] * 4),
-        m_inputNodeNum(inputNodesNum), final_layer(nodeDims.size()),
-        m_hash_table(config::hash_table_size) {}
+        m_nodeDims(nodeDims), m_inputNodeNum(inputNodesNum),
+        final_layer(nodeDims.size()), m_hash_table(config::hash_table_size) {}
 
   unsigned get_current_generation_sequence() const { return sequence; }
   void cycle();

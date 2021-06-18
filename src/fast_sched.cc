@@ -89,6 +89,7 @@ unsigned output_node::invalid_input(const std::vector<unsigned int> &input) {
   }
   return invalid_items;
 }
+// find bug here, not release the badge!!!
 bool fast_sched::current_working_window::can_add(
     const fast_sched::output_node &node) const {
 
@@ -102,7 +103,8 @@ bool fast_sched::current_working_window::can_add(
   }
 }
 void current_working_window::add(const output_node &nd) {
-
+  assert(can_add(nd));
+  assert(current_window.count(nd.get_output_node_id()) == 0);
   current_window.insert({nd.get_output_node_id(), nd});
 
   total_edge_buffer_usage += nd.get_edge_size();
@@ -111,9 +113,9 @@ void current_working_window::add(const output_node &nd) {
   assert(total_edge_buffer_usage <= (unsigned)config::edgeSize);
   assert(total_agg_buffer_usage <= (unsigned)config::aggSize);
 
-  spdlog::trace("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
+  spdlog::info("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
                 (int)config::edgeSize);
-  spdlog::trace("agg_buffer_ocupy: {} of_total {}", total_agg_buffer_usage,
+  spdlog::info("agg_buffer_ocupy: {} of_total {}", total_agg_buffer_usage,
                 (int)config::aggSize);
 }
 
@@ -175,10 +177,24 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
       item_count += i->second.invalid_input(next_input);
     }
     // remove all empty entry, which means
-    std::erase_if(current_window, [](const auto &pair) {
-      auto const &[key, value] = pair;
-      return value.is_all_processed();
-    });
+
+    // FIXME , fix bug here, when delete a line, should release the entry
+    // To release the entry,1. need to release the agg and edge buffer
+    // 2. need to invalid all hashtable(make sure!!!)
+    // what about cycle in hashtable??
+
+    auto i = current_window.begin();
+    while (i != current_window.end()) {
+      if (i->second.is_all_processed()) {
+        i = current_window.erase(i);
+        // release the edge buffer and agg buffer
+        total_edge_buffer_usage -= i->second.get_edge_size();
+        total_agg_buffer_usage -= current_output_node_size;
+
+      } else {
+        i++;
+      }
+    }
 
     all_input.insert(all_input.end(), next_input.begin(), next_input.end());
 
@@ -190,7 +206,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
 
   return all_input;
 }
-
+// output node_size, single node size in Byte
 current_working_window::current_working_window(unsigned int numInputCapacity,
                                                unsigned output_node_size)
     : num_input_capacity(numInputCapacity),

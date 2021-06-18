@@ -96,6 +96,13 @@ public:
     return out;
   }
   unsigned get_current_item_count() { return current_item_count; }
+  unsigned get_output_size() const { return current_window.size(); }
+  unsigned get_input_size() const { return num_input_capacity; }
+  unsigned get_agg_usage() const { return total_agg_buffer_usage; }
+  unsigned get_edge_usage() const { return total_edge_buffer_usage; }
+  unsigned get_current_output_node_size() const {
+    return current_output_node_size;
+  }
 
 private:
   std::map<unsigned, output_node> current_window;

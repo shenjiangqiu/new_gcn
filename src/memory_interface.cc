@@ -52,7 +52,7 @@ void memory_interface::cycle() {
         // fix bug here
         // the traffic should only contain those really send to dram.
         // before(update every time call send_reqs!!)
-        update_traffic(64,req->t);
+        update_traffic(64, req->t);
       }
 
       // add the req to the record
@@ -72,8 +72,8 @@ void memory_interface::cycle() {
           // task_return_queue.push(req);
           // req_queue.pop();
 
-          //the write traffic!
-          assert(req->t==device_types::output_buffer);
+          // the write traffic!
+          assert(req->t == device_types::output_buffer);
           update_traffic(64, device_types::output_buffer);
           if (len <= 64) {
             GCN_DEBUG("{}:{} ,finished write: {}", __FILE__, __LINE__, *req);
@@ -166,6 +166,12 @@ void memory_interface::send(const std::shared_ptr<Req> &req) {
     id_to_reqs_map.insert({req->id, req});
   GCN_DEBUG("received req:{}", *req);
   req_queue.push(req);
+
+  static uint64_t print_sign = 0;
+  if (print_sign % 100 == 0) {
+    GCN_INFO("mem_interface is still receiving request:{}", print_sign);
+  }
+  print_sign++;
 }
 
 memory_interface::memory_interface(const std::string &dram_config_name,

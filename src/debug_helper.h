@@ -16,13 +16,14 @@
   spdlog::error("{}:{} cycle:{}, " format, __FILE__, __LINE__,                 \
                 global_definitions.cycle, __VA_ARGS__)
 
-#define GCN_INFO_S(format)                                                  \
+
+#define GCN_INFO_S(format)                                                     \
   spdlog::info("{}:{} cycle:{}, " format, __FILE__, __LINE__,                  \
                global_definitions.cycle)
-#define GCN_DEBUG_S(format)                                                 \
+#define GCN_DEBUG_S(format)                                                    \
   spdlog::debug("{}:{} cycle:{}, " format, __FILE__, __LINE__,                 \
                 global_definitions.cycle)
-#define GCN_ERROR_S(format)                                                 \
+#define GCN_ERROR_S(format)                                                    \
   spdlog::error("{}:{} cycle:{}, " format, __FILE__, __LINE__,                 \
                 global_definitions.cycle)
 
