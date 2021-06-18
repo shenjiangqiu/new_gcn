@@ -58,7 +58,7 @@ void fast_sched::controll_info_generator::cycle() {
     // insert a new output node!!!! read the next stage.
 
     // update here, real query
-    auto cycle = 1;
+    auto cycle = 1u;
     for (auto input : next_input_nodes) {
 
       cycle += m_hash_table.query(input);
@@ -79,10 +79,10 @@ void fast_sched::controll_info_generator::cycle() {
     m_work.add(next_input_line);
 
     // update here, real insert
-    auto cycle = 0;
+    auto cycle = 0u;
     for (auto input : next_input_line.get_not_processed()) {
-      auto ret = 0;
-      ret = m_hash_table.insert(input);
+
+      auto ret = m_hash_table.insert(input);
       if (ret == 0) {
         spdlog::error("fail to insert a line? this line should be handled "
                       "by manuelly serch, might try to insert it again?");

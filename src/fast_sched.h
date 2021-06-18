@@ -28,10 +28,10 @@ public:
   explicit output_node(std::set<unsigned> input_nodes, unsigned id,
                        unsigned edge_size);
   // get the edge buffer requirement of this outout node
-  unsigned get_edge_size() const { return edgesize; }
+  [[nodiscard]] unsigned get_edge_size() const { return edgesize; }
   // get the agg buffer requirement of this output node
 
-  std::string get_line_trace() const {
+  [[nodiscard]] std::string get_line_trace() const {
     std::string out;
     for (auto i : input_nodes) {
       if (not_processed_nodes.count(i)) {
@@ -45,8 +45,8 @@ public:
     return out;
   }
   output_node() = default;
-  [[nodiscard]] const std::set<unsigned int> &getInputNodes() const;
-  void setInputNodes(const std::set<unsigned int> &inputNodes);
+  [[maybe_unused]] [[nodiscard]] const std::set<unsigned int> &getInputNodes() const;
+  [[maybe_unused]] void setInputNodes(const std::set<unsigned int> &inputNodes);
 
   // this will consume the next n input
   [[nodiscard]] std::vector<unsigned> get_next_n_input(unsigned n) const;
@@ -54,12 +54,12 @@ public:
   [[nodiscard]] bool is_all_processed() const {
     return not_processed_nodes.empty();
   }
-  unsigned get_remaining() const { return not_processed_nodes.size(); }
-  bool exists(unsigned id) const { return not_processed_nodes.count(id) > 0; }
-  const std::set<unsigned> &get_not_processed() const {
+  [[nodiscard]] unsigned get_remaining() const { return not_processed_nodes.size(); }
+  [[nodiscard]] bool exists(unsigned id) const { return not_processed_nodes.count(id) > 0; }
+  [[nodiscard]] const std::set<unsigned> &get_not_processed() const {
     return not_processed_nodes;
   }
-  unsigned get_output_node_id() const { return output_node_id; }
+  [[nodiscard]] unsigned get_output_node_id() const { return output_node_id; }
 
 private:
   std::set<unsigned> input_nodes;
@@ -80,11 +80,11 @@ public:
                                   unsigned output_node_size);
   // void invalid(unsigned);
 
-  bool can_add(const output_node &node) const;
+  [[nodiscard]] bool can_add(const output_node &node) const;
 
   void add(const output_node &nd);
 
-  unsigned get_num_valid_work() const { return current_window.size(); }
+  [[maybe_unused]] [[nodiscard]] unsigned get_num_valid_work() const { return current_window.size(); }
   // void invalid_and_add(unsigned id, const output_node &nd);
   std::vector<unsigned> get_next_input_nodes();
   std::string get_line_trace() {
@@ -95,12 +95,12 @@ public:
     }
     return out;
   }
-  unsigned get_current_item_count() { return current_item_count; }
-  unsigned get_output_size() const { return current_window.size(); }
-  unsigned get_input_size() const { return num_input_capacity; }
-  unsigned get_agg_usage() const { return total_agg_buffer_usage; }
-  unsigned get_edge_usage() const { return total_edge_buffer_usage; }
-  unsigned get_current_output_node_size() const {
+  [[nodiscard]] unsigned get_current_item_count() const { return current_item_count; }
+  [[nodiscard]] unsigned get_output_size() const { return current_window.size(); }
+  [[nodiscard]] unsigned get_input_size() const { return num_input_capacity; }
+  [[nodiscard]] unsigned get_agg_usage() const { return total_agg_buffer_usage; }
+  [[nodiscard]] unsigned get_edge_usage() const { return total_edge_buffer_usage; }
+  [[nodiscard]] unsigned get_current_output_node_size() const {
     return current_output_node_size;
   }
 
@@ -110,11 +110,11 @@ private:
   // this size if fixed because it's only decided by the input buffer
   unsigned num_input_capacity;
   // the number of agg buffer being used
-  unsigned total_agg_buffer_usage;
+  unsigned total_agg_buffer_usage{};
   // the number of edge buffuer being used
-  unsigned total_edge_buffer_usage;
+  unsigned total_edge_buffer_usage{};
   // number of edges of next input window;
-  unsigned current_item_count;
+  unsigned current_item_count{};
 
   unsigned current_output_node_size;
 };
@@ -123,9 +123,9 @@ class output_pool {
 public:
   explicit output_pool(const Graph &m_graph);
   // get a new input line
-  output_node get_next_input_line() const;
+  [[nodiscard]] output_node get_next_input_line() const;
   output_node get_next_input_line_and_move();
-  void only_move() { current_position++; }
+  [[maybe_unused]] void only_move() { current_position++; }
   void reset() { current_position = 0; }
 
   bool have_next_col() {
@@ -134,7 +134,7 @@ public:
   std::string get_line_trace() {
     std::string out;
     auto count = 0u;
-    for (auto i : all_remaining_output_nodes) {
+    for (const auto& i : all_remaining_output_nodes) {
       if (count < current_position) {
         out += "x ";
       } else {

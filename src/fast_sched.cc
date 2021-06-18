@@ -3,11 +3,9 @@
 //
 
 #include "fast_sched.h"
-#include "cstdint"
 #include "limits"
 #include <globals.h>
 #include <spdlog/spdlog.h>
-#include <utility>
 using namespace fast_sched;
 template <typename C> bool all_false(C &c) {
   return std::all_of(c.begin(), c.end(), [](auto v) { return v == false; });
@@ -48,11 +46,11 @@ output_node::output_node(const std::vector<unsigned int> &_input_nodes,
   not_processed_nodes = input_nodes;
 }
 
-const std::set<unsigned int> &output_node::getInputNodes() const {
+[[maybe_unused]] const std::set<unsigned int> &output_node::getInputNodes() const {
   return input_nodes;
 }
 
-void output_node::setInputNodes(const std::set<unsigned int> &inputNodes) {
+[[maybe_unused]] void output_node::setInputNodes(const std::set<unsigned int> &inputNodes) {
   input_nodes = inputNodes;
 }
 
@@ -129,7 +127,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
 
   // the number of edges returned in the input window
   unsigned item_count = 0;
-  assert(current_window.size());
+  assert(!current_window.empty());
   // in this while loop, we will try to find next sz input nodes to be loaded
   // into the input buffer
   while (remainings > 0) {
@@ -171,10 +169,10 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
 
     // mark all elements in this vector invalid in all other working set, this
     // step prevent choose redundent input nodes
-    for (auto i = current_window.begin(); i != current_window.end(); i++) {
+    for (auto & i : current_window) {
 
       // valid and not all processed
-      item_count += i->second.invalid_input(next_input);
+      item_count += i.second.invalid_input(next_input);
     }
     // remove all empty entry, which means
 

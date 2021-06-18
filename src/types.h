@@ -17,9 +17,9 @@ public:
     global_id++;
     items_cnt = 0;
   }
-  unsigned nodeDim;
+  unsigned nodeDim{};
   unsigned id;
-  int items_cnt; //#vertices or #edges
+  unsigned items_cnt; //#vertices or #edges
   device_types t;
   mem_request req_type;
   bool the_final_request = false;
@@ -63,7 +63,7 @@ public:
 
 private:
   std::vector<uint64_t> addr;
-  uint64_t single_addr;
+  uint64_t single_addr{};
   bool use_continue_addr = false;
   unsigned single_len = 0;
 };

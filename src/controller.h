@@ -16,12 +16,7 @@ using pool = output_pool;
 using node = output_node;
 using work = current_working_window;
 
-enum class edge_info_stats {
-  empty,
-  reading_edges_and_build_hash,
-  finished_build_hash,
-  finished_use_hash
-};
+
 class controll_info_generator {
 public:
   controll_info_generator(const Graph &m_graph,
@@ -31,7 +26,7 @@ public:
         m_nodeDims(nodeDims), m_inputNodeNum(inputNodesNum),
         final_layer(nodeDims.size()), m_hash_table(config::hash_table_size) {}
 
-  unsigned get_current_generation_sequence() const { return sequence; }
+  [[nodiscard]] unsigned get_current_generation_sequence() const { return sequence; }
   void cycle();
 
 private:
@@ -40,10 +35,6 @@ private:
   std::vector<unsigned int> m_nodeDims;
 
   std::vector<unsigned> m_inputNodeNum;
-
-  unsigned calculate_insert_node(const node &new_node);
-  unsigned per_query_cycle = 2;
-  unsigned insert_cycle_per_node = 2;
 
   bool pool_all_finished = false;
 
@@ -56,9 +47,7 @@ private:
   sjq::hash_table m_hash_table;
 };
 
-struct agg_signal {
-  unsigned remaining_cycle = 0;
-};
+
 class controller {
 
 public:
@@ -96,7 +85,6 @@ private:
   std::shared_ptr<memory_interface> m_mem;
 
   // generated signal buffered here
-  std::queue<agg_signal> m_agg_signal;
 
   // the signal generator!
   controll_info_generator m_controll_info_generator;
