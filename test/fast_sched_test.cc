@@ -3,20 +3,21 @@
 //
 #include "catch2/catch.hpp"
 #include "fast_sched.h"
-
+#include <globals.h>
 TEST_CASE("fast_sched_test") {
+  config::aggSize = 16777216;
+  config::edgeSize = 2097152;
   Graph m_graph("test");
-  fast_sched::output_pool m_poll(m_graph);
-  fmt::print("{}\n", m_poll.get_line_trace());
+  fast_sched::output_pool m_pool(m_graph);
+  fmt::print("{}\n", m_pool.get_line_trace());
 
   fast_sched::current_working_window m_working_window(2, 2);
-  auto wd = m_working_window.getAllFinishedCol();
-  for (auto i : wd) {
-    m_working_window.add(i, m_poll.get_next_input_line());
+  while (m_working_window.can_add(m_pool.get_next_input_line())) {
+    m_working_window.add(m_pool.get_next_input_line_and_move());
   }
 
   fmt::print("{}\n", m_working_window.get_line_trace());
-  fmt::print("{}\n", m_poll.get_line_trace());
+  fmt::print("{}\n", m_pool.get_line_trace());
 
   auto next = m_working_window.get_next_input_nodes();
   fmt::print("{}\n", m_working_window.get_line_trace());
@@ -24,13 +25,12 @@ TEST_CASE("fast_sched_test") {
   next = m_working_window.get_next_input_nodes();
   fmt::print("{}\n", m_working_window.get_line_trace());
   // add a new line
-  wd = m_working_window.getAllFinishedCol();
-  for (auto i : wd) {
-    m_working_window.add(i, m_poll.get_next_input_line());
+  while (m_working_window.can_add(m_pool.get_next_input_line())) {
+    m_working_window.add(m_pool.get_next_input_line_and_move());
   }
 
   fmt::print("{}\n", m_working_window.get_line_trace());
-  fmt::print("{}\n", m_poll.get_line_trace());
+  fmt::print("{}\n", m_pool.get_line_trace());
 
   // test all finished
 

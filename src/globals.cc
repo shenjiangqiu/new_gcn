@@ -38,21 +38,32 @@ Minisat::DoubleOption dram_freq("system", "dram-freq",
                                 "the dram frequency in GHZ,Note that, It's "
                                 "working frequency not data frequency!!",
                                 1);
-Minisat::StringOption mem_sim("system", "mem-sim",
-                                  "memory simulator",
-                                  "ramulator");
+Minisat::StringOption mem_sim("system", "mem-sim", "memory simulator",
+                              "ramulator");
 
-Minisat::IntOption enable_feature_sparsity("system", "enable-feature-sparsity", "if enable feature sparsity", 0);
+Minisat::IntOption enable_feature_sparsity("system", "enable-feature-sparsity",
+                                           "if enable feature sparsity", 0);
 Minisat::DoubleOption feature_sparse_rate0("system", "feature-sparse-rate0",
-                                "Feature sparse rate layer 0", 0);
+                                           "Feature sparse rate layer 0", 0);
 
 Minisat::DoubleOption feature_sparse_rate1("system", "feature-sparse-rate1",
-                                "Feature sparse rate layer 1", 0);
-                                
+                                           "Feature sparse rate layer 1", 0);
+
 Minisat::DoubleOption feature_sparse_rate2("system", "feature-sparse-rate2",
-                                "Feature sparse rate layer 2", 0);
-Minisat::BoolOption enable_valid_node_only("system","enable-valid-node-only","enable-valid-node-only",false);
-Minisat::BoolOption enable_dense_window("system","enable-dense-window","enable-dense-window",false);
-Minisat::BoolOption enable_fast_sched("system","enable-fast-sched","enable-fast-sched",false);
+                                           "Feature sparse rate layer 2", 0);
+Minisat::BoolOption enable_valid_node_only("system", "enable-valid-node-only",
+                                           "enable-valid-node-only", false);
+Minisat::BoolOption enable_dense_window("system", "enable-dense-window",
+                                        "enable-dense-window", false);
+Minisat::BoolOption enable_fast_sched("system", "enable-fast-sched",
+                                      "enable-fast-sched", false);
+
+// the size of the hash table(num entrys), the real size will be 8*size, which
+// means one entry=8 bytes
+Minisat::IntOption
+    hash_table_size("system", "hash-table-size",
+                    "the size of the hash table(num entrys), the real size "
+                    "will be 8*size, which means one entry=8 bytes",
+                    0);
 
 } // namespace config

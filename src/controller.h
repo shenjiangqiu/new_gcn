@@ -26,11 +26,10 @@ class controll_info_generator {
 public:
   controll_info_generator(const Graph &m_graph,
                           std::vector<unsigned int> nodeDims,
-                          std::vector<unsigned int> inputNodesNum,
-                          std::vector<unsigned int> outputNodeNum)
-      : m_pool(m_graph), m_work(outputNodeNum[0], inputNodesNum[0]),
-        m_outputNodeNum(outputNodeNum), m_inputNodeNum(inputNodesNum),
-        final_layer(nodeDims.size()), m_hash_table(524288) {}
+                          std::vector<unsigned int> inputNodesNum)
+      : m_pool(m_graph), m_work(inputNodesNum[0], nodeDims[0] * 4),
+        m_inputNodeNum(inputNodesNum), final_layer(nodeDims.size()),
+        m_hash_table(config::hash_table_size) {}
 
   unsigned get_current_generation_sequence() const { return sequence; }
   void cycle();
@@ -38,8 +37,8 @@ public:
 private:
   pool m_pool;
   work m_work;
+  std::vector<unsigned int> m_nodeDims;
 
-  std::vector<unsigned> m_outputNodeNum;
   std::vector<unsigned> m_inputNodeNum;
 
   unsigned calculate_insert_node(const node &new_node);
@@ -67,7 +66,6 @@ public:
   controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
              std::vector<unsigned int> nodeDims,
              std::vector<unsigned int> inputNodesNum,
-             std::vector<unsigned int> outputNodeNum,
              std::shared_ptr<Aggregator_fast> agg,
              std::shared_ptr<memory_interface> mMem);
   controller() = delete;
@@ -93,7 +91,6 @@ private:
   unsigned finalLayer;
   bool all_finished = false;
 
-  std::vector<unsigned> m_outputNodeNum;
   std::vector<unsigned> m_inputNodeNum;
   std::shared_ptr<Aggregator_fast> agg;
   std::shared_ptr<memory_interface> m_mem;

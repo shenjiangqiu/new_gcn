@@ -40,10 +40,11 @@ public:
     unsigned real_entry_id;
     bool found = false;
     // 1, find and append
-    if (entrys.count(entry_id_1) and entrys[entry_id_1].tag == node_id) {
+    if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
       real_entry_id = entry_id_1;
       found = true;
-    } else if (entrys.count(entry_id_2) and entrys[entry_id_2].tag == node_id) {
+    } else if (entrys.count(entry_id_2) and
+               entrys.at(entry_id_2).tag == node_id) {
       real_entry_id = entry_id_2;
       found = true;
     } else {
@@ -52,7 +53,7 @@ public:
     }
 
     if (found) {
-      auto &entry = entrys[real_entry_id];
+      auto &entry = entrys.at(real_entry_id);
       auto next = entrys.upper_bound(real_entry_id);
       if (next != entrys.end()) {
         // this mean how many entry availiable to be used by real_entry_id
@@ -143,7 +144,7 @@ public:
         auto t_entry = entry();
         t_entry.tag = node_id;
         t_entry.total_len = 1;
-        entrys[entry_id_1] = t_entry;
+        entrys.insert({entry_id_1, t_entry});
         total_cycle++;
 
       } else if (is_entry_empty(entry_id_2, 1)) {
@@ -152,7 +153,7 @@ public:
         auto t_entry = entry();
         t_entry.tag = node_id;
         t_entry.total_len = 1;
-        entrys[entry_id_2] = t_entry;
+        entrys.insert({entry_id_2, t_entry});
         total_cycle++;
 
       } else {
@@ -177,7 +178,7 @@ public:
         t_entry.tag = node_id;
         t_entry.total_len = 1;
         total_cycle++;
-        entrys[shortest] = t_entry;
+        entrys.at(shortest) = t_entry;
       }
     }
     return total_cycle;
@@ -186,8 +187,10 @@ public:
   [[nodiscard]] unsigned query(unsigned node_id) {
     // currently we assume no conflict and return the number of entries
     // dont' worry, it's constant
-    auto entryId = find_real_entry_id(node_id);
-    auto entry_size = entrys[entryId].total_len;
+    // fix bug here, it's node id, not entry id!!!!
+
+    auto entryId = get_entry_id_from_node_id(node_id);
+    auto entry_size = entrys.at(entryId).total_len;
     entrys.erase(entryId);
     // T
     return entry_size;
@@ -197,12 +200,36 @@ private:
   // fucnction move, move the entry_id to it's another hash function, note that
   // the entry_id MUST be the real id of the begining node, not from some inner
   // node!!
+
+  // note that , the node id must exist in the hash table!!!
+  unsigned get_entry_id_from_node_id(unsigned node_id) {
+    auto entry_id_1 = hash_func_1(node_id);
+    auto entry_id_2 = hash_func_2(node_id);
+    // 1, find and append
+    unsigned real_entry_id = 0;
+    if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
+      real_entry_id = entry_id_1;
+    } else if (entrys.count(entry_id_2) and
+               entrys.at(entry_id_2).tag == node_id) {
+      real_entry_id = entry_id_2;
+    } else {
+      spdlog::error("in get entry form node id,fail to find the entry of "
+                    "node_id: {} at {} or {}",
+                    node_id, entry_id_1, entry_id_2);
+      throw std::runtime_error("cannot get entry id from node id");
+    }
+    return real_entry_id;
+  }
+
   [[nodiscard]] unsigned move(unsigned entry_id, unsigned a = 0, unsigned b = 0,
                               unsigned move_depth = 0) {
 
     // meet the max move depth.
+    spdlog::debug("currently not using the a and b, maybe use it later for "
+                  "fixing the bug! {}",
+                  a + b);
     GCN_DEBUG("debug to move:{},current depth:{}, current len:{}", entry_id,
-              move_depth, entrys[entry_id].total_len);
+              move_depth, entrys.at(entry_id).total_len);
 
     if (move_depth >= 5) {
       GCN_DEBUG_S("fail to move!, depth is 5");
@@ -228,7 +255,7 @@ private:
                 new_entry_id, tag, get_entry_size(this_entry));
       total_cycle += get_entry_size(this_entry);
 
-      entrys[new_entry_id] = this_entry;
+      entrys.insert({new_entry_id, this_entry});
       // release the old one
       entrys.erase(entry_id);
     } else {
@@ -284,7 +311,7 @@ private:
       }
       // have already clear this place, put it on!!
       total_cycle += get_entry_size(this_entry);
-      entrys[new_entry_id] = this_entry;
+      entrys.at(new_entry_id) = this_entry;
       entrys.erase(entry_id);
     }
     // return the number of cycles, if error happend, return 0 to indicate
@@ -395,10 +422,14 @@ private:
       assert(overflow > inner_id);
 #endif
       return std::prev(entrys.end())->first;
-    }
+    };
+    auto prev = std::prev(neareast);
+    GCN_DEBUG("find_prev: id:{},len:{}, the real id to find:{}", prev->first,
+              prev->second.total_len, inner_id);
+
     assert(std::prev(neareast)->first + get_entry_size(neareast->second) >
            inner_id);
-    return std::prev(neareast)->first;
+    return prev->first;
   }
   [[nodiscard]] unsigned find_shortest_to_move(unsigned entryId1,
                                                unsigned entryId2) const {

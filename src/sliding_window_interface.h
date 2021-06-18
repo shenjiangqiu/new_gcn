@@ -17,8 +17,8 @@ public:
                             unsigned _level) = 0;
   virtual void set_location(unsigned x, unsigned _xw, unsigned _y, unsigned yw,
                             unsigned _level) = 0;
-  virtual void set_location(std::vector<unsigned> x, std::vector<unsigned> _y,
-                            unsigned _level) {}
+  virtual void set_location(std::vector<unsigned> , std::vector<unsigned> ,
+                            unsigned ) {}
   virtual void set_addr(std::vector<uint64_t> inputAddr, unsigned inputLen,
                         uint64_t edgeAddr, unsigned edgeLen,
                         uint64_t outputAddr, unsigned outputLen) = 0;

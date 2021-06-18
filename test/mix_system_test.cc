@@ -32,7 +32,7 @@ TEST_CASE("mix_test") {
   // xws will be:3,3,7 yws will be 3,3,7
   std::vector<int> node_sizes = {10, 10, 10};
   std::shared_ptr<Model> m_model;
-  int node_feature_size = 0;
+  //int node_feature_size = 0;
 
   m_model = std::make_shared<Model>(global_definitions.m_models["gcn"]);
 
@@ -68,7 +68,7 @@ TEST_CASE("cont_test") {
   // xws will be:3,3,7 yws will be 3,3,7
   std::vector<int> node_sizes = {10, 10, 10};
   std::shared_ptr<Model> m_model;
-  int node_feature_size = 0;
+  //int node_feature_size = 0;
 
   m_model = std::make_shared<Model>(global_definitions.m_models["gcn"]);
 

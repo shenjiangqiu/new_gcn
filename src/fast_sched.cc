@@ -6,6 +6,7 @@
 #include "cstdint"
 #include "limits"
 #include <globals.h>
+#include <spdlog/spdlog.h>
 #include <utility>
 using namespace fast_sched;
 template <typename C> bool all_false(C &c) {
@@ -27,15 +28,20 @@ output_pool::output_pool(const Graph &m_graph) {
       auto input_node = idx[j];
       input_nodes.push_back(input_node);
     }
-    auto out_nd = output_node(input_nodes);
+    auto out_nd = output_node(input_nodes, i, (end - start) * 4);
     this->all_remaining_output_nodes.push_back(out_nd);
   }
 }
-output_node output_pool::get_next_input_line() {
+output_node output_pool::get_next_input_line() const {
+  return this->all_remaining_output_nodes.at(current_position);
+}
+output_node output_pool::get_next_input_line_and_move() {
   return this->all_remaining_output_nodes[current_position++];
 }
 
-output_node::output_node(const std::vector<unsigned int> &_input_nodes) {
+output_node::output_node(const std::vector<unsigned int> &_input_nodes,
+                         unsigned id, unsigned edge_size)
+    : output_node_id(id), edgesize(edge_size) {
   for (auto &&i : _input_nodes) {
     input_nodes.insert(i);
   }
@@ -50,10 +56,11 @@ void output_node::setInputNodes(const std::set<unsigned int> &inputNodes) {
   input_nodes = inputNodes;
 }
 
-output_node::output_node(std::set<unsigned int> _input_nodes)
-    : input_nodes(std::move(_input_nodes)) {
-  not_processed_nodes = input_nodes;
-}
+output_node::output_node(std::set<unsigned int> _input_nodes, unsigned id,
+                         unsigned edge_size)
+    : input_nodes(std::move(_input_nodes)), output_node_id(id),
+      edgesize(edge_size), not_processed_nodes(input_nodes) {}
+
 std::vector<unsigned> output_node::get_next_n_input(unsigned int n) const {
   std::vector<unsigned> out;
   auto front = not_processed_nodes.cbegin();
@@ -82,26 +89,32 @@ unsigned output_node::invalid_input(const std::vector<unsigned int> &input) {
   }
   return invalid_items;
 }
+bool fast_sched::current_working_window::can_add(
+    const fast_sched::output_node &node) const {
 
-void current_working_window::invalid(unsigned int id) {
-  this->current_valid[id] = false;
-  all_finished_col.insert(id);
-}
-void current_working_window::add(unsigned id, const output_node &nd) {
-  this->current_valid[id] = true;
-  this->current_window[id] = nd;
-  if (all_finished_col.count(id)) {
-    all_finished_col.erase(id);
+  if (((total_edge_buffer_usage + node.get_edge_size()) <
+       (unsigned)config::edgeSize) and
+      ((total_agg_buffer_usage + current_output_node_size) <
+       (unsigned)config::aggSize)) {
+    return true;
+  } else {
+    return false;
   }
 }
+void current_working_window::add(const output_node &nd) {
 
-void current_working_window::invalid_and_add(unsigned int id,
-                                             const output_node &nd) {
-  current_valid[id] = true;
-  current_window[id] = nd;
-  if (all_finished_col.count(id)) {
-    all_finished_col.erase(id);
-  }
+  current_window.insert({nd.get_output_node_id(), nd});
+
+  total_edge_buffer_usage += nd.get_edge_size();
+  total_agg_buffer_usage += current_output_node_size;
+
+  assert(total_edge_buffer_usage <= (unsigned)config::edgeSize);
+  assert(total_agg_buffer_usage <= (unsigned)config::aggSize);
+
+  spdlog::trace("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
+                (int)config::edgeSize);
+  spdlog::trace("agg_buffer_ocupy: {} of_total {}", total_agg_buffer_usage,
+                (int)config::aggSize);
 }
 
 // according to each output nd, choose the smallest node
@@ -114,65 +127,58 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
 
   // the number of edges returned in the input window
   unsigned item_count = 0;
-
+  assert(current_window.size());
   // in this while loop, we will try to find next sz input nodes to be loaded
   // into the input buffer
   while (remainings > 0) {
 
     // first step, find a node with fewest input edges.
     auto smallest = UINT_MAX;
-    auto selected = 0u;
+    auto selected = current_window.begin();
+    if (selected == current_window.end()) {
+      // no one in window
+      break;
+    }
     // select the smalllest col
-    for (auto i = 0u; i < sz; i++) {
-      if (this->current_valid[i]) {
-        auto &current_node = current_window[i];
-        auto size = current_node.get_remaining();
-        if (size < smallest) {
-          smallest = size;
-          selected = i;
-        }
+    for (auto i = current_window.begin(); i != current_window.end(); i++) {
+
+      auto &current_node = *i;
+      auto size = current_node.second.get_remaining();
+      if (size < smallest) {
+        smallest = size;
+        selected = i;
       }
     }
 
     // get the next input window from the selected node
-    auto &selected_window = current_window[selected];
-    auto next_input = selected_window.get_next_n_input(remainings);
-    if (next_input.empty()) {
-      // we didn't select a valid node, all node are invalid now;
-      assert(all_false(current_valid));
-      break;
-    }
+    auto &selected_window = *selected;
+    auto next_input = selected_window.second.get_next_n_input(remainings);
+
+    assert(!next_input.empty());
     // for histogram stats, record the number of output for each input
 
     for (auto i : next_input) {
       auto count = 0u;
-      for (auto j = 0; j < sz; j++) {
-        if (current_valid[j]) {
-          // count the number of occurence of this input
-          if (current_window[j].exists(i))
-            count++;
-        }
+      for (auto &j : current_window) {
+        // count the number of occurence of this input
+        if (j.second.exists(i))
+          count++;
       }
       global_definitions.number_to_count_map_for_query[count]++;
     }
 
     // mark all elements in this vector invalid in all other working set, this
     // step prevent choose redundent input nodes
-    for (auto i = 0u; i < sz; i++) {
-      if (this->current_valid[i]) {
-        if (current_window[i].is_all_processed()) {
-          current_valid[i] = false;
-          all_finished_col.insert(i);
-        } else {
-          // valid and not all processed
-          item_count += current_window[i].invalid_input(next_input);
-          if (current_window[i].is_all_processed()) {
-            all_finished_col.insert(i);
-            current_valid[i] = false;
-          }
-        }
-      }
+    for (auto i = current_window.begin(); i != current_window.end(); i++) {
+
+      // valid and not all processed
+      item_count += i->second.invalid_input(next_input);
     }
+    // remove all empty entry, which means
+    std::erase_if(current_window, [](const auto &pair) {
+      auto const &[key, value] = pair;
+      return value.is_all_processed();
+    });
 
     all_input.insert(all_input.end(), next_input.begin(), next_input.end());
 
@@ -185,14 +191,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
   return all_input;
 }
 
-current_working_window::current_working_window(unsigned int size,
-                                               unsigned int numInputCapacity)
-    : sz(size), current_window(size), current_valid(size, false),
-      num_input_capacity(numInputCapacity) {
-  for (auto i = 0u; i < sz; i++) {
-    all_finished_col.insert(i);
-  }
-}
-const std::set<unsigned int> current_working_window::getAllFinishedCol() const {
-  return all_finished_col;
-}
+current_working_window::current_working_window(unsigned int numInputCapacity,
+                                               unsigned output_node_size)
+    : num_input_capacity(numInputCapacity),
+      current_output_node_size(output_node_size) {}

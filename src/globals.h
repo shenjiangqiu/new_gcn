@@ -69,6 +69,8 @@ public:
   uint64_t total_edge_buffer_idle = 0;
   // this cycle, all buffer idle, the dram have no work to do!
   uint64_t all_buffer_idle = 0;
+  uint64_t total_cycle_insert_hash_table=0;
+  uint64_t total_cycle_query_hash_table=0;
 
   std::vector<uint64_t> finished_time_stamp;
 
@@ -82,6 +84,8 @@ public:
   std::map<std::string, std::vector<uint64_t>> config_uint64_v;
 
   std::map<unsigned,unsigned> number_to_count_map_for_query;
+
+  
 };
 extern globals global_definitions;
 
@@ -111,5 +115,7 @@ extern Minisat::BoolOption enable_valid_node_only;
 
 extern Minisat::BoolOption enable_dense_window;
 extern Minisat::BoolOption enable_fast_sched;
+
+extern Minisat::IntOption hash_table_size;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

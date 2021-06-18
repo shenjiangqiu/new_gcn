@@ -16,15 +16,22 @@
 #include "sliding_window_interface.h"
 #include "string"
 #include "vector"
+
 namespace fast_sched {
 
 // represent one vertical line in matrix
 class output_node {
   // all the in_edges
 public:
-  explicit output_node(const std::vector<unsigned> &input_nodes);
-  explicit output_node(std::set<unsigned> input_nodes);
-  std::string get_line_trace() {
+  explicit output_node(const std::vector<unsigned> &input_nodes, unsigned id,
+                       unsigned edge_size);
+  explicit output_node(std::set<unsigned> input_nodes, unsigned id,
+                       unsigned edge_size);
+  // get the edge buffer requirement of this outout node
+  unsigned get_edge_size() const { return edgesize; }
+  // get the agg buffer requirement of this output node
+
+  std::string get_line_trace() const {
     std::string out;
     for (auto i : input_nodes) {
       if (not_processed_nodes.count(i)) {
@@ -47,14 +54,18 @@ public:
   [[nodiscard]] bool is_all_processed() const {
     return not_processed_nodes.empty();
   }
-  unsigned get_remaining() { return not_processed_nodes.size(); }
+  unsigned get_remaining() const { return not_processed_nodes.size(); }
   bool exists(unsigned id) const { return not_processed_nodes.count(id) > 0; }
   const std::set<unsigned> &get_not_processed() const {
     return not_processed_nodes;
   }
+  unsigned get_output_node_id() const { return output_node_id; }
 
 private:
   std::set<unsigned> input_nodes;
+
+  unsigned output_node_id = 0;
+  unsigned edgesize = 0;
   // all nodes that is not processed yet
   std::set<unsigned> not_processed_nodes;
   // true: already processed, false: not precessed
@@ -64,59 +75,50 @@ private:
 
 class current_working_window {
 public:
-  unsigned get_current_item_count() const { return current_item_count; }
-  bool have_next_input_node() {
-    return std::any_of(current_valid.begin(), current_valid.end(),
-                       [](bool v) { return v; });
-  }
-  explicit current_working_window(unsigned int size,
-                                  unsigned int numInputCapacity);
-  void invalid(unsigned);
-  void add(unsigned, const output_node &nd);
+  bool have_next_input_node() { return !current_window.empty(); }
+  explicit current_working_window(unsigned numInputCapacity,
+                                  unsigned output_node_size);
+  // void invalid(unsigned);
 
-  unsigned get_num_valid_work() const {
-    auto ret = 0;
-    for (const auto i : current_valid) {
-      if (i) {
-        ret++;
-      }
-    }
-    return ret;
-  }
-  void invalid_and_add(unsigned id, const output_node &nd);
+  bool can_add(const output_node &node) const;
+
+  void add(const output_node &nd);
+
+  unsigned get_num_valid_work() const { return current_window.size(); }
+  // void invalid_and_add(unsigned id, const output_node &nd);
   std::vector<unsigned> get_next_input_nodes();
   std::string get_line_trace() {
     std::string out;
-    for (auto i = 0u; i < sz; i++) {
-      if (current_valid[i]) {
-        out += "o ";
-      } else {
-        out += "x ";
-      }
-      out += current_window[i].get_line_trace();
+    for (const auto &i : current_window) {
+      out += i.second.get_line_trace();
       out += "\n";
     }
     return out;
   }
+  unsigned get_current_item_count() { return current_item_count; }
 
 private:
-  unsigned sz;
-  std::vector<output_node> current_window;
-  std::vector<bool> current_valid;
-  unsigned num_input_capacity;
-  // those col is empty, need to be replaced!
-  std::set<unsigned> all_finished_col;
-  unsigned current_item_count = 0;
+  std::map<unsigned, output_node> current_window;
 
-public:
-  [[nodiscard]] const std::set<unsigned int> getAllFinishedCol() const;
+  // this size if fixed because it's only decided by the input buffer
+  unsigned num_input_capacity;
+  // the number of agg buffer being used
+  unsigned total_agg_buffer_usage;
+  // the number of edge buffuer being used
+  unsigned total_edge_buffer_usage;
+  // number of edges of next input window;
+  unsigned current_item_count;
+
+  unsigned current_output_node_size;
 };
 
 class output_pool {
 public:
   explicit output_pool(const Graph &m_graph);
   // get a new input line
-  output_node get_next_input_line();
+  output_node get_next_input_line() const;
+  output_node get_next_input_line_and_move();
+  void only_move() { current_position++; }
   void reset() { current_position = 0; }
 
   bool have_next_col() {

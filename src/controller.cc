@@ -31,18 +31,20 @@ void fast_sched::controll_info_generator::cycle() {
   // 2, not working, from working_window to generate working set
   if (m_work.have_next_input_node()) {
     // get the next input req and send it to the Inputbuffer
-    auto valid_nodes = m_work.get_num_valid_work();
+    // auto valid_nodes = m_work.get_num_valid_work();
     auto next_input_nodes = m_work.get_next_input_nodes();
-    auto total_query = valid_nodes * next_input_nodes.size();
+    // auto total_query = valid_nodes * next_input_nodes.size();
 
     // noticed here, why we use += not =, because might need additional cycle:
     // insert a new output node!!!! read the next stage.
 
     // update here, real query
-    auto cycle = 0;
+    auto cycle = 1;
     for (auto input : next_input_nodes) {
+
       cycle += m_hash_table.query(input);
     }
+    global_definitions.total_cycle_query_hash_table += cycle;
 
     next_sequence_remaining_cycle += cycle;
 
@@ -50,24 +52,28 @@ void fast_sched::controll_info_generator::cycle() {
   }
 
   // 3, when there are empty slotes in working window, add them in
-  if (!m_work.getAllFinishedCol().empty() and m_pool.have_next_col()) {
-    for (auto &&i : m_work.getAllFinishedCol()) {
-      if (m_pool.have_next_col()) {
-        auto next_input_line = m_pool.get_next_input_line();
-        auto line_size = next_input_line.getInputNodes().size();
-        m_work.add(i, next_input_line);
+  while (m_pool.have_next_col() and
+         m_work.can_add(m_pool.get_next_input_line())) {
 
-        // update here, real insert
-        auto cycle = 0;
-        for (auto input : next_input_line.get_not_processed()) {
-          cycle += m_hash_table.insert(input);
-        }
+    auto next_input_line = m_pool.get_next_input_line_and_move();
+    // auto line_size = next_input_line.getInputNodes().size();
+    m_work.add(next_input_line);
 
-        next_sequence_remaining_cycle += cycle;
-      } else {
-        break;
+    // update here, real insert
+    auto cycle = 0;
+    for (auto input : next_input_line.get_not_processed()) {
+      auto ret = 0;
+      ret = m_hash_table.insert(input);
+      if (ret == 0) {
+        spdlog::error("fail to insert a line? this line should be handled "
+                      "by manuelly serch, might try to insert it again?");
+        throw std::runtime_error("error");
       }
+      cycle += ret;
+      global_definitions.total_cycle_insert_hash_table += ret;
     }
+
+    next_sequence_remaining_cycle += cycle;
   }
 
   // switch to next layer
@@ -91,8 +97,7 @@ void fast_sched::controll_info_generator::cycle() {
         m_pool.reset();
         // set up the environments
 
-        m_work =
-            work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
+        m_work = work(m_inputNodeNum[currentLayer], m_nodeDims[currentLayer]);
       }
     }
   }
@@ -106,7 +111,7 @@ void controller::cycle() {
   // 1, send read request to input buffer
   // 2, send task to agg
   // 3, check mem
-  // 4, check working window
+  // 4, check working window, fix bug here, remenber to add lines to working_window
   // 5, check pool
   // 6, send memory request to memory
   // 7, check if everything is finished
@@ -164,17 +169,10 @@ void controller::cycle() {
     assert(m_mem->peek_req()->t == device_types::input_buffer);
     i_bf->receive(m_mem->get_req());
   }
-
-  // 4, check working window
-  if (!m_current_work.getAllFinishedCol().empty() and
-      m_current_pool.have_next_col()) {
-    for (auto &&i : m_current_work.getAllFinishedCol()) {
-      if (m_current_pool.have_next_col()) {
-        m_current_work.add(i, m_current_pool.get_next_input_line());
-      } else {
-        break;
-      }
-    }
+  // insert line to work
+  while (m_current_pool.have_next_col() and
+         m_current_work.can_add(m_current_pool.get_next_input_line())) {
+    m_current_work.add(m_current_pool.get_next_input_line_and_move());
   }
 
   // 5, check pool
@@ -193,10 +191,10 @@ void controller::cycle() {
         currentInputBaseAddr += currentnodeDim * 4 * totalNodes;
         assert(currentLayer < nodeDims.size());
         currentnodeDim = nodeDims[currentLayer];
-        GCN_INFO("setup new window: outputNodes:{},inputNodes:{}",
-                 m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
+        GCN_INFO("setup new window: inputNodes:{} node_size:{}",
+                 m_inputNodeNum[currentLayer], nodeDims[currentLayer] * 4);
         m_current_work =
-            work(m_outputNodeNum[currentLayer], m_inputNodeNum[currentLayer]);
+            work(m_inputNodeNum[currentLayer], nodeDims[currentLayer]);
       }
     }
   }
@@ -229,17 +227,14 @@ void controller::cycle() {
 controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
                        std::vector<unsigned int> nodeDims,
                        std::vector<unsigned int> inputNodesNum,
-                       std::vector<unsigned int> outputNodeNum,
                        std::shared_ptr<Aggregator_fast> agg,
                        std::shared_ptr<memory_interface> mMem)
-    : m_current_pool(m_graph),
-      m_current_work(outputNodeNum[0], inputNodesNum[0]), i_bf(iBf),
-      nodeDims(std::move(nodeDims)), totalNodes(m_graph.get_num_nodes()),
-      currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
-      currentLayer(0), finalLayer(this->nodeDims.size()),
-      m_outputNodeNum(outputNodeNum), m_inputNodeNum(inputNodesNum),
+    : m_current_pool(m_graph), m_current_work(inputNodesNum[0], nodeDims[0]),
+      i_bf(iBf), nodeDims(std::move(nodeDims)),
+      totalNodes(m_graph.get_num_nodes()), currentInputBaseAddr(0x00ff00),
+      currentnodeDim(this->nodeDims[0]), currentLayer(0),
+      finalLayer(this->nodeDims.size()), m_inputNodeNum(inputNodesNum),
       agg(std::move(agg)), m_mem(std::move(mMem)),
-      m_controll_info_generator(m_graph, this->nodeDims, inputNodesNum,
-                                outputNodeNum) {}
+      m_controll_info_generator(m_graph, this->nodeDims, inputNodesNum) {}
 bool controller::isAllFinished() const { return all_finished; }
 } // namespace fast_sched

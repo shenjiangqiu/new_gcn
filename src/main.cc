@@ -87,24 +87,19 @@ int main(int argc, char **argv) {
     auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
     std::vector<unsigned> m_node_feature_dim;
     std::vector<unsigned> m_input_num;
-    std::vector<unsigned> m_output_num;
     // fix bug here, nodeDim is the number of features per node, not the real
     // node size,//maybe rename it? do it!
     for (auto i = 0u; i < node_dim_per_layer.size() - 1; i++) {
       m_node_feature_dim.push_back(node_dim_per_layer[i]);
       m_input_num.push_back((config::inputSize / 2) /
                             (node_dim_per_layer[i] * 4));
-      m_output_num.push_back((config::aggSize / 2) /
-                             (node_dim_per_layer[i] * 4));
     }
     GCN_INFO("the input num: {}", fmt::join(m_input_num, ","));
-    GCN_INFO("the output num: {}", fmt::join(m_output_num, ","));
     GCN_INFO("the nodeDim num: {}", fmt::join(node_dim_per_layer, ","));
     GCN_INFO("the buffersize num: {}", config::inputSize);
 
-    auto m_controller =
-        fast_sched::controller(*m_graph, i_bf, m_node_feature_dim, m_input_num,
-                               m_output_num, m_agg, m_mem);
+    auto m_controller = fast_sched::controller(
+        *m_graph, i_bf, m_node_feature_dim, m_input_num, m_agg, m_mem);
     global_definitions.cycle = 0;
     uint mem_rount = 0;
     while (!m_controller.isAllFinished()) {
@@ -143,6 +138,11 @@ int main(int argc, char **argv) {
     for (auto i : global_definitions.number_to_count_map_for_query) {
       fmt::print("{} : {}\n", i.first, i.second);
     }
+    fmt::print("cycle_insert_hash: {}",
+               global_definitions.total_cycle_insert_hash_table);
+    fmt::print("cycle_query_hash: {}",
+               global_definitions.total_cycle_query_hash_table);
+
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,
                     config::outputSize, config::aggCores, config::systolic_rows,
