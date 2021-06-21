@@ -21,6 +21,8 @@
 class globals {
 public:
   std::shared_ptr<spdlog::logger> edge_agg_logger;
+  std::shared_ptr<spdlog::logger> default_logger;
+
   uint64_t cycle = 0;
 
   uint64_t edgeBuffer_idle_cycles = 0;

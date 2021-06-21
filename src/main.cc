@@ -12,10 +12,15 @@ using namespace Minisat;
 int main(int argc, char **argv) {
 
   Minisat::parseOptions(argc, argv, false);
-  // this value must be init after parse option, because it depends on graph name
+  // this value must be init after parse option, because it depends on graph
+  // name
   global_definitions.edge_agg_logger = spdlog::basic_logger_st(
       "trace_edge_agg.txt",
-      fmt::format("logs/{}/edge_agg.txt", config::graph_name));
+      fmt::format("logs/{}/edge_agg.txt", config::graph_name), true);
+   global_definitions.default_logger = spdlog::basic_logger_st(
+      "default_logger.txt",
+      fmt::format("logs/{}/default_logger.txt", config::graph_name), true);
+  
   // TODO: should be read gcn number
   // TODO: the agg_buffer might contain double information
   // the features dimension for each layer
@@ -37,9 +42,9 @@ int main(int argc, char **argv) {
   }
 
   if (config::debug) {
-    spdlog::set_level(spdlog::level::debug);
+    global_definitions.default_logger->set_level(spdlog::level::debug);
   } else {
-    spdlog::set_level(spdlog::level::info);
+    global_definitions.default_logger->set_level(spdlog::level::info);
   }
 
   GCN_INFO("Enable feature sparsity: {}", config::enable_feature_sparsity);

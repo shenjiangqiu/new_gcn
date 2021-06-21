@@ -93,7 +93,8 @@ unsigned output_node::invalid_input(const std::vector<unsigned int> &input) {
 // find bug here, not release the badge!!!
 bool fast_sched::current_working_window::can_add(
     const fast_sched::output_node &node) const {
-
+  assert((total_edge_buffer_usage == 0 and total_agg_buffer_usage == 0) or
+         (total_edge_buffer_usage != 0 and total_agg_buffer_usage != 0));
   if (((total_edge_buffer_usage + node.get_edge_size()) <
        (unsigned)config::edgeSize) and
       ((total_agg_buffer_usage + current_output_node_size) <
@@ -113,8 +114,6 @@ void current_working_window::add(const output_node &nd) {
 
   assert(total_edge_buffer_usage <= (unsigned)config::edgeSize);
   assert(total_agg_buffer_usage <= (unsigned)config::aggSize);
-
-
 
   spdlog::trace("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
                 (int)config::edgeSize);
@@ -189,10 +188,10 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
     auto i = current_window.begin();
     while (i != current_window.end()) {
       if (i->second.is_all_processed()) {
-        i = current_window.erase(i);
-        // release the edge buffer and agg buffer
+        // fix the bug that will cause edge buufer not return to zero.
         total_edge_buffer_usage -= i->second.get_edge_size();
         total_agg_buffer_usage -= current_output_node_size;
+        i = current_window.erase(i);
 
       } else {
         i++;

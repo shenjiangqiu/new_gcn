@@ -4,6 +4,7 @@
 #include <debug_helper.h>
 #include <fmt/format.h>
 #include <map>
+#include <set>
 #include <spdlog/spdlog.h>
 #include <vector>
 const unsigned NOT_EXIST = -1;
@@ -254,7 +255,7 @@ private:
     auto tag = this_entry.tag;
 
     // the place that rehash function point to
-    auto new_entry_id = 0;
+    auto new_entry_id = 0u;
     if (entry_id == hash_func_1(tag)) {
       new_entry_id = hash_func_2(tag);
     } else {
@@ -281,8 +282,23 @@ private:
 
       GCN_DEBUG("moving: could not find empty entry at:{} , try to move again!",
                 new_entry_id);
-
+      unsigned loop_count = 0;
+      std::set<unsigned> runtime_loop;
       while (!is_entry_empty(new_entry_id, get_entry_size(this_entry))) {
+        // Fix bug here, there might cause infinit loog
+        if (runtime_loop.contains(new_entry_id)) {
+          GCN_ERROR("Error! contain loop when move:{}", new_entry_id);
+        } else {
+          runtime_loop.insert(new_entry_id);
+        }
+
+        loop_count++;
+        if (loop_count == 1000) {
+          throw std::runtime_error(
+              "more than 1000 loops in move happend, might "
+              "have infinit loop here");
+        }
+
         GCN_DEBUG("moving: {} is not empty", new_entry_id);
         auto conf_entry =
             get_conflict_entry(new_entry_id, get_entry_size(this_entry));
