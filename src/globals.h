@@ -8,16 +8,19 @@
 #include "map"
 #include "utils/Options.h"
 #include "vector"
-#define add_config_uint64() { \
-                              \
-  }
-#define add_config_ull() {}
-#define add_config_ull_v() {}
-#define add_config_uint64_v() {}
+#include <spdlog/sinks/basic_file_sink.h>
+#define add_config_uint64()                                                    \
+  {}
+#define add_config_ull()                                                       \
+  {}
+#define add_config_ull_v()                                                     \
+  {}
+#define add_config_uint64_v()                                                  \
+  {}
 
 class globals {
 public:
-
+  std::shared_ptr<spdlog::logger> edge_agg_logger;
   uint64_t cycle = 0;
 
   uint64_t edgeBuffer_idle_cycles = 0;
@@ -69,8 +72,8 @@ public:
   uint64_t total_edge_buffer_idle = 0;
   // this cycle, all buffer idle, the dram have no work to do!
   uint64_t all_buffer_idle = 0;
-  uint64_t total_cycle_insert_hash_table=0;
-  uint64_t total_cycle_query_hash_table=0;
+  uint64_t total_cycle_insert_hash_table = 0;
+  uint64_t total_cycle_query_hash_table = 0;
 
   std::vector<uint64_t> finished_time_stamp;
 
@@ -83,9 +86,7 @@ public:
 
   std::map<std::string, std::vector<uint64_t>> config_uint64_v;
 
-  std::map<unsigned,unsigned> number_to_count_map_for_query;
-
-  
+  std::map<unsigned, unsigned> number_to_count_map_for_query;
 };
 extern globals global_definitions;
 

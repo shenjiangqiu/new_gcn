@@ -167,7 +167,7 @@ void controller::cycle() {
       print_window(m_current_work, next_input_nodes, print_sign, "self");
     }
     print_sign++;
-  
+
     // from nodes to address
     std::vector<uint64_t> addrs;
     // from nodes to addres
@@ -220,7 +220,21 @@ void controller::cycle() {
   // insert line to work
   while (m_current_pool.have_next_col() and
          m_current_work.can_add(m_current_pool.get_next_input_line())) {
-    m_current_work.add(m_current_pool.get_next_input_line_and_move());
+    auto &&nd = m_current_pool.get_next_input_line_and_move();
+
+    static uint64_t print_sign = 0;
+    if (print_sign % 10 == 0) {
+      global_definitions.edge_agg_logger->info("edge_buffer: {} {}",
+                                               m_current_work.get_edge_usage(),
+                                               (int)config::edgeSize);
+      global_definitions.edge_agg_logger->info("agg_buffer: {} {}",
+                                               m_current_work.get_agg_usage(),
+                                               (int)config::aggSize);
+    }
+
+    print_sign++;
+
+    m_current_work.add(nd);
   }
 
   // 5, check pool

@@ -3,12 +3,13 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/home/linuxbrew/.linuxbrew/include/"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/home/linuxbrew/.linuxbrew/bin/g++-11",
             "cStandard": "c17",
-            "cppStandard": "c++14",
+            "cppStandard": "c++20",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],

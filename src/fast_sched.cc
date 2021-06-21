@@ -4,6 +4,7 @@
 
 #include "fast_sched.h"
 #include "limits"
+#include <debug_helper.h>
 #include <globals.h>
 #include <spdlog/spdlog.h>
 using namespace fast_sched;
@@ -46,11 +47,13 @@ output_node::output_node(const std::vector<unsigned int> &_input_nodes,
   not_processed_nodes = input_nodes;
 }
 
-[[maybe_unused]] const std::set<unsigned int> &output_node::getInputNodes() const {
+[[maybe_unused]] const std::set<unsigned int> &
+output_node::getInputNodes() const {
   return input_nodes;
 }
 
-[[maybe_unused]] void output_node::setInputNodes(const std::set<unsigned int> &inputNodes) {
+[[maybe_unused]] void
+output_node::setInputNodes(const std::set<unsigned int> &inputNodes) {
   input_nodes = inputNodes;
 }
 
@@ -111,6 +114,8 @@ void current_working_window::add(const output_node &nd) {
   assert(total_edge_buffer_usage <= (unsigned)config::edgeSize);
   assert(total_agg_buffer_usage <= (unsigned)config::aggSize);
 
+
+
   spdlog::trace("edge_buffer_ocupy: {} of_total {}", total_edge_buffer_usage,
                 (int)config::edgeSize);
   spdlog::trace("agg_buffer_ocupy: {} of_total {}", total_agg_buffer_usage,
@@ -169,7 +174,7 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
 
     // mark all elements in this vector invalid in all other working set, this
     // step prevent choose redundent input nodes
-    for (auto & i : current_window) {
+    for (auto &i : current_window) {
 
       // valid and not all processed
       item_count += i.second.invalid_input(next_input);

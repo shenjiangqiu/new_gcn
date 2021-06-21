@@ -6,6 +6,8 @@
 #include <map>
 #include <spdlog/spdlog.h>
 #include <vector>
+const unsigned NOT_EXIST = -1;
+
 namespace sjq {
 struct entry {
   bool valid = false;
@@ -39,7 +41,9 @@ public:
     auto entry_id_2 = hash_func_2(node_id);
     unsigned real_entry_id;
     bool found = false;
+
     // 1, find and append
+
     if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
       real_entry_id = entry_id_1;
       found = true;
@@ -53,6 +57,7 @@ public:
     }
 
     if (found) {
+      // find existing entry, just append it
       auto &entry = entrys.at(real_entry_id);
       auto next = entrys.upper_bound(real_entry_id);
       if (next != entrys.end()) {
@@ -144,6 +149,8 @@ public:
         auto t_entry = entry();
         t_entry.tag = node_id;
         t_entry.total_len = 1;
+        assert(!entrys.contains(entry_id_1));
+
         entrys.insert({entry_id_1, t_entry});
         total_cycle++;
 
@@ -153,13 +160,17 @@ public:
         auto t_entry = entry();
         t_entry.tag = node_id;
         t_entry.total_len = 1;
+        assert(!entrys.contains(entry_id_2));
+
         entrys.insert({entry_id_2, t_entry});
         total_cycle++;
 
       } else {
+
         // both are not empty, find a shortest one to move
         // this return id is Not the real id!!, the real id should be get from
         // the other function!!!
+
         auto shortest = find_shortest_to_move(entry_id_1, entry_id_2);
 
         GCN_DEBUG("fail to find a empty entry, find the shortest:{} in {},{}",
@@ -178,7 +189,8 @@ public:
         t_entry.tag = node_id;
         t_entry.total_len = 1;
         total_cycle++;
-        entrys.at(shortest) = t_entry;
+        assert(!entrys.contains(shortest));
+        entrys.insert({shortest, t_entry});
       }
     }
     return total_cycle;
@@ -240,6 +252,8 @@ private:
     assert(entrys.count(entry_id));
     auto &this_entry = entrys.at(entry_id);
     auto tag = this_entry.tag;
+
+    // the place that rehash function point to
     auto new_entry_id = 0;
     if (entry_id == hash_func_1(tag)) {
       new_entry_id = hash_func_2(tag);
@@ -255,6 +269,7 @@ private:
                 new_entry_id, tag, get_entry_size(this_entry));
       total_cycle += get_entry_size(this_entry);
 
+      assert(!entrys.contains(new_entry_id));
       entrys.insert({new_entry_id, this_entry});
       // release the old one
       entrys.erase(entry_id);
@@ -262,56 +277,22 @@ private:
       // have entry here
       // move it to new place
       // 1. get all entris in this region
+      // rehash point is also conflict, need to move again
+
       GCN_DEBUG("moving: could not find empty entry at:{} , try to move again!",
                 new_entry_id);
 
       while (!is_entry_empty(new_entry_id, get_entry_size(this_entry))) {
         GCN_DEBUG("moving: {} is not empty", new_entry_id);
-        auto nearest = entrys.lower_bound(new_entry_id);
-        // assert(nearest != entrys.end());
-
-        if (nearest != entrys.begin()) {
-          // the one before we want to insert
-          auto the_one_before = std::prev(nearest);
-          if (is_over_lap(the_one_before->first,
-                          the_one_before->first +
-                              get_entry_size(the_one_before->second),
-                          new_entry_id,
-                          new_entry_id + get_entry_size(this_entry))) {
-            GCN_DEBUG(
-                "moving: find {} at {},len:{} is still conflict, need to move",
-                the_one_before->second.tag, the_one_before->first,
-                the_one_before->second.total_len);
-
-            auto result = move(the_one_before->first, 0, 0, move_depth + 1);
-            if (result == 0) {
-              return 0;
-            }
-            total_cycle += result;
-          }
-        }
-        // test the entry that might be covered by this one
-        if (nearest != entrys.end()) {
-          auto start = nearest->first;
-          auto end = get_entry_size(nearest->second) + start;
-
-          if (is_over_lap(start, end, new_entry_id,
-                          new_entry_id + get_entry_size(this_entry))) {
-            GCN_DEBUG(
-                "moving: find {} at {},len:{} is still conflict, need to move",
-                nearest->second.tag, nearest->first, nearest->second.total_len);
-
-            auto result = move(nearest->first, 0, 0, move_depth + 1);
-            if (result == 0) {
-              return 0;
-            }
-            total_cycle += result;
-          }
-        }
+        auto conf_entry =
+            get_conflict_entry(new_entry_id, get_entry_size(this_entry));
+        assert(conf_entry != NOT_EXIST);
+        total_cycle += move(conf_entry, 0, 0, move_depth + 1);
       }
       // have already clear this place, put it on!!
       total_cycle += get_entry_size(this_entry);
-      entrys.at(new_entry_id) = this_entry;
+      assert(!entrys.contains(new_entry_id));
+      entrys.insert({new_entry_id, this_entry});
       entrys.erase(entry_id);
     }
     // return the number of cycles, if error happend, return 0 to indicate
@@ -353,6 +334,52 @@ private:
     unsigned rid;
     rid = id;
     return rid;
+  }
+
+  // return on of the conflict entry for given entry
+  [[nodiscard]] unsigned get_conflict_entry(unsigned entry_id, unsigned size) {
+    auto the_next_nearst = entrys.lower_bound(entry_id);
+    if (the_next_nearst != entrys.end()) {
+      auto start = the_next_nearst->first;
+      auto end = start + get_entry_size(the_next_nearst->second);
+      // fix bug here, need to add the baseic shift
+      if (is_over_lap(start, end, entry_id, entry_id + size)) {
+        return start;
+      }
+    }
+
+    auto prev = the_next_nearst == entrys.begin() ? the_next_nearst
+                                                  : std::prev(the_next_nearst);
+    if (the_next_nearst == entrys.begin()) {
+      // fix bug here, there do not exist prev, so need to test the overflow
+      // conjest from the end!!
+      auto end = entrys.end();
+      if (end != entrys.begin()) {
+        end = std::prev(end);
+        auto start = end->first;
+        auto len = get_entry_size(end->second);
+        if (start + len > total_entry) {
+          // have overflow,like start =999, len=1, not overflow, start=999,
+          // len=2, overflow, because 999 is the last entry when total_entry is
+          // 1000
+          auto overflow = start + len - total_entry;
+          if (overflow > entry_id) {
+            // when overflow is 1, entry id is 0, not empty!
+            // when overflow is 1, entry is 1, empty!
+            return start;
+          }
+        }
+      }
+    }
+
+    if (prev != entrys.end()) {
+      auto start = prev->first;
+      auto end = start + get_entry_size(prev->second);
+      if (is_over_lap(start, end, entry_id, entry_id + size)) {
+        return start;
+      }
+    }
+    return NOT_EXIST;
   }
 
   // test if there are any over lap of giving range
@@ -427,7 +454,8 @@ private:
     GCN_DEBUG("find_prev: id:{},len:{}, the real id to find:{}", prev->first,
               prev->second.total_len, inner_id);
 
-    assert(std::prev(neareast)->first + get_entry_size(neareast->second) >
+    assert(std::prev(neareast)->first +
+               get_entry_size(std::prev(neareast)->second) >
            inner_id);
     return prev->first;
   }

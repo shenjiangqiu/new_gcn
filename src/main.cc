@@ -12,10 +12,14 @@ using namespace Minisat;
 int main(int argc, char **argv) {
 
   Minisat::parseOptions(argc, argv, false);
-
+  // this value must be init after parse option, because it depends on graph name
+  global_definitions.edge_agg_logger = spdlog::basic_logger_st(
+      "trace_edge_agg.txt",
+      fmt::format("logs/{}/edge_agg.txt", config::graph_name));
   // TODO: should be read gcn number
   // TODO: the agg_buffer might contain double information
   // the features dimension for each layer
+
   std::shared_ptr<Model> m_model;
   int node_feature_size = 0;
   std::string model_name = std::string(config::model);

@@ -62,6 +62,9 @@
         "memory_resource": "cpp",
         "random": "cpp",
         "set": "cpp",
-        "variant": "cpp"
-    }
+        "variant": "cpp",
+        "shared_mutex": "cpp",
+        "compare": "cpp"
+    },
+    "python.pythonPath": "/home/sjq/anaconda3/bin/python"
 }
