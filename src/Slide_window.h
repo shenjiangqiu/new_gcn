@@ -179,7 +179,7 @@ private:
   std::vector<std::vector<std::vector<Slide_window>>>::iterator third_end;
 };
 
-class [[maybe_unused]] Slide_window_set {
+class Slide_window_set {
 public:
   Slide_window_set(std::shared_ptr<Graph> mGraph, std::vector<int> xwS,
                    std::vector<int> ywS, std::vector<int> nodeDimS,

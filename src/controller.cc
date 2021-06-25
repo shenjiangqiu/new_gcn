@@ -82,6 +82,7 @@ void fast_sched::controll_info_generator::cycle() {
     for (auto input : next_input_nodes) {
 
       cycle += m_hash_table.query(input);
+      global_definitions.total_cycle_query_hash_table += cycle;
     }
     global_definitions.total_cycle_query_hash_table += cycle;
 
@@ -103,6 +104,7 @@ void fast_sched::controll_info_generator::cycle() {
     for (auto input : next_input_line.get_not_processed()) {
 
       auto ret = m_hash_table.insert(input);
+      global_definitions.total_cycle_insert_hash_table += ret;
       if (ret == 0) {
         spdlog::error("fail to insert a line? this line should be handled "
                       "by manuelly serch, might try to insert it again?");

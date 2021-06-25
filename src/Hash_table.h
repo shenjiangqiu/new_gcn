@@ -83,7 +83,11 @@ public:
                     next->second.tag, next->first, node_id, real_entry_id,
                     entry.total_len + 1);
 
-          auto result = move(unsigned(next->first), 0, entry.total_len + 1);
+          unsigned max_hop = 1;
+          auto result =
+              move(unsigned(next->first), 0, entry.total_len + 1, 1, max_hop);
+
+          global_definitions.number_hops_histogram[max_hop]++;
           if (result == 0) {
             return 0;
           }
@@ -121,8 +125,12 @@ public:
                       "need to move {} at {} ",
                       node_id, real_entry_id, entry.total_len + 1,
                       begin_it->second.tag, begin_it->first);
-            auto result =
-                move(unsigned(begin_it->first), 0, entry.total_len + 1);
+            unsigned max_hop_level = 1;
+            auto result = move(unsigned(begin_it->first), 0,
+                               entry.total_len + 1, 1, max_hop_level);
+
+            global_definitions.number_hops_histogram[max_hop_level]++;
+
             if (result == 0) {
               return 0;
             }
@@ -180,8 +188,10 @@ public:
         auto shortest_real_entry_id = find_real_entry_id(shortest);
 
         GCN_DEBUG("move it {} to another place", shortest_real_entry_id);
-
-        auto result = move(shortest_real_entry_id, shortest, 1);
+        unsigned max_hop_level = 1;
+        auto result =
+            move(shortest_real_entry_id, shortest, 1, 1, max_hop_level);
+        global_definitions.number_hops_histogram[max_hop_level]++;
         if (result == 0) {
           return 0;
         }
@@ -234,9 +244,11 @@ private:
     return real_entry_id;
   }
 
-  [[nodiscard]] unsigned move(unsigned entry_id, unsigned a = 0, unsigned b = 0,
-                              unsigned move_depth = 0) {
-
+  [[nodiscard]] unsigned move(unsigned entry_id, unsigned a, unsigned b,
+                              unsigned move_depth, unsigned &max_hop_level) {
+    if (move_depth >= max_hop_level) {
+      max_hop_level = move_depth;
+    }
     // meet the max move depth.
     spdlog::debug("currently not using the a and b, maybe use it later for "
                   "fixing the bug! {}",
@@ -303,7 +315,7 @@ private:
         auto conf_entry =
             get_conflict_entry(new_entry_id, get_entry_size(this_entry));
         assert(conf_entry != NOT_EXIST);
-        total_cycle += move(conf_entry, 0, 0, move_depth + 1);
+        total_cycle += move(conf_entry, 0, 0, move_depth + 1, max_hop_level);
       }
       // have already clear this place, put it on!!
       total_cycle += get_entry_size(this_entry);
@@ -340,13 +352,14 @@ private:
   }
   [[nodiscard]] unsigned hash_func_1(unsigned node_id) const {
     unsigned rid;
-    rid = node_id % total_entry;
+    rid = node_id % (total_entry / 2);
     return rid;
   }
   [[nodiscard]] unsigned hash_func_2(unsigned node_id) const {
     // fix bug here, 0 will map to 0 again!
     auto id = (node_id * 0x1234 % total_entry + (node_id >> 4) + 0x11f1) %
-              total_entry;
+                  (total_entry / 2) +
+              (total_entry / 2);
     unsigned rid;
     rid = id;
     return rid;

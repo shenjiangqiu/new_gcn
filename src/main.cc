@@ -17,10 +17,10 @@ int main(int argc, char **argv) {
   global_definitions.edge_agg_logger = spdlog::basic_logger_st(
       "trace_edge_agg.txt",
       fmt::format("logs/{}/edge_agg.txt", config::graph_name), true);
-   global_definitions.default_logger = spdlog::basic_logger_st(
+  global_definitions.default_logger = spdlog::basic_logger_st(
       "default_logger.txt",
       fmt::format("logs/{}/default_logger.txt", config::graph_name), true);
-  
+
   // TODO: should be read gcn number
   // TODO: the agg_buffer might contain double information
   // the features dimension for each layer
@@ -147,10 +147,14 @@ int main(int argc, char **argv) {
     for (auto i : global_definitions.number_to_count_map_for_query) {
       fmt::print("{} : {}\n", i.first, i.second);
     }
-    fmt::print("cycle_insert_hash: {}",
+    fmt::print("cycle_insert_hash: {}\n",
                global_definitions.total_cycle_insert_hash_table);
-    fmt::print("cycle_query_hash: {}",
+    fmt::print("cycle_query_hash: {}\n",
                global_definitions.total_cycle_query_hash_table);
+    fmt::print("hop_histo:\n");
+    for (auto i : global_definitions.number_hops_histogram) {
+      fmt::print("{} : {}\n", i.first, i.second);
+    }
 
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,

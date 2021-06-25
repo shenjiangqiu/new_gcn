@@ -15,7 +15,12 @@ namespace fast_sched {
 using pool = output_pool;
 using node = output_node;
 using work = current_working_window;
+// this class will maintain a queue, to store currently know shortest nodes
+class shortest_node_info_generator {
+public:
 
+private:
+};
 
 class controll_info_generator {
 public:
@@ -26,7 +31,9 @@ public:
         m_nodeDims(nodeDims), m_inputNodeNum(inputNodesNum),
         final_layer(nodeDims.size()), m_hash_table(config::hash_table_size) {}
 
-  [[nodiscard]] unsigned get_current_generation_sequence() const { return sequence; }
+  [[nodiscard]] unsigned get_current_generation_sequence() const {
+    return sequence;
+  }
   void cycle();
 
 private:
@@ -46,7 +53,6 @@ private:
   bool working = false;
   sjq::hash_table m_hash_table;
 };
-
 
 class controller {
 

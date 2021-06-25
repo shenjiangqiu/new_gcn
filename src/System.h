@@ -12,6 +12,7 @@
 #include "SystolicArray.h"
 #include "buffer.h"
 #include "memory_interface.h"
+#include <Slide_window.h>
 class System {
 public:
   System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
@@ -22,7 +23,10 @@ public:
   void print() const;
   void cycle();
   void run();
-  std::shared_ptr<dense_window_set> get_sliding_window() { return m_slide_window_set; }
+
+  std::shared_ptr<dense_window_set> get_sliding_window() {
+    return m_slide_window_set;
+  }
 
 private:
   std::shared_ptr<Graph> m_graph;

@@ -104,7 +104,7 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     GCN_INFO("yws push back:{}", yw_s.back());
   }
 
-  for (auto i = 0; i < total_level-1; i++) {
+  for (auto i = 0; i < total_level - 1; i++) {
     global_definitions.layer_input_windows.push_back(0);
     global_definitions.layer_edges.push_back(0);
     global_definitions.layer_input_vertics.push_back(0);
@@ -116,14 +116,12 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
     global_definitions.layer_window_avg_input.push_back(0);
   }
 
-  GCN_INFO("build the window: dense:{}",(bool)config::enable_dense_window);
+  GCN_INFO("build the window: dense:{}", (bool)config::enable_dense_window);
   // step 2, build the windows set. and input buffer,edge buffer
   m_slide_window_set = std::make_shared<dense_window_set>(
-      m_graph, xw_s, yw_s, node_dim, total_level,config::enable_dense_window);
+      m_graph, xw_s, yw_s, node_dim, total_level, config::enable_dense_window);
 
-
-  current_iter =
-      m_slide_window_set->begin();
+  current_iter = m_slide_window_set->begin();
   prev_iter = current_iter;
 
   input_buffer =
@@ -195,8 +193,6 @@ void System::run() {
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
             << std::endl;
   kv_maps map;
-
-
 
   map.push(std::string("total_Aggregator_idle_waiting_input"),
            global_definitions.total_waiting_input);
@@ -271,7 +267,7 @@ void System::run() {
   // the layer time should be [1-0,2-1]
   // so we need to calculate f[1]-f[0], i=1, end, so i begin at size-1, end at 1
   // before: i = total_level //
-  for (int i = total_level_r-1; i > 0; i--) {
+  for (int i = total_level_r - 1; i > 0; i--) {
     layer_time[i] = global_definitions.finished_time_stamp[i] -
                     global_definitions.finished_time_stamp[i - 1];
   }

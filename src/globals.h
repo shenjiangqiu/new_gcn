@@ -89,6 +89,7 @@ public:
   std::map<std::string, std::vector<uint64_t>> config_uint64_v;
 
   std::map<unsigned, unsigned> number_to_count_map_for_query;
+  std::map<unsigned, uint64_t> number_hops_histogram;
 };
 extern globals global_definitions;
 
