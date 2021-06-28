@@ -52,6 +52,8 @@ public:
     for (auto i = 1u; i < edge_index.size(); i++) {
       // number[0]={0,ei[1]-ei[0]};
       number.push_back({i - 1, edge_index[i] - edge_index[i - 1]});
+      std::cout << "pusing back:" << i - 1 << ","
+                << edge_index[i] - edge_index[i - 1] << std::endl;
     }
 
     std::sort(number.begin(), number.end(), [&](auto &&pair1, auto &&pair2) {
@@ -59,7 +61,9 @@ public:
     });
     std::vector<unsigned> old_to_new_mapping(number.size());
     for (auto i = 0u; i < number.size(); i++) {
+      fmt::print("pushing back:old: {},new:{}",number.at(i).first,i);
       old_to_new_mapping.at(number.at(i).first) = i;
+
     }
 
     edge_index_sorted.push_back(0);
@@ -75,8 +79,8 @@ public:
       auto original_idx_start = edge_index[node_id];
       auto original_idx_end = edge_index[node_id + 1];
       assert((original_idx_end - original_idx_start) == number[i].second);
-      for (auto i = original_idx_start; i < original_idx_end; i++) {
-        edges_sorted.push_back(old_to_new_mapping.at(edges.at(i)));
+      for (auto j = original_idx_start; j < original_idx_end; j++) {
+        edges_sorted.push_back(old_to_new_mapping.at(edges.at(j)));
       }
     }
     sorted = true;
