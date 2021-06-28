@@ -68,4 +68,9 @@ Minisat::IntOption
 Minisat::IntOption find_shortest_policy(
     "system", "find-shortest-policy",
     "the find shortest node policy, for example , 0,1,2,3...", 0);
+Minisat::BoolOption enable_global_sorted_graph("system",
+                                               "enable-global-sorted-graph",
+                                               "use the global sorted graph",
+                                               false);
+
 } // namespace config

@@ -144,13 +144,17 @@ std::vector<unsigned> current_working_window::get_next_input_nodes() {
       break;
     }
     // select the smalllest col
-    for (auto i = current_window.begin(); i != current_window.end(); i++) {
+    if (config::enable_global_sorted_graph) {
+      // just use the bgin
+    } else {
+      for (auto i = current_window.begin(); i != current_window.end(); i++) {
 
-      auto &current_node = *i;
-      auto size = current_node.second.get_remaining();
-      if (size < smallest) {
-        smallest = size;
-        selected = i;
+        auto &current_node = *i;
+        auto size = current_node.second.get_remaining();
+        if (size < smallest) {
+          smallest = size;
+          selected = i;
+        }
       }
     }
 

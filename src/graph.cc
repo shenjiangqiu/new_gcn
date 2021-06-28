@@ -30,9 +30,12 @@ void Graph::parse(const std::string &graph_name) {
   assert(feature_size > 0);
   while (true) {
     std::string i_line;
-    getline(graph_in, i_line);
     if (graph_in.eof())
       break;
+    getline(graph_in, i_line);
+    if (i_line.size() == 0) {
+      break;
+    }
     edges.push_back(node);
     node++;
     edge_index.push_back(edge_index.back() + 1);

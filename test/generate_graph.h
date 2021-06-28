@@ -12,7 +12,7 @@ inline void generate_small_graph() {
              "1 2 3\n"
              "2 3\n"
              "3\n"
-             "0";
+             "0\n\n\n";
   auto f = std::ofstream("test.graph");
   f.write(str, strlen(str));
   f.close();

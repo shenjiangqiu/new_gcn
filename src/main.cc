@@ -51,7 +51,9 @@ int main(int argc, char **argv) {
 
   std::shared_ptr<Graph> m_graph =
       std::make_shared<Graph>(std::string(config::graph_name));
-
+  if (config::enable_global_sorted_graph) {
+    m_graph->sort_translate();
+  }
   // check the size
   if (global_definitions.concate) {
     if (config::ignore_self >= m_graph->getNodeFeatures() or

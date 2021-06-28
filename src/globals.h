@@ -122,6 +122,7 @@ extern Minisat::BoolOption enable_fast_sched;
 
 extern Minisat::IntOption hash_table_size;
 extern Minisat::IntOption find_shortest_policy;
+extern Minisat::BoolOption enable_global_sorted_graph;
 
 
 } // namespace config

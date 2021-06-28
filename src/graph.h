@@ -59,11 +59,14 @@ public:
     std::sort(number.begin(), number.end(), [&](auto &&pair1, auto &&pair2) {
       return pair1.second < pair2.second;
     });
+    for (auto i : number) {
+      fmt::print("new number: {},{}\n", i.first, i.second);
+    }
+
     std::vector<unsigned> old_to_new_mapping(number.size());
     for (auto i = 0u; i < number.size(); i++) {
-      fmt::print("pushing back:old: {},new:{}",number.at(i).first,i);
+      fmt::print("pushing back:old: {},new:{}\n", number.at(i).first, i);
       old_to_new_mapping.at(number.at(i).first) = i;
-
     }
 
     edge_index_sorted.push_back(0);
