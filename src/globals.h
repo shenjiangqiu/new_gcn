@@ -121,5 +121,8 @@ extern Minisat::BoolOption enable_dense_window;
 extern Minisat::BoolOption enable_fast_sched;
 
 extern Minisat::IntOption hash_table_size;
+extern Minisat::IntOption find_shortest_policy;
+
+
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

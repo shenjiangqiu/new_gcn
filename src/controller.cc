@@ -42,7 +42,7 @@ void print_window(const current_working_window &m_current_work,
 }
 // note here, we do not count the latency of read csc format edge from dram to
 // on-chip buffer, because the bottleneck should be signal generation process
-void fast_sched::controll_info_generator::cycle() {
+void fast_sched::control_info_generator::cycle() {
 
   // 1. when have work, do work
 
@@ -302,4 +302,50 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
       m_mem(std::move(mMem)),
       m_controll_info_generator(m_graph, this->nodeDims, inputNodesNum) {}
 bool controller::isAllFinished() const { return all_finished; }
-} // namespace fast_sched
+
+shortest_node_info_generator::shortest_node_info_generator(unsigned int policy,
+                                                           unsigned queue_size)
+    : current_policy(policy), queue_size(queue_size) {}
+
+unsigned
+shortest_node_info_generator::get_next_shortest(unsigned int &shortest_value) {
+  unsigned cycle = 0;
+  if (current_policy == 0) {
+    // will sort
+    auto &entry = current_choose_vector.front();
+    shortest_value = entry.node;
+    cycle += 1;
+  } else if (current_policy == 1) {
+    // not sorted
+    unsigned shortest = 0;
+    for (auto i = 0; i < current_choose_vector.size(); i++) {
+      if (current_choose_vector[i].size <
+          current_choose_vector[shortest].size) {
+
+        shortest = i;
+      }
+    }
+    shortest_value = current_choose_vector[shortest].node;
+    cycle += queue_size;
+  }
+  return cycle;
+}
+unsigned shortest_node_info_generator::finished_output(
+    unsigned int node_id, const std::vector<unsigned int> &edges,
+    bool is_final) {
+  if(current_policy==0){
+    // the queue is ordered, only re-sort when some node will be removed
+    if(is_final){
+      // this is the final one, need to resort all
+
+
+    }else{
+      // not the final one?? what to do?
+    }
+  }
+
+  return 0;
+}
+
+
+}
