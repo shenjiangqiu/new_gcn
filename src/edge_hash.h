@@ -21,6 +21,7 @@ struct entry {
 };
 
 class hash_table {
+    
 public:
   hash_table(unsigned t_e) : total_entry(t_e) {}
   // insert a new node

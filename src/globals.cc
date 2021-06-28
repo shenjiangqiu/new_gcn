@@ -68,5 +68,4 @@ Minisat::IntOption
 Minisat::IntOption find_shortest_policy(
     "system", "find-shortest-policy",
     "the find shortest node policy, for example , 0,1,2,3...", 0);
-find_shortest_policy
 } // namespace config

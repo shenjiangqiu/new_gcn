@@ -56,7 +56,27 @@ void Graph::print() const {
     std::cout << e << " ";
   }
   std::cout << std::endl;
+
+  if (sorted) {
+    std::cout << "sorted\n";
+
+    for (auto index : edge_index_sorted) {
+      std::cout << index << " ";
+    }
+
+    std::cout << std::endl;
+
+    for (auto e : edges_sorted) {
+      std::cout << e << " ";
+    }
+
+    std::cout << std::endl;
+
+  } else {
+    std::cout << "not_sorted" << std::endl;
+  }
 }
+
 int Graph::getNodeFeatures() const { return node_features; }
 
 // those are global definitions, do not use them in constructors!!!
