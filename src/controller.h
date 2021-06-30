@@ -8,7 +8,7 @@
 #include "Aggregator_fast.h"
 #include "SystolicArray_fast.h"
 #include "buffer_fast.h"
-
+#include "contoll_signal_generator.hh"
 #include "fast_sched.h"
 #include <Hash_table.h>
 namespace fast_sched {
@@ -23,7 +23,8 @@ using work = current_working_window;
 /// @line 1. insert a new node into the buffer, args, node id, and size
 /// @line 2. finihsed a new node, args, node id, vector of edges
 /// @line 3. query the current shortest
-/// current policy: 1, the queue is always sorted, 2 queue is not sorted,search all entry to select the smallest, 3. the queue is not sorted, random select
+/// current policy: 1, the queue is always sorted, 2 queue is not sorted,search
+/// all entry to select the smallest, 3. the queue is not sorted, random select
 class shortest_node_info_generator {
   struct queue_entry {
     unsigned node;
@@ -41,38 +42,6 @@ private:
   std::vector<queue_entry> current_choose_vector;
   unsigned current_policy;
   unsigned queue_size;
-};
-
-class control_info_generator {
-public:
-  control_info_generator(const Graph &m_graph,
-                         std::vector<unsigned int> nodeDims,
-                         std::vector<unsigned int> inputNodesNum)
-      : m_pool(m_graph), m_work(inputNodesNum[0], nodeDims[0] * 4),
-        m_nodeDims(nodeDims), m_inputNodeNum(inputNodesNum),
-        final_layer(nodeDims.size()), m_hash_table(config::hash_table_size) {}
-
-  [[nodiscard]] unsigned get_current_generation_sequence() const {
-    return sequence;
-  }
-  void cycle();
-
-private:
-  pool m_pool;
-  work m_work;
-  std::vector<unsigned int> m_nodeDims;
-
-  std::vector<unsigned> m_inputNodeNum;
-
-  bool pool_all_finished = false;
-
-  unsigned sequence = 0;
-  unsigned currentLayer = 0;
-  unsigned final_layer;
-  // this should be set at contstructor
-  unsigned next_sequence_remaining_cycle = 0;
-  bool working = false;
-  sjq::hash_table m_hash_table;
 };
 
 class controller {

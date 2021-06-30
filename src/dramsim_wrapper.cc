@@ -3,8 +3,8 @@
 //
 #ifdef USEDRAM3
 #include "dramsim_wrapper.h"
+#include "debug_helper.h"
 #include "spdlog/spdlog.h"
-#include"debug_helper.h"
 
 void dramsim_wrapper::send(uint64_t addr, bool is_write) {
 
@@ -28,7 +28,8 @@ void dramsim_wrapper::send(uint64_t addr, bool is_write) {
 bool dramsim_wrapper::available(uint64_t addr) const {
 
   auto channel_id = get_channel_id(addr);
-  return read_queue[channel_id].size() < 256 and write_queue[channel_id].size() < 256;
+  return read_queue[channel_id].size() < 256 and
+         write_queue[channel_id].size() < 256;
   // return read_queue.size() < 16 and write_queue.size() < 16;
 }
 
@@ -45,14 +46,14 @@ void dramsim_wrapper::cycle() {
   for (unsigned i = 0; i < get_channel_num(); i++) {
     if (!read_queue[i].empty()) {
       auto &&next = read_queue[i].front();
-      if (m_memory_system->WillAcceptTransaction(next,false)) {
+      if (m_memory_system->WillAcceptTransaction(next, false)) {
         m_memory_system->AddTransaction(next, false);
         read_queue[i].pop();
         inflight_req_cnt++;
       }
     } else if (!write_queue[i].empty()) {
       auto &&next = write_queue[i].front();
-      if (m_memory_system->WillAcceptTransaction(next,true)) {
+      if (m_memory_system->WillAcceptTransaction(next, true)) {
         m_memory_system->AddTransaction(next, true);
         write_queue[i].pop();
         inflight_req_cnt++;
@@ -136,7 +137,7 @@ void dramsim_wrapper::receive_write(uint64_t addr) {
 
   finished_write_req++;
 }
-unsigned dramsim_wrapper::get_channel_num() const{
+unsigned dramsim_wrapper::get_channel_num() const {
   return dramsim3::BaseDRAMSystem::total_channels_;
 }
 unsigned dramsim_wrapper::get_channel_id(uint64_t addr) const {

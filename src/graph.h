@@ -44,50 +44,7 @@ public:
 
   void print() const;
 
-  void sort_translate() {
-    if (sorted) {
-      return;
-    }
-    std::vector<std::pair<unsigned, unsigned>> number;
-    for (auto i = 1u; i < edge_index.size(); i++) {
-      // number[0]={0,ei[1]-ei[0]};
-      number.push_back({i - 1, edge_index[i] - edge_index[i - 1]});
-      std::cout << "pusing back:" << i - 1 << ","
-                << edge_index[i] - edge_index[i - 1] << std::endl;
-    }
-
-    std::sort(number.begin(), number.end(), [&](auto &&pair1, auto &&pair2) {
-      return pair1.second < pair2.second;
-    });
-    for (auto i : number) {
-      fmt::print("new number: {},{}\n", i.first, i.second);
-    }
-
-    std::vector<unsigned> old_to_new_mapping(number.size());
-    for (auto i = 0u; i < number.size(); i++) {
-      fmt::print("pushing back:old: {},new:{}\n", number.at(i).first, i);
-      old_to_new_mapping.at(number.at(i).first) = i;
-    }
-
-    edge_index_sorted.push_back(0);
-    for (auto i = 1u; i < edge_index.size(); i++) {
-      // fill the new edge index
-      edge_index_sorted.push_back(edge_index_sorted[i - 1] +
-                                  number[i - 1].second);
-    }
-    for (auto i = 0u; i < number.size(); i++) {
-      // noticed here, need to remap the edge node id according to the new array
-      auto node_id = number[i].first;
-
-      auto original_idx_start = edge_index[node_id];
-      auto original_idx_end = edge_index[node_id + 1];
-      assert((original_idx_end - original_idx_start) == number[i].second);
-      for (auto j = original_idx_start; j < original_idx_end; j++) {
-        edges_sorted.push_back(old_to_new_mapping.at(edges.at(j)));
-      }
-    }
-    sorted = true;
-  }
+  void sort_translate() ;
 
 private:
   std::vector<unsigned> edge_index;
