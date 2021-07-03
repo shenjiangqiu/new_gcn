@@ -110,7 +110,10 @@ int main(int argc, char **argv) {
     GCN_INFO("the buffersize num: {}", config::inputSize);
 
     auto m_controller = fast_sched::controller(
-        *m_graph, i_bf, m_node_feature_dim, m_input_num, m_agg, m_mem);
+        *m_graph, i_bf, m_node_feature_dim, m_input_num, m_agg, m_mem,
+        config::short_large_divider, config::short_queue_size,
+        config::large_queue_size, config::task_queue_size, config::aggSize);
+
     global_definitions.cycle = 0;
     uint mem_rount = 0;
     while (!m_controller.isAllFinished()) {
@@ -145,7 +148,7 @@ int main(int argc, char **argv) {
 
     fmt::print("total_read_traffic_edge: {}\n",
                global_definitions.total_read_traffic_edge);
-    fmt::print("output the histo for query\n");
+    fmt::print("output the histo for query_and_delete\n");
     for (auto i : global_definitions.number_to_count_map_for_query) {
       fmt::print("{} : {}\n", i.first, i.second);
     }

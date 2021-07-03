@@ -88,17 +88,17 @@ void dense_window::set_addr(std::vector<uint64_t> inputAddr,
   this->output_addr = outputAddr;
   this->output_len = outputLen;
 }
-void dense_window::set_addr(uint64_t inputAddr, unsigned int inputLen,
-                            uint64_t edgeAddr, unsigned int edgeLen,
-                            uint64_t outputAddr, unsigned int outputLen) {
+void dense_window::set_addr(uint64_t , unsigned int ,
+                            uint64_t , unsigned int ,
+                            uint64_t , unsigned int ) {
   // dense_window only support discrete addr
   throw;
-  this->input_addr_c = inputAddr;
-  this->input_len = inputLen;
-  this->edge_addr = edgeAddr;
-  this->edge_len = edgeLen;
-  this->output_addr = outputAddr;
-  this->output_len = outputLen;
+//  this->input_addr_c = inputAddr;
+//  this->input_len = inputLen;
+//  this->edge_addr = edgeAddr;
+//  this->edge_len = edgeLen;
+//  this->output_addr = outputAddr;
+//  this->output_len = outputLen;
 }
 void dense_window::set_size(unsigned int currentEdges,
                             unsigned int currentnodeDim) {

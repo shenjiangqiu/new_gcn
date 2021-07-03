@@ -11,8 +11,8 @@ TEST_CASE("controller_test") {
   auto i_bf = std::make_shared<InputBuffer>();
   auto m_agg = std::make_shared<Aggregator_fast>(128);
   auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
-  auto m_controller =
-      controller(m_graph, i_bf, {2, 2, 2}, {2, 2, 2}, m_agg, m_mem);
+  auto m_controller = controller(m_graph, i_bf, {2, 2, 2}, {2, 2, 2}, m_agg,
+                                 m_mem, 0, 0, 0, 0, 0);
   while (!m_controller.isAllFinished()) {
     m_controller.cycle();
     i_bf->cycle();

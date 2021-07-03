@@ -9,8 +9,10 @@
 #include "SystolicArray_fast.h"
 #include "buffer_fast.h"
 #include "contoll_signal_generator.hh"
+#include "edge_hash.h"
 #include "fast_sched.h"
 #include <Hash_table.h>
+#include <deque>
 namespace fast_sched {
 using pool = output_pool;
 using node = output_node;
@@ -22,7 +24,7 @@ using work = current_working_window;
 ///
 /// @line 1. insert a new node into the buffer, args, node id, and size
 /// @line 2. finihsed a new node, args, node id, vector of edges
-/// @line 3. query the current shortest
+/// @line 3. query_and_delete the current shortest
 /// current policy: 1, the queue is always sorted, 2 queue is not sorted,search
 /// all entry to select the smallest, 3. the queue is not sorted, random select
 class shortest_node_info_generator {
@@ -43,7 +45,10 @@ private:
   unsigned current_policy;
   unsigned queue_size;
 };
-
+struct agg_task {
+  std::vector<unsigned> input_nodes;
+  unsigned total_edges;
+};
 class controller {
 
 public:
@@ -52,15 +57,45 @@ public:
              std::vector<unsigned int> nodeDims,
              std::vector<unsigned int> inputNodesNum,
              std::shared_ptr<Aggregator_fast> agg,
-             std::shared_ptr<memory_interface> mMem);
+             std::shared_ptr<memory_interface> mMem,
+             unsigned int shortLargeDivider, unsigned int shortQueueSize,
+             unsigned int largeQueueSize, unsigned int taskQueueSize,
+             unsigned int aggBufferSize);
   controller() = delete;
-
   // operation
   void cycle();
+  [[nodiscard]] bool isAllFinished() const;
 
 private:
+  // store a tmepory edge when insert fail
+  bool next_to_insert_valid{false};
+  std::pair<unsigned, unsigned> next_to_insert_edge{0, 0};
+
+  void handle_remaining_cycle();
+  void handle_buffer_relative_cycle();
+  void handle_task_generation();
+  void handle_work_insert();
+  std::queue<agg_task> task_generation_queue{};
+
+  // 1,2 is short , >3 is large
+  unsigned short_large_divider ;
+
+  // this two queue should be maintainced during insert to hash
+  std::deque<unsigned> short_queue{};
+  std::deque<unsigned> large_queue{};
+
+  sjq::edge_hash hashtable1;
+  sjq::hash_table hashTable2;
+  bool need_to_insert = true;
+  unsigned short_queue_size;
+  unsigned large_queue_size;
+
+  unsigned task_queue_size;
+
+  unsigned remaining_cycle_build_task{};
+  unsigned remaining_cycle_insert_hash{};
+
   pool m_current_pool;
-  work m_current_work;
 
   std::shared_ptr<InputBuffer> i_bf;
 
@@ -80,18 +115,18 @@ private:
   std::shared_ptr<Aggregator_fast> agg;
   std::shared_ptr<memory_interface> m_mem;
 
+  unsigned aggBufferSize;
+
   // generated signal buffered here
 
   // the signal generator!
-  control_info_generator m_controll_info_generator;
+  // control_info_generator m_controll_info_generator;
 
   // the sequence number we are going to wait, if current we are going to use
   // sequence 0, the number is signal generator should be at least 1!!!
   unsigned current_sequence_number = 1;
-
-public:
-  [[nodiscard]] bool isAllFinished() const;
 };
+
 } // namespace fast_sched
 
 #endif // GCN_SIM_CONTROLLER_H

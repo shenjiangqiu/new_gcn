@@ -44,7 +44,7 @@ public:
 
   void print() const;
 
-  void sort_translate() ;
+  void sort_translate();
 
 private:
   std::vector<unsigned> edge_index;

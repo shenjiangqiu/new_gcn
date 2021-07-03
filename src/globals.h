@@ -124,6 +124,10 @@ extern Minisat::IntOption hash_table_size;
 extern Minisat::IntOption find_shortest_policy;
 extern Minisat::BoolOption enable_global_sorted_graph;
 
+extern Minisat::IntOption short_queue_size;
+extern Minisat::IntOption large_queue_size;
+extern Minisat::IntOption task_queue_size;
+extern Minisat::IntOption short_large_divider;
 
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

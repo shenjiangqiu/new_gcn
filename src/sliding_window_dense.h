@@ -79,11 +79,9 @@ public:
 private:
   unsigned x{};            // x: starting vertex ID in the aggregation buffer
   std::vector<unsigned> y; // y: starting vertex ID in the input buffer
-  unsigned y_c{};          // yc: the continues type of y
   unsigned xw{};           // cnt of vertices in the the aggregation buffer
   unsigned level{};
   std::vector<uint64_t> input_addr;
-  uint64_t input_addr_c{}; // input_addr_c: the continues type of addr
 
   uint64_t edge_addr{}, output_addr{};
   unsigned input_len{}, edge_len{}, output_len{};

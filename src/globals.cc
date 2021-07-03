@@ -73,4 +73,15 @@ Minisat::BoolOption enable_global_sorted_graph("system",
                                                "use the global sorted graph",
                                                false);
 
+
+Minisat::IntOption short_queue_size("system", "short-queue-size",
+                                    "short_queue_size", 4096);
+Minisat::IntOption large_queue_size("system", "large-queue-size",
+                                    "large_queue_size", 4096);
+Minisat::IntOption task_queue_size("system", "task-queue-size",
+                                   "task_queue_size", 64);
+Minisat::IntOption short_large_divider("system","short-large-divider","",2);
+
+
+
 } // namespace config

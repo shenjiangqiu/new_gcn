@@ -1,224 +1,117 @@
-#ifndef HASH_TABLE_H
-#define HASH_TABLE_H
+#ifndef EDGE_HASH_H
+#define EDGE_HASH_H
 #include <cassert>
 #include <debug_helper.h>
 #include <fmt/format.h>
 #include <map>
 #include <set>
 #include <spdlog/spdlog.h>
+#include <utils/common.hh>
 #include <vector>
-const unsigned NOT_EXIST = -1;
-
 namespace sjq {
-struct entry {
+
+struct entry_edge {
   bool valid = false;
   bool next_valid = false;
   bool main = false;
   unsigned node_id = 0;
   unsigned tag = 0;
   unsigned shift = 0;
+
+  // total len means the size when inserted
   unsigned total_len = 0;
+
+  // real len means the size during runtime, my reduced when other input touch
+  // this entry
+  unsigned real_len = 0;
+  // the real edges
+  std::vector<unsigned> edges;
+
+  unsigned get_real_input_id() {
+    assert(total_len != 0);
+
+    // return the last edge
+    return edges.at(total_len - 1);
+  }
 };
 
-class hash_table {
-    
+class edge_hash {
+
 public:
-  hash_table(unsigned t_e) : total_entry(t_e) {}
+  unsigned size() const { return entrys.size(); }
+  explicit edge_hash(unsigned t_e);
+  bool empty() const { return entrys.empty(); }
   // insert a new node
-  [[nodiscard]] std::string get_line_trace() {
-    std::string ret;
-    for (auto i : entrys) {
-      ret += fmt::format("{}: len:{},tag:{}\n", i.first, i.second.total_len,
-                         i.second.tag);
-    }
-    return ret;
+  [[nodiscard]] std::string get_line_trace();
+  bool can_insert(unsigned node_id);
+  void delete_last(unsigned int node_id) {
+    auto entry_id = get_entry_id_from_node_id(node_id);
+    entrys.at(entry_id).edges.pop_back();
   }
-
-  [[nodiscard]] unsigned insert(unsigned node_id) {
-
-    unsigned total_cycle = 0;
-    total_cycle++;
-
-    auto entry_id_1 = hash_func_1(node_id);
-    auto entry_id_2 = hash_func_2(node_id);
-    unsigned real_entry_id;
-    bool found = false;
-
-    // 1, find and append
-
-    if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
-      real_entry_id = entry_id_1;
-      found = true;
-    } else if (entrys.count(entry_id_2) and
-               entrys.at(entry_id_2).tag == node_id) {
-      real_entry_id = entry_id_2;
-      found = true;
-    } else {
-      found = false;
-      // not found
-    }
-
-    if (found) {
-      // find existing entry, just append it
-      auto &entry = entrys.at(real_entry_id);
-      auto next = entrys.upper_bound(real_entry_id);
-      if (next != entrys.end()) {
-        // this mean how many entry availiable to be used by real_entry_id
-        auto gap = next->first - real_entry_id;
-        // this mean how many space needed after insert the new value
-        // 1->1,2->2 3->2 4-3, n+2/2 is good for this calculation.
-        auto space_needed = (entry.total_len + 1 + 2) / 2;
-
-        if (gap >= space_needed) {
-          // ok, good to go,
-          GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                    real_entry_id, entry.total_len + 1);
-          entry.total_len += 1;
-          total_cycle++;
-
-        } else {
-          // no, the space is too busy, need to move
-          GCN_DEBUG_S("no enough space");
-          GCN_DEBUG("need to move {} at {},because we want to insert {} to {} "
-                    "with length:{}",
-                    next->second.tag, next->first, node_id, real_entry_id,
-                    entry.total_len + 1);
-
-          unsigned max_hop = 1;
-          auto result =
-              move(unsigned(next->first), 0, entry.total_len + 1, 1, max_hop);
-
-          global_definitions.number_hops_histogram[max_hop]++;
-          if (result == 0) {
-            return 0;
-          }
-          total_cycle += result;
-          GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                    real_entry_id, entry.total_len + 1);
-          total_cycle++;
-          entry.total_len += 1;
-        }
-      } else {
-        // reach the end,
-        // if fit in the space, just insert
-        auto space_needed = (entry.total_len + 1 + 2) / 2;
-        auto gap = total_entry - real_entry_id;
-        if (gap >= space_needed) {
-          GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                    real_entry_id, entry.total_len + 1);
-          total_cycle++;
-          entry.total_len += 1;
-        } else {
-          // try to insert to the other side// from zero
-          GCN_DEBUG("space not enought, try to insert to another side:{}",
-                    node_id);
-          // FIXBUG here, the base shift is need to add
-          auto remaining_size = space_needed - gap;
-          assert(remaining_size > 0);
-          auto begin_it = entrys.begin();
-          assert(begin_it != entrys.end());
-          auto space_from_begin = begin_it->first;
-
-          // Fix another bug here, may contains multiple conflict
-          while (space_from_begin < remaining_size) {
-
-            GCN_DEBUG("fail to insert the node {} at {} , current len:{}, "
-                      "need to move {} at {} ",
-                      node_id, real_entry_id, entry.total_len + 1,
-                      begin_it->second.tag, begin_it->first);
-            unsigned max_hop_level = 1;
-            auto result = move(unsigned(begin_it->first), 0,
-                               entry.total_len + 1, 1, max_hop_level);
-
-            global_definitions.number_hops_histogram[max_hop_level]++;
-
-            if (result == 0) {
-              return 0;
-            }
-            total_cycle += result;
-
-            begin_it = entrys.begin();
-            space_from_begin = begin_it->first;
-          }
-
-          GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                    real_entry_id, entry.total_len + 1);
-          total_cycle++;
-          entry.total_len += 1;
-        }
-      }
-    } else {
-      // not found, need to new an entry
-      // note that, the entry_id may not be the begining node!!!
-      GCN_DEBUG("fail to find the: id {} at {} or {}", node_id, entry_id_1,
-                entry_id_2);
-      if (is_entry_empty(entry_id_1, 1)) {
-
-        // choose, entry 1
-        GCN_DEBUG("put it in entry I:{}", entry_id_1);
-        auto t_entry = entry();
-        t_entry.tag = node_id;
-        t_entry.total_len = 1;
-        assert(!entrys.contains(entry_id_1));
-
-        entrys.insert({entry_id_1, t_entry});
-        total_cycle++;
-
-      } else if (is_entry_empty(entry_id_2, 1)) {
-
-        GCN_DEBUG("put it in entry II:{}", entry_id_2);
-        auto t_entry = entry();
-        t_entry.tag = node_id;
-        t_entry.total_len = 1;
-        assert(!entrys.contains(entry_id_2));
-
-        entrys.insert({entry_id_2, t_entry});
-        total_cycle++;
-
-      } else {
-
-        // both are not empty, find a shortest one to move
-        // this return id is Not the real id!!, the real id should be get from
-        // the other function!!!
-
-        auto shortest = find_shortest_to_move(entry_id_1, entry_id_2);
-
-        GCN_DEBUG("fail to find a empty entry, find the shortest:{} in {},{}",
-                  shortest, entry_id_1, entry_id_2);
-
-        auto shortest_real_entry_id = find_real_entry_id(shortest);
-
-        GCN_DEBUG("move it {} to another place", shortest_real_entry_id);
-        unsigned max_hop_level = 1;
-        auto result =
-            move(shortest_real_entry_id, shortest, 1, 1, max_hop_level);
-        global_definitions.number_hops_histogram[max_hop_level]++;
-        if (result == 0) {
-          return 0;
-        }
-        total_cycle += result;
-        auto t_entry = entry();
-        t_entry.tag = node_id;
-        t_entry.total_len = 1;
-        total_cycle++;
-        assert(!entrys.contains(shortest));
-        entrys.insert({shortest, t_entry});
-      }
-    }
-    return total_cycle;
-  }
+  [[nodiscard]] unsigned insert(unsigned node_id, unsigned valude);
   //
-  [[nodiscard]] unsigned query(unsigned node_id) {
+  unsigned query_and_mark(unsigned node_id) {
+    auto entryId = get_entry_id_from_node_id(node_id);
+    auto &real_len = entrys.at(entryId).real_len;
+
+    if (real_len == 0) {
+      throw std::runtime_error("shouldn't be 0 of real len!!");
+    }
+    real_len--;
+
+    return 1;
+  }
+  // will remove the empty entry
+  void remove_entry(unsigned node_id) {
+    auto entryId = get_entry_id_from_node_id(node_id);
+
+    entrys.erase(entryId);
+  }
+
+  bool query_is_empty(unsigned node_id) const {
+
+    auto entryId = get_entry_id_from_node_id(node_id);
+    auto &entry = entrys.at(entryId);
+    if (entry.total_len == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // get one node from the node id, remove if the size is zero.
+  [[nodiscard]] unsigned query_and_delete(unsigned node_id,
+                                          unsigned &out_edge) {
     // currently we assume no conflict and return the number of entries
     // dont' worry, it's constant
     // fix bug here, it's node id, not entry id!!!!
 
     auto entryId = get_entry_id_from_node_id(node_id);
-    auto entry_size = entrys.at(entryId).total_len;
-    entrys.erase(entryId);
-    // T
-    return entry_size;
+
+    // here, we are going to delete the total len because it's real moved during
+    // query, when it's influenced by other input, we are going to reduce the
+    // real_len
+    auto &entry = entrys.at(entryId);
+    auto &entry_size = entry.total_len;
+    out_edge = entry.get_real_input_id();
+
+    entry_size--;
+    if (entry_size == 0) {
+      just_removed = true;
+      entrys.erase(entryId);
+    }
+    return 1;
   }
+  bool is_just_removed() const {
+    if (just_removed) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // used when alread remove the element in the sorted queue
+  void set_not_just_removed() { just_removed = false; }
 
 private:
   // fucnction move, move the entry_id to it's another hash function, note that
@@ -226,7 +119,7 @@ private:
   // node!!
 
   // note that , the node id must exist in the hash table!!!
-  unsigned get_entry_id_from_node_id(unsigned node_id) {
+  unsigned get_entry_id_from_node_id(unsigned node_id) const {
     auto entry_id_1 = hash_func_1(node_id);
     auto entry_id_2 = hash_func_2(node_id);
     // 1, find and append
@@ -244,7 +137,7 @@ private:
     }
     return real_entry_id;
   }
-
+  bool just_removed = false;
   [[nodiscard]] unsigned move(unsigned entry_id, unsigned a, unsigned b,
                               unsigned move_depth, unsigned &max_hop_level) {
     if (move_depth >= max_hop_level) {
@@ -331,7 +224,7 @@ private:
     return total_cycle;
   }
 
-  std::map<unsigned, entry> entrys;
+  std::map<unsigned, entry_edge> entrys{};
 
   unsigned total_entry;
 
@@ -348,7 +241,7 @@ private:
     return a_s < b_e && b_s < a_e;
   }
 
-  [[nodiscard]] static unsigned get_entry_size(const entry &e) {
+  [[nodiscard]] static unsigned get_entry_size(const entry_edge &e) {
     return (e.total_len + 2) / 2;
   }
   [[nodiscard]] unsigned hash_func_1(unsigned node_id) const {

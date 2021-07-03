@@ -6,21 +6,24 @@
 #include <memory>
 #include <utils/common.hh>
 #include <utils/sized_queue.h>
+#include <utility>
 #include <vector>
 // the real signal send from info generator to agg controller
-struct signal {};
+struct Signal {
+
+};
 
 class control_info_generator {
 public:
   control_info_generator(
       const Graph &m_graph, std::vector<unsigned int> nodeDims,
       std::vector<unsigned int> inputNodesNum,
-      std::shared_ptr<sized_queue<signal>> task_sending_queue)
+      std::shared_ptr<sized_queue<Signal>> task_sending_queue)
       : m_pool(m_graph), m_work(inputNodesNum[0], nodeDims[0] * 4),
         m_nodeDims(nodeDims), m_inputNodeNum(inputNodesNum),
         final_layer(nodeDims.size()), m_hash_table_1(config::hash_table_size),
         m_hash_table_2(config::hash_table_size),
-        m_task_sending_queue(task_sending_queue) {}
+        m_task_sending_queue(std::move(task_sending_queue)) {}
 
   [[nodiscard]] unsigned get_current_generation_sequence() const {
     return sequence;
@@ -48,7 +51,7 @@ private:
   std::queue<unsigned> small_nodes_queue;
   std::queue<unsigned> large_nodes_queue;
 
-  std::shared_ptr<sized_queue<signal>> m_task_sending_queue;
+  std::shared_ptr<sized_queue<Signal>> m_task_sending_queue;
 };
 
 #endif /* CONTOLL_SIGNAL_GENERATOR_HH */
