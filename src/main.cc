@@ -43,8 +43,10 @@ int main(int argc, char **argv) {
 
   if (config::debug) {
     global_definitions.default_logger->set_level(spdlog::level::debug);
+    spdlog::set_level(spdlog::level::debug);
   } else {
     global_definitions.default_logger->set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::info);
   }
 
   GCN_INFO("Enable feature sparsity: {}", config::enable_feature_sparsity);

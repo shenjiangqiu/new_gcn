@@ -64,15 +64,23 @@ void controller::handle_buffer_relative_cycle() {
 
   if (m_mem->ret_available()) {
     assert(m_mem->peek_req()->t == device_types::input_buffer);
+
+    // spdlog::info("receiving req:{}",
+    //              fmt::join(m_mem->peek_req()->get_addr(), ","));
     i_bf->receive(m_mem->get_req());
   }
 
   // 6, send mem from buffer
   if (m_mem->available()) {
     if (i_bf->getCurrentState() == InputBufferState::readyToSend) {
+      // spdlog::info("sending curr_request: addr: {} ",
+      //              fmt::join(i_bf->getCurrentReq()->get_addr(), ","));
       m_mem->send(i_bf->getCurrentReq());
       i_bf->setCurrentState(InputBufferState::sent);
     } else if (i_bf->getNextState() == InputBufferState::readyToSend) {
+
+      // spdlog::info("sending next_request: addr: {} ",
+      //              fmt::join(i_bf->getNextReq()->get_addr(), ","));
       m_mem->send(i_bf->getNextReq());
       i_bf->setNextState(InputBufferState::sent);
     }
@@ -149,11 +157,13 @@ void controller::handle_work_insert() {
                             next_to_insert_edge.first) <= short_large_divider;
         if (is_short) {
           // should be insert to short
-          if (short_queue.back() != next_to_insert_edge.first) {
+          if (short_queue.empty() or
+              short_queue.back() != next_to_insert_edge.first) {
             short_queue.push_back(next_to_insert_edge.first);
           }
         } else {
-          if (large_queue.back() != next_to_insert_edge.first) {
+          if (large_queue.empty() or
+              large_queue.back() != next_to_insert_edge.first) {
             large_queue.push_back(next_to_insert_edge.first);
           }
           // should be insert to large
@@ -186,11 +196,13 @@ void controller::handle_work_insert() {
                           next_to_insert_edge.first) <= short_large_divider;
       if (is_short) {
         // should be insert to short
-        if (short_queue.back() != next_to_insert_edge.first) {
+        if (short_queue.empty() or
+            short_queue.back() != next_to_insert_edge.first) {
           short_queue.push_back(next_to_insert_edge.first);
         }
       } else {
-        if (large_queue.back() != next_to_insert_edge.first) {
+        if (large_queue.empty() or
+            large_queue.back() != next_to_insert_edge.first) {
           large_queue.push_back(next_to_insert_edge.first);
         }
         // should be insert to large
@@ -227,6 +239,7 @@ void controller::handle_work_insert() {
       assert(hashTable2.empty());
       // move to next layer
       currentLayer++;
+      GCN_INFO("switch to next layer:{}", currentLayer);
       if (currentLayer == finalLayer) {
         GCN_INFO("finished the pool:current layer:{}", currentLayer);
         pool_all_finished = true;
@@ -261,8 +274,7 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
       currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
       currentLayer(0), finalLayer(this->nodeDims.size()),
       m_inputNodeNum(std::move(inputNodesNum)), agg(std::move(agg)),
-      m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {
-}
+      m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {}
 
 bool controller::isAllFinished() const { return all_finished; }
 void controller::handle_remaining_cycle() {
@@ -332,8 +344,8 @@ void controller::handle_task_generation() {
                    out_edge);
         }
       } // end while
-
-      task_generation_queue.push(task);
+      if (task.input_nodes.size())
+        task_generation_queue.push(task);
     } // end test the task queue
   }
 }

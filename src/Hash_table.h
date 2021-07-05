@@ -47,13 +47,10 @@ public:
     auto entry_id_1 = hash_func_1(node_id);
     auto entry_id_2 = hash_func_2(node_id);
     // 1, find and append
-    unsigned real_entry_id = 0;
     if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
-      real_entry_id = entry_id_1;
       return true;
     } else if (entrys.count(entry_id_2) and
                entrys.at(entry_id_2).tag == node_id) {
-      real_entry_id = entry_id_2;
       return true;
     } else {
       return false;
