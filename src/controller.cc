@@ -31,13 +31,18 @@ void controller::handle_buffer_relative_cycle() {
         start_addr += 64;
       }
     }
-    task_generation_queue.pop();
     req->set_addr(addrs);
     req->t = device_types::input_buffer;
     req->req_type = mem_request::read;
     req->items_cnt = next_task.total_edges;
+    // if (next_task.total_edges >= 1000000) {
+    //   throw std::runtime_error("total edges too large!!");
+    // }
+    assert(req->items_cnt != 0);
     req->nodeDim = currentnodeDim;
     i_bf->send(req);
+
+    task_generation_queue.pop();
   }
 
   // 2, send task to agg
@@ -134,7 +139,9 @@ void controller::handle_work_insert() {
     while (m_current_pool.have_next_col() or this->next_to_insert_valid) {
 
       if (this->next_to_insert_valid) {
-
+        // if (next_to_insert_edge.first == 0) {
+        //   GCN_INFO_S("find 0 to insert");
+        // }
         auto result1 = hashtable1.insert(this->next_to_insert_edge.first,
                                          this->next_to_insert_edge.second);
         if (result1 == 0) {
@@ -160,10 +167,20 @@ void controller::handle_work_insert() {
           if (short_queue.empty() or
               short_queue.back() != next_to_insert_edge.first) {
             short_queue.push_back(next_to_insert_edge.first);
+            // GCN_INFO("insert to short_buffered!{}:{}",
+            //          next_to_insert_edge.first, next_to_insert_edge.second);
+            // if (next_to_insert_edge.first == 0) {
+            //   GCN_INFO("insert:{}", 0);
+            // }
           }
         } else {
           if (large_queue.empty() or
               large_queue.back() != next_to_insert_edge.first) {
+            // if (next_to_insert_edge.first == 0) {
+            //   GCN_INFO("insert:{}", 0);
+            // }
+            // GCN_INFO("insert to large_buffered!{}:{}",
+            //          next_to_insert_edge.first, next_to_insert_edge.second);
             large_queue.push_back(next_to_insert_edge.first);
           }
           // should be insert to large
@@ -172,6 +189,9 @@ void controller::handle_work_insert() {
       } else {
       }
       auto item = m_current_pool.get_next_edge_and_move();
+      // if (item.first == 0) {
+      //   GCN_INFO_S("find 0 to insert");
+      // }
       next_to_insert_edge = item;
       auto result1 = hashtable1.insert(item.first, item.second);
 
@@ -192,18 +212,22 @@ void controller::handle_work_insert() {
 
       remaining_cycle_insert_hash += result2;
       assert(next_to_insert_valid == false);
-      bool is_short = m_current_pool.get_node_total_len(
-                          next_to_insert_edge.first) <= short_large_divider;
+      bool is_short =
+          m_current_pool.get_node_total_len(item.first) <= short_large_divider;
+
+      // if (item.first == 0) {
+      //   GCN_INFO("insert:{}", 0);
+      // }
       if (is_short) {
         // should be insert to short
-        if (short_queue.empty() or
-            short_queue.back() != next_to_insert_edge.first) {
-          short_queue.push_back(next_to_insert_edge.first);
+        if (short_queue.empty() or short_queue.back() != item.first) {
+          // GCN_INFO("insert to short!{}:{}", item.first, item.second);
+          short_queue.push_back(item.first);
         }
       } else {
-        if (large_queue.empty() or
-            large_queue.back() != next_to_insert_edge.first) {
-          large_queue.push_back(next_to_insert_edge.first);
+        if (large_queue.empty() or large_queue.back() != item.first) {
+          // GCN_INFO("insert to large!{}:{}", item.first, item.second);
+          large_queue.push_back(item.first);
         }
         // should be insert to large
       }
@@ -307,15 +331,24 @@ void controller::handle_task_generation() {
         // select one output node from sorted queue
         unsigned selected_element =
             get_the_first_valid_element(short_queue, large_queue);
+        // bool find_zero = false;
+        // if (selected_element == 0) {
+        //   find_zero = true;
+        // }
+
+        // if (selected_element == 0)
+        //   GCN_INFO("find zero {}", selected_element);
 
         // selected one input from the output node, might remove the item
         remaining_cycle_build_task +=
             hashtable1.query_and_delete(selected_element, out_edge);
 
-        task.input_nodes.push_back(out_edge);
         total_generated_input++;
 
         if (hashtable1.is_just_removed()) {
+          // if (find_zero) {
+          //   GCN_INFO("find zero and moved,{}", selected_element);
+          // }
           // we need try to insert new nodes
           this->need_to_insert = true;
           remove_from_queue(short_queue, large_queue, selected_element);
@@ -334,18 +367,25 @@ void controller::handle_task_generation() {
           std::vector<unsigned> all_infected_output;
           auto hash_table_2 =
               hashTable2.query_and_delete(out_edge, all_infected_output);
+          // if (hash_table_2 >= 1000000) {
+          //   throw std::runtime_error("hashtable 2 too large!!");
+          // }
           assert(all_infected_output.size() == hash_table_2);
+          task.input_nodes.push_back(out_edge);
+
           task.total_edges += hash_table_2;
           remaining_cycle_build_task += hash_table_2;
         } else {
           // for query the hashtable 2
           remaining_cycle_build_task++;
-          GCN_INFO("could not find input id: {},might be touched before",
-                   out_edge);
+          // GCN_INFO("could not find input id: {},might be touched before",
+          //  out_edge);
         }
       } // end while
-      if (task.input_nodes.size())
+      if (task.input_nodes.size()) {
+        // assert(task.total_edges != 0);
         task_generation_queue.push(task);
+      }
     } // end test the task queue
   }
 }

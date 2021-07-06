@@ -25,6 +25,7 @@ namespace fast_sched {
 class output_node {
   // all the in_edges
 public:
+  void reset() { current_position = 0; }
   // TODO, 1.should be able to add or remove edges
   // TODO, 2. should support real mark(mark the size, when take, should to test
   // if the node is really valid!!!!)
@@ -169,7 +170,13 @@ public:
 
   output_node get_next_input_line_and_move();
   [[maybe_unused]] void only_move() { current_position++; }
-  void reset() { current_position = 0; }
+  void reset() {
+    current_position = 0;
+    // reset nodes's position
+    for (auto &&i : all_remaining_output_nodes) {
+      i.reset();
+    }
+  }
 
   bool have_next_col() {
     return current_position < all_remaining_output_nodes.size();

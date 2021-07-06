@@ -18,9 +18,11 @@ elementType have_any_element(const queueType &q1, const queueType &q2) {
 template <typename queueType,
           typename elementType = typename queueType::value_type>
 void remove_from_queue(queueType &q1, queueType &q2, elementType e) {
-  if (q1.front() == e) {
+  if (!q1.empty() and q1.front() == e) {
     q1.pop_front();
   } else {
+    assert(!q2.empty());
+    assert(q2.front() == e);
     if (q2.front() != e) {
       throw std::runtime_error("e not exist in q1,q2");
     }
@@ -34,10 +36,19 @@ elementType get_the_first_valid_element(const queueType &q1,
                                         const queueType &q2) {
   if (!q1.empty()) {
     auto e = q1.front();
+    // if (e == 0) {
+    //   GCN_INFO_S("0!");
+    // }
     return e;
   } else {
-    assert(!q2.empty());
+    // if (q2.empty()) {
+    //   throw std::runtime_error("long queue is empty!!!");
+    // }
+
     auto e = q2.front();
+    // if (e == 0) {
+    //   GCN_INFO_S("0!");
+    // }
     return e;
   }
 }

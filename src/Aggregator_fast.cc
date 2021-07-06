@@ -16,7 +16,15 @@ Aggregator_fast::Aggregator_fast(int totalCores) : total_cores(totalCores) {}
 
 void Aggregator_fast::cycle() {
   if (working) {
+    // if (remaining_cycle >= 100000) {
+    //   GCN_INFO_S("remaining cycle too large!!");
+    // }
+    assert(remaining_cycle > 0);
+    // if (remaining_cycle == 0) {
+    //   throw std::runtime_error("the cycle should not be zero");
+    // }
     remaining_cycle--;
+
     if (remaining_cycle == 0) {
       working = false;
     }
@@ -40,8 +48,9 @@ void Aggregator_fast::add_task(std::shared_ptr<dense_window> window) {
 
 void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_dim) {
   assert(working == false);
+  assert(req->items_cnt != 0);
   auto total_edges = req->items_cnt;
-  total_operations+=total_edges;
+  total_operations += total_edges;
   total_rounds++;
   auto rounds = (total_edges * node_dim + total_cores - 1) / total_cores;
   // read dram latency;
@@ -49,15 +58,14 @@ void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_dim) {
   // for each round, read the data, and use 1 cycle to process.
   auto total_time = rounds * (per_round_memory_fetch_time);
 
-
-  global_definitions.do_aggregate+=total_time;
-  global_definitions.total_aggregate_op+=total_edges*node_dim;
+  global_definitions.do_aggregate += total_time;
+  global_definitions.total_aggregate_op += total_edges * node_dim;
   global_definitions.total_input_windows++;
   global_definitions.total_edges += total_edges;
 
   remaining_cycle = total_time;
-  if(remaining_cycle>=100000){
-    GCN_INFO("remaining_cycle too large:{}",remaining_cycle);
+  if (remaining_cycle >= 1000000) {
+    throw std::runtime_error("remaining cycle too large!");
   }
   working = true;
 }
