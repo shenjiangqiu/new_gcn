@@ -128,6 +128,7 @@ extern Minisat::IntOption short_queue_size;
 extern Minisat::IntOption large_queue_size;
 extern Minisat::IntOption task_queue_size;
 extern Minisat::IntOption short_large_divider;
-
+extern Minisat::BoolOption enable_ideal_selection;
+extern Minisat::BoolOption enable_sequential_selection;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

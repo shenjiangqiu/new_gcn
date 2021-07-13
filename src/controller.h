@@ -67,6 +67,49 @@ public:
   [[nodiscard]] bool isAllFinished() const;
 
 private:
+  void handle_insert_queue(bool is_short) {
+    if (config::enable_ideal_selection) {
+
+      all_tasks_pool.insert(
+          {m_current_pool.get_node_total_len(next_to_insert_edge.first),
+           next_to_insert_edge.first});
+
+    } else if (config::enable_sequential_selection) {
+      // only push to short queue
+      if (short_queue.empty() or
+          short_queue.back() != next_to_insert_edge.first) {
+        short_queue.push_back(next_to_insert_edge.first);
+      }
+    } else {
+      // default case, real simulation
+      if (is_short) {
+        // should be insert to short
+        if (short_queue.empty() or
+            short_queue.back() != next_to_insert_edge.first) {
+          short_queue.push_back(next_to_insert_edge.first);
+          // GCN_INFO("insert to short_buffered!{}:{}",
+          //          next_to_insert_edge.first,
+          //          next_to_insert_edge.second);
+          // if (next_to_insert_edge.first == 0) {
+          //   GCN_INFO("insert:{}", 0);
+          // }
+        }
+      } else {
+        if (large_queue.empty() or
+            large_queue.back() != next_to_insert_edge.first) {
+          // if (next_to_insert_edge.first == 0) {
+          //   GCN_INFO("insert:{}", 0);
+          // }
+          // GCN_INFO("insert to large_buffered!{}:{}",
+          //          next_to_insert_edge.first,
+          //          next_to_insert_edge.second);
+          large_queue.push_back(next_to_insert_edge.first);
+        }
+        // should be insert to large
+      }
+    }
+  }
+
   // store a tmepory edge when insert fail
   bool next_to_insert_valid{false};
   std::pair<unsigned, unsigned> next_to_insert_edge{0, 0};
@@ -78,11 +121,13 @@ private:
   std::queue<agg_task> task_generation_queue{};
 
   // 1,2 is short , >3 is large
-  unsigned short_large_divider ;
+  unsigned short_large_divider;
 
   // this two queue should be maintainced during insert to hash
   std::deque<unsigned> short_queue{};
   std::deque<unsigned> large_queue{};
+
+  std::set<std::pair<unsigned, unsigned>> all_tasks_pool;
 
   sjq::edge_hash hashtable1;
   sjq::hash_table hashTable2;
@@ -107,7 +152,13 @@ private:
   uint64_t currentInputBaseAddr;
   // how many features per node in this layer
   unsigned currentnodeDim;
-  unsigned currentLayer;
+
+  // this is the layer the agg and ibfer runing layer
+  unsigned current_running_layer = 0;
+
+  // this is the layer the pool generate edges. this value might be more
+  // advanced than current_running_layer
+  unsigned currentLayer = 0;
   unsigned finalLayer;
   bool all_finished = false;
 

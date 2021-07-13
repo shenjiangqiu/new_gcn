@@ -32,7 +32,7 @@ for buffer_size in [1048576, 1048576*2, 1048576*4]:
                 -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
                 -model=gsc -ignore-neighbor=0 -ignore-self=0  \
                     -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
-                        -short-large-divider={divider}  >{graph}.{buffer_size}.{divider}.sched.out 2>&1"
+                        -short-large-divider={divider} -short-queue-size=100000 -large-queue-size=100000 -enable-ideal-selection  >{graph}.{buffer_size}.{divider}.sched.out 2>&1"
             print(cmd)
             cmds.append(cmd)
 

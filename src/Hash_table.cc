@@ -9,17 +9,16 @@ unsigned hash_table::query_and_delete(unsigned int node_id,
   // fix bug here, it's node id, not entry id!!!!
 
   auto entryId = get_entry_id_from_node_id(node_id);
-  auto entry_size = entrys.at(entryId).total_len;
-  out = entrys.at(entryId).edges;
-
+  auto entry_size = entrys.at(entryId).get_total_len();
+  out = entrys.at(entryId).get_edges();
+  assert(entry_size == out.size());
   entrys.erase(entryId);
   // T
   return entry_size;
 }
-void sjq::hash_table::delete_last(unsigned int node_id)
-{
-  auto entry_id=get_entry_id_from_node_id(node_id);
-  entrys.at(entry_id).edges.pop_back();
+void sjq::hash_table::delete_last(unsigned int node_id) {
+  auto entry_id = get_entry_id_from_node_id(node_id);
+  entrys.at(entry_id).delete_edge();
 }
 unsigned hash_table::insert(unsigned int node_id, unsigned value) {
 
@@ -33,11 +32,11 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
 
   // 1, find and append
 
-  if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
+  if (entrys.count(entry_id_1) and entrys.at(entry_id_1).get_tag() == node_id) {
     real_entry_id = entry_id_1;
     found = true;
   } else if (entrys.count(entry_id_2) and
-             entrys.at(entry_id_2).tag == node_id) {
+             entrys.at(entry_id_2).get_tag() == node_id) {
     real_entry_id = entry_id_2;
     found = true;
   } else {
@@ -48,20 +47,19 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
   if (found) {
     // find existing entry, just append it
     auto &entry = entrys.at(real_entry_id);
-    entry.edges.push_back(value);
+    entry.add_edge(value);
     auto next = entrys.upper_bound(real_entry_id);
     if (next != entrys.end()) {
       // this mean how many entry availiable to be used by real_entry_id
       auto gap = next->first - real_entry_id;
       // this mean how many space needed after insert the new value
       // 1->1,2->2 3->2 4-3, n+2/2 is good for this calculation.
-      auto space_needed = (entry.total_len + 1 + 2) / 2;
+      auto space_needed = (entry.get_total_len() + 1 + 2) / 2;
 
       if (gap >= space_needed) {
         // ok, good to go,
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
-        entry.total_len += 1;
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
 
       } else {
@@ -69,12 +67,12 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
         GCN_DEBUG_S("no enough space");
         GCN_DEBUG("need to move {} at {},because we want to insert {} to {} "
                   "with length:{}",
-                  next->second.tag, next->first, node_id, real_entry_id,
-                  entry.total_len + 1);
+                  next->second.get_tag(), next->first, node_id, real_entry_id,
+                  entry.get_total_len() + 1);
 
         unsigned max_hop = 1;
-        auto result =
-            move(unsigned(next->first), 0, entry.total_len + 1, 1, max_hop);
+        auto result = move(unsigned(next->first), 0, entry.get_total_len() + 1,
+                           1, max_hop);
 
         global_definitions.number_hops_histogram[max_hop]++;
         if (result == 0) {
@@ -82,20 +80,18 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
         }
         total_cycle += result;
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
-        entry.total_len += 1;
       }
     } else {
       // reach the end,
       // if fit in the space, just insert
-      auto space_needed = (entry.total_len + 1 + 2) / 2;
+      auto space_needed = (entry.get_total_len() + 1 + 2) / 2;
       auto gap = total_entry - real_entry_id;
       if (gap >= space_needed) {
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
-        entry.total_len += 1;
       } else {
         // try to insert to the other side// from zero
         GCN_DEBUG("space not enought, try to insert to another side:{}",
@@ -112,11 +108,11 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
 
           GCN_DEBUG("fail to insert the node {} at {} , current len:{}, "
                     "need to move {} at {} ",
-                    node_id, real_entry_id, entry.total_len + 1,
-                    begin_it->second.tag, begin_it->first);
+                    node_id, real_entry_id, entry.get_total_len() + 1,
+                    begin_it->second.get_tag(), begin_it->first);
           unsigned max_hop_level = 1;
-          auto result = move(unsigned(begin_it->first), 0, entry.total_len + 1,
-                             1, max_hop_level);
+          auto result = move(unsigned(begin_it->first), 0,
+                             entry.get_total_len() + 1, 1, max_hop_level);
 
           global_definitions.number_hops_histogram[max_hop_level]++;
 
@@ -130,9 +126,8 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
         }
 
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
-        entry.total_len += 1;
       }
     }
   } else {
@@ -145,9 +140,8 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
       // choose, entry 1
       GCN_DEBUG("put it in entry I:{}", entry_id_1);
       auto t_entry = entry();
-      t_entry.tag = node_id;
-      t_entry.edges.push_back(value);
-      t_entry.total_len = 1;
+      t_entry.set_tag(node_id);
+      t_entry.add_edge(value);
       assert(!entrys.contains(entry_id_1));
 
       entrys.insert({entry_id_1, t_entry});
@@ -157,10 +151,10 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
 
       GCN_DEBUG("put it in entry II:{}", entry_id_2);
       auto t_entry = entry();
-      t_entry.edges.push_back(value);
+      t_entry.add_edge(value);
 
-      t_entry.tag = node_id;
-      t_entry.total_len = 1;
+      t_entry.set_tag(node_id);
+
       assert(!entrys.contains(entry_id_2));
 
       entrys.insert({entry_id_2, t_entry});
@@ -188,10 +182,10 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
       }
       total_cycle += result;
       auto t_entry = entry();
-      t_entry.edges.push_back(value);
+      t_entry.add_edge(value);
 
-      t_entry.tag = node_id;
-      t_entry.total_len = 1;
+      t_entry.set_tag(node_id);
+
       total_cycle++;
       assert(!entrys.contains(shortest));
       entrys.insert({shortest, t_entry});
@@ -204,10 +198,10 @@ unsigned hash_table::get_entry_id_from_node_id(unsigned int node_id) {
   auto entry_id_2 = hash_func_2(node_id);
   // 1, find and append
   unsigned real_entry_id = 0;
-  if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
+  if (entrys.count(entry_id_1) and entrys.at(entry_id_1).get_tag() == node_id) {
     real_entry_id = entry_id_1;
   } else if (entrys.count(entry_id_2) and
-             entrys.at(entry_id_2).tag == node_id) {
+             entrys.at(entry_id_2).get_tag() == node_id) {
     real_entry_id = entry_id_2;
   } else {
     spdlog::error("in get entry form node id,fail to find the entry of "
@@ -228,7 +222,7 @@ unsigned hash_table::move(unsigned int entry_id, unsigned int a, unsigned int b,
                 "fixing the bug! {}",
                 a + b);
   GCN_DEBUG("debug to move:{},current depth:{}, current len:{}", entry_id,
-            move_depth, entrys.at(entry_id).total_len);
+            move_depth, entrys.at(entry_id).get_total_len());
 
   if (move_depth >= 5) {
     GCN_DEBUG_S("fail to move!, depth is 5");
@@ -238,7 +232,7 @@ unsigned hash_table::move(unsigned int entry_id, unsigned int a, unsigned int b,
   auto total_cycle = 1;
   assert(entrys.count(entry_id));
   auto &this_entry = entrys.at(entry_id);
-  auto tag = this_entry.tag;
+  auto tag = this_entry.get_tag();
 
   // the place that rehash function point to
   auto new_entry_id = 0u;
@@ -273,15 +267,14 @@ unsigned hash_table::move(unsigned int entry_id, unsigned int a, unsigned int b,
     while (!is_entry_empty(new_entry_id, get_entry_size(this_entry))) {
       // Fix bug here, there might cause infinit loog
       if (runtime_loop.contains(new_entry_id)) {
-        GCN_ERROR("Error! contain loop when move:{}", new_entry_id);
+        return 0;
       } else {
         runtime_loop.insert(new_entry_id);
       }
 
       loop_count++;
-      if (loop_count == 1000) {
-        throw std::runtime_error("more than 1000 loops in move happend, might "
-                                 "have infinit loop here");
+      if (loop_count == 10) {
+        return 0;
       }
 
       GCN_DEBUG("moving: {} is not empty", new_entry_id);

@@ -82,29 +82,29 @@ void Graph::print() const {
 
 int Graph::getNodeFeatures() const { return node_features; }
 
-// those are global definitions, do not use them in constructors!!!
-Minisat::IntOption inputSize("system", "input", "the input buffer size(Byte)");
-Minisat::IntOption outputSize("system", "output",
-                              "the output buffer size(Byte)");
-Minisat::IntOption edgeSize("system", "edge", "the edge buffer size(Byte)");
-Minisat::IntOption aggSize("system", "agg", "the agg buffer size(Byte)");
+// // those are global definitions, do not use them in constructors!!!
+// Minisat::IntOption inputSize("system", "input", "the input buffer size(Byte)");
+// Minisat::IntOption outputSize("system", "output",
+//                               "the output buffer size(Byte)");
+// Minisat::IntOption edgeSize("system", "edge", "the edge buffer size(Byte)");
+// Minisat::IntOption aggSize("system", "agg", "the agg buffer size(Byte)");
 
-Minisat::IntOption aggCores("system", "aggCores", "the agg buffer size(Byte)");
-Minisat::IntOption systolic_rows("system", "systolic-rows",
-                                 "the agg buffer size(Byte)");
-Minisat::IntOption systolic_cols("system", "systolic-cols",
-                                 "the agg buffer size(Byte)");
-Minisat::StringOption graph_name("system", "graph-name", "the name of graph",
-                                 "test");
-Minisat::StringOption dram_name("sym", "dram-name", "the name of dram",
-                                "DDR4-config.cfg");
-Minisat::BoolOption debug("system", "debug", "if enable debug", false);
+// Minisat::IntOption aggCores("system", "aggCores", "the agg buffer size(Byte)");
+// Minisat::IntOption systolic_rows("system", "systolic-rows",
+//                                  "the agg buffer size(Byte)");
+// Minisat::IntOption systolic_cols("system", "systolic-cols",
+//                                  "the agg buffer size(Byte)");
+// Minisat::StringOption graph_name("system", "graph-name", "the name of graph",
+//                                  "test");
+// Minisat::StringOption dram_name("sym", "dram-name", "the name of dram",
+//                                 "DDR4-config.cfg");
+// Minisat::BoolOption debug("system", "debug", "if enable debug", false);
 
-Minisat::StringOption model("system", "model", "the model definition file",
-                            "gcn");
-Minisat::BoolOption double_input(
-    "system", "double-input",
-    "will the result of aggregation need to concat the origin vector", false);
+// Minisat::StringOption model("system", "model", "the model definition file",
+//                             "gcn");
+// Minisat::BoolOption double_input(
+//     "system", "double-input",
+//     "will the result of aggregation need to concat the origin vector", false);
 void Graph::sort_translate() {
   GCN_INFO_S("start to sort the graph");
   if (sorted) {

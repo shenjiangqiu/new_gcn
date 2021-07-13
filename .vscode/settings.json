@@ -93,7 +93,8 @@
         "strstream": "cpp",
         "typeindex": "cpp",
         "stop_token": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "ranges": "cpp"
     },
     "python.pythonPath": "/home/sjq/anaconda3/bin/python"
 }

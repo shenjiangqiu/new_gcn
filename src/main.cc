@@ -14,12 +14,21 @@ int main(int argc, char **argv) {
   Minisat::parseOptions(argc, argv, false);
   // this value must be init after parse option, because it depends on graph
   // name
+  auto options = Minisat::Option::getOptionList();
+
+  for (auto &&i : options) {
+    GCN_INFO("name:{} value:{}", i->get_name(), i->get_value());
+  }
   global_definitions.edge_agg_logger = spdlog::basic_logger_st(
       "trace_edge_agg.txt",
-      fmt::format("logs/{}/edge_agg.txt", config::graph_name), true);
+      fmt::format("logs/{}/edge_agg_{}_{}.txt", config::graph_name,
+                  config::hash_table_size, config::short_large_divider),
+      true);
   global_definitions.default_logger = spdlog::basic_logger_st(
       "default_logger.txt",
-      fmt::format("logs/{}/default_logger.txt", config::graph_name), true);
+      fmt::format("logs/{}/default_logger_{}_{}.txt", config::graph_name,
+                  config::hash_table_size, config::short_large_divider),
+      true);
 
   // TODO: should be read gcn number
   // TODO: the agg_buffer might contain double information

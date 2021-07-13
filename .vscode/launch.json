@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "(gdb) fast_test",
             "type": "cppdbg",
             "request": "launch",
@@ -14,11 +21,11 @@
                 "-output=4194304",
                 "-edge=2097152",
                 "-agg=16777216",
-                "-hash-table-size=4194304",
+                "-hash-table-size=1048576",
                 "-aggCores=512",
                 "-systolic-rows=32",
                 "-systolic-cols=128",
-                "-graph-name=coauthor_cs_graph_data",
+                "-graph-name=acm_graph_data",
                 "-dram-name=HBM-config.cfg",
                 "-model=gsc",
                 "-ignore-neighbor=0",
@@ -28,6 +35,9 @@
                 "-dram-freq=0.5",
                 "-enable-dense-window",
                 "-enable-fast-sched",
+                "-short-large-divider=2",
+                // "-enable-ideal-selection",
+                "-enable-sequential-selection",
                 // "-debug",
             ],
             "stopAtEntry": false,

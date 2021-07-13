@@ -5,8 +5,8 @@ edge_hash::edge_hash(unsigned int t_e) : total_entry(t_e) {}
 std::string edge_hash::get_line_trace() {
   std::string ret;
   for (auto i : entrys) {
-    ret += fmt::format("{}: len:{},tag:{}\n", i.first, i.second.total_len,
-                       i.second.tag);
+    ret += fmt::format("{}: len:{},tag:{}\n", i.first, i.second.get_total_len(),
+                       i.second.get_tag());
   }
   return ret;
 }
@@ -23,11 +23,11 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
 
   // 1, find and append
 
-  if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
+  if (entrys.count(entry_id_1) and entrys.at(entry_id_1).get_tag() == node_id) {
     real_entry_id = entry_id_1;
     found = true;
   } else if (entrys.count(entry_id_2) and
-             entrys.at(entry_id_2).tag == node_id) {
+             entrys.at(entry_id_2).get_tag() == node_id) {
     real_entry_id = entry_id_2;
     found = true;
   } else {
@@ -38,20 +38,19 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
   if (found) {
     // find existing entry, just append it
     auto &entry = entrys.at(real_entry_id);
-    entry.edges.push_back(value);
+    entry.add_edge(value);
     auto next = entrys.upper_bound(real_entry_id);
     if (next != entrys.end()) {
       // this mean how many entry availiable to be used by real_entry_id
       auto gap = next->first - real_entry_id;
       // this mean how many space needed after insert the new value
       // 1->1,2->2 3->2 4-3, n+2/2 is good for this calculation.
-      auto space_needed = (entry.total_len + 1 + 2) / 2;
+      auto space_needed = (entry.get_total_len() + 1 + 2) / 2;
 
       if (gap >= space_needed) {
         // ok, good to go,
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
-        entry.total_len += 1;
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
 
       } else {
@@ -59,12 +58,12 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
         GCN_DEBUG_S("no enough space");
         GCN_DEBUG("need to move {} at {},because we want to insert {} to {} "
                   "with length:{}",
-                  next->second.tag, next->first, node_id, real_entry_id,
-                  entry.total_len + 1);
+                  next->second.get_tag(), next->first, node_id, real_entry_id,
+                  entry.get_total_len() + 1);
 
         unsigned max_hop = 1;
-        auto result =
-            move(unsigned(next->first), 0, entry.total_len + 1, 1, max_hop);
+        auto result = move(unsigned(next->first), 0, entry.get_total_len() + 1,
+                           1, max_hop);
 
         global_definitions.number_hops_histogram[max_hop]++;
         if (result == 0) {
@@ -72,20 +71,18 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
         }
         total_cycle += result;
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
-        entry.total_len += 1;
       }
     } else {
       // reach the end,
       // if fit in the space, just insert
-      auto space_needed = (entry.total_len + 1 + 2) / 2;
+      auto space_needed = (entry.get_total_len() + 1 + 2) / 2;
       auto gap = total_entry - real_entry_id;
       if (gap >= space_needed) {
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
-        entry.total_len += 1;
       } else {
         // try to insert to the other side// from zero
         GCN_DEBUG("space not enought, try to insert to another side:{}",
@@ -102,11 +99,11 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
 
           GCN_DEBUG("fail to insert the node {} at {} , current len:{}, "
                     "need to move {} at {} ",
-                    node_id, real_entry_id, entry.total_len + 1,
-                    begin_it->second.tag, begin_it->first);
+                    node_id, real_entry_id, entry.get_total_len() + 1,
+                    begin_it->second.get_tag(), begin_it->first);
           unsigned max_hop_level = 1;
-          auto result = move(unsigned(begin_it->first), 0, entry.total_len + 1,
-                             1, max_hop_level);
+          auto result = move(unsigned(begin_it->first), 0,
+                             entry.get_total_len() + 1, 1, max_hop_level);
 
           global_definitions.number_hops_histogram[max_hop_level]++;
 
@@ -120,9 +117,8 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
         }
 
         GCN_DEBUG("insert {} at {} succeed!,current len: {}", node_id,
-                  real_entry_id, entry.total_len + 1);
+                  real_entry_id, entry.get_total_len() + 1);
         total_cycle++;
-        entry.total_len += 1;
       }
     }
   } else {
@@ -135,10 +131,9 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       // choose, entry 1
       GCN_DEBUG("put it in entry I:{}", entry_id_1);
       auto t_entry = entry_edge();
-      t_entry.tag = node_id;
-      t_entry.total_len = 1;
+      t_entry.set_tag(node_id);
       assert(!entrys.contains(entry_id_1));
-      t_entry.edges.push_back(value);
+      t_entry.add_edge(value);
       entrys.insert({entry_id_1, t_entry});
       total_cycle++;
 
@@ -146,9 +141,9 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
 
       GCN_DEBUG("put it in entry II:{}", entry_id_2);
       auto t_entry = entry_edge();
-      t_entry.tag = node_id;
-      t_entry.total_len = 1;
-      t_entry.edges.push_back(value);
+      t_entry.set_tag(node_id);
+      assert(!entrys.contains(entry_id_1));
+      t_entry.add_edge(value);
 
       assert(!entrys.contains(entry_id_2));
 
@@ -177,9 +172,10 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       }
       total_cycle += result;
       auto t_entry = entry_edge();
-      t_entry.tag = node_id;
-      t_entry.total_len = 1;
-      t_entry.edges.push_back(value);
+      t_entry.set_tag(node_id);
+      assert(!entrys.contains(entry_id_1));
+      t_entry.add_edge(value);
+
 
       total_cycle++;
       assert(!entrys.contains(shortest));

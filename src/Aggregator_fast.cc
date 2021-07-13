@@ -51,7 +51,7 @@ void Aggregator_fast::add_task(const shared_ptr<Req> &req, unsigned node_dim) {
   assert(req->items_cnt != 0);
   auto total_edges = req->items_cnt;
   total_operations += total_edges;
-  total_rounds++;
+  total_rounds++; 
   auto rounds = (total_edges * node_dim + total_cores - 1) / total_cores;
   // read dram latency;
   auto per_round_memory_fetch_time = 1;

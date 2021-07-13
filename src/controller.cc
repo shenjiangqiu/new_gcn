@@ -10,6 +10,7 @@
 #include "debug_helper.h"
 #include "utils/common.hh"
 namespace fast_sched {
+
 // note here, we do not count the latency of read csc format edge from dram to
 // on-chip buffer, because the bottleneck should be signal generation process
 void controller::handle_buffer_relative_cycle() {
@@ -40,6 +41,7 @@ void controller::handle_buffer_relative_cycle() {
     // }
     assert(req->items_cnt != 0);
     req->nodeDim = currentnodeDim;
+    assert(currentnodeDim != 0);
     i_bf->send(req);
 
     task_generation_queue.pop();
@@ -130,11 +132,16 @@ void controller::cycle() {
 void controller::handle_work_insert() {
   // note that, this function will also remove this flag
   // put a new output node into the buffer ans hashtable
+  // fix bug here, when cross the layer, should wait the remaining task to
+  // complete
   if (this->need_to_insert and remaining_cycle_insert_hash == 0 and
       ((hashtable1.size() * currentnodeDim * 4 + currentnodeDim * 4) <
        aggBufferSize) and
       large_queue.size() < large_queue_size and
-      short_queue.size() < short_queue_size) {
+      short_queue.size() < short_queue_size and
+      all_tasks_pool.size() < large_queue_size + short_queue_size and
+      current_running_layer == currentLayer) {
+
     // start to insert
     while (m_current_pool.have_next_col() or this->next_to_insert_valid) {
 
@@ -162,74 +169,43 @@ void controller::handle_work_insert() {
         // handle short queue or  large queue insert
         bool is_short = m_current_pool.get_node_total_len(
                             next_to_insert_edge.first) <= short_large_divider;
-        if (is_short) {
-          // should be insert to short
-          if (short_queue.empty() or
-              short_queue.back() != next_to_insert_edge.first) {
-            short_queue.push_back(next_to_insert_edge.first);
-            // GCN_INFO("insert to short_buffered!{}:{}",
-            //          next_to_insert_edge.first, next_to_insert_edge.second);
-            // if (next_to_insert_edge.first == 0) {
-            //   GCN_INFO("insert:{}", 0);
-            // }
-          }
-        } else {
-          if (large_queue.empty() or
-              large_queue.back() != next_to_insert_edge.first) {
-            // if (next_to_insert_edge.first == 0) {
-            //   GCN_INFO("insert:{}", 0);
-            // }
-            // GCN_INFO("insert to large_buffered!{}:{}",
-            //          next_to_insert_edge.first, next_to_insert_edge.second);
-            large_queue.push_back(next_to_insert_edge.first);
-          }
-          // should be insert to large
-        }
+
+        handle_insert_queue(is_short);
 
       } else {
-      }
-      auto item = m_current_pool.get_next_edge_and_move();
-      // if (item.first == 0) {
-      //   GCN_INFO_S("find 0 to insert");
-      // }
-      next_to_insert_edge = item;
-      auto result1 = hashtable1.insert(item.first, item.second);
+        // Fix bug here, why the else block be emtpy before...
 
-      if (result1 == 0) {
-        next_to_insert_valid = true;
-        // insert fail
-        break;
-      }
-      auto result2 = hashTable2.insert(item.second, item.first);
-      if (result2 == 0) {
-        hashtable1.delete_last(item.first);
-        next_to_insert_valid = true;
+        auto item = m_current_pool.get_next_edge_and_move();
+        // if (item.first == 0) {
+        //   GCN_INFO_S("find 0 to insert");
+        // }
+        next_to_insert_edge = item;
+        auto result1 = hashtable1.insert(item.first, item.second);
 
-        break;
-      }
-
-      remaining_cycle_insert_hash += result1;
-
-      remaining_cycle_insert_hash += result2;
-      assert(next_to_insert_valid == false);
-      bool is_short =
-          m_current_pool.get_node_total_len(item.first) <= short_large_divider;
-
-      // if (item.first == 0) {
-      //   GCN_INFO("insert:{}", 0);
-      // }
-      if (is_short) {
-        // should be insert to short
-        if (short_queue.empty() or short_queue.back() != item.first) {
-          // GCN_INFO("insert to short!{}:{}", item.first, item.second);
-          short_queue.push_back(item.first);
+        if (result1 == 0) {
+          next_to_insert_valid = true;
+          // insert fail
+          break;
         }
-      } else {
-        if (large_queue.empty() or large_queue.back() != item.first) {
-          // GCN_INFO("insert to large!{}:{}", item.first, item.second);
-          large_queue.push_back(item.first);
+        auto result2 = hashTable2.insert(item.second, item.first);
+        if (result2 == 0) {
+          hashtable1.delete_last(item.first);
+          next_to_insert_valid = true;
+
+          break;
         }
-        // should be insert to large
+
+        remaining_cycle_insert_hash += result1;
+
+        remaining_cycle_insert_hash += result2;
+        assert(next_to_insert_valid == false);
+        bool is_short = m_current_pool.get_node_total_len(item.first) <=
+                        short_large_divider;
+
+        // if (item.first == 0) {
+        //   GCN_INFO("insert:{}", 0);
+        // }
+        handle_insert_queue(is_short);
       }
     }
 
@@ -257,6 +233,23 @@ void controller::handle_work_insert() {
   // }
 
   // 5, check pool
+  if (current_running_layer < currentLayer and hashtable1.empty() and
+      i_bf->getCurrentState() == InputBufferState::empty and
+      i_bf->getNextState() == InputBufferState::empty and !agg->isWorking()) {
+    assert(hashTable2.empty());
+    assert(short_queue.empty());
+    assert(large_queue.empty());
+    assert(all_tasks_pool.empty());
+    // fix bug here, because we use seperate insert and task generationlogic, so
+    // the meta data change should happend when the real layer changed
+
+    current_running_layer++;
+    currentInputBaseAddr += currentnodeDim * 4 * totalNodes;
+    currentnodeDim = nodeDims[current_running_layer];
+    need_to_insert = true;
+    next_to_insert_valid = false;
+  }
+
   if (!m_current_pool.have_next_col() and not pool_all_finished) {
     // waiting until all current layer finished
     if (hashtable1.empty()) {
@@ -271,13 +264,6 @@ void controller::handle_work_insert() {
         GCN_INFO("switch to next layer:layer:{}", currentLayer);
         m_current_pool.reset();
         // set up the environments
-        currentInputBaseAddr += currentnodeDim * 4 * totalNodes;
-        assert(currentLayer < nodeDims.size());
-        currentnodeDim = nodeDims[currentLayer];
-        GCN_INFO("setup new window: inputNodes:{} node_size:{}",
-                 m_inputNodeNum[currentLayer], nodeDims[currentLayer] * 4);
-        need_to_insert = true;
-        next_to_insert_valid = false;
       }
     }
   }
@@ -291,12 +277,13 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
                        unsigned int shortQueueSize, unsigned int largeQueueSize,
                        unsigned int taskQueueSize, unsigned int aggBufferSize)
     : short_large_divider(shortLargeDivider),
-      hashtable1(config::hash_table_size), hashTable2(config::hash_table_size),
-      short_queue_size(shortQueueSize), large_queue_size(largeQueueSize),
-      task_queue_size(taskQueueSize), m_current_pool(m_graph), i_bf(iBf),
-      nodeDims(std::move(nodeDims)), totalNodes(m_graph.get_num_nodes()),
-      currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
-      currentLayer(0), finalLayer(this->nodeDims.size()),
+      hashtable1(config::hash_table_size / 8),
+      hashTable2(config::hash_table_size / 8), short_queue_size(shortQueueSize),
+      large_queue_size(largeQueueSize), task_queue_size(taskQueueSize),
+      m_current_pool(m_graph), i_bf(iBf), nodeDims(std::move(nodeDims)),
+      totalNodes(m_graph.get_num_nodes()), currentInputBaseAddr(0x00ff00),
+      currentnodeDim(this->nodeDims[0]), currentLayer(0),
+      finalLayer(this->nodeDims.size()),
       m_inputNodeNum(std::move(inputNodesNum)), agg(std::move(agg)),
       m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {}
 
@@ -314,6 +301,11 @@ void controller::handle_remaining_cycle() {
 void controller::handle_task_generation() {
   // add task
   // TODO
+  if (current_running_layer == this->finalLayer) {
+    assert(!have_any_element(short_queue, large_queue));
+    assert(all_tasks_pool.empty());
+    return;
+  }
   if (remaining_cycle_build_task == 0 and remaining_cycle_insert_hash == 0) {
     auto task = agg_task{
         .input_nodes = {},
@@ -323,14 +315,33 @@ void controller::handle_task_generation() {
     if (task_generation_queue.size() < task_queue_size) {
       // might send the task
       remaining_cycle_build_task++;
-      unsigned out_edge;
+      unsigned in_edge;
       unsigned total_generated_input = 0;
-      while (total_generated_input < m_inputNodeNum.at(currentLayer) and
-             have_any_element(short_queue, large_queue)) {
+      // bool have_next = false;
+      // if (config::enable_ideal_selection) {
+      //   have_next = !all_tasks_pool.empty();
+      // } else {
+      //   have_next = have_any_element(short_queue, large_queue);
+      // }
+      // Fix bug here, should to test emtpy every time!!
+      GCN_INFO("{}", m_inputNodeNum.at(current_running_layer));
+      auto max_input_num = m_inputNodeNum.at(current_running_layer);
+
+      // FIX a seriouse BUG here,
+      // a huge bug
+      // the and operator is prior than ?, so it always be true!!!
+      while ((total_generated_input < max_input_num) and
+             (config::enable_ideal_selection
+                  ? !all_tasks_pool.empty()
+                  : have_any_element(short_queue, large_queue))) {
 
         // select one output node from sorted queue
-        unsigned selected_element =
-            get_the_first_valid_element(short_queue, large_queue);
+        unsigned selected_element = -1;
+
+        selected_element =
+            config::enable_ideal_selection
+                ? all_tasks_pool.begin()->second
+                : get_the_first_valid_element(short_queue, large_queue);
         // bool find_zero = false;
         // if (selected_element == 0) {
         //   find_zero = true;
@@ -339,11 +350,12 @@ void controller::handle_task_generation() {
         // if (selected_element == 0)
         //   GCN_INFO("find zero {}", selected_element);
 
-        // selected one input from the output node, might remove the item
-        remaining_cycle_build_task +=
-            hashtable1.query_and_delete(selected_element, out_edge);
+        // selected one input from the output node, might remove the
+        // item
 
-        total_generated_input++;
+        // fix bug here, we need input edge here, not in_edge
+        remaining_cycle_build_task +=
+            hashtable1.query_and_delete(selected_element, in_edge);
 
         if (hashtable1.is_just_removed()) {
           // if (find_zero) {
@@ -351,39 +363,57 @@ void controller::handle_task_generation() {
           // }
           // we need try to insert new nodes
           this->need_to_insert = true;
-          remove_from_queue(short_queue, large_queue, selected_element);
+          if (config::enable_ideal_selection) {
+            assert(all_tasks_pool.begin()->second == selected_element);
+            assert(!all_tasks_pool.empty());
+            all_tasks_pool.erase(all_tasks_pool.begin());
+          } else {
+            remove_from_queue(short_queue, large_queue, selected_element);
+          }
           hashtable1.set_not_just_removed();
         }
 
         // got the edges from this hashtable.
         // TODO search hashtable 2 to get all influence output nodes
-        // note that , this input might not exist in the hashtable 2, because
-        // it might be removed by another output but we do not delete it in
-        // this output
+        // note that , this input might not exist in the hashtable 2,
+        // because it might be removed by another output but we do not
+        // delete it in this output
 
         // first need to judge if this input exist in hashtable 2
-        if (hashTable2.exist(out_edge)) {
+        if (hashTable2.exist(in_edge)) {
+
+          // fix a bug here, only valid node are considered!
+          total_generated_input++;
 
           std::vector<unsigned> all_infected_output;
           auto hash_table_2 =
-              hashTable2.query_and_delete(out_edge, all_infected_output);
+              hashTable2.query_and_delete(in_edge, all_infected_output);
           // if (hash_table_2 >= 1000000) {
           //   throw std::runtime_error("hashtable 2 too large!!");
           // }
           assert(all_infected_output.size() == hash_table_2);
-          task.input_nodes.push_back(out_edge);
+          task.input_nodes.push_back(in_edge);
 
           task.total_edges += hash_table_2;
           remaining_cycle_build_task += hash_table_2;
         } else {
           // for query the hashtable 2
           remaining_cycle_build_task++;
-          // GCN_INFO("could not find input id: {},might be touched before",
-          //  out_edge);
+          // GCN_INFO("could not find input id: {},might be touched
+          // before",
+          //  in_edge);
         }
       } // end while
       if (task.input_nodes.size()) {
         // assert(task.total_edges != 0);
+        static bool the_first = true;
+
+        if (the_first) {
+          the_first = false;
+          // print the first window!!
+          GCN_INFO("generating the first window:edges:{}", task.total_edges);
+          GCN_INFO("the edge detail:{}", fmt::join(task.input_nodes, ","));
+        }
         task_generation_queue.push(task);
       }
     } // end test the task queue

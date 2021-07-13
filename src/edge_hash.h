@@ -11,6 +11,32 @@
 namespace sjq {
 
 struct entry_edge {
+  void add_edge(unsigned edge_id) {
+    total_len++;
+    edges.push_back(edge_id);
+  }
+  void delete_edge() {
+    total_len--;
+    edges.pop_back();
+  }
+
+  unsigned get_total_len() const { return total_len; }
+  unsigned get_tag() const { return tag; }
+  bool is_valid() const { return valid; }
+  bool is_next_valid() const { return next_valid; }
+  bool is_main() const { return main; }
+  const std::vector<unsigned> &get_edges() const { return edges; }
+
+  void set_tag(unsigned _tag) { tag = _tag; }
+  void set_node_id(unsigned _node_id) { node_id = _node_id; }
+  unsigned get_real_input_id() {
+    assert(total_len != 0);
+
+    // return the last edge
+    return edges.at(total_len - 1);
+  }
+
+private:
   bool valid = false;
   bool next_valid = false;
   bool main = false;
@@ -23,16 +49,8 @@ struct entry_edge {
 
   // real len means the size during runtime, my reduced when other input touch
   // this entry
-  unsigned real_len = 0;
   // the real edges
   std::vector<unsigned> edges;
-
-  unsigned get_real_input_id() {
-    assert(total_len != 0);
-
-    // return the last edge
-    return edges.at(total_len - 1);
-  }
 };
 
 class edge_hash {
@@ -46,21 +64,21 @@ public:
   bool can_insert(unsigned node_id);
   void delete_last(unsigned int node_id) {
     auto entry_id = get_entry_id_from_node_id(node_id);
-    entrys.at(entry_id).edges.pop_back();
+    entrys.at(entry_id).delete_edge();
   }
   [[nodiscard]] unsigned insert(unsigned node_id, unsigned valude);
   //
-  unsigned query_and_mark(unsigned node_id) {
-    auto entryId = get_entry_id_from_node_id(node_id);
-    auto &real_len = entrys.at(entryId).real_len;
+  // unsigned query_and_mark(unsigned node_id) {
+  //   auto entryId = get_entry_id_from_node_id(node_id);
+  //   auto &real_len = entrys.at(entryId).get_total_len();
 
-    if (real_len == 0) {
-      throw std::runtime_error("shouldn't be 0 of real len!!");
-    }
-    real_len--;
+  //   if (real_len == 0) {
+  //     throw std::runtime_error("shouldn't be 0 of real len!!");
+  //   }
+  //   real_len--;
 
-    return 1;
-  }
+  //   return 1;
+  // }
   // will remove the empty entry
   void remove_entry(unsigned node_id) {
     auto entryId = get_entry_id_from_node_id(node_id);
@@ -72,7 +90,7 @@ public:
 
     auto entryId = get_entry_id_from_node_id(node_id);
     auto &entry = entrys.at(entryId);
-    if (entry.total_len == 0) {
+    if (entry.get_total_len() == 0) {
       return true;
     } else {
       return false;
@@ -80,8 +98,7 @@ public:
   }
 
   // get one node from the node id, remove if the size is zero.
-  [[nodiscard]] unsigned query_and_delete(unsigned node_id,
-                                          unsigned &out_edge) {
+  [[nodiscard]] unsigned query_and_delete(unsigned node_id, unsigned &in_edge) {
     // currently we assume no conflict and return the number of entries
     // dont' worry, it's constant
     // fix bug here, it's node id, not entry id!!!!
@@ -92,11 +109,9 @@ public:
     // query, when it's influenced by other input, we are going to reduce the
     // real_len
     auto &entry = entrys.at(entryId);
-    auto &entry_size = entry.total_len;
-    out_edge = entry.get_real_input_id();
-
-    entry_size--;
-    if (entry_size == 0) {
+    in_edge = entry.get_edges().back();
+    entry.delete_edge();
+    if (entry.get_total_len() == 0) {
       just_removed = true;
       entrys.erase(entryId);
     }
@@ -124,10 +139,11 @@ private:
     auto entry_id_2 = hash_func_2(node_id);
     // 1, find and append
     unsigned real_entry_id = 0;
-    if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
+    if (entrys.count(entry_id_1) and
+        entrys.at(entry_id_1).get_tag() == node_id) {
       real_entry_id = entry_id_1;
     } else if (entrys.count(entry_id_2) and
-               entrys.at(entry_id_2).tag == node_id) {
+               entrys.at(entry_id_2).get_tag() == node_id) {
       real_entry_id = entry_id_2;
     } else {
       spdlog::error("in get entry form node id,fail to find the entry of "
@@ -148,7 +164,7 @@ private:
                   "fixing the bug! {}",
                   a + b);
     GCN_DEBUG("debug to move:{},current depth:{}, current len:{}", entry_id,
-              move_depth, entrys.at(entry_id).total_len);
+              move_depth, entrys.at(entry_id).get_total_len());
 
     if (move_depth >= 5) {
       GCN_DEBUG_S("fail to move!, depth is 5");
@@ -158,7 +174,7 @@ private:
     auto total_cycle = 1;
     assert(entrys.count(entry_id));
     auto &this_entry = entrys.at(entry_id);
-    auto tag = this_entry.tag;
+    auto tag = this_entry.get_tag();
 
     // the place that rehash function point to
     auto new_entry_id = 0u;
@@ -193,16 +209,14 @@ private:
       while (!is_entry_empty(new_entry_id, get_entry_size(this_entry))) {
         // Fix bug here, there might cause infinit loog
         if (runtime_loop.contains(new_entry_id)) {
-          GCN_ERROR("Error! contain loop when move:{}", new_entry_id);
+          return 0;
         } else {
           runtime_loop.insert(new_entry_id);
         }
 
         loop_count++;
-        if (loop_count == 1000) {
-          throw std::runtime_error(
-              "more than 1000 loops in move happend, might "
-              "have infinit loop here");
+        if (loop_count == 10) {
+          return 0;
         }
 
         GCN_DEBUG("moving: {} is not empty", new_entry_id);
@@ -242,7 +256,7 @@ private:
   }
 
   [[nodiscard]] static unsigned get_entry_size(const entry_edge &e) {
-    return (e.total_len + 2) / 2;
+    return (e.get_total_len() + 2) / 2;
   }
   [[nodiscard]] unsigned hash_func_1(unsigned node_id) const {
     unsigned rid;
@@ -375,7 +389,7 @@ private:
     };
     auto prev = std::prev(neareast);
     GCN_DEBUG("find_prev: id:{},len:{}, the real id to find:{}", prev->first,
-              prev->second.total_len, inner_id);
+              prev->second.get_total_len(), inner_id);
 
     assert(std::prev(neareast)->first +
                get_entry_size(std::prev(neareast)->second) >
@@ -385,9 +399,9 @@ private:
   [[nodiscard]] unsigned find_shortest_to_move(unsigned entryId1,
                                                unsigned entryId2) const {
     auto firstId = find_real_entry_id(entryId1);
-    auto firstLen = entrys.at(firstId).total_len;
+    auto firstLen = entrys.at(firstId).get_total_len();
     auto secondId = find_real_entry_id(entryId2);
-    auto secondLen = entrys.at(secondId).total_len;
+    auto secondLen = entrys.at(secondId).get_total_len();
     if (firstLen < secondLen) {
       return entryId1;
     } else {

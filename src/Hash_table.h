@@ -10,7 +10,29 @@
 #include <vector>
 
 namespace sjq {
-struct entry {
+class entry {
+
+public:
+  void add_edge(unsigned edge_id) {
+    total_len++;
+    edges.push_back(edge_id);
+  }
+  void delete_edge() {
+    total_len--;
+    edges.pop_back();
+  }
+
+  unsigned get_total_len() const { return total_len; }
+  unsigned get_tag() const { return tag; }
+  bool is_valid() const { return valid; }
+  bool is_next_valid() const { return next_valid; }
+  bool is_main() const { return main; }
+  const std::vector<unsigned> &get_edges() const { return edges; }
+
+  void set_tag(unsigned _tag) { tag = _tag; }
+  void set_node_id(unsigned _node_id) { node_id = _node_id; }
+
+private:
   bool valid = false;
   bool next_valid = false;
   bool main = false;
@@ -30,8 +52,8 @@ public:
   [[nodiscard]] std::string get_line_trace() {
     std::string ret;
     for (auto i : entrys) {
-      ret += fmt::format("{}: len:{},tag:{}\n", i.first, i.second.total_len,
-                         i.second.tag);
+      ret += fmt::format("{}: len:{},tag:{}\n", i.first,
+                         i.second.get_total_len(), i.second.get_tag());
     }
     return ret;
   }
@@ -47,10 +69,11 @@ public:
     auto entry_id_1 = hash_func_1(node_id);
     auto entry_id_2 = hash_func_2(node_id);
     // 1, find and append
-    if (entrys.count(entry_id_1) and entrys.at(entry_id_1).tag == node_id) {
+    if (entrys.count(entry_id_1) and
+        entrys.at(entry_id_1).get_tag() == node_id) {
       return true;
     } else if (entrys.count(entry_id_2) and
-               entrys.at(entry_id_2).tag == node_id) {
+               entrys.at(entry_id_2).get_tag() == node_id) {
       return true;
     } else {
       return false;
@@ -72,9 +95,6 @@ private:
 
   unsigned total_entry;
 
-
-
-
   // note that when a_s=b_e, it's not overlap in this problem
   // 1-2,size=1, 2-3, size=1 is not overlap
   [[nodiscard]] static bool is_over_lap(unsigned a_s, unsigned a_e,
@@ -83,7 +103,7 @@ private:
   }
 
   [[nodiscard]] static unsigned get_entry_size(const entry &e) {
-    return (e.total_len + 2) / 2;
+    return (e.get_total_len() + 2) / 2;
   }
   [[nodiscard]] unsigned hash_func_1(unsigned node_id) const {
     unsigned rid;
@@ -216,7 +236,7 @@ private:
     };
     auto prev = std::prev(neareast);
     GCN_DEBUG("find_prev: id:{},len:{}, the real id to find:{}", prev->first,
-              prev->second.total_len, inner_id);
+              prev->second.get_total_len(), inner_id);
 
     assert(std::prev(neareast)->first +
                get_entry_size(std::prev(neareast)->second) >
@@ -226,9 +246,9 @@ private:
   [[nodiscard]] unsigned find_shortest_to_move(unsigned entryId1,
                                                unsigned entryId2) const {
     auto firstId = find_real_entry_id(entryId1);
-    auto firstLen = entrys.at(firstId).total_len;
+    auto firstLen = entrys.at(firstId).get_total_len();
     auto secondId = find_real_entry_id(entryId2);
-    auto secondLen = entrys.at(secondId).total_len;
+    auto secondLen = entrys.at(secondId).get_total_len();
     if (firstLen < secondLen) {
       return entryId1;
     } else {
