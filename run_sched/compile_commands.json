@@ -1,0 +1,517 @@
+[
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/aggregator_test.cc.o -c /home/sjq/git/new_gcn/test/aggregator_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/aggregator_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/controller_test.cc.o -c /home/sjq/git/new_gcn/test/controller_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/controller_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/dense_sliding_window_test.cc.o -c /home/sjq/git/new_gcn/test/dense_sliding_window_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/dense_sliding_window_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/dram2sim_test.cc.o -c /home/sjq/git/new_gcn/test/dram2sim_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/dram2sim_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/dram3sim_test.cc.o -c /home/sjq/git/new_gcn/test/dram3sim_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/dram3sim_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/fast_sched_test.cc.o -c /home/sjq/git/new_gcn/test/fast_sched_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/fast_sched_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/generate_graph.cc.o -c /home/sjq/git/new_gcn/test/generate_graph.cc",
+  "file": "/home/sjq/git/new_gcn/test/generate_graph.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/generate_graph_test.cc.o -c /home/sjq/git/new_gcn/test/generate_graph_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/generate_graph_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/hash_table_test.cc.o -c /home/sjq/git/new_gcn/test/hash_table_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/hash_table_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/main_test.cc.o -c /home/sjq/git/new_gcn/test/main_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/main_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/mapping_test.cc.o -c /home/sjq/git/new_gcn/test/mapping_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/mapping_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/mem_interface_test.cc.o -c /home/sjq/git/new_gcn/test/mem_interface_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/mem_interface_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/memory_interface_test.cc.o -c /home/sjq/git/new_gcn/test/memory_interface_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/memory_interface_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/mix_system_test.cc.o -c /home/sjq/git/new_gcn/test/mix_system_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/mix_system_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/ramu_test.cc.o -c /home/sjq/git/new_gcn/test/ramu_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/ramu_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/sliding_iter_test.cc.o -c /home/sjq/git/new_gcn/test/sliding_iter_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/sliding_iter_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/sorted_graph_test.cc.o -c /home/sjq/git/new_gcn/test/sorted_graph_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/sorted_graph_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/system_test.cc.o -c /home/sjq/git/new_gcn/test/system_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/system_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/utils_test.cc.o -c /home/sjq/git/new_gcn/test/utils_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/utils_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/test -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim_test.dir/test/windows_slid_test.cc.o -c /home/sjq/git/new_gcn/test/windows_slid_test.cc",
+  "file": "/home/sjq/git/new_gcn/test/windows_slid_test.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/Aggregator.cc.o -c /home/sjq/git/new_gcn/src/Aggregator.cc",
+  "file": "/home/sjq/git/new_gcn/src/Aggregator.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/Aggregator_fast.cc.o -c /home/sjq/git/new_gcn/src/Aggregator_fast.cc",
+  "file": "/home/sjq/git/new_gcn/src/Aggregator_fast.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/Hash_table.cc.o -c /home/sjq/git/new_gcn/src/Hash_table.cc",
+  "file": "/home/sjq/git/new_gcn/src/Hash_table.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/Model.cc.o -c /home/sjq/git/new_gcn/src/Model.cc",
+  "file": "/home/sjq/git/new_gcn/src/Model.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/Slide_window.cc.o -c /home/sjq/git/new_gcn/src/Slide_window.cc",
+  "file": "/home/sjq/git/new_gcn/src/Slide_window.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/System.cc.o -c /home/sjq/git/new_gcn/src/System.cc",
+  "file": "/home/sjq/git/new_gcn/src/System.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/System_fast.cc.o -c /home/sjq/git/new_gcn/src/System_fast.cc",
+  "file": "/home/sjq/git/new_gcn/src/System_fast.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/SystolicArray.cc.o -c /home/sjq/git/new_gcn/src/SystolicArray.cc",
+  "file": "/home/sjq/git/new_gcn/src/SystolicArray.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/SystolicArray_fast.cc.o -c /home/sjq/git/new_gcn/src/SystolicArray_fast.cc",
+  "file": "/home/sjq/git/new_gcn/src/SystolicArray_fast.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/buffer.cc.o -c /home/sjq/git/new_gcn/src/buffer.cc",
+  "file": "/home/sjq/git/new_gcn/src/buffer.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/buffer_fast.cc.o -c /home/sjq/git/new_gcn/src/buffer_fast.cc",
+  "file": "/home/sjq/git/new_gcn/src/buffer_fast.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/contoll_signal_generator.cc.o -c /home/sjq/git/new_gcn/src/contoll_signal_generator.cc",
+  "file": "/home/sjq/git/new_gcn/src/contoll_signal_generator.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/controller.cc.o -c /home/sjq/git/new_gcn/src/controller.cc",
+  "file": "/home/sjq/git/new_gcn/src/controller.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/dram_wrapper.cc.o -c /home/sjq/git/new_gcn/src/dram_wrapper.cc",
+  "file": "/home/sjq/git/new_gcn/src/dram_wrapper.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/dramsim2_wrapper.cc.o -c /home/sjq/git/new_gcn/src/dramsim2_wrapper.cc",
+  "file": "/home/sjq/git/new_gcn/src/dramsim2_wrapper.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/dramsim_wrapper.cc.o -c /home/sjq/git/new_gcn/src/dramsim_wrapper.cc",
+  "file": "/home/sjq/git/new_gcn/src/dramsim_wrapper.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/edge_hash.cc.o -c /home/sjq/git/new_gcn/src/edge_hash.cc",
+  "file": "/home/sjq/git/new_gcn/src/edge_hash.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/fast_sched.cc.o -c /home/sjq/git/new_gcn/src/fast_sched.cc",
+  "file": "/home/sjq/git/new_gcn/src/fast_sched.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/globals.cc.o -c /home/sjq/git/new_gcn/src/globals.cc",
+  "file": "/home/sjq/git/new_gcn/src/globals.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/graph.cc.o -c /home/sjq/git/new_gcn/src/graph.cc",
+  "file": "/home/sjq/git/new_gcn/src/graph.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/helper_utils.cc.o -c /home/sjq/git/new_gcn/src/helper_utils.cc",
+  "file": "/home/sjq/git/new_gcn/src/helper_utils.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/memory_interface.cc.o -c /home/sjq/git/new_gcn/src/memory_interface.cc",
+  "file": "/home/sjq/git/new_gcn/src/memory_interface.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/new_controller.cc.o -c /home/sjq/git/new_gcn/src/new_controller.cc",
+  "file": "/home/sjq/git/new_gcn/src/new_controller.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/ramulator_wrapper.cc.o -c /home/sjq/git/new_gcn/src/ramulator_wrapper.cc",
+  "file": "/home/sjq/git/new_gcn/src/ramulator_wrapper.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/sliding_window_dense.cc.o -c /home/sjq/git/new_gcn/src/sliding_window_dense.cc",
+  "file": "/home/sjq/git/new_gcn/src/sliding_window_dense.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=gnu++2a -o CMakeFiles/gcn_sim_lib.dir/src/sliding_window_interface.cc.o -c /home/sjq/git/new_gcn/src/sliding_window_interface.cc",
+  "file": "/home/sjq/git/new_gcn/src/sliding_window_interface.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DFMT_HEADER_ONLY=1 -DUSEDRAM3 -I/home/sjq/git/new_gcn/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -I/home/sjq/git/new_gcn/deps/ramulator/src -I/home/sjq/git/new_gcn/deps/minisat_utils -I/home/sjq/git/new_gcn/deps/HBM -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -std=gnu++2a -o CMakeFiles/gcn_sim.dir/src/main.cc.o -c /home/sjq/git/new_gcn/src/main.cc",
+  "file": "/home/sjq/git/new_gcn/src/main.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/ALDRAM.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/ALDRAM.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/ALDRAM.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/Cache.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/Cache.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/Cache.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/Controller.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/Controller.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/Controller.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/DDR3.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/DDR3.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/DDR3.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/DDR4.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/DDR4.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/DDR4.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/DSARP.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/DSARP.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/DSARP.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/GDDR5.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/GDDR5.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/GDDR5.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/Gem5Wrapper.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/Gem5Wrapper.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/Gem5Wrapper.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/HBM.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/HBM.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/HBM.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/LPDDR3.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/LPDDR3.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/LPDDR3.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/LPDDR4.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/LPDDR4.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/LPDDR4.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/Main.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/Main.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/Main.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/MemoryFactory.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/MemoryFactory.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/MemoryFactory.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/PCM.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/PCM.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/PCM.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/Processor.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/Processor.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/Processor.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/RamulatorConfig.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/RamulatorConfig.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/RamulatorConfig.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/Refresh.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/Refresh.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/Refresh.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/SALP.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/SALP.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/SALP.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/STTMRAM.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/STTMRAM.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/STTMRAM.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/StatType.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/StatType.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/StatType.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/TLDRAM.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/TLDRAM.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/TLDRAM.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/WideIO.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/WideIO.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/WideIO.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator.dir/src/WideIO2.cpp.o -c /home/sjq/git/new_gcn/deps/ramulator/src/WideIO2.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/src/WideIO2.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/ramulator",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/ramulator/src -Wall -g -std=gnu++2a -o CMakeFiles/ramulator_test.dir/main.cc.o -c /home/sjq/git/new_gcn/deps/ramulator/main.cc",
+  "file": "/home/sjq/git/new_gcn/deps/ramulator/main.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/minisat_utils",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -I/home/sjq/git/new_gcn/deps/minisat_utils -isystem /home/linuxbrew/.linuxbrew/include -g -std=gnu++17 -o CMakeFiles/minisat_utiles.dir/utils/Options.cc.o -c /home/sjq/git/new_gcn/deps/minisat_utils/utils/Options.cc",
+  "file": "/home/sjq/git/new_gcn/deps/minisat_utils/utils/Options.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/minisat_utils",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -I/home/sjq/git/new_gcn/deps/minisat_utils -isystem /home/linuxbrew/.linuxbrew/include -g -std=gnu++17 -o CMakeFiles/minisat_utiles.dir/utils/System.cc.o -c /home/sjq/git/new_gcn/deps/minisat_utils/utils/System.cc",
+  "file": "/home/sjq/git/new_gcn/deps/minisat_utils/utils/System.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/data",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/data -g -std=gnu++17 -o CMakeFiles/transformer.dir/main.cc.o -c /home/sjq/git/new_gcn/data/main.cc",
+  "file": "/home/sjq/git/new_gcn/data/main.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/data",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/data -g -std=gnu++17 -o CMakeFiles/transformer.dir/transformer.cc.o -c /home/sjq/git/new_gcn/data/transformer.cc",
+  "file": "/home/sjq/git/new_gcn/data/transformer.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/bankstate.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/bankstate.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/bankstate.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/channel_state.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/channel_state.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/channel_state.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/command_queue.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/command_queue.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/command_queue.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/common.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/common.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/common.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/configuration.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/configuration.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/configuration.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/controller.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/controller.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/controller.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/dram_system.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/dram_system.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/dram_system.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/hmc.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/hmc.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/hmc.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/refresh.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/refresh.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/refresh.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/simple_stats.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/simple_stats.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/simple_stats.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/timing.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/timing.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/timing.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++ -DFMT_HEADER_ONLY=1 -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -Wall -Wextra -std=c++17 -o CMakeFiles/dramsim3.dir/src/memory_system.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/memory_system.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/memory_system.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -g -std=c++17 -o CMakeFiles/dramsim3main.dir/src/main.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/main.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/main.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -g -std=c++17 -o CMakeFiles/dramsim3main.dir/src/cpu.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/src/cpu.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/src/cpu.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -std=gnu++2a -o CMakeFiles/dramsim3test.dir/tests/test_config.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/tests/test_config.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/tests/test_config.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -std=gnu++2a -o CMakeFiles/dramsim3test.dir/tests/test_dramsys.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/tests/test_dramsys.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/tests/test_dramsys.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/DRAMsim3",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/DRAMsim3/src -I/home/sjq/git/new_gcn/deps/DRAMsim3/ext/headers -isystem /home/linuxbrew/.linuxbrew/include -g -std=gnu++2a -o CMakeFiles/dramsim3test.dir/tests/test_hmcsys.cc.o -c /home/sjq/git/new_gcn/deps/DRAMsim3/tests/test_hmcsys.cc",
+  "file": "/home/sjq/git/new_gcn/deps/DRAMsim3/tests/test_hmcsys.cc"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/AddressMapping.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/AddressMapping.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/AddressMapping.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/BankState.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/BankState.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/BankState.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/BusPacket.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/BusPacket.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/BusPacket.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/CommandQueue.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/CommandQueue.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/CommandQueue.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/IniReader.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/IniReader.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/IniReader.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/MemoryController.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/MemoryController.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/MemoryController.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/MemorySystem.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/MemorySystem.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/MemorySystem.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/MultiChannelMemorySystem.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/MultiChannelMemorySystem.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/MultiChannelMemorySystem.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/Rank.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/Rank.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/Rank.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/SimulatorObject.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/SimulatorObject.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/SimulatorObject.cpp"
+},
+{
+  "directory": "/home/sjq/git/new_gcn/run_sched/deps/HBM",
+  "command": "/usr/bin/c++  -I/home/sjq/git/new_gcn/deps/HBM -g -std=gnu++2a -o CMakeFiles/dramsim2.dir/Transaction.cpp.o -c /home/sjq/git/new_gcn/deps/HBM/Transaction.cpp",
+  "file": "/home/sjq/git/new_gcn/deps/HBM/Transaction.cpp"
+}
+]

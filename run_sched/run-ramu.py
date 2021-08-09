@@ -9,7 +9,7 @@ import workloads_defs
 #workloads=[ "Graph_saint_amazon","Graph_saint_ogbn-products","Graph_saint_reddit","reddit", "Graph_saint_yelp"]
 
 workloads = workloads_defs.workloads
-# workloads=workloads[0:1]
+# workloads = workloads[0:1]
 mem_sim = "ramulator"
 mem = "HBM-config.cfg"  # ramulator
 
@@ -24,22 +24,32 @@ valid_node_only = " "
 
 out_dir = "results/"
 cmds = []
+dividers = []
+for scheduling_method in ["-enable-ideal-selection", "enable-sequential-selection", ""]:
+    # for buffer_size in [1048576, 1048576*2, 1048576*4][1:2]:
+    for buffer_size in [1048576, 1048576*2, 1048576*4]:
+        # for divider in [2, 4, 8, 16][0:1]:
 
-for buffer_size in [1048576, 1048576*2, 1048576*4]:
-    for divider in [2, 4, 8, 16]:
-        for graph in workloads:
-            cmd = f"echo {graph};./gcn_sim -input=131072 -output=4194304 -edge=2097152 -hash-table-size={buffer_size} -agg=16777216 \
-                -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
-                -model=gsc -ignore-neighbor=0 -ignore-self=0  \
-                    -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
-                        -short-large-divider={divider}  >{graph}.{buffer_size}.{divider}.sched.out 2>&1"
-            print(cmd)
-            cmds.append(cmd)
+        if scheduling_method == "":
+            dividers = [2, 4, 8, 16]
+        else:
+            dividers = [2]
+        print(dividers)
+        for divider in dividers:
+            for graph in workloads:
+                cmd = f"echo {graph};./gcn_sim -input=131072 -output=4194304 -edge=2097152 -hash-table-size={buffer_size} -agg=16777216 \
+                    -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
+                    -model=gsc -ignore-neighbor=0 -ignore-self=0  \
+                        -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
+                            -short-large-divider={divider} -short-queue-size=100000 -large-queue-size=100000 {scheduling_method} >{graph}.{buffer_size}.{divider}.{scheduling_method}.sched.out 2>&1"
+                print(cmd)
+                cmds.append(cmd)
 
 
 def run_task(command):
     subprocess.run(command, shell=True)
 
 
+print(f"cmds: {cmds}")
 with Pool(int(10)) as p:
     p.map(run_task, cmds)

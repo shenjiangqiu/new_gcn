@@ -30,4 +30,8 @@ run/results
 *.out
 *.result
 *.ini
+*.csv
 *.cfg
+*.pyc
+*.npz
+*.zip
