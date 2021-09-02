@@ -68,14 +68,17 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
   }
   assert(yw_s.back() > 0 && "the window should be positive");
   GCN_INFO("yws push back:{}", yw_s.back());
-
+  average_window_size.resize(total_level);
   for (auto i = 1; i < total_level - 1; i++) {
     if (m_model->isConcatenate()) {
       // the aggregator's result will concatenate the origin node.
       auto size = ((agg_buffer_size / 2) / ((2 * node_dim[i]) * 4));
       xw_s.push_back(size);
+      average_window_size[i].update(size);
     } else {
-      xw_s.push_back((agg_buffer_size / 2) / ((node_dim[i]) * 4));
+      auto size = (agg_buffer_size / 2) / ((node_dim[i]) * 4);
+      xw_s.push_back(size);
+      average_window_size[i].update(size);
     }
     GCN_INFO("xws push back:{}", xw_s.back());
     assert(xw_s.back() > 0 && "the window should be positive");
@@ -191,6 +194,8 @@ void System::run() {
     }
   }
   std::cout << "finished run the simulator, cycle:" << global_definitions.cycle
+            << std::endl;
+  std::cout << "average_window_size: " << average_window_size[0].get_average()
             << std::endl;
   kv_maps map;
 

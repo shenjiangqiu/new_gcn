@@ -56,9 +56,9 @@ private:
     addr_to_req_map.erase(addr);
 
     static uint64_t print_sign = 0;
-    if (print_sign % 10000 == 0) {
-      GCN_INFO("memory is receiving response!!:{}", print_sign);
-    }
+    // if (print_sign % 10000 == 0) {
+    //   GCN_INFO("memory is receiving response!!:{}", print_sign);
+    // }
     print_sign++;
     // return the all finished reqs
     return finished_reqs;

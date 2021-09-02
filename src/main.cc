@@ -123,7 +123,8 @@ int main(int argc, char **argv) {
     auto m_controller = fast_sched::controller(
         *m_graph, i_bf, m_node_feature_dim, m_input_num, m_agg, m_mem,
         config::short_large_divider, config::short_queue_size,
-        config::large_queue_size, config::task_queue_size, config::aggSize);
+        config::large_queue_size, config::task_queue_size, config::aggSize,
+        config::enable_outer_list, std::string(config::outer_name));
 
     global_definitions.cycle = 0;
     uint mem_rount = 0;
@@ -140,6 +141,7 @@ int main(int argc, char **argv) {
 
       global_definitions.cycle++;
     }
+    m_controller.print();
     fmt::print("cycle: {}\n", global_definitions.cycle);
     fmt::print("total_agg: {}\n", m_agg->get_total_operations());
     fmt::print("total_rounds_in_agg: {}\n", m_agg->get_total_rounds());

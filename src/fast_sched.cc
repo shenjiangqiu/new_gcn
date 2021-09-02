@@ -12,10 +12,12 @@ template <typename C> bool all_false(C &c) {
   return std::all_of(c.begin(), c.end(), [](auto v) { return v == false; });
 }
 
-output_pool::output_pool(const Graph &m_graph) {
+output_pool::output_pool(const Graph &m_graph, bool enable_outer_order,
+                         std::string outer_order_file_name) {
   const auto &ptr = m_graph.get_edge_index();
   const auto &idx = m_graph.get_edges();
   auto num_node = m_graph.get_num_nodes();
+  this->enable_ordered_list = enable_outer_order;
   // for each nodes
   for (auto i = 0u; i < num_node; i++) {
     // this is a vertical line
@@ -29,6 +31,15 @@ output_pool::output_pool(const Graph &m_graph) {
     }
     auto out_nd = output_node(input_nodes, i);
     this->all_remaining_output_nodes.push_back(out_nd);
+  }
+
+  if (enable_outer_order) {
+    fmt::print("read from list name: {} \n", outer_order_file_name);
+    auto in = std::ifstream(outer_order_file_name);
+    std::string buffer;
+    while (in >> buffer) {
+      this->order_list.push_back(std::stoi(buffer));
+    }
   }
 }
 output_node output_pool::get_next_input_line() const {

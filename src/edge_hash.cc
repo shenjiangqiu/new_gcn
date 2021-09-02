@@ -142,7 +142,6 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       GCN_DEBUG("put it in entry II:{}", entry_id_2);
       auto t_entry = entry_edge();
       t_entry.set_tag(node_id);
-      assert(!entrys.contains(entry_id_1));
       t_entry.add_edge(value);
 
       assert(!entrys.contains(entry_id_2));
@@ -173,7 +172,6 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       total_cycle += result;
       auto t_entry = entry_edge();
       t_entry.set_tag(node_id);
-      assert(!entrys.contains(entry_id_1));
       t_entry.add_edge(value);
 
 

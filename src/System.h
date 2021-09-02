@@ -13,6 +13,7 @@
 #include "buffer.h"
 #include "memory_interface.h"
 #include <Slide_window.h>
+#include <utils/average_number.hh>
 class System {
 public:
   System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
@@ -29,6 +30,7 @@ public:
   }
 
 private:
+  std::vector<average_number> average_window_size;
   std::shared_ptr<Graph> m_graph;
 
   int input_buffer_size;

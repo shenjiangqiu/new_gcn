@@ -144,7 +144,10 @@ void controller::handle_work_insert() {
 
     // start to insert
     while (m_current_pool.have_next_col() or this->next_to_insert_valid) {
-
+      if (hashtable1.size() * currentnodeDim * 4 >= aggBufferSize) {
+        unable_to_insert_aggbuffer_full++;
+        break;
+      }
       if (this->next_to_insert_valid) {
         // if (next_to_insert_edge.first == 0) {
         //   GCN_INFO_S("find 0 to insert");
@@ -152,6 +155,7 @@ void controller::handle_work_insert() {
         auto result1 = hashtable1.insert(this->next_to_insert_edge.first,
                                          this->next_to_insert_edge.second);
         if (result1 == 0) {
+          unable_to_insert_hashtable_full++;
           break;
         }
         auto result2 = hashTable2.insert(next_to_insert_edge.second,
@@ -159,6 +163,8 @@ void controller::handle_work_insert() {
         if (result2 == 0) {
           // fail to insert hashtable 2, need to pop hashtable 1
           hashtable1.delete_last(next_to_insert_edge.first);
+          unable_to_insert_hashtable_full++;
+
           break;
         }
         // Ok, we successfully insert this two value
@@ -184,6 +190,7 @@ void controller::handle_work_insert() {
 
         if (result1 == 0) {
           next_to_insert_valid = true;
+          unable_to_insert_hashtable_full++;
           // insert fail
           break;
         }
@@ -191,6 +198,7 @@ void controller::handle_work_insert() {
         if (result2 == 0) {
           hashtable1.delete_last(item.first);
           next_to_insert_valid = true;
+          unable_to_insert_hashtable_full++;
 
           break;
         }
@@ -209,6 +217,11 @@ void controller::handle_work_insert() {
       }
     }
 
+    // update the average window
+    while (average_window_size.size() < (current_running_layer + 1)) {
+      average_window_size.emplace_back();
+    }
+    average_window_size[current_running_layer].update(hashtable1.size());
     need_to_insert = false;
   }
 
@@ -275,15 +288,16 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
                        std::shared_ptr<memory_interface> mMem,
                        unsigned int shortLargeDivider,
                        unsigned int shortQueueSize, unsigned int largeQueueSize,
-                       unsigned int taskQueueSize, unsigned int aggBufferSize)
+                       unsigned int taskQueueSize, unsigned int aggBufferSize,
+                       bool enable_outer_list, std::string outer_name)
     : short_large_divider(shortLargeDivider),
       hashtable1(config::hash_table_size / 8),
       hashTable2(config::hash_table_size / 8), short_queue_size(shortQueueSize),
       large_queue_size(largeQueueSize), task_queue_size(taskQueueSize),
-      m_current_pool(m_graph), i_bf(iBf), nodeDims(std::move(nodeDims)),
-      totalNodes(m_graph.get_num_nodes()), currentInputBaseAddr(0x00ff00),
-      currentnodeDim(this->nodeDims[0]), currentLayer(0),
-      finalLayer(this->nodeDims.size()),
+      m_current_pool(m_graph, enable_outer_list, outer_name), i_bf(iBf),
+      nodeDims(std::move(nodeDims)), totalNodes(m_graph.get_num_nodes()),
+      currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
+      currentLayer(0), finalLayer(this->nodeDims.size()),
       m_inputNodeNum(std::move(inputNodesNum)), agg(std::move(agg)),
       m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {}
 
@@ -306,6 +320,7 @@ void controller::handle_task_generation() {
     assert(all_tasks_pool.empty());
     return;
   }
+
   if (remaining_cycle_build_task == 0 and remaining_cycle_insert_hash == 0) {
     auto task = agg_task{
         .input_nodes = {},
@@ -324,7 +339,6 @@ void controller::handle_task_generation() {
       //   have_next = have_any_element(short_queue, large_queue);
       // }
       // Fix bug here, should to test emtpy every time!!
-      GCN_INFO("{}", m_inputNodeNum.at(current_running_layer));
       auto max_input_num = m_inputNodeNum.at(current_running_layer);
 
       // FIX a seriouse BUG here,

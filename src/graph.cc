@@ -35,7 +35,10 @@ void Graph::parse(const std::string &graph_name) {
     if (graph_in.eof())
       break;
     getline(graph_in, i_line);
-    
+    // fix bug here, now use exciplite end sign
+    if (i_line.starts_with("end") or i_line.starts_with("END")) {
+      break;
+    }
     edges.push_back(node);
     node++;
     edge_index.push_back(edge_index.back() + 1);
@@ -83,14 +86,14 @@ void Graph::print() const {
 int Graph::getNodeFeatures() const { return node_features; }
 
 // // those are global definitions, do not use them in constructors!!!
-// Minisat::IntOption inputSize("system", "input", "the input buffer size(Byte)");
-// Minisat::IntOption outputSize("system", "output",
+// Minisat::IntOption inputSize("system", "input", "the input buffer
+// size(Byte)"); Minisat::IntOption outputSize("system", "output",
 //                               "the output buffer size(Byte)");
 // Minisat::IntOption edgeSize("system", "edge", "the edge buffer size(Byte)");
 // Minisat::IntOption aggSize("system", "agg", "the agg buffer size(Byte)");
 
-// Minisat::IntOption aggCores("system", "aggCores", "the agg buffer size(Byte)");
-// Minisat::IntOption systolic_rows("system", "systolic-rows",
+// Minisat::IntOption aggCores("system", "aggCores", "the agg buffer
+// size(Byte)"); Minisat::IntOption systolic_rows("system", "systolic-rows",
 //                                  "the agg buffer size(Byte)");
 // Minisat::IntOption systolic_cols("system", "systolic-cols",
 //                                  "the agg buffer size(Byte)");
@@ -104,7 +107,8 @@ int Graph::getNodeFeatures() const { return node_features; }
 //                             "gcn");
 // Minisat::BoolOption double_input(
 //     "system", "double-input",
-//     "will the result of aggregation need to concat the origin vector", false);
+//     "will the result of aggregation need to concat the origin vector",
+//     false);
 void Graph::sort_translate() {
   GCN_INFO_S("start to sort the graph");
   if (sorted) {
@@ -137,10 +141,10 @@ void Graph::sort_translate() {
         GCN_ERROR("but the old_to_new_mapping is: {}",
                   old_to_new_mapping.size());
       } else {
-        
+
         throw;
       }
-      
+
       throw;
     }
   }
@@ -156,7 +160,7 @@ void Graph::sort_translate() {
     } catch (std::exception &e) {
       GCN_ERROR("edge index sorted pushback error??:{}",
                 edge_index_sorted.size());
-      
+
       throw;
     }
   }
@@ -179,20 +183,17 @@ void Graph::sort_translate() {
           if (old_to_new_mapping.size() > edge_number) {
             GCN_ERROR("new mapping numboer for this edge is {}",
                       old_to_new_mapping.at(edges.at(j)));
-            
+
           } else {
             GCN_ERROR("fail to find the mapping, the maping size is:{},but the "
                       "odl edge is:{}",
                       old_to_new_mapping.size(), edges.at(j));
-            
           }
         } else {
           GCN_ERROR("this edge not exist:{}, the edge size:{}", j,
                     edges.size());
-          
         }
 
-        
         global_definitions.default_logger->flush();
         global_definitions.edge_agg_logger->flush();
         throw;

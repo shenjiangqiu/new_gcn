@@ -51,8 +51,7 @@ Minisat::DoubleOption feature_sparse_rate1("system", "feature-sparse-rate1",
 
 Minisat::DoubleOption feature_sparse_rate2("system", "feature-sparse-rate2",
                                            "Feature sparse rate layer 2", 0);
-Minisat::BoolOption enable_valid_node_only("system", "enable-valid-node-only",
-                                           "enable-valid-node-only", false);
+
 Minisat::BoolOption enable_dense_window("system", "enable-dense-window",
                                         "enable-dense-window", false);
 Minisat::BoolOption enable_fast_sched("system", "enable-fast-sched",
@@ -86,5 +85,6 @@ Minisat::BoolOption enable_ideal_selection("system", "enable-ideal-selection",
 Minisat::BoolOption enable_sequential_selection("system",
                                                 "enable-sequential-selection",
                                                 "", false);
-
+ Minisat::BoolOption enable_outer_list("system","enable-outer-list","",false);
+ Minisat::StringOption outer_name("system","outer-name","","");
 } // namespace config

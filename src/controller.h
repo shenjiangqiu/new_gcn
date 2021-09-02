@@ -13,6 +13,7 @@
 #include "fast_sched.h"
 #include <Hash_table.h>
 #include <deque>
+#include <utils/average_number.hh>
 namespace fast_sched {
 using pool = output_pool;
 using node = output_node;
@@ -49,6 +50,7 @@ struct agg_task {
   std::vector<unsigned> input_nodes;
   unsigned total_edges;
 };
+
 class controller {
 
 public:
@@ -60,11 +62,19 @@ public:
              std::shared_ptr<memory_interface> mMem,
              unsigned int shortLargeDivider, unsigned int shortQueueSize,
              unsigned int largeQueueSize, unsigned int taskQueueSize,
-             unsigned int aggBufferSize);
+             unsigned int aggBufferSize, bool, std::string);
   controller() = delete;
   // operation
   void cycle();
   [[nodiscard]] bool isAllFinished() const;
+  void print() {
+    fmt::print("average_window: {}\n", average_window_size[0].get_average());
+
+    fmt::print("unable_to_insert_hashtable_full: {}\n",
+               unable_to_insert_hashtable_full);
+    fmt::print("unable_to_insert_aggbuffer_full: {}\n",
+               unable_to_insert_aggbuffer_full);
+  }
 
 private:
   void handle_insert_queue(bool is_short) {
@@ -176,6 +186,10 @@ private:
   // the sequence number we are going to wait, if current we are going to use
   // sequence 0, the number is signal generator should be at least 1!!!
   unsigned current_sequence_number = 1;
+
+  unsigned unable_to_insert_hashtable_full = 0;
+  unsigned unable_to_insert_aggbuffer_full = 0;
+  std::vector<average_number> average_window_size;
 };
 
 } // namespace fast_sched

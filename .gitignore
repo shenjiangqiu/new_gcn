@@ -35,3 +35,5 @@ run/results
 *.pyc
 *.npz
 *.zip
+*.seqresult
+core

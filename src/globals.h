@@ -115,7 +115,6 @@ extern Minisat::IntOption enable_feature_sparsity;
 extern Minisat::DoubleOption feature_sparse_rate0;
 extern Minisat::DoubleOption feature_sparse_rate1;
 extern Minisat::DoubleOption feature_sparse_rate2;
-extern Minisat::BoolOption enable_valid_node_only;
 
 extern Minisat::BoolOption enable_dense_window;
 extern Minisat::BoolOption enable_fast_sched;
@@ -130,5 +129,8 @@ extern Minisat::IntOption task_queue_size;
 extern Minisat::IntOption short_large_divider;
 extern Minisat::BoolOption enable_ideal_selection;
 extern Minisat::BoolOption enable_sequential_selection;
+extern Minisat::BoolOption enable_outer_list;
+extern Minisat::StringOption outer_name;
+
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

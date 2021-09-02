@@ -139,7 +139,8 @@ private:
 // TODO the pull should be ready to send partial
 class output_pool {
 public:
-  explicit output_pool(const Graph &m_graph);
+  explicit output_pool(const Graph &m_graph, bool enable_outer_order = false,
+                       std::string outer_order_file_name = "");
 
   unsigned get_node_total_len(unsigned node_id) const {
     return all_remaining_output_nodes.at(node_id).get_total_len();
@@ -148,26 +149,33 @@ public:
   [[nodiscard]] output_node get_next_input_line() const;
 
   std::pair<unsigned, unsigned> get_next_edge() const {
-    assert(
-        current_position ==
-        all_remaining_output_nodes.at(current_position).get_output_node_id());
+    auto real_position = this->enable_ordered_list
+                             ? order_list[current_position]
+                             : current_position;
 
-    return {current_position,
-            all_remaining_output_nodes.at(current_position).top()};
+    assert(real_position ==
+           all_remaining_output_nodes.at(real_position).get_output_node_id());
+
+    return {real_position, all_remaining_output_nodes.at(real_position).top()};
   }
   std::pair<unsigned, unsigned> get_next_edge_and_move() {
-    assert(
-        current_position ==
-        all_remaining_output_nodes.at(current_position).get_output_node_id());
-    auto old_position = current_position;
+    assert(order_list.size() == all_remaining_output_nodes.size());
+
+    assert(current_position < order_list.size());
+    auto real_position = this->enable_ordered_list
+                             ? order_list[current_position]
+                             : current_position;
+
+    assert(real_position ==
+           all_remaining_output_nodes.at(real_position).get_output_node_id());
 
     // will finish this node, just move to the next one
-    if (all_remaining_output_nodes.at(current_position).get_remaining() == 1) {
+    if (all_remaining_output_nodes.at(real_position).get_remaining() == 1) {
       current_position++;
     }
-    return {old_position, all_remaining_output_nodes.at(old_position).pop()};
+    return {real_position, all_remaining_output_nodes.at(real_position).pop()};
   }
-
+  // deprecated, now use get next_edge and move
   output_node get_next_input_line_and_move();
   [[maybe_unused]] void only_move() { current_position++; }
   void reset() {
@@ -184,8 +192,10 @@ public:
 
 private:
   std::vector<output_node> all_remaining_output_nodes;
+  std::vector<int> order_list;
   // represent current node id;
   unsigned current_position = 0;
+  bool enable_ordered_list = false;
 };
 
 } // namespace fast_sched
