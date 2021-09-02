@@ -433,6 +433,56 @@ void controller::handle_task_generation() {
     } // end test the task queue
   }
 }
+void controller::handle_insert_queue(bool is_short) {
+  if (config::enable_ideal_selection) {
+
+    all_tasks_pool.insert(
+        {m_current_pool.get_node_total_len(next_to_insert_edge.first),
+         next_to_insert_edge.first});
+
+  } else if (config::enable_sequential_selection) {
+    // only push to short queue
+    if (short_queue.empty() or
+        short_queue.back() != next_to_insert_edge.first) {
+      short_queue.push_back(next_to_insert_edge.first);
+    }
+  } else {
+    // default case, real simulation
+    if (is_short) {
+      // should be insert to short
+      if (short_queue.empty() or
+          short_queue.back() != next_to_insert_edge.first) {
+        short_queue.push_back(next_to_insert_edge.first);
+        // GCN_INFO("insert to short_buffered!{}:{}",
+        //          next_to_insert_edge.first,
+        //          next_to_insert_edge.second);
+        // if (next_to_insert_edge.first == 0) {
+        //   GCN_INFO("insert:{}", 0);
+        // }
+      }
+    } else {
+      if (large_queue.empty() or
+          large_queue.back() != next_to_insert_edge.first) {
+        // if (next_to_insert_edge.first == 0) {
+        //   GCN_INFO("insert:{}", 0);
+        // }
+        // GCN_INFO("insert to large_buffered!{}:{}",
+        //          next_to_insert_edge.first,
+        //          next_to_insert_edge.second);
+        large_queue.push_back(next_to_insert_edge.first);
+      }
+      // should be insert to large
+    }
+  }
+}
+void controller::print() {
+  fmt::print("average_window: {}\n", average_window_size[0].get_average());
+
+  fmt::print("unable_to_insert_hashtable_full: {} {}\n",
+             unable_to_insert_hashtable_full1,unable_to_insert_hashtable_full2);
+  fmt::print("unable_to_insert_aggbuffer_full: {}\n",
+             unable_to_insert_aggbuffer_full);
+}
 
 shortest_node_info_generator::shortest_node_info_generator(unsigned int policy,
                                                            unsigned queue_size)
