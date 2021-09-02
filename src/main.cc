@@ -127,17 +127,17 @@ int main(int argc, char **argv) {
         config::enable_outer_list, std::string(config::outer_name));
 
     global_definitions.cycle = 0;
-    uint mem_rount = 0;
+    uint mem_round = 0;
     while (!m_controller.isAllFinished()) {
 
       m_controller.cycle();
       i_bf->cycle();
       m_agg->cycle();
-      if (mem_rount == 0) {
+      if (mem_round == 0) {
         m_mem->cycle();
       }
-      mem_rount++;
-      mem_rount %= 2;
+      mem_round++;
+      mem_round %= 2;
 
       global_definitions.cycle++;
     }

@@ -70,8 +70,8 @@ public:
   void print() {
     fmt::print("average_window: {}\n", average_window_size[0].get_average());
 
-    fmt::print("unable_to_insert_hashtable_full: {}\n",
-               unable_to_insert_hashtable_full);
+    fmt::print("unable_to_insert_hashtable_full: {} {}\n",
+               unable_to_insert_hashtable_full1,unable_to_insert_hashtable_full2);
     fmt::print("unable_to_insert_aggbuffer_full: {}\n",
                unable_to_insert_aggbuffer_full);
   }
@@ -187,7 +187,8 @@ private:
   // sequence 0, the number is signal generator should be at least 1!!!
   unsigned current_sequence_number = 1;
 
-  unsigned unable_to_insert_hashtable_full = 0;
+  unsigned unable_to_insert_hashtable_full1 = 0;
+  unsigned unable_to_insert_hashtable_full2 = 0;
   unsigned unable_to_insert_aggbuffer_full = 0;
   std::vector<average_number> average_window_size;
 };

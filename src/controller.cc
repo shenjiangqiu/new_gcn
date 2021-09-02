@@ -155,7 +155,7 @@ void controller::handle_work_insert() {
         auto result1 = hashtable1.insert(this->next_to_insert_edge.first,
                                          this->next_to_insert_edge.second);
         if (result1 == 0) {
-          unable_to_insert_hashtable_full++;
+          unable_to_insert_hashtable_full1++;
           break;
         }
         auto result2 = hashTable2.insert(next_to_insert_edge.second,
@@ -163,7 +163,7 @@ void controller::handle_work_insert() {
         if (result2 == 0) {
           // fail to insert hashtable 2, need to pop hashtable 1
           hashtable1.delete_last(next_to_insert_edge.first);
-          unable_to_insert_hashtable_full++;
+          unable_to_insert_hashtable_full2++;
 
           break;
         }
@@ -190,7 +190,7 @@ void controller::handle_work_insert() {
 
         if (result1 == 0) {
           next_to_insert_valid = true;
-          unable_to_insert_hashtable_full++;
+          unable_to_insert_hashtable_full1++;
           // insert fail
           break;
         }
@@ -198,7 +198,7 @@ void controller::handle_work_insert() {
         if (result2 == 0) {
           hashtable1.delete_last(item.first);
           next_to_insert_valid = true;
-          unable_to_insert_hashtable_full++;
+          unable_to_insert_hashtable_full2++;
 
           break;
         }
