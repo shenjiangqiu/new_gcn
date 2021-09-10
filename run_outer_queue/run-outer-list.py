@@ -32,6 +32,7 @@ valid_node_only = " "
 #valid_node_only = "  -enable-valid-node-only  "
 
 out_dir = "results/"
+enable_ideal_hash = "-enable-ideal-hash"
 cmds = []
 dividers = []
 for scheduling_method in ["-enable-sequential-selection"]:
@@ -40,14 +41,14 @@ for scheduling_method in ["-enable-sequential-selection"]:
 
         # for divider in [2, 4, 8, 16][0:1]:
         for graph in large_graphs:
-            # sliding
-            cmd = f"echo {graph};./gcn_sim -input=131072 -output=4194304 -edge=2097152 -hash-table-size={buffer_size} -agg=16777216 \
-                -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
-                -model=gsc -ignore-neighbor=0 -ignore-self=0  \
-                    -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 \
-                            -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection >{graph}.sliding.sched.out 2>&1"
-            print(cmd)
-            cmds.append(cmd)
+            # # sliding
+            # cmd = f"echo {graph};./gcn_sim -input=131072 -output=4194304 -edge=2097152 -hash-table-size={buffer_size} -agg=16777216 \
+            #     -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
+            #     -model=gsc -ignore-neighbor=0 -ignore-self=0  \
+            #         -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 \
+            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection >{graph}.sliding.sched.out 2>&1"
+            # print(cmd)
+            # cmds.append(cmd)
 
             # # dense
             # cmd = f"echo {graph};./gcn_sim -input=131072 -output=4194304 -edge=2097152 -hash-table-size={buffer_size} -agg=16777216 \
@@ -63,7 +64,7 @@ for scheduling_method in ["-enable-sequential-selection"]:
                 -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
                 -model=gsc -ignore-neighbor=0 -ignore-self=0  \
                     -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
-                            -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection >{graph}.seq.sched.out 2>&1"
+                            -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection {enable_ideal_hash} >{graph}.seq.sched.out 2>&1"
             print(cmd)
             cmds.append(cmd)
 
@@ -73,7 +74,8 @@ for scheduling_method in ["-enable-sequential-selection"]:
             #     -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
             #     -model=gsc -ignore-neighbor=0 -ignore-self=0  \
             #         -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
-            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection -enable-outer-list -outer-name=lists/{graph}.graph.bfs.30.seqresult >{graph}.bfs.sched.out 2>&1"
+            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection -enable-outer-list -outer-name=lists/{graph}.graph.bfs.30.seqresult\
+            #                    {enable_ideal_hash}  >{graph}.bfs.sched.out 2>&1"
             # print(cmd)
             # cmds.append(cmd)
             # # bdfs
@@ -81,7 +83,7 @@ for scheduling_method in ["-enable-sequential-selection"]:
             #     -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
             #     -model=gsc -ignore-neighbor=0 -ignore-self=0  \
             #         -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
-            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection -enable-outer-list -outer-name=lists/{graph}.graph.bdfs.30.seqresult >{graph}.bdfs.sched.out 2>&1"
+            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection -enable-outer-list {enable_ideal_hash} -outer-name=lists/{graph}.graph.bdfs.30.seqresult >{graph}.bdfs.sched.out 2>&1"
             # print(cmd)
             # cmds.append(cmd)
             # for divider in smart_bfs_diviers:
@@ -89,7 +91,7 @@ for scheduling_method in ["-enable-sequential-selection"]:
             #     -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
             #     -model=gsc -ignore-neighbor=0 -ignore-self=0  \
             #         -enable-feature-sparsity=0  -mem-sim={mem_sim} -dram-freq=0.5 -enable-dense-window -enable-fast-sched \
-            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection -enable-outer-list -outer-name=lists/{graph}.graph.smartbfs.30.5.{divider}.seqresult >{graph}.smartbfs.{divider}.sched.out 2>&1"
+            #                 -short-queue-size=100000 -large-queue-size=100000 -enable-sequential-selection -enable-outer-list {enable_ideal_hash} -outer-name=lists/{graph}.graph.smartbfs.30.5.{divider}.seqresult >{graph}.smartbfs.{divider}.sched.out 2>&1"
             #     print(cmd)
             #     cmds.append(cmd)
 

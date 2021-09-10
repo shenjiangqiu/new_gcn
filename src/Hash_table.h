@@ -68,6 +68,10 @@ public:
   bool exist(unsigned node_id) {
     auto entry_id_1 = hash_func_1(node_id);
     auto entry_id_2 = hash_func_2(node_id);
+    if (config::enable_ideal_hash) {
+      entry_id_1 = node_id;
+      entry_id_2 = node_id;
+    }
     // 1, find and append
     if (entrys.count(entry_id_1) and
         entrys.at(entry_id_1).get_tag() == node_id) {

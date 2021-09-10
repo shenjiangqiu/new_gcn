@@ -49,6 +49,7 @@ private:
 struct agg_task {
   std::vector<unsigned> input_nodes;
   unsigned total_edges;
+  std::vector<std::pair<unsigned,std::vector<unsigned>>> edges;
 };
 
 class controller {

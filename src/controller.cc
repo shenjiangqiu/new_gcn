@@ -134,8 +134,9 @@ void controller::handle_work_insert() {
   // put a new output node into the buffer ans hashtable
   // fix bug here, when cross the layer, should wait the remaining task to
   // complete
+  
   if (this->need_to_insert and remaining_cycle_insert_hash == 0 and
-      ((hashtable1.size() * currentnodeDim * 4 + currentnodeDim * 4) <
+      ((hashtable1.size() * currentnodeDim * 4 + currentnodeDim * 4) <=
        aggBufferSize) and
       large_queue.size() < large_queue_size and
       short_queue.size() < short_queue_size and
@@ -143,8 +144,12 @@ void controller::handle_work_insert() {
       current_running_layer == currentLayer) {
 
     // start to insert
+    unsigned last_insert = 0;
     while (m_current_pool.have_next_col() or this->next_to_insert_valid) {
-      if (hashtable1.size() * currentnodeDim * 4 >= aggBufferSize) {
+      if (m_current_pool.get_next_edge().first != last_insert and
+          (hashtable1.size() + 1) * currentnodeDim * 4 > aggBufferSize) {
+        fmt::print("fail to insert: current_nodes:{},hashtable1size:{}\n",
+                   short_queue.size(), hashtable1.size());
         unable_to_insert_aggbuffer_full++;
         break;
       }
@@ -152,10 +157,15 @@ void controller::handle_work_insert() {
         // if (next_to_insert_edge.first == 0) {
         //   GCN_INFO_S("find 0 to insert");
         // }
+        throw;
         auto result1 = hashtable1.insert(this->next_to_insert_edge.first,
                                          this->next_to_insert_edge.second);
         if (result1 == 0) {
           unable_to_insert_hashtable_full1++;
+          fmt::print("fail to insert: current_nodes:{},hashtable1 size:{}\n",
+                     short_queue.size(), hashtable1.size());
+          fmt::print("average subqueue size: {}\n",
+                     hashtable1.get_total_size());
           break;
         }
         auto result2 = hashTable2.insert(next_to_insert_edge.second,
@@ -164,6 +174,8 @@ void controller::handle_work_insert() {
           // fail to insert hashtable 2, need to pop hashtable 1
           hashtable1.delete_last(next_to_insert_edge.first);
           unable_to_insert_hashtable_full2++;
+          fmt::print("fail to insert: current_nodes:{},hashtable2 size:{}\n",
+                     short_queue.size(), hashtable1.size());
 
           break;
         }
@@ -171,6 +183,7 @@ void controller::handle_work_insert() {
         remaining_cycle_insert_hash += result1;
         remaining_cycle_insert_hash += result2;
         next_to_insert_valid = false;
+        last_insert = next_to_insert_edge.first;
 
         // handle short queue or  large queue insert
         bool is_short = m_current_pool.get_node_total_len(
@@ -187,7 +200,10 @@ void controller::handle_work_insert() {
         // }
         next_to_insert_edge = item;
         auto result1 = hashtable1.insert(item.first, item.second);
-
+        // if (item.second == 13738) {
+        //   std::cout << "stop here!" << std::endl;
+        //   fmt::print("{}:{}", item.first, item.second);
+        // }
         if (result1 == 0) {
           next_to_insert_valid = true;
           unable_to_insert_hashtable_full1++;
@@ -210,6 +226,8 @@ void controller::handle_work_insert() {
         bool is_short = m_current_pool.get_node_total_len(item.first) <=
                         short_large_divider;
 
+        last_insert = item.first;
+
         // if (item.first == 0) {
         //   GCN_INFO("insert:{}", 0);
         // }
@@ -224,7 +242,6 @@ void controller::handle_work_insert() {
     average_window_size[current_running_layer].update(hashtable1.size());
     need_to_insert = false;
   }
-
   // Old add current task , for reference only
   // while (m_current_pool.have_next_col() and
   //        m_current_work.can_add(m_current_pool.get_next_input_line())) {
@@ -299,7 +316,14 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
       currentInputBaseAddr(0x00ff00), currentnodeDim(this->nodeDims[0]),
       currentLayer(0), finalLayer(this->nodeDims.size()),
       m_inputNodeNum(std::move(inputNodesNum)), agg(std::move(agg)),
-      m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {}
+      m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {
+
+  if (config::enable_ideal_hash) {
+    large_queue_size = 100000;
+    short_queue_size = 100000;
+    task_queue_size = 100000;
+  }
+}
 
 bool controller::isAllFinished() const { return all_finished; }
 void controller::handle_remaining_cycle() {
@@ -322,10 +346,7 @@ void controller::handle_task_generation() {
   }
 
   if (remaining_cycle_build_task == 0 and remaining_cycle_insert_hash == 0) {
-    auto task = agg_task{
-        .input_nodes = {},
-        .total_edges = 0,
-    };
+    auto task = agg_task{.input_nodes = {}, .total_edges = 0, .edges = {}};
 
     if (task_generation_queue.size() < task_queue_size) {
       // might send the task
@@ -344,6 +365,13 @@ void controller::handle_task_generation() {
       // FIX a seriouse BUG here,
       // a huge bug
       // the and operator is prior than ?, so it always be true!!!
+
+      // auto first_element = short_queue[0];
+      // auto last_element = first_element + hashtable1.size();
+      // if (first_element == 57) {
+      //   std::cout << "break here!" << std::endl;
+      //   fmt::print("{}\n", fmt::join(hashtable1.get_edges(57), ","));
+      // }
       while ((total_generated_input < max_input_num) and
              (config::enable_ideal_selection
                   ? !all_tasks_pool.empty()
@@ -368,6 +396,7 @@ void controller::handle_task_generation() {
         // item
 
         // fix bug here, we need input edge here, not in_edge
+
         remaining_cycle_build_task +=
             hashtable1.query_and_delete(selected_element, in_edge);
 
@@ -405,8 +434,17 @@ void controller::handle_task_generation() {
           // if (hash_table_2 >= 1000000) {
           //   throw std::runtime_error("hashtable 2 too large!!");
           // }
+
+          // delete all entry at hashtable 1 about the infect output:
+          // if (in_edge == 12786) {
+          //   std::cout << "stop here!" << std::endl;
+          // }
+          for (auto &&i : all_infected_output) {
+            hashtable1.delete_entry(i, in_edge);
+          }
           assert(all_infected_output.size() == hash_table_2);
           task.input_nodes.push_back(in_edge);
+          task.edges.push_back({in_edge, all_infected_output});
 
           task.total_edges += hash_table_2;
           remaining_cycle_build_task += hash_table_2;
@@ -419,6 +457,25 @@ void controller::handle_task_generation() {
         }
       } // end while
       if (task.input_nodes.size()) {
+        if (current_running_layer == 0) {
+
+          global_definitions.controlloer_layer_0_windows++;
+          global_definitions.controller_layer_0_edges += task.total_edges;
+          // fmt::print("start print window:\n");
+          // fmt::print("current_output_range:{}:{}\n", first_element,
+          //            last_element);
+          // fmt::print("{}\n", task.input_nodes.size());
+          // for (auto &&i : task.edges) {
+          //   fmt::print("input:{}\n", i.first);
+          //   for (auto &&j : i.second) {
+          //     fmt::print("{} ", j);
+          //   }
+          //   fmt::print("\n");
+          // }
+          // fmt::print("{}\n", fmt::join(task.input_nodes, ","));
+          // fmt::print("\ntotal_edges:{}\n", task.total_edges);
+          // fmt::print("\nend print window:\n");
+        }
         // assert(task.total_edges != 0);
         static bool the_first = true;
 
@@ -479,7 +536,8 @@ void controller::print() {
   fmt::print("average_window: {}\n", average_window_size[0].get_average());
 
   fmt::print("unable_to_insert_hashtable_full: {} {}\n",
-             unable_to_insert_hashtable_full1,unable_to_insert_hashtable_full2);
+             unable_to_insert_hashtable_full1,
+             unable_to_insert_hashtable_full2);
   fmt::print("unable_to_insert_aggbuffer_full: {}\n",
              unable_to_insert_aggbuffer_full);
 }

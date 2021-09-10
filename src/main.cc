@@ -173,6 +173,10 @@ int main(int argc, char **argv) {
     for (auto i : global_definitions.number_hops_histogram) {
       fmt::print("{} : {}\n", i.first, i.second);
     }
+    fmt::print("controller_layer_0_window:{}\n",
+               global_definitions.controlloer_layer_0_windows);
+    fmt::print("controller_layer_0_edges:{}\n",
+               global_definitions.controller_layer_0_edges);
 
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,

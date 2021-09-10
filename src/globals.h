@@ -90,6 +90,9 @@ public:
 
   std::map<unsigned, unsigned> number_to_count_map_for_query;
   std::map<unsigned, uint64_t> number_hops_histogram;
+
+  unsigned controlloer_layer_0_windows = 0;
+  unsigned controller_layer_0_edges = 0;
 };
 extern globals global_definitions;
 
@@ -131,6 +134,6 @@ extern Minisat::BoolOption enable_ideal_selection;
 extern Minisat::BoolOption enable_sequential_selection;
 extern Minisat::BoolOption enable_outer_list;
 extern Minisat::StringOption outer_name;
-
+extern Minisat::BoolOption enable_ideal_hash;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

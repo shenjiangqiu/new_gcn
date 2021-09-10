@@ -88,17 +88,16 @@ void dense_window::set_addr(std::vector<uint64_t> inputAddr,
   this->output_addr = outputAddr;
   this->output_len = outputLen;
 }
-void dense_window::set_addr(uint64_t , unsigned int ,
-                            uint64_t , unsigned int ,
-                            uint64_t , unsigned int ) {
+void dense_window::set_addr(uint64_t, unsigned int, uint64_t, unsigned int,
+                            uint64_t, unsigned int) {
   // dense_window only support discrete addr
   throw;
-//  this->input_addr_c = inputAddr;
-//  this->input_len = inputLen;
-//  this->edge_addr = edgeAddr;
-//  this->edge_len = edgeLen;
-//  this->output_addr = outputAddr;
-//  this->output_len = outputLen;
+  //  this->input_addr_c = inputAddr;
+  //  this->input_len = inputLen;
+  //  this->edge_addr = edgeAddr;
+  //  this->edge_len = edgeLen;
+  //  this->output_addr = outputAddr;
+  //  this->output_len = outputLen;
 }
 void dense_window::set_size(unsigned int currentEdges,
                             unsigned int currentnodeDim) {
@@ -182,7 +181,34 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
 
       // setup the end of the column bound
       // that's the last element+1
-      auto col_end = col_i + xw_s[level_i];
+      // get the edge buffer bounded xws. current xw_s is only bounded by
+      // aggregation buffer
+
+      // get the edge size:
+      // index size
+
+      auto nodes = 0;
+      auto total_edge_size = 0;
+
+      while (true) {
+        if (unsigned(col_i + nodes) >= m_graph->get_num_nodes()) {
+          break;
+        }
+
+        auto &edge_index = m_graph->get_edge_index();
+        auto temp_size =
+            (edge_index[col_i + nodes + 1] - edge_index[col_i + nodes]) * 4;
+        temp_size += 4;
+        if (total_edge_size + temp_size > (unsigned)config::edgeSize) {
+          break;
+        }
+        nodes++;
+        total_edge_size += temp_size;
+      }
+
+      auto col_end = std::min(col_i + xw_s[level_i], col_i + nodes);
+      fmt::print("col_size: {} ,agg: {} ,edge:{}, edge_size:{}\n",
+                 col_end - col_i, xw_s[level_i], nodes, total_edge_size);
       bool the_final_col = false;
       auto &&edge_index = m_graph->get_edge_index();
 

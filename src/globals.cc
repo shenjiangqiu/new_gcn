@@ -85,6 +85,9 @@ Minisat::BoolOption enable_ideal_selection("system", "enable-ideal-selection",
 Minisat::BoolOption enable_sequential_selection("system",
                                                 "enable-sequential-selection",
                                                 "", false);
- Minisat::BoolOption enable_outer_list("system","enable-outer-list","",false);
- Minisat::StringOption outer_name("system","outer-name","","");
+Minisat::BoolOption enable_outer_list("system", "enable-outer-list", "", false);
+Minisat::StringOption outer_name("system", "outer-name", "", "");
+
+Minisat::BoolOption enable_ideal_hash("system", "enable-ideal-hash", "", false);
+
 } // namespace config

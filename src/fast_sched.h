@@ -159,9 +159,10 @@ public:
     return {real_position, all_remaining_output_nodes.at(real_position).top()};
   }
   std::pair<unsigned, unsigned> get_next_edge_and_move() {
-    assert(order_list.size() == all_remaining_output_nodes.size());
+    assert(!enable_ordered_list or
+           order_list.size() == all_remaining_output_nodes.size());
 
-    assert(current_position < order_list.size());
+    assert(!enable_ordered_list or current_position < order_list.size());
     auto real_position = this->enable_ordered_list
                              ? order_list[current_position]
                              : current_position;

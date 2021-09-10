@@ -21,7 +21,17 @@ void sjq::hash_table::delete_last(unsigned int node_id) {
   entrys.at(entry_id).delete_edge();
 }
 unsigned hash_table::insert(unsigned int node_id, unsigned value) {
-
+  if (config::enable_ideal_hash) {
+    if (entrys.contains(node_id)) {
+      entrys.at(node_id).add_edge(value);
+    } else {
+      sjq::entry m_entry;
+      m_entry.set_tag(node_id);
+      m_entry.add_edge(value);
+      entrys.insert({node_id, m_entry});
+    }
+    return 1;
+  }
   unsigned total_cycle = 0;
   total_cycle++;
 
@@ -194,6 +204,10 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
   return total_cycle;
 }
 unsigned hash_table::get_entry_id_from_node_id(unsigned int node_id) {
+  if (config::enable_ideal_hash) {
+    return node_id;
+  }
+
   auto entry_id_1 = hash_func_1(node_id);
   auto entry_id_2 = hash_func_2(node_id);
   // 1, find and append

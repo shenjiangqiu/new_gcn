@@ -15,6 +15,11 @@ struct entry_edge {
     total_len++;
     edges.push_back(edge_id);
   }
+  void delete_edge(unsigned in) {
+    // fmt::print("before:{}\n", fmt::join(edges, " ,"));
+    edges.erase(std::remove(edges.begin(), edges.end(), in), edges.end());
+    // fmt::print("after:{}\n", fmt::join(edges, " ,"));
+  }
   void delete_edge() {
     total_len--;
     edges.pop_back();
@@ -56,13 +61,34 @@ private:
 class edge_hash {
 
 public:
+  void delete_entry(unsigned out, unsigned in) {
+    if (entrys.contains(out))
+      entrys.at(out).delete_edge(in);
+  }
+
+  unsigned get_total_size() const {
+#ifndef NDEBUG
+    auto total = 0;
+    for (const auto &i : entrys) {
+      total += i.second.get_total_len();
+    }
+    return total;
+#else
+    return 0;
+#endif
+  }
   unsigned size() const { return entrys.size(); }
   explicit edge_hash(unsigned t_e);
   bool empty() const { return entrys.empty(); }
   // insert a new node
   [[nodiscard]] std::string get_line_trace();
-  bool can_insert(unsigned node_id);
+
   void delete_last(unsigned int node_id) {
+    if (config::enable_ideal_hash) {
+      entrys.at(node_id).delete_edge();
+      return;
+    }
+
     auto entry_id = get_entry_id_from_node_id(node_id);
     entrys.at(entry_id).delete_edge();
   }
@@ -81,6 +107,11 @@ public:
   // }
   // will remove the empty entry
   void remove_entry(unsigned node_id) {
+    if (config::enable_ideal_hash) {
+      entrys.erase(node_id);
+      return;
+    }
+
     auto entryId = get_entry_id_from_node_id(node_id);
 
     entrys.erase(entryId);
@@ -88,7 +119,10 @@ public:
 
   bool query_is_empty(unsigned node_id) const {
 
-    auto entryId = get_entry_id_from_node_id(node_id);
+    auto entryId = config::enable_ideal_hash
+                       ? node_id
+                       : get_entry_id_from_node_id(node_id);
+
     auto &entry = entrys.at(entryId);
     if (entry.get_total_len() == 0) {
       return true;
@@ -96,7 +130,9 @@ public:
       return false;
     }
   }
-
+  const std::vector<unsigned> &get_edges(unsigned node_id) {
+    return entrys.at(node_id).get_edges();
+  }
   // get one node from the node id, remove if the size is zero.
   [[nodiscard]] unsigned query_and_delete(unsigned node_id, unsigned &in_edge) {
     // currently we assume no conflict and return the number of entries
@@ -135,6 +171,10 @@ private:
 
   // note that , the node id must exist in the hash table!!!
   unsigned get_entry_id_from_node_id(unsigned node_id) const {
+    if (config::enable_ideal_hash) {
+      return node_id;
+    }
+
     auto entry_id_1 = hash_func_1(node_id);
     auto entry_id_2 = hash_func_2(node_id);
     // 1, find and append
@@ -156,6 +196,11 @@ private:
   bool just_removed = false;
   [[nodiscard]] unsigned move(unsigned entry_id, unsigned a, unsigned b,
                               unsigned move_depth, unsigned &max_hop_level) {
+
+    if (config::enable_ideal_hash) {
+      return 1;
+    }
+
     if (move_depth >= max_hop_level) {
       max_hop_level = move_depth;
     }
