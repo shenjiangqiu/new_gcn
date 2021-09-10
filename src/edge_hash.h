@@ -12,20 +12,20 @@ namespace sjq {
 
 struct entry_edge {
   void add_edge(unsigned edge_id) {
-    total_len++;
     edges.push_back(edge_id);
   }
   void delete_edge(unsigned in) {
-    // fmt::print("before:{}\n", fmt::join(edges, " ,"));
+// fmt::print("before:{}\n", fmt::join(edges, " ,"));
+#ifndef NDEBUG
+
+#endif
+
     edges.erase(std::remove(edges.begin(), edges.end(), in), edges.end());
     // fmt::print("after:{}\n", fmt::join(edges, " ,"));
   }
-  void delete_edge() {
-    total_len--;
-    edges.pop_back();
-  }
+  void delete_edge() { edges.pop_back(); }
 
-  unsigned get_total_len() const { return total_len; }
+  unsigned get_total_len() const { return edges.size(); }
   unsigned get_tag() const { return tag; }
   bool is_valid() const { return valid; }
   bool is_next_valid() const { return next_valid; }
@@ -35,10 +35,10 @@ struct entry_edge {
   void set_tag(unsigned _tag) { tag = _tag; }
   void set_node_id(unsigned _node_id) { node_id = _node_id; }
   unsigned get_real_input_id() {
-    assert(total_len != 0);
+    assert(get_total_len() != 0);
 
     // return the last edge
-    return edges.at(total_len - 1);
+    return edges.back();
   }
 
 private:
@@ -50,7 +50,6 @@ private:
   unsigned shift = 0;
 
   // total len means the size when inserted
-  unsigned total_len = 0;
 
   // real len means the size during runtime, my reduced when other input touch
   // this entry
@@ -138,13 +137,17 @@ public:
     // currently we assume no conflict and return the number of entries
     // dont' worry, it's constant
     // fix bug here, it's node id, not entry id!!!!
-
+    // if (node_id == 15) {
+    //   fmt::print("{}\n", fmt::join(entrys.at(15).get_edges(), ", "));
+    // }
     auto entryId = get_entry_id_from_node_id(node_id);
 
     // here, we are going to delete the total len because it's real moved during
     // query, when it's influenced by other input, we are going to reduce the
     // real_len
+    assert(entrys.contains(entryId) && "do not contain entryId");
     auto &entry = entrys.at(entryId);
+    assert(entry.get_total_len() && "total len is zero!!");
     in_edge = entry.get_edges().back();
     entry.delete_edge();
     if (entry.get_total_len() == 0) {

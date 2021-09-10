@@ -134,7 +134,7 @@ void controller::handle_work_insert() {
   // put a new output node into the buffer ans hashtable
   // fix bug here, when cross the layer, should wait the remaining task to
   // complete
-  
+
   if (this->need_to_insert and remaining_cycle_insert_hash == 0 and
       ((hashtable1.size() * currentnodeDim * 4 + currentnodeDim * 4) <=
        aggBufferSize) and
@@ -366,8 +366,8 @@ void controller::handle_task_generation() {
       // a huge bug
       // the and operator is prior than ?, so it always be true!!!
 
-      // auto first_element = short_queue[0];
-      // auto last_element = first_element + hashtable1.size();
+      auto first_element = short_queue[0];
+      auto last_element = first_element + hashtable1.size();
       // if (first_element == 57) {
       //   std::cout << "break here!" << std::endl;
       //   fmt::print("{}\n", fmt::join(hashtable1.get_edges(57), ","));
@@ -384,6 +384,26 @@ void controller::handle_task_generation() {
             config::enable_ideal_selection
                 ? all_tasks_pool.begin()->second
                 : get_the_first_valid_element(short_queue, large_queue);
+
+        while (true) {
+          // skip all empty entrys:
+          if (hashtable1.query_is_empty(selected_element)) {
+            hashtable1.remove_entry(selected_element);
+            if (config::enable_ideal_selection) {
+              assert(all_tasks_pool.begin()->second == selected_element);
+              assert(!all_tasks_pool.empty());
+              all_tasks_pool.erase(all_tasks_pool.begin());
+            } else {
+              remove_from_queue(short_queue, large_queue, selected_element);
+            }
+          } else {
+            break;
+          }
+          selected_element =
+              config::enable_ideal_selection
+                  ? all_tasks_pool.begin()->second
+                  : get_the_first_valid_element(short_queue, large_queue);
+        }
         // bool find_zero = false;
         // if (selected_element == 0) {
         //   find_zero = true;
@@ -396,10 +416,10 @@ void controller::handle_task_generation() {
         // item
 
         // fix bug here, we need input edge here, not in_edge
-
+        
         remaining_cycle_build_task +=
             hashtable1.query_and_delete(selected_element, in_edge);
-
+       
         if (hashtable1.is_just_removed()) {
           // if (find_zero) {
           //   GCN_INFO("find zero and moved,{}", selected_element);
