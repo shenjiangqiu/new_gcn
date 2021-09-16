@@ -13,7 +13,7 @@ std::string edge_hash::get_line_trace() {
 
 unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
 
-  if (config::enable_ideal_hash) {
+  if (config::enable_ideal_hash1) {
     if (entrys.contains(node_id)) {
       entrys.at(node_id).add_edge(value);
     } else {

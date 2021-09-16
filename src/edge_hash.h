@@ -11,9 +11,8 @@
 namespace sjq {
 
 struct entry_edge {
-  void add_edge(unsigned edge_id) {
-    edges.push_back(edge_id);
-  }
+  bool is_self_driven = false;
+  void add_edge(unsigned edge_id) { edges.push_back(edge_id); }
   void delete_edge(unsigned in) {
 // fmt::print("before:{}\n", fmt::join(edges, " ,"));
 #ifndef NDEBUG
@@ -83,7 +82,7 @@ public:
   [[nodiscard]] std::string get_line_trace();
 
   void delete_last(unsigned int node_id) {
-    if (config::enable_ideal_hash) {
+    if (config::enable_ideal_hash1) {
       entrys.at(node_id).delete_edge();
       return;
     }
@@ -106,7 +105,7 @@ public:
   // }
   // will remove the empty entry
   void remove_entry(unsigned node_id) {
-    if (config::enable_ideal_hash) {
+    if (config::enable_ideal_hash1) {
       entrys.erase(node_id);
       return;
     }
@@ -118,7 +117,7 @@ public:
 
   bool query_is_empty(unsigned node_id) const {
 
-    auto entryId = config::enable_ideal_hash
+    auto entryId = config::enable_ideal_hash1
                        ? node_id
                        : get_entry_id_from_node_id(node_id);
 
@@ -174,7 +173,7 @@ private:
 
   // note that , the node id must exist in the hash table!!!
   unsigned get_entry_id_from_node_id(unsigned node_id) const {
-    if (config::enable_ideal_hash) {
+    if (config::enable_ideal_hash1) {
       return node_id;
     }
 
@@ -200,7 +199,7 @@ private:
   [[nodiscard]] unsigned move(unsigned entry_id, unsigned a, unsigned b,
                               unsigned move_depth, unsigned &max_hop_level) {
 
-    if (config::enable_ideal_hash) {
+    if (config::enable_ideal_hash1) {
       return 1;
     }
 
@@ -214,8 +213,8 @@ private:
     GCN_DEBUG("debug to move:{},current depth:{}, current len:{}", entry_id,
               move_depth, entrys.at(entry_id).get_total_len());
 
-    if (move_depth >= 5) {
-      GCN_DEBUG_S("fail to move!, depth is 5");
+    if (move_depth >= 10) {
+      GCN_INFO_S("fail to move!, depth is 5");
       return 0;
     }
     // 1. find the next entry

@@ -134,6 +134,11 @@ extern Minisat::BoolOption enable_ideal_selection;
 extern Minisat::BoolOption enable_sequential_selection;
 extern Minisat::BoolOption enable_outer_list;
 extern Minisat::StringOption outer_name;
-extern Minisat::BoolOption enable_ideal_hash;
+extern Minisat::BoolOption enable_ideal_hash1;
+extern Minisat::BoolOption enable_ideal_hash2;
+extern Minisat::BoolOption enable_single_entry_hash2;
+extern Minisat::BoolOption enable_reduced_entry_hash2;
+// extern Minisat::BoolOption enable_duponly_entry_hash2;
+extern Minisat::BoolOption enable_placeholder_hash2;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

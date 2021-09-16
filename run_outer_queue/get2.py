@@ -4,7 +4,8 @@ import subprocess
 
 large_graphs = ["amazon_cs_graph_data", "blogcatalog_graph_data", "coauthor_cs_graph_data",
                 "coauthor_phy_graph_data", "flickr_graph_data", "Graph_saint_ogbn-arxiv", "Graph_saint_ppi", "uai_graph_data"]
-
+large_graphs = ["amazon_cs_graph_data", "blogcatalog_graph_data",
+                "coauthor_cs_graph_data", "coauthor_phy_graph_data", "flickr_graph_data"]
 smart_bfs_diviers = [0.01, 0.05, 0.1, 0.2]
 
 

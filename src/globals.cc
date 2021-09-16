@@ -88,6 +88,22 @@ Minisat::BoolOption enable_sequential_selection("system",
 Minisat::BoolOption enable_outer_list("system", "enable-outer-list", "", false);
 Minisat::StringOption outer_name("system", "outer-name", "", "");
 
-Minisat::BoolOption enable_ideal_hash("system", "enable-ideal-hash", "", false);
+Minisat::BoolOption enable_ideal_hash1("system", "enable-ideal-hash1", "",
+                                       false);
+Minisat::BoolOption enable_ideal_hash2("system", "enable-ideal-hash2", "",
+                                       false);
+Minisat::BoolOption
+    enable_single_entry_hash2("system", "enable-single-entry-hash2", "", false);
+Minisat::BoolOption enable_reduced_entry_hash2("system",
+                                               "enable-reduced-entry-hash2",
+                                               "enable-reduced-entry-hash2",
+                                               false);
+Minisat::BoolOption enable_duponly_entry_hash2("system",
+                                               "enable-duponly-entry-hash2",
+                                               "enable-duponly-entry-hash2",
+                                               false);
 
+Minisat::BoolOption enable_placeholder_hash2("system",
+                                             "enable-placeholder-hash2",
+                                             "enable-placeholder-hash2", false);
 } // namespace config

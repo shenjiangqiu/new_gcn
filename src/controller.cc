@@ -157,7 +157,7 @@ void controller::handle_work_insert() {
         // if (next_to_insert_edge.first == 0) {
         //   GCN_INFO_S("find 0 to insert");
         // }
-        throw;
+
         auto result1 = hashtable1.insert(this->next_to_insert_edge.first,
                                          this->next_to_insert_edge.second);
         if (result1 == 0) {
@@ -174,8 +174,11 @@ void controller::handle_work_insert() {
           // fail to insert hashtable 2, need to pop hashtable 1
           hashtable1.delete_last(next_to_insert_edge.first);
           unable_to_insert_hashtable_full2++;
-          fmt::print("fail to insert: current_nodes:{},hashtable2 size:{}\n",
-                     short_queue.size(), hashtable1.size());
+          fmt::print("fail to insert: current_nodes:{},hashtable2 "
+                     "size:{},hashtable2 real_entry:{}, max :{}\n",
+                     short_queue.size(), hashTable2.size(),
+                     hashTable2.get_edge_size(),
+                     aggBufferSize / (currentnodeDim * 4));
 
           break;
         }
@@ -318,11 +321,10 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
       m_inputNodeNum(std::move(inputNodesNum)), agg(std::move(agg)),
       m_mem(std::move(mMem)), aggBufferSize(aggBufferSize) {
 
-  if (config::enable_ideal_hash) {
-    large_queue_size = 100000;
-    short_queue_size = 100000;
-    task_queue_size = 100000;
-  }
+  // the queue size shouldn't limit the agg size
+  large_queue_size = 100000;
+  short_queue_size = 100000;
+  task_queue_size = 100000;
 }
 
 bool controller::isAllFinished() const { return all_finished; }
@@ -366,8 +368,8 @@ void controller::handle_task_generation() {
       // a huge bug
       // the and operator is prior than ?, so it always be true!!!
 
-      auto first_element = short_queue[0];
-      auto last_element = first_element + hashtable1.size();
+      // auto first_element = short_queue[0];
+      // auto last_element = first_element + hashtable1.size();
       // if (first_element == 57) {
       //   std::cout << "break here!" << std::endl;
       //   fmt::print("{}\n", fmt::join(hashtable1.get_edges(57), ","));
@@ -416,10 +418,10 @@ void controller::handle_task_generation() {
         // item
 
         // fix bug here, we need input edge here, not in_edge
-        
+
         remaining_cycle_build_task +=
             hashtable1.query_and_delete(selected_element, in_edge);
-       
+
         if (hashtable1.is_just_removed()) {
           // if (find_zero) {
           //   GCN_INFO("find zero and moved,{}", selected_element);
@@ -462,15 +464,28 @@ void controller::handle_task_generation() {
           for (auto &&i : all_infected_output) {
             hashtable1.delete_entry(i, in_edge);
           }
-          assert(all_infected_output.size() == hash_table_2);
+          all_infected_output.push_back(selected_element);
           task.input_nodes.push_back(in_edge);
           task.edges.push_back({in_edge, all_infected_output});
 
-          task.total_edges += hash_table_2;
-          remaining_cycle_build_task += hash_table_2;
+          task.total_edges += hash_table_2 + 1;
+          remaining_cycle_build_task += hash_table_2 + 1;
         } else {
+          // only him self is considered
           // for query the hashtable 2
-          remaining_cycle_build_task++;
+
+          // fix a bug here, only valid node are considered!
+          total_generated_input++;
+
+          std::vector<unsigned> all_infected_output;
+          all_infected_output.push_back(selected_element);
+
+          task.input_nodes.push_back(in_edge);
+          task.edges.push_back({in_edge, all_infected_output});
+
+          task.total_edges += 1;
+          remaining_cycle_build_task += 1;
+
           // GCN_INFO("could not find input id: {},might be touched
           // before",
           //  in_edge);

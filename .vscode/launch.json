@@ -40,7 +40,7 @@
                 "-enable-sequential-selection",
                 // "-debug",
                 // "-enable-outer-list",
-                "-enable-ideal-hash", 
+                "-enable-ideal-hash1", 
                 "-outer-name=lists/amazon_cs_graph_data.graph.bfs.30.seqresult",
             ],
             "stopAtEntry": false,

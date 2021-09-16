@@ -13,16 +13,10 @@ namespace sjq {
 class entry {
 
 public:
-  void add_edge(unsigned edge_id) {
-    total_len++;
-    edges.push_back(edge_id);
-  }
-  void delete_edge() {
-    total_len--;
-    edges.pop_back();
-  }
+  void add_edge(unsigned edge_id) { edges.push_back(edge_id); }
+  void delete_edge() { edges.pop_back(); }
 
-  unsigned get_total_len() const { return total_len; }
+  unsigned get_total_len() const { return edges.size(); }
   unsigned get_tag() const { return tag; }
   bool is_valid() const { return valid; }
   bool is_next_valid() const { return next_valid; }
@@ -31,6 +25,8 @@ public:
 
   void set_tag(unsigned _tag) { tag = _tag; }
   void set_node_id(unsigned _node_id) { node_id = _node_id; }
+  // when a entry is created, it's just a place holder
+  bool is_place_holder() { return edges.empty(); }
 
 private:
   bool valid = false;
@@ -68,7 +64,7 @@ public:
   bool exist(unsigned node_id) {
     auto entry_id_1 = hash_func_1(node_id);
     auto entry_id_2 = hash_func_2(node_id);
-    if (config::enable_ideal_hash) {
+    if (config::enable_ideal_hash2) {
       entry_id_1 = node_id;
       entry_id_2 = node_id;
     }
@@ -83,6 +79,8 @@ public:
       return false;
     }
   }
+  unsigned get_edge_size() const { return total_edge_size; }
+  unsigned size() const { return entrys.size(); }
 
 private:
   // fucnction move, move the entry_id to it's another hash function, note that
@@ -92,6 +90,8 @@ private:
   // note that , the node id must exist in the hash table!!!
   unsigned get_entry_id_from_node_id(unsigned node_id);
 
+  // added in insert , decreased in remove
+  unsigned total_edge_size = 0;
   [[nodiscard]] unsigned move(unsigned entry_id, unsigned a, unsigned b,
                               unsigned move_depth, unsigned &max_hop_level);
 
@@ -105,9 +105,16 @@ private:
                                         unsigned b_s, unsigned b_e) {
     return a_s < b_e && b_s < a_e;
   }
+  static unsigned get_entry_size_by_element(unsigned elements) {
+    if (config::enable_reduced_entry_hash2) {
+      return (32 + 12 * elements + 63) / 64;
+    }
 
+    return (elements + 2) / 2;
+  }
   [[nodiscard]] static unsigned get_entry_size(const entry &e) {
-    return (e.get_total_len() + 2) / 2;
+
+    return get_entry_size_by_element(e.get_total_len());
   }
   [[nodiscard]] unsigned hash_func_1(unsigned node_id) const {
     unsigned rid;
@@ -172,8 +179,25 @@ private:
 
   // test if there are any over lap of giving range
   [[nodiscard]] bool is_entry_empty(unsigned entry_id, unsigned size) const {
+
     bool is_empty = true;
     auto the_next_nearst = entrys.lower_bound(entry_id);
+    if (config::enable_single_entry_hash2) {
+      if (the_next_nearst == entrys.end()) {
+        return true;
+      } else if (the_next_nearst->first != entry_id) {
+
+        // in this case we simulate the entry size is always one, so it's never
+        // overlap when entry id is not the same.
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (entrys.contains(entry_id)) {
+      // incase of placeholder entry;
+      return false;
+    }
     if (the_next_nearst != entrys.end()) {
       auto start = the_next_nearst->first;
       auto end = start + get_entry_size(the_next_nearst->second);
