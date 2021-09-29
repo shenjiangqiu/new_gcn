@@ -374,6 +374,8 @@ void controller::handle_task_generation() {
       //   std::cout << "break here!" << std::endl;
       //   fmt::print("{}\n", fmt::join(hashtable1.get_edges(57), ","));
       // }
+
+      unsigned current_agg_size=hashtable1.size();
       while ((total_generated_input < max_input_num) and
              (config::enable_ideal_selection
                   ? !all_tasks_pool.empty()
@@ -381,7 +383,7 @@ void controller::handle_task_generation() {
 
         // select one output node from sorted queue
         unsigned selected_element = -1;
-
+        
         selected_element =
             config::enable_ideal_selection
                 ? all_tasks_pool.begin()->second
@@ -491,7 +493,23 @@ void controller::handle_task_generation() {
           //  in_edge);
         }
       } // end while
+
+
       if (task.input_nodes.size()) {
+        global_definitions.sliding_window_input_buffer_nodes += max_input_num;
+          global_definitions.sliding_window_input_nodes += task.input_nodes.size();
+          global_definitions.sliding_window_effect_input_nodes +=
+              task.input_nodes.size();
+
+          
+              global_definitions.total_edges_in_window += task.total_edges;
+            
+          global_definitions.total_window_size +=
+              (task.input_nodes.size()) * (current_agg_size);
+          global_definitions.input_traffic +=
+              (task.input_nodes.size()) * currentnodeDim * 4;
+
+
         if (current_running_layer == 0) {
 
           global_definitions.controlloer_layer_0_windows++;

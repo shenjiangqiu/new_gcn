@@ -178,12 +178,29 @@ int main(int argc, char **argv) {
     fmt::print("controller_layer_0_edges:{}\n",
                global_definitions.controller_layer_0_edges);
 
+
+    fmt::print("sliding_window_input_buffer_nodes: {}\n",global_definitions.sliding_window_input_buffer_nodes);
+    fmt::print("sliding_window_input_nodes: {}\n",global_definitions.sliding_window_input_nodes);
+    fmt::print("sliding_window_effect_input_nodes: {}\n",global_definitions.sliding_window_effect_input_nodes);
+    fmt::print("total_edges_in_window: {}\n",global_definitions.total_edges_in_window);
+    fmt::print("total_window_size: {}\n",global_definitions.total_window_size);
+    fmt::print("input_traffic: {}\n",global_definitions.input_traffic);
+
+
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,
                     config::outputSize, config::aggCores, config::systolic_rows,
                     config::systolic_cols, m_graph, node_dim_per_layer,
                     (std::string)config::dram_name, m_model);
     m_system.run();
+
+
+    fmt::print("sliding_window_input_buffer_nodes: {}\n",global_definitions.sliding_window_input_buffer_nodes);
+    fmt::print("sliding_window_input_nodes: {}\n",global_definitions.sliding_window_input_nodes);
+    fmt::print("sliding_window_effect_input_nodes: {}\n",global_definitions.sliding_window_effect_input_nodes);
+    fmt::print("total_edges_in_window: {}\n",global_definitions.total_edges_in_window);
+    fmt::print("total_window_size: {}\n",global_definitions.total_window_size);
+    fmt::print("input_traffic: {}\n",global_definitions.input_traffic);
   }
 
   return 0;

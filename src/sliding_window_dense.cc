@@ -336,6 +336,21 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           window->set_prop(the_final_col, the_last_row, the_first_row,
                            the_last_layer);
 
+          global_definitions.sliding_window_input_buffer_nodes += yw_s[level_i];
+          global_definitions.sliding_window_input_nodes += input_nodes.size();
+          global_definitions.sliding_window_effect_input_nodes +=
+              input_nodes.size();
+
+          for (auto i : input_nodes) {
+            if (row_to_count.contains(i)) {
+              global_definitions.total_edges_in_window += row_to_count[i];
+            }
+          }
+          global_definitions.total_window_size +=
+              (input_nodes.size()) * (col_end - col_i);
+          global_definitions.input_traffic +=
+              (input_nodes.size()) * node_dim_s[level_i] * 4;
+
           m_sliding_window_vec.push_back(
               std::static_pointer_cast<sliding_window_interface>(window));
 
@@ -406,6 +421,20 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           current_col_input_len += input_len;
 
           auto window = std::make_shared<Slide_window>();
+
+          global_definitions.sliding_window_input_buffer_nodes += yw_s[level_i];
+          global_definitions.sliding_window_input_nodes += row_end - row_i;
+          for (auto i = row_i; i < row_end; i++) {
+            if (row_to_count.contains(i)) {
+              global_definitions.sliding_window_effect_input_nodes++;
+              global_definitions.total_edges_in_window += row_to_count[i];
+            }
+          }
+          global_definitions.total_window_size +=
+              (row_end - row_i) * (col_end - col_i);
+          global_definitions.input_traffic +=
+              (row_end - row_i) * node_dim_s[level_i] * 4;
+
           window->set_location(col_i, col_end - col_i, row_i, row_end - row_i,
                                level_i);
           window->set_addr(input_addr, input_len, start_edge_addr, edge_len,

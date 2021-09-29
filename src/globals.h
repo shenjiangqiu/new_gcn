@@ -93,6 +93,20 @@ public:
 
   unsigned controlloer_layer_0_windows = 0;
   unsigned controller_layer_0_edges = 0;
+
+
+  unsigned long long sliding_window_input_buffer_nodes=0;
+
+  unsigned long long sliding_window_input_nodes=0;
+  unsigned long long sliding_window_effect_input_nodes=0;
+
+  unsigned long long total_edges_in_window=0;
+  unsigned long long total_window_size=0;
+
+  unsigned long long input_traffic=0;
+  
+  
+
 };
 extern globals global_definitions;
 
