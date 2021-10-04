@@ -4,6 +4,9 @@ import subprocess
 import workloads_defs
 large_graphs = ["amazon_cs_graph_data", "blogcatalog_graph_data",
                 "coauthor_cs_graph_data", "coauthor_phy_graph_data", "flickr_graph_data","Graph_saint_ogbn-arxiv","Graph_saint_reddit","Graph_saint_ppi"]
+
+large_graphs = ["Graph_saint_ogbn-products","Graph_saint_yelp","acm_graph_data","dblp_graph_data"]
+
 # large_graphs = ["amazon_cs_graph_data"]
 
 large_graphs_full = [a+'.graph' for a in large_graphs]
@@ -80,7 +83,7 @@ for scheduling_method in ["-enable-sequential-selection"]:
             print(cmd)
             cmds.append(cmd)
 
-            # bfs
+            # # bfs
 
             # cmd = f"echo {graph};./gcn_sim -input=131072 -output=4194304 -edge=2097152 -hash-table-size={buffer_size} -agg=16777216 \
             #     -aggCores=512 -systolic-rows=32 -systolic-cols=128 -graph-name={graph} -dram-name={mem} \
