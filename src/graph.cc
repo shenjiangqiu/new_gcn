@@ -36,7 +36,7 @@ void Graph::parse(const std::string &graph_name) {
       break;
     getline(graph_in, i_line);
     // fix bug here, now use exciplite end sign
-    if (i_line.starts_with("end") or i_line.starts_with("END")) {
+    if (i_line.rfind("end",0)==0 or i_line.rfind("END",0)==0) {
       break;
     }
     edges.push_back(node);

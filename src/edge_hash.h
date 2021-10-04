@@ -60,7 +60,7 @@ class edge_hash {
 
 public:
   void delete_entry(unsigned out, unsigned in) {
-    if (entrys.contains(out))
+    if (entrys.count(out))
       entrys.at(out).delete_edge(in);
   }
 
@@ -144,7 +144,7 @@ public:
     // here, we are going to delete the total len because it's real moved during
     // query, when it's influenced by other input, we are going to reduce the
     // real_len
-    assert(entrys.contains(entryId) && "do not contain entryId");
+    assert(entrys.count(entryId) && "do not contain entryId");
     auto &entry = entrys.at(entryId);
     assert(entry.get_total_len() && "total len is zero!!");
     in_edge = entry.get_edges().back();
@@ -239,7 +239,7 @@ private:
                 new_entry_id, tag, get_entry_size(this_entry));
       total_cycle += get_entry_size(this_entry);
 
-      assert(!entrys.contains(new_entry_id));
+      assert(!entrys.count(new_entry_id));
       entrys.insert({new_entry_id, this_entry});
       // release the old one
       entrys.erase(entry_id);
@@ -255,7 +255,7 @@ private:
       std::set<unsigned> runtime_loop;
       while (!is_entry_empty(new_entry_id, get_entry_size(this_entry))) {
         // Fix bug here, there might cause infinit loog
-        if (runtime_loop.contains(new_entry_id)) {
+        if (runtime_loop.count(new_entry_id)) {
           return 0;
         } else {
           runtime_loop.insert(new_entry_id);
@@ -274,7 +274,7 @@ private:
       }
       // have already clear this place, put it on!!
       total_cycle += get_entry_size(this_entry);
-      assert(!entrys.contains(new_entry_id));
+      assert(!entrys.count(new_entry_id));
       entrys.insert({new_entry_id, this_entry});
       entrys.erase(entry_id);
     }

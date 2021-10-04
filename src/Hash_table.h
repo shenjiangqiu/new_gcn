@@ -194,7 +194,7 @@ private:
         return false;
       }
     }
-    if (entrys.contains(entry_id)) {
+    if (entrys.count(entry_id)) {
       // incase of placeholder entry;
       return false;
     }

@@ -14,7 +14,7 @@ std::string edge_hash::get_line_trace() {
 unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
 
   if (config::enable_ideal_hash1) {
-    if (entrys.contains(node_id)) {
+    if (entrys.count(node_id)) {
       entrys.at(node_id).add_edge(value);
     } else {
       sjq::entry_edge m_entry;
@@ -145,7 +145,7 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       GCN_DEBUG("put it in entry I:{}", entry_id_1);
       auto t_entry = entry_edge();
       t_entry.set_tag(node_id);
-      assert(!entrys.contains(entry_id_1));
+      assert(!entrys.count(entry_id_1));
       t_entry.add_edge(value);
       entrys.insert({entry_id_1, t_entry});
       total_cycle++;
@@ -157,7 +157,7 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       t_entry.set_tag(node_id);
       t_entry.add_edge(value);
 
-      assert(!entrys.contains(entry_id_2));
+      assert(!entrys.count(entry_id_2));
 
       entrys.insert({entry_id_2, t_entry});
       total_cycle++;
@@ -188,7 +188,7 @@ unsigned edge_hash::insert(unsigned int node_id, unsigned value) {
       t_entry.add_edge(value);
 
       total_cycle++;
-      assert(!entrys.contains(shortest));
+      assert(!entrys.count(shortest));
       entrys.insert({shortest, t_entry});
     }
   }

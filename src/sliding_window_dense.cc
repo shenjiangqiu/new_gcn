@@ -342,7 +342,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
               input_nodes.size();
 
           for (auto i : input_nodes) {
-            if (row_to_count.contains(i)) {
+            if (row_to_count.count(i)) {
               global_definitions.total_edges_in_window += row_to_count[i];
             }
           }
@@ -425,7 +425,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           global_definitions.sliding_window_input_buffer_nodes += yw_s[level_i];
           global_definitions.sliding_window_input_nodes += row_end - row_i;
           for (auto i = row_i; i < row_end; i++) {
-            if (row_to_count.contains(i)) {
+            if (row_to_count.count(i)) {
               global_definitions.sliding_window_effect_input_nodes++;
               global_definitions.total_edges_in_window += row_to_count[i];
             }

@@ -29,7 +29,7 @@ void add_edge(entry &entry, unsigned m_edge, unsigned &total_count) {
 }
 unsigned hash_table::insert(unsigned int node_id, unsigned value) {
   if (config::enable_ideal_hash2) {
-    if (entrys.contains(node_id)) {
+    if (entrys.count(node_id)) {
       add_edge(entrys.at(node_id), value, total_edge_size);
 
     } else {
@@ -51,12 +51,12 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
 
   // 1, find and append
 
-  if (entrys.contains(entry_id_1) and
+  if (entrys.count(entry_id_1) and
       entrys.at(entry_id_1).get_tag() == node_id) {
 
     real_entry_id = entry_id_1;
     found = true;
-  } else if (entrys.contains(entry_id_2) and
+  } else if (entrys.count(entry_id_2) and
              entrys.at(entry_id_2).get_tag() == node_id) {
     real_entry_id = entry_id_2;
     found = true;
@@ -167,7 +167,7 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
       GCN_DEBUG("put it in entry I:{}", entry_id_1);
       auto t_entry = entry();
       t_entry.set_tag(node_id);
-      assert(!entrys.contains(entry_id_1));
+      assert(!entrys.count(entry_id_1));
 
       entrys.insert({entry_id_1, t_entry});
 
@@ -180,7 +180,7 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
 
       t_entry.set_tag(node_id);
 
-      assert(!entrys.contains(entry_id_2));
+      assert(!entrys.count(entry_id_2));
 
       entrys.insert({entry_id_2, t_entry});
 
@@ -190,11 +190,11 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
       // need to move
       bool find_place_holder = false;
       auto the_place_holder = 0u;
-      if (entrys.contains(entry_id_1) and
+      if (entrys.count(entry_id_1) and
           entrys.at(entry_id_1).is_place_holder()) {
         find_place_holder = true;
         the_place_holder = entry_id_1;
-      } else if (entrys.contains(entry_id_2) and
+      } else if (entrys.count(entry_id_2) and
                  entrys.at(entry_id_2).is_place_holder()) {
         find_place_holder = true;
         the_place_holder = entry_id_2;
@@ -232,7 +232,7 @@ unsigned hash_table::insert(unsigned int node_id, unsigned value) {
       t_entry.set_tag(node_id);
 
       total_cycle++;
-      assert(!entrys.contains(shortest));
+      assert(!entrys.count(shortest));
       entrys.insert({shortest, t_entry});
     }
   }
@@ -297,7 +297,7 @@ unsigned hash_table::move(unsigned int entry_id, unsigned int, unsigned int,
               new_entry_id, tag, get_entry_size(this_entry));
     total_cycle += get_entry_size(this_entry);
 
-    assert(!entrys.contains(new_entry_id));
+    assert(!entrys.count(new_entry_id));
     entrys.insert({new_entry_id, this_entry});
     // release the old one
     entrys.erase(entry_id);
@@ -313,7 +313,7 @@ unsigned hash_table::move(unsigned int entry_id, unsigned int, unsigned int,
     std::set<unsigned> runtime_loop;
     while (!is_entry_empty(new_entry_id, get_entry_size(this_entry))) {
       // Fix bug here, there might cause infinit loog
-      if (runtime_loop.contains(new_entry_id)) {
+      if (runtime_loop.count(new_entry_id)) {
         return 0;
       } else {
         runtime_loop.insert(new_entry_id);
@@ -332,7 +332,7 @@ unsigned hash_table::move(unsigned int entry_id, unsigned int, unsigned int,
     }
     // have already clear this place, put it on!!
     total_cycle += get_entry_size(this_entry);
-    assert(!entrys.contains(new_entry_id));
+    assert(!entrys.count(new_entry_id));
     entrys.insert({new_entry_id, this_entry});
     entrys.erase(entry_id);
   }
