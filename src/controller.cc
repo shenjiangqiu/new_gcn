@@ -24,18 +24,40 @@ void controller::handle_buffer_relative_cycle() {
     // from nodes to address
     std::vector<uint64_t> addrs;
     // from nodes to addres
+    // for (auto &&i : next_task.input_nodes) {
+    //   uint64_t start_addr = i * currentnodeDim * 4 + currentInputBaseAddr;
+    //   uint64_t end_addr = start_addr + currentnodeDim * 4;
+
+    //   while (start_addr < end_addr) {
+    //     addrs.push_back(start_addr);
+    //     start_addr += 64;
+    //   }
+    // }
+    // change here, generate the address from the csc format node
+    auto total_size = 0u;
     for (auto &&i : next_task.input_nodes) {
-      uint64_t start_addr = i * currentnodeDim * 4 + currentInputBaseAddr;
-      uint64_t end_addr = start_addr + currentnodeDim * 4;
-      while (start_addr < end_addr) {
-        addrs.push_back(start_addr);
-        start_addr += 64;
-      }
+
+      // the start addr of the node
+      auto edges = m_vec.get_input_node_edges(next_task.current_layer, i);
+      total_size += edges;
     }
+
+    uint64_t start_addr =
+        next_task.input_nodes[0] * 1024 * 4 + currentInputBaseAddr;
+    uint64_t end_addr = start_addr + total_size * 2;
+    while (start_addr < end_addr) {
+      addrs.push_back(start_addr);
+      start_addr += 64;
+    }
+
     req->set_addr(addrs);
     req->t = device_types::input_buffer;
     req->req_type = mem_request::read;
     req->items_cnt = next_task.total_edges;
+    req->edges = next_task.reverse_edges;
+
+    // fix bug here, add the current layer to the req
+    req->current_layer = next_task.current_layer;
     // if (next_task.total_edges >= 1000000) {
     //   throw std::runtime_error("total edges too large!!");
     // }
@@ -63,7 +85,7 @@ void controller::handle_buffer_relative_cycle() {
     }
     auto &req = i_bf->getCurrentReq();
     assert(req->nodeDim > 0);
-    agg->add_task(req, req->nodeDim);
+    agg->add_task(req, req->nodeDim, m_vec);
     i_bf->setCurrentState(InputBufferState::reading);
   }
 
@@ -98,6 +120,7 @@ void controller::handle_buffer_relative_cycle() {
       i_bf->getCurrentState() == InputBufferState::reading) {
     i_bf->setCurrentState(InputBufferState::empty);
   }
+
 }
 void controller::cycle() {
   // update the controller signal
@@ -157,7 +180,7 @@ void controller::handle_work_insert() {
         // if (next_to_insert_edge.first == 0) {
         //   GCN_INFO_S("find 0 to insert");
         // }
-
+        // fmt::print("insert: {}\n", next_to_insert_edge.first);
         auto result1 = hashtable1.insert(this->next_to_insert_edge.first,
                                          this->next_to_insert_edge.second);
         if (result1 == 0) {
@@ -168,8 +191,10 @@ void controller::handle_work_insert() {
                      hashtable1.get_total_size());
           break;
         }
+
+        // fix bug here
         auto result2 = hashTable2.insert(next_to_insert_edge.second,
-                                         next_to_insert_edge.second);
+                                         next_to_insert_edge.first);
         if (result2 == 0) {
           // fail to insert hashtable 2, need to pop hashtable 1
           hashtable1.delete_last(next_to_insert_edge.first);
@@ -275,6 +300,18 @@ void controller::handle_work_insert() {
     assert(all_tasks_pool.empty());
     // fix bug here, because we use seperate insert and task generationlogic, so
     // the meta data change should happend when the real layer changed
+    // empyty the vec
+    // first get the multiply cycles of the current layer
+    global_definitions.sparse_mult_cycles += m_vec.getMultiplyCycles(
+        nodeDims[current_running_layer + 1]);
+
+    // second, get the mask cycles of the current layer
+    if (current_running_layer < finalLayer - 1)
+      global_definitions.sparse_mask_cycles +=
+          m_vec.getMaskCycles(current_running_layer);
+    // swtich to the next layer
+
+    m_vec.switch_to_next_layer();
 
     current_running_layer++;
     currentInputBaseAddr += currentnodeDim * 4 * totalNodes;
@@ -309,8 +346,11 @@ controller::controller(const Graph &m_graph, const shared_ptr<InputBuffer> &iBf,
                        unsigned int shortLargeDivider,
                        unsigned int shortQueueSize, unsigned int largeQueueSize,
                        unsigned int taskQueueSize, unsigned int aggBufferSize,
-                       bool enable_outer_list, std::string outer_name)
-    : short_large_divider(shortLargeDivider),
+                       bool enable_outer_list, std::string outer_name,
+                       std::vector<std::string> in_names,
+                       std::vector<std::string> mask_names)
+    : m_vec(in_names, mask_names),
+      short_large_divider(shortLargeDivider),
       hashtable1(config::hash_table_size / 8),
       hashTable2(config::hash_table_size / 8), short_queue_size(shortQueueSize),
       large_queue_size(largeQueueSize), task_queue_size(taskQueueSize),
@@ -348,7 +388,11 @@ void controller::handle_task_generation() {
   }
 
   if (remaining_cycle_build_task == 0 and remaining_cycle_insert_hash == 0) {
-    auto task = agg_task{.input_nodes = {}, .total_edges = 0, .edges = {}};
+    auto task = agg_task{.input_nodes = {},
+                         .total_edges = 0,
+                         .edges = {},
+                         .reverse_edges = {},
+                         .current_layer = current_running_layer};
 
     if (task_generation_queue.size() < task_queue_size) {
       // might send the task
@@ -375,7 +419,7 @@ void controller::handle_task_generation() {
       //   fmt::print("{}\n", fmt::join(hashtable1.get_edges(57), ","));
       // }
 
-      unsigned current_agg_size=hashtable1.size();
+      unsigned current_agg_size = hashtable1.size();
       while ((total_generated_input < max_input_num) and
              (config::enable_ideal_selection
                   ? !all_tasks_pool.empty()
@@ -383,7 +427,7 @@ void controller::handle_task_generation() {
 
         // select one output node from sorted queue
         unsigned selected_element = -1;
-        
+
         selected_element =
             config::enable_ideal_selection
                 ? all_tasks_pool.begin()->second
@@ -399,9 +443,15 @@ void controller::handle_task_generation() {
               all_tasks_pool.erase(all_tasks_pool.begin());
             } else {
               remove_from_queue(short_queue, large_queue, selected_element);
+              if(!have_any_element(short_queue, large_queue)) {
+                break;
+              }
             }
           } else {
             break;
+          }
+          if(!have_any_element(short_queue, large_queue)) {
+            throw std::runtime_error("should not happen");
           }
           selected_element =
               config::enable_ideal_selection
@@ -420,7 +470,7 @@ void controller::handle_task_generation() {
         // item
 
         // fix bug here, we need input edge here, not in_edge
-
+        // fmt::print("remove {}\n", selected_element);
         remaining_cycle_build_task +=
             hashtable1.query_and_delete(selected_element, in_edge);
 
@@ -494,21 +544,30 @@ void controller::handle_task_generation() {
         }
       } // end while
 
-
       if (task.input_nodes.size()) {
+        // build reverse edges
+        std::map<unsigned, std::vector<unsigned>> reverse_edges;
+        for (auto &&i : task.edges) {
+          for (auto &&j : i.second) {
+            reverse_edges[j].push_back(i.first);
+          }
+        }
+        for (auto &&i : reverse_edges) {
+          task.reverse_edges.push_back({i.first, i.second});
+        }
+
         global_definitions.sliding_window_input_buffer_nodes += max_input_num;
-          global_definitions.sliding_window_input_nodes += task.input_nodes.size();
-          global_definitions.sliding_window_effect_input_nodes +=
-              task.input_nodes.size();
+        global_definitions.sliding_window_input_nodes +=
+            task.input_nodes.size();
+        global_definitions.sliding_window_effect_input_nodes +=
+            task.input_nodes.size();
 
-          
-              global_definitions.total_edges_in_window += task.total_edges;
-            
-          global_definitions.total_window_size +=
-              (task.input_nodes.size()) * (current_agg_size);
-          global_definitions.input_traffic +=
-              (task.input_nodes.size()) * currentnodeDim * 4;
+        global_definitions.total_edges_in_window += task.total_edges;
 
+        global_definitions.total_window_size +=
+            (task.input_nodes.size()) * (current_agg_size);
+        global_definitions.input_traffic +=
+            (task.input_nodes.size()) * currentnodeDim * 4;
 
         if (current_running_layer == 0) {
 

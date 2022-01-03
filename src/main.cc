@@ -109,6 +109,8 @@ int main(int argc, char **argv) {
     auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
     std::vector<unsigned> m_node_feature_dim;
     std::vector<unsigned> m_input_num;
+    // fix bug here, the input num should be changed for sparse input
+    
     // fix bug here, nodeDim is the number of features per node, not the real
     // node size,//maybe rename it? do it!
     for (auto i = 0u; i < node_dim_per_layer.size() - 1; i++) {
@@ -119,12 +121,27 @@ int main(int argc, char **argv) {
     GCN_INFO("the input num: {}", fmt::join(m_input_num, ","));
     GCN_INFO("the nodeDim num: {}", fmt::join(node_dim_per_layer, ","));
     GCN_INFO("the buffersize num: {}", config::inputSize);
+    // load names
+    std::vector<std::string> in_names;
+    std::vector<std::string> mask_names;
+    std::string temp;
+    std::string origin_in_names = std::string(config::in_names);
+    std::stringstream ss(origin_in_names);
+    while (std::getline(ss, temp, ',')) {
+      in_names.push_back(temp);
+    }
 
+    std::string origin_mask_names = std::string(config::mask_names);
+    std::stringstream ss3(origin_mask_names);
+    while (std::getline(ss3, temp, ',')) {
+      mask_names.push_back(temp);
+    }
+    // STEP 1: create the controller
     auto m_controller = fast_sched::controller(
         *m_graph, i_bf, m_node_feature_dim, m_input_num, m_agg, m_mem,
         config::short_large_divider, config::short_queue_size,
         config::large_queue_size, config::task_queue_size, config::aggSize,
-        config::enable_outer_list, std::string(config::outer_name));
+        config::enable_outer_list, std::string(config::outer_name), in_names, mask_names);
 
     global_definitions.cycle = 0;
     uint mem_round = 0;
@@ -178,14 +195,23 @@ int main(int argc, char **argv) {
     fmt::print("controller_layer_0_edges:{}\n",
                global_definitions.controller_layer_0_edges);
 
+    fmt::print("sliding_window_input_buffer_nodes: {}\n",
+               global_definitions.sliding_window_input_buffer_nodes);
+    fmt::print("sliding_window_input_nodes: {}\n",
+               global_definitions.sliding_window_input_nodes);
+    fmt::print("sliding_window_effect_input_nodes: {}\n",
+               global_definitions.sliding_window_effect_input_nodes);
+    fmt::print("total_edges_in_window: {}\n",
+               global_definitions.total_edges_in_window);
+    fmt::print("total_window_size: {}\n", global_definitions.total_window_size);
+    fmt::print("input_traffic: {}\n", global_definitions.input_traffic);
 
-    fmt::print("sliding_window_input_buffer_nodes: {}\n",global_definitions.sliding_window_input_buffer_nodes);
-    fmt::print("sliding_window_input_nodes: {}\n",global_definitions.sliding_window_input_nodes);
-    fmt::print("sliding_window_effect_input_nodes: {}\n",global_definitions.sliding_window_effect_input_nodes);
-    fmt::print("total_edges_in_window: {}\n",global_definitions.total_edges_in_window);
-    fmt::print("total_window_size: {}\n",global_definitions.total_window_size);
-    fmt::print("input_traffic: {}\n",global_definitions.input_traffic);
-
+    // sparse related cycles
+    fmt::print("sparse add: {}\n", global_definitions.sparse_agg_cycles);
+    fmt::print("sparse_mult_cycles: {}\n",
+               global_definitions.sparse_mult_cycles);
+    fmt::print("sparse_mask_cycles: {}\n",
+               global_definitions.sparse_mask_cycles);
 
   } else {
     System m_system(config::inputSize, config::edgeSize, config::aggSize,
@@ -194,13 +220,16 @@ int main(int argc, char **argv) {
                     (std::string)config::dram_name, m_model);
     m_system.run();
 
-
-    fmt::print("sliding_window_input_buffer_nodes: {}\n",global_definitions.sliding_window_input_buffer_nodes);
-    fmt::print("sliding_window_input_nodes: {}\n",global_definitions.sliding_window_input_nodes);
-    fmt::print("sliding_window_effect_input_nodes: {}\n",global_definitions.sliding_window_effect_input_nodes);
-    fmt::print("total_edges_in_window: {}\n",global_definitions.total_edges_in_window);
-    fmt::print("total_window_size: {}\n",global_definitions.total_window_size);
-    fmt::print("input_traffic: {}\n",global_definitions.input_traffic);
+    fmt::print("sliding_window_input_buffer_nodes: {}\n",
+               global_definitions.sliding_window_input_buffer_nodes);
+    fmt::print("sliding_window_input_nodes: {}\n",
+               global_definitions.sliding_window_input_nodes);
+    fmt::print("sliding_window_effect_input_nodes: {}\n",
+               global_definitions.sliding_window_effect_input_nodes);
+    fmt::print("total_edges_in_window: {}\n",
+               global_definitions.total_edges_in_window);
+    fmt::print("total_window_size: {}\n", global_definitions.total_window_size);
+    fmt::print("input_traffic: {}\n", global_definitions.input_traffic);
   }
 
   return 0;

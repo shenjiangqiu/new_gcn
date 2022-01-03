@@ -94,19 +94,19 @@ public:
   unsigned controlloer_layer_0_windows = 0;
   unsigned controller_layer_0_edges = 0;
 
+  unsigned long long sliding_window_input_buffer_nodes = 0;
 
-  unsigned long long sliding_window_input_buffer_nodes=0;
+  unsigned long long sliding_window_input_nodes = 0;
+  unsigned long long sliding_window_effect_input_nodes = 0;
 
-  unsigned long long sliding_window_input_nodes=0;
-  unsigned long long sliding_window_effect_input_nodes=0;
+  unsigned long long total_edges_in_window = 0;
+  unsigned long long total_window_size = 0;
 
-  unsigned long long total_edges_in_window=0;
-  unsigned long long total_window_size=0;
+  unsigned long long input_traffic = 0;
 
-  unsigned long long input_traffic=0;
-  
-  
-
+  unsigned long long sparse_agg_cycles = 0;
+  unsigned long long sparse_mult_cycles = 0;
+  unsigned long long sparse_mask_cycles = 0;
 };
 extern globals global_definitions;
 
@@ -154,5 +154,8 @@ extern Minisat::BoolOption enable_single_entry_hash2;
 extern Minisat::BoolOption enable_reduced_entry_hash2;
 // extern Minisat::BoolOption enable_duponly_entry_hash2;
 extern Minisat::BoolOption enable_placeholder_hash2;
+
+extern Minisat::StringOption in_names;
+extern Minisat::StringOption mask_names;
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

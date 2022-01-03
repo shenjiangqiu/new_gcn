@@ -25,7 +25,7 @@
                 "-aggCores=512",
                 "-systolic-rows=32",
                 "-systolic-cols=128",
-                "-graph-name=amazon_cs_graph_data",
+                "-graph-name=cora",
                 "-dram-name=HBM-config.cfg",
                 "-model=gsc",
                 "-ignore-neighbor=0",
@@ -42,6 +42,7 @@
                 // "-enable-outer-list",
                 "-enable-ideal-hash1", 
                 "-outer-name=lists/amazon_cs_graph_data.graph.bfs.30.seqresult",
+                "-in-names=cora_0_x.txt,cora_1_x.txt,cora_2_x.txt", "-mask-names=cora_0_y.txt,cora_1_y.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/run_outer_queue",

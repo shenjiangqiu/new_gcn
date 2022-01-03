@@ -140,7 +140,9 @@ public:
     //   fmt::print("{}\n", fmt::join(entrys.at(15).get_edges(), ", "));
     // }
     auto entryId = get_entry_id_from_node_id(node_id);
-
+    if(entrys.count(entryId) == 0) {
+      return 0;
+    }
     // here, we are going to delete the total len because it's real moved during
     // query, when it's influenced by other input, we are going to reduce the
     // real_len

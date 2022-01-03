@@ -16,10 +16,13 @@ public:
     id = global_id;
     global_id++;
     items_cnt = 0;
+
   }
+  unsigned current_layer;
   unsigned nodeDim{};
   unsigned id;
   unsigned items_cnt; //#vertices or #edges
+  std::vector<std::pair<unsigned,std::vector<unsigned>>> edges;
   device_types t;
   mem_request req_type;
   bool the_final_request = false;

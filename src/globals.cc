@@ -106,4 +106,7 @@ Minisat::BoolOption enable_duponly_entry_hash2("system",
 Minisat::BoolOption enable_placeholder_hash2("system",
                                              "enable-placeholder-hash2",
                                              "enable-placeholder-hash2", false);
+
+Minisat::StringOption in_names("system", "in-names", "", "");
+Minisat::StringOption mask_names("system", "mask-names", "", "");
 } // namespace config

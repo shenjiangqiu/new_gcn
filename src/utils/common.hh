@@ -44,7 +44,9 @@ elementType get_the_first_valid_element(const queueType &q1,
     // if (q2.empty()) {
     //   throw std::runtime_error("long queue is empty!!!");
     // }
-
+    if(q2.empty()) {
+      throw std::runtime_error("long queue is empty!!!");
+    }
     auto e = q2.front();
     // if (e == 0) {
     //   GCN_INFO_S("0!");

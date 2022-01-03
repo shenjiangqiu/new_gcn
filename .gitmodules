@@ -10,3 +10,6 @@
 [submodule "deps/cppitertools"]
 	path = deps/cppitertools
 	url = https://github.com/ryanhaining/cppitertools.git
+[submodule "deps/sparse_operations"]
+	path = deps/sparse_operations
+	url = git@github.com:shenjiangqiu/sparse_operations.git

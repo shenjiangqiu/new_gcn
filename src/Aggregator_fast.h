@@ -10,6 +10,7 @@
 #include "fast_sched.h"
 #include <unordered_map>
 #include <vector>
+#include <sparseVector.h>
 namespace fast_sched {
 class Aggregator_fast {
 public:
@@ -19,7 +20,7 @@ public:
 
   explicit Aggregator_fast(int totalCores);
 
-  void add_task(const shared_ptr<Req> &req, unsigned node_dim);
+  void add_task(const shared_ptr<Req> &req, unsigned node_dim,sparseVector &m_vec);
   unsigned get_total_rounds() const{
     return total_rounds;
   }

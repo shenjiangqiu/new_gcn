@@ -13,6 +13,7 @@
 #include "fast_sched.h"
 #include <Hash_table.h>
 #include <deque>
+#include <sparseVector.h>
 #include <utils/average_number.hh>
 namespace fast_sched {
 using pool = output_pool;
@@ -49,7 +50,9 @@ private:
 struct agg_task {
   std::vector<unsigned> input_nodes;
   unsigned total_edges;
-  std::vector<std::pair<unsigned,std::vector<unsigned>>> edges;
+  std::vector<std::pair<unsigned, std::vector<unsigned>>> edges;
+  std::vector<std::pair<unsigned, std::vector<unsigned>>> reverse_edges;
+  unsigned current_layer;
 };
 
 class controller {
@@ -63,7 +66,9 @@ public:
              std::shared_ptr<memory_interface> mMem,
              unsigned int shortLargeDivider, unsigned int shortQueueSize,
              unsigned int largeQueueSize, unsigned int taskQueueSize,
-             unsigned int aggBufferSize, bool, std::string);
+             unsigned int aggBufferSize, bool, std::string,
+             std::vector<std::string> in_names,
+             std::vector<std::string> mask_names);
   controller() = delete;
   // operation
   void cycle();
@@ -72,7 +77,7 @@ public:
 
 private:
   void handle_insert_queue(bool is_short);
-
+  sparseVector m_vec;
   // store a tmepory edge when insert fail
   bool next_to_insert_valid{false};
   std::pair<unsigned, unsigned> next_to_insert_edge{0, 0};
@@ -126,6 +131,8 @@ private:
   bool all_finished = false;
 
   std::vector<unsigned> m_inputNodeNum;
+  std::vector<unsigned> m_inputNodeDims;
+
   std::shared_ptr<Aggregator_fast> agg;
   std::shared_ptr<memory_interface> m_mem;
 
