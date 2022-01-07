@@ -13,6 +13,7 @@
 #include "buffer.h"
 #include "memory_interface.h"
 #include <Slide_window.h>
+#include <sparseVector.h>
 #include <utils/average_number.hh>
 class System {
 public:
@@ -20,7 +21,8 @@ public:
          int outputBufferSize, int aggTotalCores, int systolic_rows,
          int systolic_cols, std::shared_ptr<Graph> graph,
          std::vector<int> node_dim, const std::string &dram_config_name,
-         std::shared_ptr<Model> mModel);
+         std::shared_ptr<Model> mModel,
+         std::shared_ptr<sparseVector> m_vec, bool enable_sparse);
   void print() const;
   void cycle();
   void run();
@@ -30,6 +32,8 @@ public:
   }
 
 private:
+  bool enable_sparse;
+  std::shared_ptr<sparseVector> m_vec;
   std::vector<average_number> average_window_size;
   std::shared_ptr<Graph> m_graph;
 

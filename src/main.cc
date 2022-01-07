@@ -102,28 +102,10 @@ int main(int argc, char **argv) {
   GCN_INFO("print out model levels {}", fmt::join(node_dim_per_layer, ","));
 
   GCN_INFO("memory simulator: {}", config::mem_sim);
-  if (config::enable_fast_sched) {
-    auto i_bf = std::make_shared<fast_sched::InputBuffer>();
-    auto m_agg =
-        std::make_shared<fast_sched::Aggregator_fast>(config::aggCores);
-    auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
-    std::vector<unsigned> m_node_feature_dim;
-    std::vector<unsigned> m_input_num;
-    // fix bug here, the input num should be changed for sparse input
-    
-    // fix bug here, nodeDim is the number of features per node, not the real
-    // node size,//maybe rename it? do it!
-    for (auto i = 0u; i < node_dim_per_layer.size() - 1; i++) {
-      m_node_feature_dim.push_back(node_dim_per_layer[i]);
-      m_input_num.push_back((config::inputSize / 2) /
-                            (node_dim_per_layer[i] * 4));
-    }
-    GCN_INFO("the input num: {}", fmt::join(m_input_num, ","));
-    GCN_INFO("the nodeDim num: {}", fmt::join(node_dim_per_layer, ","));
-    GCN_INFO("the buffersize num: {}", config::inputSize);
-    // load names
-    std::vector<std::string> in_names;
-    std::vector<std::string> mask_names;
+  // load names
+  std::vector<std::string> in_names;
+  std::vector<std::string> mask_names;
+  if (config ::enable_sparse) {
     std::string temp;
     std::string origin_in_names = std::string(config::in_names);
     std::stringstream ss(origin_in_names);
@@ -136,12 +118,34 @@ int main(int argc, char **argv) {
     while (std::getline(ss3, temp, ',')) {
       mask_names.push_back(temp);
     }
+  }
+  if (config::enable_fast_sched) {
+    auto i_bf = std::make_shared<fast_sched::InputBuffer>();
+    auto m_agg =
+        std::make_shared<fast_sched::Aggregator_fast>(config::aggCores);
+    auto m_mem = std::make_shared<memory_interface>("HBM-config.cfg", "", 64);
+    std::vector<unsigned> m_node_feature_dim;
+    std::vector<unsigned> m_input_num;
+    // fix bug here, the input num should be changed for sparse input
+
+    // fix bug here, nodeDim is the number of features per node, not the real
+    // node size,//maybe rename it? do it!
+    for (auto i = 0u; i < node_dim_per_layer.size() - 1; i++) {
+      m_node_feature_dim.push_back(node_dim_per_layer[i]);
+      m_input_num.push_back((config::inputSize / 2) /
+                            (node_dim_per_layer[i] * 4));
+    }
+    GCN_INFO("the input num: {}", fmt::join(m_input_num, ","));
+    GCN_INFO("the nodeDim num: {}", fmt::join(node_dim_per_layer, ","));
+    GCN_INFO("the buffersize num: {}", config::inputSize);
+
     // STEP 1: create the controller
     auto m_controller = fast_sched::controller(
         *m_graph, i_bf, m_node_feature_dim, m_input_num, m_agg, m_mem,
         config::short_large_divider, config::short_queue_size,
         config::large_queue_size, config::task_queue_size, config::aggSize,
-        config::enable_outer_list, std::string(config::outer_name), in_names, mask_names);
+        config::enable_outer_list, std::string(config::outer_name), in_names,
+        mask_names);
 
     global_definitions.cycle = 0;
     uint mem_round = 0;
@@ -214,10 +218,15 @@ int main(int argc, char **argv) {
                global_definitions.sparse_mask_cycles);
 
   } else {
+    std::shared_ptr<sparseVector> m_vec;
+    m_vec = config::enable_sparse
+                ? std::make_shared<sparseVector>(in_names, mask_names)
+                : nullptr;
     System m_system(config::inputSize, config::edgeSize, config::aggSize,
                     config::outputSize, config::aggCores, config::systolic_rows,
                     config::systolic_cols, m_graph, node_dim_per_layer,
-                    (std::string)config::dram_name, m_model);
+                    (std::string)config::dram_name, m_model, m_vec,
+                    config::enable_sparse);
     m_system.run();
 
     fmt::print("sliding_window_input_buffer_nodes: {}\n",

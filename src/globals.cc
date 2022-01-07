@@ -109,4 +109,6 @@ Minisat::BoolOption enable_placeholder_hash2("system",
 
 Minisat::StringOption in_names("system", "in-names", "", "");
 Minisat::StringOption mask_names("system", "mask-names", "", "");
+Minisat::BoolOption enable_sparse("system", "enable-sparse", "enable-sparse",
+                                  false);
 } // namespace config

@@ -150,8 +150,26 @@ void SystolicArray::cycle() {
                 *std::static_pointer_cast<Slide_window>(current_sliding_window),
                 req->the_final_request, req->the_final_request_of_the_layer);
 
-    req->set_addr(current_sliding_window->getOutputAddr(),
-                  current_sliding_window->getOutputLen());
+    if (config::enable_sparse) {
+
+      // approximate here, ignore the last one to avoid overflow
+      // because our get_start_addr_masks() do not support the element after the
+      // last one
+      auto x_start = current_sliding_window->getX();
+      auto x_end = x_start + current_sliding_window->getXw() - 1;
+
+      // culculate the write address range:
+      auto layer = current_sliding_window->getLevel();
+      auto addr_start =
+          global_definitions.m_vec->get_start_addr_masks(layer, x_start);
+      auto addr_end =
+          global_definitions.m_vec->get_start_addr_masks(layer, x_end);
+      auto len = addr_end - addr_start;
+      req->set_addr(addr_start, len);
+    } else {
+      req->set_addr(current_sliding_window->getOutputAddr(),
+                    current_sliding_window->getOutputLen());
+    }
     req->t = device_types::output_buffer;
     req->req_type = mem_request::write;
     output_buffer->start_write_to_buffer(req);
@@ -160,17 +178,27 @@ void SystolicArray::cycle() {
     assert(remaining_cycle == 0);
     empty = false;
     running = true;
+    if (config::enable_sparse) {
+      remaining_cycle =
+          global_definitions.m_vec->getMultiplyCycles(256) / ((256 * 30));
 
-    remaining_cycle = cal_remaining_cycle();
-    global_definitions.do_systolic += remaining_cycle;
-    // start agg buffer read
+      fmt::print("systolic array cycle:{}\n", remaining_cycle);
+      global_definitions.do_systolic += remaining_cycle;
+
+    } else {
+      remaining_cycle = cal_remaining_cycle();
+      fmt::print("systolic array cycle:{}\n", remaining_cycle);
+
+      global_definitions.do_systolic += remaining_cycle;
+      // start agg buffer read
+    }
     agg_buffer->start_read();
 
   } else {
     // fix bug here!
     // only when it's empy we can consider it's idle and count
-    if(empty){
-      //it's empty but cannot serve! find the reason!!
+    if (empty) {
+      // it's empty but cannot serve! find the reason!!
       if (!agg_buffer->isReadReady()) {
         global_definitions.total_waiting_agg_read++;
       }

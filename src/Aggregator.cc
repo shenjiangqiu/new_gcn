@@ -15,11 +15,11 @@ Aggregator::Aggregator(const shared_ptr<InputBuffer> &inputBuffer,
                        const shared_ptr<Aggregator_buffer> &aggBuffer,
                        int totalCores)
     : input_buffer(inputBuffer), edge_buffer(edgeBuffer), agg_buffer(aggBuffer),
-      total_cores(totalCores) {
-  cur_layer = 0;
-}
+      total_cores(totalCores) {}
 
 void Aggregator::cycle() {
+  unsigned current_layer =
+      current_sliding_window ? current_sliding_window->getLevel() : 0;
 
   if (working) {
     // current running one task
@@ -60,13 +60,44 @@ void Aggregator::cycle() {
         (agg_buffer->isWriteEmpty() or
          (current_sliding_window and agg_buffer->getWriteWindow()->getX() ==
                                          current_sliding_window->getX()))) {
-
-      current_sliding_window = *(input_buffer->getMCurrentIter());
-      remaining_cycles = calculate_remaining_cycle();
-      global_definitions.do_aggregate += remaining_cycles;
-
       working = true;
-      cur_layer = current_sliding_window->getLevel();
+      static unsigned last_layer = 0;
+      if (config::enable_sparse) {
+        if (current_layer != last_layer) {
+          // layer changed
+          GCN_INFO("layer changed. last layer: {} cur layer: {}", last_layer,
+                   current_layer);
+          last_layer = current_layer;
+          global_definitions.m_vec->switch_to_next_layer();
+        }
+      }
+      current_sliding_window = *(input_buffer->getMCurrentIter());
+
+      if (config::enable_sparse) {
+        auto total_cycle = 0;
+        auto edges = current_sliding_window->get_edges_csc();
+
+        auto p_task = std::vector<std::vector<unsigned>>();
+        auto p_output = std::vector<unsigned>();
+        for (auto i = 0u; i < edges.size(); i++) {
+          p_task.push_back(edges[i].second);
+          p_output.push_back(edges[i].first);
+        }
+
+        // TODO
+        total_cycle += global_definitions.m_vec->getAddCycles(p_task, p_output,
+                                                              current_layer);
+        fmt::print("all outputs to agg:{}\n", fmt::join(p_output, ","));
+        total_cycle = (total_cycle + total_cores - 1) / total_cores;
+
+        // statistics
+        global_definitions.sparse_agg_cycles += total_cycle;
+        remaining_cycles = total_cycle;
+
+      } else {
+        remaining_cycles = calculate_remaining_cycle();
+        global_definitions.do_aggregate += remaining_cycles;
+      }
 
       if (current_sliding_window->isTheFirstRow()) {
         agg_buffer->add_new_task(current_sliding_window);
@@ -83,7 +114,7 @@ void Aggregator::cycle() {
     } else {
       if (!input_buffer->isCurrentReady()) {
         global_definitions.total_waiting_input++;
-        global_definitions.layer_wait_input[cur_layer]++;
+        global_definitions.layer_wait_input[current_layer]++;
       }
       if (!edge_buffer->isCurrentReady()) {
         global_definitions.total_waiting_edge++;
@@ -120,7 +151,7 @@ void Aggregator::updateEdgesHist(int flag, int value) {
   }
 }
 
-//123
+// 123
 int Aggregator::calculate_remaining_cycle() {
 
   // Update here, now the ignored features are not count for calculation
@@ -128,8 +159,8 @@ int Aggregator::calculate_remaining_cycle() {
   auto total_nodes = current_sliding_window->getNumEdgesInWindow();
 
   auto node_dim = current_sliding_window
-                       ->getCurrentnodeDim(); // num features in one node//not
-                                               // the bytes in one nodes
+                      ->getCurrentnodeDim(); // num features in one node//not
+                                             // the bytes in one nodes
 
   if (current_sliding_window->getLevel() == 0)
     node_dim -= config::ignore_neighbor;

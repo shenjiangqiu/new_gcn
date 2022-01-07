@@ -16,20 +16,17 @@ public:
     id = global_id;
     global_id++;
     items_cnt = 0;
-
   }
-  unsigned current_layer;
+  unsigned current_layer=0;
   unsigned nodeDim{};
   unsigned id;
   unsigned items_cnt; //#vertices or #edges
-  std::vector<std::pair<unsigned,std::vector<unsigned>>> edges;
+  std::vector<std::pair<unsigned, std::vector<unsigned>>> edges;
   device_types t;
   mem_request req_type;
   bool the_final_request = false;
   bool the_final_request_of_the_layer = false;
-  [[nodiscard]] const std::vector<uint64_t> &get_addr() const {
-    return addr;
-  }
+  [[nodiscard]] const std::vector<uint64_t> &get_addr() const { return addr; }
   [[nodiscard]] uint64_t get_single_addr() const {
     return single_addr;
   }
@@ -58,7 +55,9 @@ public:
     single_len += rounded;
   }
 
-  [[nodiscard]] unsigned get_len() const { return use_continue_addr ? single_len : addr.size(); }
+  [[nodiscard]] unsigned get_len() const {
+    return use_continue_addr ? single_len : addr.size();
+  }
 
   /*void add64(){
     addr+=64;

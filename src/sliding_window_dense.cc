@@ -250,6 +250,18 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           col_i * node_dim_s.at(level_i + 1) * single_node_dim;
 
       // count the edges for each row.
+      // csr format for col_i to col_end
+      std::map<int, std::vector<int>> all_edges_map;
+
+      for (auto col_start = col_i; col_start < col_end; col_start++) {
+        auto start_idx = edge_index[col_start];
+        auto end_idx = edge_index[col_start + 1];
+        for (auto idx = start_idx; idx < end_idx; idx++) {
+          auto row = m_graph->get_edges()[idx];
+          // build map, key is the row, value is the vector of cols
+          all_edges_map[row].push_back(col_start);
+        }
+      }
       for (auto e_index : irange(start_edge_index, end_edge_index)) {
         row_to_count[m_graph->get_edges()[e_index]]++;
       }
@@ -312,6 +324,8 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           };
 
           // gain information from all_edges
+          auto window = std::make_shared<dense_window>();
+          std::map<unsigned, std::vector<unsigned>> col_to_rows;
           for (auto node : all_edges) {
             auto item = *node;
             auto node_id = item.first;
@@ -325,10 +339,15 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
               len -= 64;
               node_addr += 64;
             }
+            for (auto col : all_edges_map[node_id]) {
+              col_to_rows[col].push_back(node_id);
+            }
+          }
+          for (auto i : col_to_rows) {
+            window->edges_csc.push_back({i.first, i.second});
           }
 
           // start to setup the window
-          auto window = std::make_shared<dense_window>();
           window->set_location(col_i, col_end - col_i, input_nodes, level_i);
           window->set_addr(input_addrs, input_addrs.size(), start_edge_addr,
                            edge_len, output_addr, output_len);
@@ -348,8 +367,11 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           }
           global_definitions.total_window_size +=
               (input_nodes.size()) * (col_end - col_i);
-          global_definitions.input_traffic +=
-              (input_nodes.size()) * node_dim_s[level_i] * 4;
+          if (config::enable_sparse) {
+          } else {
+            global_definitions.input_traffic +=
+                (input_nodes.size()) * node_dim_s[level_i] * 4;
+          }
 
           m_sliding_window_vec.push_back(
               std::static_pointer_cast<sliding_window_interface>(window));
@@ -359,6 +381,7 @@ dense_window_set::dense_window_set(std::shared_ptr<Graph> mGraph,
           current_col_input_len += current_row_input_len;
         }
       } else {
+        throw std::runtime_error("not support sparse model yet");
         // build shrink-skip based window
         // skipping
         unsigned row_i = 0;

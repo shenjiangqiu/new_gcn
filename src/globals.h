@@ -9,6 +9,7 @@
 #include "utils/Options.h"
 #include "vector"
 #include <spdlog/sinks/basic_file_sink.h>
+#include <sparseVector.h>
 #define add_config_uint64()                                                    \
   {}
 #define add_config_ull()                                                       \
@@ -20,6 +21,8 @@
 
 class globals {
 public:
+  std::shared_ptr<sparseVector> m_vec;
+  bool enable_sparse=false;
   std::shared_ptr<spdlog::logger> edge_agg_logger;
   std::shared_ptr<spdlog::logger> default_logger;
 
@@ -80,7 +83,7 @@ public:
   std::vector<uint64_t> finished_time_stamp;
 
   std::map<std::string, Model> m_models{
-      {"gcn", Model("gcn", {16, 16}, false, false, 0)},
+      {"gcn", Model("gcn", {256, 256, 16}, false, false, 0)},
       {"gsc", Model("gsc", {512, 512}, false, true, 25)},
       {"gin", Model("gin", {64, 64, 64, 64, 64}, false, false, 0)}};
 
@@ -157,5 +160,7 @@ extern Minisat::BoolOption enable_placeholder_hash2;
 
 extern Minisat::StringOption in_names;
 extern Minisat::StringOption mask_names;
+extern Minisat::BoolOption enable_sparse;
+
 } // namespace config
 #endif // GCN_SIM_GLOBALS_H

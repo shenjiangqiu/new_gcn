@@ -301,6 +301,7 @@ void InputBuffer::cycle() {
        handle_multiple_input_buffer( );
        return;
   }*/
+
   if (current_empty) {
 
     if (!next_empty) {
@@ -324,6 +325,29 @@ void InputBuffer::cycle() {
   }
 }
 
+void dense_pop_requst(window_iter &iter, std::shared_ptr<Req> &req) {
+  if (config::enable_sparse) {
+    auto layer = (*iter)->getLevel();
+    std::set<unsigned long long> all_addrs;
+
+    for (auto i : (**iter).getY()) {
+      auto start_addr =
+          global_definitions.m_vec->get_start_addr_input(layer, i);
+      auto len = global_definitions.m_vec->get_input_node_edges(layer, i);
+      auto end_addr = start_addr + len * 4;
+      for (auto i = start_addr; i < end_addr; i += 64) {
+        all_addrs.insert(i - i % 64);
+      }
+    }
+    fmt::print("sparse send addrs: {}\n", all_addrs.size());
+    std::vector<uint64_t> all_addrs_vec(all_addrs.begin(), all_addrs.end());
+    req->set_addr(all_addrs_vec);
+  } else {
+
+    req->set_addr((**iter).getInputAddr());
+  }
+}
+
 shared_ptr<Req> InputBuffer::pop_current() {
 
   assert(!current_empty and !current_sent);
@@ -337,9 +361,10 @@ shared_ptr<Req> InputBuffer::pop_current() {
               *std::static_pointer_cast<Slide_window>(*m_current_iter));
 
   if (config::enable_dense_window) {
-    req->set_addr((**m_current_iter).getInputAddr());
-
+    fmt::print("dense pop current\n");
+    dense_pop_requst(m_current_iter, req);
   } else {
+    throw std::runtime_error("not implemented");
     req->set_addr((**m_current_iter).getInputAddr_c(),
                   (**m_current_iter).getInputLen());
   }
@@ -366,9 +391,13 @@ shared_ptr<Req> InputBuffer::pop_next() {
     GCN_DEBUG("inputbuffer pop next:{}",
               *std::static_pointer_cast<Slide_window>(*m_next_iter));
   if (config::enable_dense_window) {
-    req->set_addr((**m_next_iter).getInputAddr());
+    // fix bug here, the send logic should be same as pop_current
+    // may be need to change the logic
 
+    // req->set_addr((**m_next_iter).getInputAddr());
+    dense_pop_requst(m_next_iter, req);
   } else {
+    throw std::runtime_error("not implemented");
     req->set_addr((**m_next_iter).getInputAddr_c(),
                   (**m_next_iter).getInputLen());
   }

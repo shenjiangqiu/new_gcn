@@ -28,14 +28,18 @@ public:
   bool operator==(const dense_window &rhs) const;
 
   bool operator!=(const dense_window &rhs) const;
-
+  virtual std::vector<std::pair<unsigned, std::vector<unsigned>>> get_edges_csc() override {
+    return edges_csc;
+  }
+  // virtual std::vector<std::pair<unsigned, std::vector<unsigned>>> get_edges_csr() override {
+  //   return edges_csr;
+  // }
   dense_window() = default;
   virtual ~dense_window() = default;
   // setting the window size and location,x:begin of x, _xw:x width
   // _y:all rows
   void set_location(unsigned x, unsigned _xw, std::vector<unsigned> _y,
                     unsigned _level) override;
-
   void set_addr(std::vector<uint64_t> inputAddr, unsigned inputLen,
                 uint64_t edgeAddr, unsigned edgeLen, uint64_t outputAddr,
                 unsigned outputLen) override;
@@ -75,8 +79,11 @@ public:
   void setTheFinalRow(bool theFinalRow) override;
 
   [[nodiscard]] unsigned getNumEdgesInWindow() const override;
+  
+  std::vector<std::pair<unsigned, std::vector<unsigned>>> edges_csc;
 
 private:
+
   unsigned x{};            // x: starting vertex ID in the aggregation buffer
   std::vector<unsigned> y; // y: starting vertex ID in the input buffer
   unsigned xw{};           // cnt of vertices in the the aggregation buffer
@@ -86,7 +93,7 @@ private:
   uint64_t edge_addr{}, output_addr{};
   unsigned input_len{}, edge_len{}, output_len{};
   unsigned num_edges_in_window{}; //#edges in the window
-  unsigned current_node_dim{};   // A feature dim.
+  unsigned current_node_dim{};    // A feature dim.
   bool the_final_col{};
   bool the_final_layer{};
 

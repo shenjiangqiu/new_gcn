@@ -36,10 +36,10 @@ TEST_CASE("mix_test") {
 
   m_model = std::make_shared<Model>(global_definitions.m_models["gcn"]);
 
-  System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
-                  (std::string)config::dram_name, m_model);
+  // System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
+  //                 (std::string)config::dram_name, m_model);
 
-  m_system.run();
+  // m_system.run();
   delete[] argv[0];
   delete[] argv[1];
   delete[] argv;
@@ -72,10 +72,10 @@ TEST_CASE("cont_test") {
 
   m_model = std::make_shared<Model>(global_definitions.m_models["gcn"]);
 
-  System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
-                  (std::string)config::dram_name, m_model);
+  // System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
+  //                 (std::string)config::dram_name, m_model,);
 
-  m_system.run();
+  // m_system.run();
   delete[] argv[0];
   delete[] argv[1];
   delete[] argv;

@@ -16,8 +16,12 @@ System::System(int inputBufferSize, int edgeBufferSize, int aggBufferSize,
                int outputBufferSize, int aggTotalCores, int systolic_rows,
                int systolic_cols, std::shared_ptr<Graph> graph,
                std::vector<int> node_dim, const std::string &dram_config_name,
-               std::shared_ptr<Model> mModel) {
-
+               std::shared_ptr<Model> mModel,
+               std::shared_ptr<sparseVector> m_vec, bool enable_sparse) {
+  this->enable_sparse = enable_sparse;
+  global_definitions.m_vec = m_vec;
+  global_definitions.enable_sparse = enable_sparse;
+  m_vec = m_vec;
   m_graph = std::move(graph);
   input_buffer_size = inputBufferSize;
   edge_buffer_size = edgeBufferSize;
@@ -312,8 +316,9 @@ void System::run() {
     auto cnt = global_definitions.layer_input_windows[i];
     auto agg_time = global_definitions.layer_do_aggregate[i];
     auto input_time = global_definitions.layer_wait_input[i];
-    float avg_agg_time = agg_time / cnt;
-    float avg_input_time = input_time / cnt;
+    float avg_agg_time = cnt == 0 ? 0 : agg_time / cnt;
+
+    float avg_input_time = cnt == 0 ? 0 : input_time / cnt;
     global_definitions.layer_window_avg_agg[i] = avg_agg_time;
     global_definitions.layer_window_avg_input[i] = avg_input_time;
   }
@@ -370,7 +375,7 @@ void System::cycle() {
                 "agg_buffer:{} \n out_buffer:{}\n ",
                 input_buffer->get_line_trace(), edge_buffer->get_line_trace(),
                 agg_buffer->get_line_trace(), output_buffer->get_line_trace());
-      if (total_detected_times == 3) {
+      if (total_detected_times == 30) {
         std::cout.flush();
         std::cerr.flush();
         throw;

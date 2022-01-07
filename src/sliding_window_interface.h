@@ -8,6 +8,7 @@
 #include "cstdint"
 #include "vector"
 #include <memory>
+#include <stdexcept>
 class sliding_window_interface {
 public:
   virtual ~sliding_window_interface() = default;
@@ -17,8 +18,8 @@ public:
                             unsigned _level) = 0;
   virtual void set_location(unsigned x, unsigned _xw, unsigned _y, unsigned yw,
                             unsigned _level) = 0;
-  virtual void set_location(std::vector<unsigned> , std::vector<unsigned> ,
-                            unsigned ) {}
+  virtual void set_location(std::vector<unsigned>, std::vector<unsigned>,
+                            unsigned) {}
   virtual void set_addr(std::vector<uint64_t> inputAddr, unsigned inputLen,
                         uint64_t edgeAddr, unsigned edgeLen,
                         uint64_t outputAddr, unsigned outputLen) = 0;
@@ -29,7 +30,15 @@ public:
 
   virtual void set_prop(bool the_final_col, bool theFinalRow, bool theFirstRow,
                         bool the_final_layer) = 0;
-
+  // edges from  to
+  virtual std::vector<std::pair<unsigned, std::vector<unsigned>>>
+  get_edges_csr() {
+    throw std::runtime_error("not implemented");
+  }
+  virtual std::vector<std::pair<unsigned, std::vector<unsigned>>>
+  get_edges_csc() {
+    throw std::runtime_error("not implemented");
+  }
   [[nodiscard]] virtual unsigned getX() const = 0;
   [[nodiscard]] virtual std::vector<unsigned int> getX_fast() const {
     return std::vector<unsigned int>();
@@ -49,7 +58,7 @@ public:
   [[nodiscard]] virtual uint64_t getEdgeAddr() const = 0;
 
   [[nodiscard]] virtual uint64_t getOutputAddr() const = 0;
-  [[nodiscard]] virtual uint64_t getOutputAddr_fast() const {return 0;}
+  [[nodiscard]] virtual uint64_t getOutputAddr_fast() const { return 0; }
 
   [[nodiscard]] virtual unsigned getInputLen() const = 0;
 

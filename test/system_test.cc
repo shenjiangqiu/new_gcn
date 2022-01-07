@@ -30,9 +30,9 @@ TEST_CASE("system_graph_test") {
                     m_model->getMLevels().end());
   spdlog::info("print out model levels {}", fmt::join(node_sizes, ","));
 
-  System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
-                  (std::string)config::dram_name, m_model);
-  auto windows = m_system.get_sliding_window();
+  // System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
+  //                 (std::string)config::dram_name, m_model);
+  // auto windows = m_system.get_sliding_window();
 
 }
 TEST_CASE("system_test", "[big]") {
@@ -56,7 +56,7 @@ TEST_CASE("system_test", "[big]") {
                     m_model->getMLevels().end());
   spdlog::info("print out model levels {}", fmt::join(node_sizes, ","));
 
-  System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
-                  (std::string)config::dram_name, m_model);
-  m_system.run();
+  // System m_system(300, 100, 300, 100, 1, 4, 4, m_graph, node_sizes,
+  //                 (std::string)config::dram_name, m_model);
+  // m_system.run();
 }
