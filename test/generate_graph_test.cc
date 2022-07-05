@@ -3,5 +3,5 @@
 //
 #include "generate_graph.h"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 TEST_CASE("generate_graph_test") { generate_test_graph(); }

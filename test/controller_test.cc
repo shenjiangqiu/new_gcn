@@ -1,7 +1,7 @@
 //
 // Created by Jiangqiu shen on 5/28/21.
 //
-#include "catch2/catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 #include "controller.h"
 #include <spdlog/spdlog.h>
 using namespace fast_sched;

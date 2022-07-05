@@ -1,4 +1,4 @@
-#include "catch2/catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 
 #include <sliding_window_dense.h>
 #include <fmt/format.h>

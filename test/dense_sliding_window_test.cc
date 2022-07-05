@@ -1,7 +1,7 @@
 //
 // Created by Jiangqiu shen on 5/5/21.
 //
-#include "catch2/catch.hpp"
+#include "catch2/catch_test_macros.hpp"
 #include "fmt/format.h"
 #include "sliding_window_dense.h"
 #include "generate_graph.h"

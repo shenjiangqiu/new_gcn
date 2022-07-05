@@ -1,7 +1,7 @@
 // //
 // // Created by Jiangqiu shen on 5/24/21.
 // //
-// #include "catch2/catch.hpp"
+// #include "catch2/catch_test_macros.hpp"
 // #include "fast_sched.h"
 // #include <globals.h>
 // TEST_CASE("fast_sched_test") {

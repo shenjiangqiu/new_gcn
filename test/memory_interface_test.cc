@@ -2,7 +2,8 @@
 // Created by sjq on 1/7/21.
 //
 
-#include "catch2/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+
 #include <cstdint>
 #include <fmt/format.h>
 #include <memory_interface.h>

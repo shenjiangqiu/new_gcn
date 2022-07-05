@@ -3,7 +3,8 @@
 //
 
 #include "System.h"
-#include "catch2/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+
 
 #include "globals.h"
 #include "spdlog/spdlog.h"

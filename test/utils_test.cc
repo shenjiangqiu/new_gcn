@@ -1,4 +1,5 @@
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+
 #include <utils/sized_queue.h>
 TEST_CASE("size_queue", "[utils]") {
   auto queue = sized_queue<int>(10);

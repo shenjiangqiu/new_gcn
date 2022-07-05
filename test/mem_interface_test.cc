@@ -2,7 +2,8 @@
 // Created by Jiangqiu shen on 5/10/21.
 //
 #include "boost/range/irange.hpp"
-#include "catch2/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+
 #include "fmt/format.h"
 #include "globals.h"
 #include "memory_interface.h"

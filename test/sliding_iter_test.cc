@@ -2,7 +2,8 @@
 // Created by sjq on 1/10/21.
 //
 #include "sliding_window_dense.h"
-#include "catch2/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+
 
 /*
 TEST_CASE("sliding_iter") {
