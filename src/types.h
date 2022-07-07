@@ -1,6 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 #include "fmt/format.h"
+#include <vector>
 enum class device_types {
   input_buffer,
   aggregator,
@@ -24,12 +25,8 @@ public:
   mem_request req_type;
   bool the_final_request = false;
   bool the_final_request_of_the_layer = false;
-  [[nodiscard]] const std::vector<uint64_t> &get_addr() const {
-    return addr;
-  }
-  [[nodiscard]] uint64_t get_single_addr() const {
-    return single_addr;
-  }
+  [[nodiscard]] const std::vector<uint64_t> &get_addr() const { return addr; }
+  [[nodiscard]] uint64_t get_single_addr() const { return single_addr; }
 
   [[nodiscard]] bool is_single_addr() const { return use_continue_addr; }
   void set_addr(std::vector<uint64_t> taddr) {
@@ -55,7 +52,9 @@ public:
     single_len += rounded;
   }
 
-  [[nodiscard]] unsigned get_len() const { return use_continue_addr ? single_len : addr.size(); }
+  [[nodiscard]] unsigned get_len() const {
+    return use_continue_addr ? single_len : addr.size();
+  }
 
   /*void add64(){
     addr+=64;
